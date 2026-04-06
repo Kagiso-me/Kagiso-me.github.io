@@ -153,49 +153,179 @@ build_velero() {
   echo "{\"name\":\"${name}\",\"result\":\"${status_str}\",\"status\":\"${status}\"}"
 }
 
-# ── Service status via Uptime Kuma API ────────────────────────────────────────
-# Uptime Kuma exposes a public status page API at /api/status-page/heartbeat/<slug>
-# We use the "homelab" status page slug — adjust if yours differs.
+# =============================================================================
+# Service endpoints
+# TODO: replace IPs with internal DNS names once USG DNS records are configured
+#   e.g. sonarr.home, radarr.home, sabnzbd.home, plex.home
+# =============================================================================
+DOCKER_HOST="10.0.10.20"          # Docker host — all media stack services
+SONARR_URL="http://${DOCKER_HOST}:8989"
+RADARR_URL="http://${DOCKER_HOST}:7878"
+SABNZBD_URL="http://${DOCKER_HOST}:8085"
+PLEX_URL="http://${DOCKER_HOST}:32400"
+UPTIME_KUMA_URL="http://${DOCKER_HOST}:3001"
+SONARR_API_KEY="d95aa2889b4b4e4090f96aef586c424b"
+RADARR_API_KEY="1caa2a083cd64a42af4d13f8eb7dadef"
+
+# ── Sonarr: series count ───────────────────────────────────────────────────────
+build_sonarr() {
+  local raw
+  raw=$(curl -sf --max-time 5 \
+    -H "X-Api-Key: ${SONARR_API_KEY}" \
+    "${SONARR_URL}/api/v3/series?includeSeasonImages=false" 2>/dev/null || echo "")
+
+  local count="—"
+  local status="unknown"
+  if [[ -n "$raw" ]]; then
+    count=$(echo "$raw" | python3 -c "import sys,json; d=json.load(sys.stdin); print(len(d))" 2>/dev/null || echo "—")
+    status="ok"
+  fi
+  echo "{\"count\":\"${count}\",\"label\":\"${count} series\",\"status\":\"${status}\"}"
+}
+
+# ── Radarr: movie count ────────────────────────────────────────────────────────
+build_radarr() {
+  local raw
+  raw=$(curl -sf --max-time 5 \
+    -H "X-Api-Key: ${RADARR_API_KEY}" \
+    "${RADARR_URL}/api/v3/movie" 2>/dev/null || echo "")
+
+  local count="—"
+  local status="unknown"
+  if [[ -n "$raw" ]]; then
+    count=$(echo "$raw" | python3 -c "import sys,json; d=json.load(sys.stdin); print(len(d))" 2>/dev/null || echo "—")
+    status="ok"
+  fi
+  echo "{\"count\":\"${count}\",\"label\":\"${count} movies\",\"status\":\"${status}\"}"
+}
+
+# ── SABnzbd: queue size remaining ─────────────────────────────────────────────
+build_sabnzbd() {
+  local raw
+  raw=$(curl -sf --max-time 5 \
+    "${SABNZBD_URL}/api?mode=queue&output=json&limit=1" 2>/dev/null || echo "")
+
+  local label="idle"
+  local status="unknown"
+  if [[ -n "$raw" ]]; then
+    status="ok"
+    label=$(echo "$raw" | python3 -c "
+import sys, json
+try:
+  d = json.load(sys.stdin)['queue']
+  state = d.get('status', 'Idle').lower()
+  mb_left = float(d.get('mbleft', 0))
+  if state in ('downloading', 'grabbing') and mb_left > 0:
+    if mb_left >= 1024:
+      size = f'{mb_left/1024:.1f} GB left'
+    else:
+      size = f'{mb_left:.0f} MB left'
+    print(f'downloading · {size}')
+  else:
+    print('idle')
+except:
+  print('idle')
+" 2>/dev/null || echo "idle")
+  fi
+  echo "{\"label\":\"${label}\",\"status\":\"${status}\"}"
+}
+
+# ── Plex: active stream count ──────────────────────────────────────────────────
+build_plex() {
+  # Plex token stored as env var PLEX_TOKEN on varys, falls back to empty (status unknown)
+  local token="${PLEX_TOKEN:-}"
+  local label="online"
+  local status="unknown"
+
+  if [[ -n "$token" ]]; then
+    local raw
+    raw=$(curl -sf --max-time 5 \
+      -H "X-Plex-Token: ${token}" \
+      -H "Accept: application/json" \
+      "${PLEX_URL}/status/sessions" 2>/dev/null || echo "")
+
+    if [[ -n "$raw" ]]; then
+      status="ok"
+      label=$(echo "$raw" | python3 -c "
+import sys, json
+try:
+  d = json.load(sys.stdin)
+  size = int(d.get('MediaContainer', {}).get('size', 0))
+  print(f'{size} stream{\"s\" if size != 1 else \"\"}')
+except:
+  print('online')
+" 2>/dev/null || echo "online")
+    fi
+  else
+    # No token — just check if Plex responds at all
+    if curl -sf --max-time 5 "${PLEX_URL}/identity" >/dev/null 2>&1; then
+      status="ok"
+      label="online"
+    fi
+  fi
+  echo "{\"label\":\"${label}\",\"status\":\"${status}\"}"
+}
+
+# ── Service status via Uptime Kuma + enriched sub-labels ──────────────────────
+# Uptime Kuma status page slug: "homelab" — adjust if yours differs
 build_services() {
   local uk_raw
-  uk_raw=$(curl -sf --max-time 5 "http://10.0.10.20:3001/api/status-page/heartbeat/homelab" 2>/dev/null || echo "")
+  uk_raw=$(curl -sf --max-time 5 \
+    "${UPTIME_KUMA_URL}/api/status-page/heartbeat/homelab" 2>/dev/null || echo "")
+
+  # Fetch enriched sub-labels from individual service APIs
+  local sonarr radarr sabnzbd plex
+  sonarr=$(build_sonarr)
+  radarr=$(build_radarr)
+  sabnzbd=$(build_sabnzbd)
+  plex=$(build_plex)
 
   python3 -c "
 import sys, json
 
+uk_raw   = '''${uk_raw}'''
+sonarr   = json.loads('''${sonarr}''')
+radarr   = json.loads('''${radarr}''')
+sabnzbd  = json.loads('''${sabnzbd}''')
+plex_d   = json.loads('''${plex}''')
+
+# Base service list: name, ticker tag, optional override label + status
 SERVICES = [
-  'Vaultwarden', 'Immich', 'Nextcloud', 'Grafana', 'Prometheus', 'Velero',
-  'SABnzbd', 'Sonarr', 'Radarr', 'FreshRSS', 'Uptime Kuma', 'Plex',
+  {'name': 'Vaultwarden', 'tag': 'k3s · passwords'},
+  {'name': 'Immich',      'tag': 'k3s · photos'},
+  {'name': 'Nextcloud',   'tag': 'k3s · files'},
+  {'name': 'Grafana',     'tag': 'k3s · dashboards'},
+  {'name': 'Prometheus',  'tag': 'k3s · metrics'},
+  {'name': 'Velero',      'tag': 'k3s · backups'},
+  {'name': 'SABnzbd',     'tag': f'docker · {sabnzbd[\"label\"]}',  'status_override': sabnzbd['status']},
+  {'name': 'Sonarr',      'tag': f'docker · {sonarr[\"label\"]}',   'status_override': sonarr['status']},
+  {'name': 'Radarr',      'tag': f'docker · {radarr[\"label\"]}',   'status_override': radarr['status']},
+  {'name': 'FreshRSS',    'tag': 'docker · rss'},
+  {'name': 'Uptime Kuma', 'tag': 'docker · monitoring'},
+  {'name': 'Plex',        'tag': f'docker · {plex_d[\"label\"]}',   'status_override': plex_d['status']},
 ]
 
-raw = '''${uk_raw}'''
-result = []
-
+# Build status map from Uptime Kuma heartbeats
+status_map = {}
 try:
-  d = json.loads(raw)
-  heartbeats = d.get('heartbeatList', {})
-
-  # Build a lookup: monitor name (lowercase) -> latest status
-  status_map = {}
-  for monitor_id, beats in heartbeats.items():
+  d = json.loads(uk_raw)
+  for monitor_id, beats in d.get('heartbeatList', {}).items():
     if not beats:
       continue
     latest = beats[-1]
-    # status: 1=up, 0=down, pending=unknown
     s = latest.get('status')
     name_key = latest.get('name', '').lower()
-    if s == 1:
-      status_map[name_key] = 'ok'
-    elif s == 0:
-      status_map[name_key] = 'crit'
-    else:
-      status_map[name_key] = 'warn'
+    if s == 1:   status_map[name_key] = 'ok'
+    elif s == 0: status_map[name_key] = 'crit'
+    else:        status_map[name_key] = 'warn'
 except Exception:
-  status_map = {}
+  pass
 
-for name in SERVICES:
-  status = status_map.get(name.lower(), 'unknown')
-  result.append({'name': name, 'status': status})
+result = []
+for svc in SERVICES:
+  # status_override (from direct API) takes priority over Uptime Kuma
+  status = svc.get('status_override') or status_map.get(svc['name'].lower(), 'unknown')
+  result.append({'name': svc['name'], 'tag': svc['tag'], 'status': status})
 
 print(json.dumps(result))
 "

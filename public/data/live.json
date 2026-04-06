@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-06T22:29:20Z",
+  "updated": "2026-04-06T22:40:35Z",
   "cards": [
     {
       "label": "Workloads",
@@ -10,7 +10,7 @@
     {
       "label": "Flux",
       "value": "19/19 synced",
-      "sub": "Applied",
+      "sub": "3d5h",
       "status": "ok"
     },
     {
@@ -21,7 +21,7 @@
     },
     {
       "label": "Velero",
-      "value": "3h29m",
+      "value": "3h41m",
       "sub": "last cluster backup",
       "status": "unknown"
     }
@@ -55,122 +55,122 @@
   "flux": {
     "ready": 19,
     "total": 19,
-    "last_sync": "Applied",
+    "last_sync": "3d5h",
     "status": "ok",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
-        "ready": false,
-        "age": "Applied"
+        "age": "3d5h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "ready": false,
-        "age": "Applied"
+        "age": "3d5h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-authentik",
-        "ready": false,
-        "age": "Applied"
+        "age": "3d5h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
-        "ready": false,
-        "age": "Applied"
+        "age": "3d5h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
-        "ready": false,
-        "age": "Applied"
+        "age": "3d5h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
-        "ready": false,
-        "age": "Applied"
+        "age": "3d5h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
-        "ready": false,
-        "age": "Applied"
+        "age": "3d5h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-namespaces",
-        "ready": false,
-        "age": "Applied"
+        "age": "3d5h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking",
-        "ready": false,
-        "age": "Applied"
+        "age": "3d5h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-config",
-        "ready": false,
-        "age": "Applied"
+        "age": "3d5h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-tls",
-        "ready": false,
-        "age": "Applied"
+        "age": "3d5h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability",
-        "ready": false,
-        "age": "Applied"
+        "age": "3d5h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
-        "ready": false,
-        "age": "Applied"
+        "age": "3d5h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
-        "ready": false,
-        "age": "Applied"
+        "age": "3d5h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security",
-        "ready": false,
-        "age": "Applied"
+        "age": "3d5h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security-issuers",
-        "ready": false,
-        "age": "Applied"
+        "age": "3d5h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-storage",
-        "ready": false,
-        "age": "Applied"
+        "age": "3d5h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade",
-        "ready": false,
-        "age": "Applied"
+        "age": "3d5h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade-plans",
-        "ready": false,
-        "age": "Applied"
+        "age": "3d5h",
+        "ready": true
       }
     ]
   },
@@ -197,8 +197,8 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "docker \u00b7 idle",
-      "status": "unknown"
+      "tag": "docker \u00b7 downloading \u00b7 399.3 GB left",
+      "status": "ok"
     },
     {
       "name": "Sonarr",

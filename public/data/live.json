@@ -17,5 +17,19 @@
     "last_sync": "—",
     "status": "unknown",
     "kustomizations": []
-  }
+  },
+  "services": [
+    { "name": "Vaultwarden", "status": "unknown" },
+    { "name": "Immich",      "status": "unknown" },
+    { "name": "Nextcloud",   "status": "unknown" },
+    { "name": "Grafana",     "status": "unknown" },
+    { "name": "Prometheus",  "status": "unknown" },
+    { "name": "Velero",      "status": "unknown" },
+    { "name": "SABnzbd",     "status": "unknown" },
+    { "name": "Sonarr",      "status": "unknown" },
+    { "name": "Radarr",      "status": "unknown" },
+    { "name": "FreshRSS",    "status": "unknown" },
+    { "name": "Uptime Kuma", "status": "unknown" },
+    { "name": "Plex",        "status": "unknown" }
+  ]
 }

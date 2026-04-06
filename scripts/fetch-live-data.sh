@@ -153,37 +153,52 @@ build_velero() {
   echo "{\"name\":\"${name}\",\"result\":\"${status_str}\",\"status\":\"${status}\"}"
 }
 
-# ── SABnzbd ───────────────────────────────────────────────────────────────────
-build_sabnzbd() {
-  local api_key
-  api_key=$(grep "^api_key" /dev/null 2>/dev/null || echo "")
-  # Check if SABnzbd is reachable
-  local speed="—"
-  local queue="—"
-  local status="unknown"
+# ── Service status via Uptime Kuma API ────────────────────────────────────────
+# Uptime Kuma exposes a public status page API at /api/status-page/heartbeat/<slug>
+# We use the "homelab" status page slug — adjust if yours differs.
+build_services() {
+  local uk_raw
+  uk_raw=$(curl -sf --max-time 5 "http://10.0.10.20:3001/api/status-page/heartbeat/homelab" 2>/dev/null || echo "")
 
-  local sabnzbd_status
-  sabnzbd_status=$(curl -sf --max-time 3 "http://10.0.10.20:8085/api?mode=queue&output=json&limit=1" 2>/dev/null || echo "")
+  python3 -c "
+import sys, json
 
-  if [[ -n "$sabnzbd_status" ]]; then
-    speed=$(echo "$sabnzbd_status" | python3 -c "
-import sys,json
+SERVICES = [
+  'Vaultwarden', 'Immich', 'Nextcloud', 'Grafana', 'Prometheus', 'Velero',
+  'SABnzbd', 'Sonarr', 'Radarr', 'FreshRSS', 'Uptime Kuma', 'Plex',
+]
+
+raw = '''${uk_raw}'''
+result = []
+
 try:
-  d=json.load(sys.stdin)
-  print(d['queue']['speed'] or '0 B/s')
-except: print('—')
-")
-    queue=$(echo "$sabnzbd_status" | python3 -c "
-import sys,json
-try:
-  d=json.load(sys.stdin)
-  print(d['queue']['noofslots'])
-except: print('—')
-")
-    status="ok"
-  fi
+  d = json.loads(raw)
+  heartbeats = d.get('heartbeatList', {})
 
-  echo "{\"speed\":\"${speed}\",\"queue\":\"${queue}\",\"status\":\"${status}\"}"
+  # Build a lookup: monitor name (lowercase) -> latest status
+  status_map = {}
+  for monitor_id, beats in heartbeats.items():
+    if not beats:
+      continue
+    latest = beats[-1]
+    # status: 1=up, 0=down, pending=unknown
+    s = latest.get('status')
+    name_key = latest.get('name', '').lower()
+    if s == 1:
+      status_map[name_key] = 'ok'
+    elif s == 0:
+      status_map[name_key] = 'crit'
+    else:
+      status_map[name_key] = 'warn'
+except Exception:
+  status_map = {}
+
+for name in SERVICES:
+  status = status_map.get(name.lower(), 'unknown')
+  result.append({'name': name, 'status': status})
+
+print(json.dumps(result))
+"
 }
 
 # ── Assemble live cards ────────────────────────────────────────────────────────
@@ -191,6 +206,7 @@ NODES=$(build_nodes)
 FLUX=$(build_flux)
 BACKUP=$(build_backup)
 VELERO=$(build_velero)
+SERVICES=$(build_services)
 
 FLUX_STATUS=$(echo "$FLUX" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['status'])")
 FLUX_LABEL=$(echo "$FLUX" | python3 -c "import sys,json; d=json.load(sys.stdin); print(f\"{d['ready']}/{d['total']} synced\")")
@@ -237,7 +253,8 @@ data = {
     }
   ],
   'nodes': json.loads('${NODES}'),
-  'flux': json.loads('${FLUX}')
+  'flux': json.loads('${FLUX}'),
+  'services': json.loads('${SERVICES}')
 }
 print(json.dumps(data, indent=2))
 "

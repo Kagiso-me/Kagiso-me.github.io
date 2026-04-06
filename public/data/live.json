@@ -1,14 +1,21 @@
 {
   "updated": "2026-04-06T00:00:00Z",
   "cards": [
-    { "label": "Plex Streams",     "value": "—",     "sub": "no data yet", "status": "unknown" },
-    { "label": "SABnzbd",          "value": "—",     "sub": "no data yet", "status": "unknown" },
-    { "label": "Flux Sync",        "value": "—",     "sub": "no data yet", "status": "unknown" },
-    { "label": "Last Backup",      "value": "—",     "sub": "no data yet", "status": "unknown" }
+    { "label": "Workloads",   "value": "—", "sub": "pods running",       "status": "unknown" },
+    { "label": "Flux",        "value": "—", "sub": "kustomizations",     "status": "unknown" },
+    { "label": "Last Backup", "value": "—", "sub": "docker appdata",     "status": "unknown" },
+    { "label": "Velero",      "value": "—", "sub": "last cluster backup","status": "unknown" }
   ],
   "nodes": [
-    { "name": "tywin",  "role": "control-plane", "status": "unknown", "cpu": "—", "memory": "—" },
-    { "name": "tyrion", "role": "worker",        "status": "unknown", "cpu": "—", "memory": "—" },
-    { "name": "jaime",  "role": "worker",        "status": "unknown", "cpu": "—", "memory": "—" }
-  ]
+    { "name": "tywin",  "role": "control-plane", "status": "unknown", "cpu": "—", "memory": "—", "uptime": "—" },
+    { "name": "tyrion", "role": "worker",        "status": "unknown", "cpu": "—", "memory": "—", "uptime": "—" },
+    { "name": "jaime",  "role": "worker",        "status": "unknown", "cpu": "—", "memory": "—", "uptime": "—" }
+  ],
+  "flux": {
+    "ready": 0,
+    "total": 0,
+    "last_sync": "—",
+    "status": "unknown",
+    "kustomizations": []
+  }
 }

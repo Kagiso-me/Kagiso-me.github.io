@@ -10,7 +10,9 @@
 
 set -euo pipefail
 
-PROM="http://10.0.10.20:9090"
+# Prometheus ClusterIP — reachable from varys via k3s cluster network
+# TODO: replace with internal DNS name once USG DNS records are configured
+PROM="http://10.43.248.50:9090"
 NOW=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 # ── Helper: query Prometheus instant ──────────────────────────────────────────
@@ -87,10 +89,12 @@ build_flux() {
   local ks_raw
   ks_raw=$(kubectl get kustomizations -A --no-headers 2>/dev/null || echo "")
 
+  # Column order: NAMESPACE NAME AGE READY STATUS
+  # parts[0]=namespace parts[1]=name parts[2]=age parts[3]=ready parts[4..]=status
   local ready_count total_count last_sync status
-  ready_count=$(echo "$ks_raw" | grep -c "True" || echo "0")
+  ready_count=$(echo "$ks_raw" | awk '{print $4}' | grep -c "True" || echo "0")
   total_count=$(echo "$ks_raw"  | grep -c . || echo "0")
-  last_sync=$(echo "$ks_raw"    | awk '{print $5}' | head -1 || echo "—")
+  last_sync=$(echo "$ks_raw"    | awk '{print $3}' | head -1 || echo "—")
   status="ok"
   [[ "$ready_count" != "$total_count" ]] && status="warn"
 
@@ -101,12 +105,12 @@ import sys, json
 rows = []
 for line in sys.stdin:
     parts = line.split()
-    if len(parts) >= 5:
+    if len(parts) >= 4:
         rows.append({
             'namespace': parts[0],
             'name':      parts[1],
-            'ready':     parts[2] == 'True',
-            'age':       parts[4] if len(parts) > 4 else '—'
+            'age':       parts[2],
+            'ready':     parts[3] == 'True',
         })
 print(json.dumps(rows))
 ")
@@ -166,6 +170,7 @@ PLEX_URL="http://${DOCKER_HOST}:32400"
 UPTIME_KUMA_URL="http://${DOCKER_HOST}:3001"
 SONARR_API_KEY="d95aa2889b4b4e4090f96aef586c424b"
 RADARR_API_KEY="1caa2a083cd64a42af4d13f8eb7dadef"
+SABNZBD_API_KEY="198e3a44a31f404d95b16531629d5605"
 
 # ── Sonarr: series count ───────────────────────────────────────────────────────
 build_sonarr() {
@@ -203,7 +208,7 @@ build_radarr() {
 build_sabnzbd() {
   local raw
   raw=$(curl -sf --max-time 5 \
-    "${SABNZBD_URL}/api?mode=queue&output=json&limit=1" 2>/dev/null || echo "")
+    "${SABNZBD_URL}/api?mode=queue&output=json&limit=1&apikey=${SABNZBD_API_KEY}" 2>/dev/null || echo "")
 
   local label="idle"
   local status="unknown"

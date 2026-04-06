@@ -2,7 +2,7 @@ name: Fetch Live Data
 
 on:
   schedule:
-    - cron: '*/5 * * * *'   # every 5 minutes
+    - cron: '*/30 * * * *'  # every 30 minutes
   workflow_dispatch:
 
 jobs:

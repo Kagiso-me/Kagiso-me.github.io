@@ -305,47 +305,39 @@ import Layout from '../layouts/Layout.astro';
 </style>
 
 <script>
-  // Static service list — status dot will reflect live data once available
-  const SERVICES = [
-    // k3s workloads
-    { name: 'Vaultwarden',  tag: 'k3s · passwords',    category: 'k3s'    },
-    { name: 'Immich',       tag: 'k3s · photos',        category: 'k3s'    },
-    { name: 'Nextcloud',    tag: 'k3s · files',         category: 'k3s'    },
-    { name: 'Grafana',      tag: 'k3s · dashboards',    category: 'k3s'    },
-    { name: 'Prometheus',   tag: 'k3s · metrics',       category: 'k3s'    },
-    { name: 'Velero',       tag: 'k3s · backups',       category: 'k3s'    },
-    // Docker services
-    { name: 'SABnzbd',      tag: 'docker · downloads',  category: 'docker' },
-    { name: 'Sonarr',       tag: 'docker · tv',         category: 'docker' },
-    { name: 'Radarr',       tag: 'docker · movies',     category: 'docker' },
-    { name: 'FreshRSS',     tag: 'docker · rss',        category: 'docker' },
-    { name: 'Uptime Kuma',  tag: 'docker · monitoring', category: 'docker' },
-    { name: 'Plex',         tag: 'docker · media',      category: 'docker' },
+  // Fallback static list — shown immediately before live.json loads
+  const STATIC_SERVICES = [
+    { name: 'Vaultwarden', tag: 'k3s · passwords',    status: 'unknown' },
+    { name: 'Immich',      tag: 'k3s · photos',        status: 'unknown' },
+    { name: 'Nextcloud',   tag: 'k3s · files',         status: 'unknown' },
+    { name: 'Grafana',     tag: 'k3s · dashboards',    status: 'unknown' },
+    { name: 'Prometheus',  tag: 'k3s · metrics',       status: 'unknown' },
+    { name: 'Velero',      tag: 'k3s · backups',       status: 'unknown' },
+    { name: 'SABnzbd',     tag: 'docker · downloads',  status: 'unknown' },
+    { name: 'Sonarr',      tag: 'docker · tv',         status: 'unknown' },
+    { name: 'Radarr',      tag: 'docker · movies',     status: 'unknown' },
+    { name: 'FreshRSS',    tag: 'docker · rss',        status: 'unknown' },
+    { name: 'Uptime Kuma', tag: 'docker · monitoring', status: 'unknown' },
+    { name: 'Plex',        tag: 'docker · media',      status: 'unknown' },
   ];
 
-  function buildTicker(services: typeof SERVICES, liveStatuses: Record<string, string> = {}) {
+  function buildTicker(services: {name: string; tag: string; status: string}[]) {
     const track = document.getElementById('ticker-track');
     if (!track) return;
-
     // Duplicate for seamless loop
     const all = [...services, ...services];
-    track.innerHTML = all.map(s => {
-      const status = liveStatuses[s.name] ?? 'unknown';
-      return `
-        <div class="ticker-item">
-          <span class="status-dot ${status}"></span>
-          <span class="svc-name">${s.name}</span>
-          <span class="svc-tag">${s.tag}</span>
-        </div>
-      `;
-    }).join('');
-
-    document.getElementById('ticker-wrap')?.removeAttribute('hidden');
+    track.innerHTML = all.map(s => `
+      <div class="ticker-item">
+        <span class="status-dot ${s.status}"></span>
+        <span class="svc-name">${s.name}</span>
+        <span class="svc-tag">${s.tag}</span>
+      </div>
+    `).join('');
   }
 
   async function loadLiveData() {
-    // Show ticker immediately with unknown status
-    buildTicker(SERVICES);
+    // Render ticker immediately with static fallback
+    buildTicker(STATIC_SERVICES);
 
     try {
       const res = await fetch('/data/live.json');
@@ -366,13 +358,9 @@ import Layout from '../layouts/Layout.astro';
         `).join('');
       }
 
-      // Rebuild ticker with live statuses if services array present
-      const liveStatuses: Record<string, string> = {};
-      if (data.services) {
-        for (const svc of data.services) {
-          liveStatuses[svc.name] = svc.status;
-        }
-        buildTicker(SERVICES, liveStatuses);
+      // Rebuild ticker with live data (includes enriched tags from APIs)
+      if (data.services?.length) {
+        buildTicker(data.services);
       }
 
       const strip = document.getElementById('status-strip');
@@ -391,7 +379,7 @@ import Layout from '../layouts/Layout.astro';
           </div>
         `).join('');
       }
-    } catch { /* skeletons stay, ticker already showing */ }
+    } catch { /* skeletons stay, ticker already showing with static fallback */ }
   }
 
   async function loadDigest() {

@@ -168,9 +168,14 @@ RADARR_URL="http://${DOCKER_HOST}:7878"
 SABNZBD_URL="http://${DOCKER_HOST}:8085"
 PLEX_URL="http://${DOCKER_HOST}:32400"
 UPTIME_KUMA_URL="http://${DOCKER_HOST}:3001"
-SONARR_API_KEY="d95aa2889b4b4e4090f96aef586c424b"
-RADARR_API_KEY="1caa2a083cd64a42af4d13f8eb7dadef"
-SABNZBD_API_KEY="198e3a44a31f404d95b16531629d5605"
+# API keys injected as environment variables from GitHub Actions secrets
+# Set locally on varys via ~/.bashrc if running the script manually:
+#   export SONARR_API_KEY=...
+#   export RADARR_API_KEY=...
+#   export SABNZBD_API_KEY=...
+: "${SONARR_API_KEY:?SONARR_API_KEY env var not set}"
+: "${RADARR_API_KEY:?RADARR_API_KEY env var not set}"
+: "${SABNZBD_API_KEY:?SABNZBD_API_KEY env var not set}"
 
 # ── Sonarr: series count ───────────────────────────────────────────────────────
 build_sonarr() {

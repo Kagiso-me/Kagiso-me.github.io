@@ -1,0 +1,82 @@
+---
+import Nav from '../components/Nav.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'Living Homelab — built in public by Kagiso.' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0d1117" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+    <title>{title} · kagiso.me</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <Nav />
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <span class="mono">Built in public · <a href="https://github.com/Kagiso-me/homelab-infrastructure" target="_blank" rel="noopener">homelab-infrastructure</a></span>
+        <span class="mono" id="footer-time"></span>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  main {
+    min-height: calc(100vh - 60px - 56px);
+  }
+
+  .site-footer {
+    border-top: 1px solid var(--color-muted);
+    padding: 1rem 1.5rem;
+  }
+
+  .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+</style>
+
+<script>
+  const el = document.getElementById('footer-time');
+  if (el) {
+    const update = () => {
+      el.textContent = new Date().toLocaleString('en-ZA', {
+        timeZone: 'Africa/Johannesburg',
+        hour: '2-digit', minute: '2-digit', second: '2-digit',
+        hour12: false
+      }) + ' SAST';
+    };
+    update();
+    setInterval(update, 1000);
+  }
+</script>

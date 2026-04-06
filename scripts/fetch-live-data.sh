@@ -291,18 +291,20 @@ plex_d   = json.loads('''${plex}''')
 
 # Base service list: name, ticker tag, optional override label + status
 SERVICES = [
+  # k3s
   {'name': 'Vaultwarden', 'tag': 'k3s · passwords'},
   {'name': 'Immich',      'tag': 'k3s · photos'},
   {'name': 'Nextcloud',   'tag': 'k3s · files'},
-  {'name': 'Grafana',     'tag': 'k3s · dashboards'},
-  {'name': 'Prometheus',  'tag': 'k3s · metrics'},
-  {'name': 'Velero',      'tag': 'k3s · backups'},
-  {'name': 'SABnzbd',     'tag': f'docker · {sabnzbd[\"label\"]}',  'status_override': sabnzbd['status']},
-  {'name': 'Sonarr',      'tag': f'docker · {sonarr[\"label\"]}',   'status_override': sonarr['status']},
-  {'name': 'Radarr',      'tag': f'docker · {radarr[\"label\"]}',   'status_override': radarr['status']},
-  {'name': 'FreshRSS',    'tag': 'docker · rss'},
+  # Docker — media
+  {'name': 'Plex',        'tag': f'docker · {plex_d[\"label\"]}',  'status_override': plex_d['status']},
+  {'name': 'SABnzbd',     'tag': f'docker · {sabnzbd[\"label\"]}', 'status_override': sabnzbd['status']},
+  {'name': 'Sonarr',      'tag': f'docker · {sonarr[\"label\"]}',  'status_override': sonarr['status']},
+  {'name': 'Radarr',      'tag': f'docker · {radarr[\"label\"]}',  'status_override': radarr['status']},
+  {'name': 'Lidarr',      'tag': 'docker · music'},
+  {'name': 'Navidrome',   'tag': 'docker · music streaming'},
+  # Docker — platform
   {'name': 'Uptime Kuma', 'tag': 'docker · monitoring'},
-  {'name': 'Plex',        'tag': f'docker · {plex_d[\"label\"]}',   'status_override': plex_d['status']},
+  {'name': 'NPM',         'tag': 'docker · proxy'},
 ]
 
 # Build status map from Uptime Kuma heartbeats

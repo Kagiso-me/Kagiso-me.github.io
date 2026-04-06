@@ -19,17 +19,16 @@
     "kustomizations": []
   },
   "services": [
-    { "name": "Vaultwarden", "tag": "k3s · passwords",    "status": "unknown" },
-    { "name": "Immich",      "tag": "k3s · photos",        "status": "unknown" },
-    { "name": "Nextcloud",   "tag": "k3s · files",         "status": "unknown" },
-    { "name": "Grafana",     "tag": "k3s · dashboards",    "status": "unknown" },
-    { "name": "Prometheus",  "tag": "k3s · metrics",       "status": "unknown" },
-    { "name": "Velero",      "tag": "k3s · backups",       "status": "unknown" },
-    { "name": "SABnzbd",     "tag": "docker · downloads",  "status": "unknown" },
-    { "name": "Sonarr",      "tag": "docker · tv",         "status": "unknown" },
-    { "name": "Radarr",      "tag": "docker · movies",     "status": "unknown" },
-    { "name": "FreshRSS",    "tag": "docker · rss",        "status": "unknown" },
-    { "name": "Uptime Kuma", "tag": "docker · monitoring", "status": "unknown" },
-    { "name": "Plex",        "tag": "docker · media",      "status": "unknown" }
+    { "name": "Vaultwarden", "tag": "k3s · passwords",         "status": "unknown" },
+    { "name": "Immich",      "tag": "k3s · photos",             "status": "unknown" },
+    { "name": "Nextcloud",   "tag": "k3s · files",              "status": "unknown" },
+    { "name": "Plex",        "tag": "docker · media",           "status": "unknown" },
+    { "name": "SABnzbd",     "tag": "docker · downloads",       "status": "unknown" },
+    { "name": "Sonarr",      "tag": "docker · tv",              "status": "unknown" },
+    { "name": "Radarr",      "tag": "docker · movies",          "status": "unknown" },
+    { "name": "Lidarr",      "tag": "docker · music",           "status": "unknown" },
+    { "name": "Navidrome",   "tag": "docker · music streaming", "status": "unknown" },
+    { "name": "Uptime Kuma", "tag": "docker · monitoring",      "status": "unknown" },
+    { "name": "NPM",         "tag": "docker · proxy",           "status": "unknown" }
   ]
 }

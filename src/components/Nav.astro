@@ -1,0 +1,146 @@
+---
+const links = [
+  { href: '/',          label: 'Home' },
+  { href: '/status',    label: 'Status' },
+  { href: '/digest',    label: 'Digest' },
+  { href: '/docs',      label: 'Docs' },
+  { href: '/projects',  label: 'Projects' },
+  { href: '/decisions', label: 'Decisions' },
+];
+
+const current = Astro.url.pathname;
+---
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">
+      <span class="mono" style="color: var(--color-peach)">~/</span>
+      <span style="color: var(--color-heading); font-weight: 700;">kagiso.me</span>
+    </a>
+
+    <ul class="nav-links">
+      {links.map(link => (
+        <li>
+          <a
+            href={link.href}
+            class:list={['nav-link', { active: current === link.href || (link.href !== '/' && current.startsWith(link.href)) }]}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <button class="nav-mobile-toggle" id="nav-toggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <ul class="nav-mobile" id="nav-mobile">
+    {links.map(link => (
+      <li>
+        <a href={link.href} class="nav-link">{link.label}</a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: color-mix(in srgb, var(--color-mantle) 90%, transparent);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-muted);
+  }
+
+  .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .nav-brand {
+    font-size: 1rem;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    flex-shrink: 0;
+  }
+
+  .nav-brand:hover { opacity: 0.8; }
+
+  .nav-links {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 0.25rem;
+  }
+
+  .nav-link {
+    display: block;
+    padding: 0.375rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    color: var(--color-text);
+    text-decoration: none;
+    transition: color 0.2s, background 0.2s;
+  }
+
+  .nav-link:hover, .nav-link.active {
+    color: var(--color-heading);
+    background: var(--color-overlay);
+  }
+
+  .nav-link.active {
+    color: var(--color-peach);
+  }
+
+  .nav-mobile-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  .nav-mobile-toggle span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--color-text);
+    border-radius: 2px;
+    transition: 0.2s;
+  }
+
+  .nav-mobile {
+    display: none;
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem 1.5rem 1rem;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .nav-mobile-toggle { display: flex; }
+    .nav-mobile.open { display: flex; }
+  }
+</style>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const mobile = document.getElementById('nav-mobile');
+  toggle?.addEventListener('click', () => mobile?.classList.toggle('open'));
+</script>

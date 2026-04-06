@@ -1,0 +1,16 @@
+[
+  {
+    "title": "kagiso.me — Living Homelab Site",
+    "status": "active",
+    "timeline": "Apr 2026",
+    "description": "Building a public-facing site for the homelab — status dashboard, ops digest, ADR log, project tracker, and live terminal.",
+    "milestones": [
+      { "label": "Astro scaffold",     "done": true  },
+      { "label": "Design system",      "done": true  },
+      { "label": "Deploy pipeline",    "done": false },
+      { "label": "Status dashboard",   "done": false },
+      { "label": "Live data pipeline", "done": false },
+      { "label": "Live terminal",      "done": false }
+    ]
+  }
+]

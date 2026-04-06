@@ -1,0 +1,336 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Command Center" description="Living Homelab — built in public by Kagiso.">
+
+  <!-- ── Hero ── -->
+  <section class="hero fade-up">
+    <div class="hero-inner">
+      <p class="mono hero-eyebrow">~/homelab</p>
+      <h1>
+        <span class="gradient-text">Living Homelab</span>
+      </h1>
+      <p class="hero-sub">
+        A real homelab, built and operated in public —
+        from bare metal to production discipline.
+      </p>
+      <div class="hero-actions">
+        <a href="/status" class="btn-primary">View Status</a>
+        <a href="/docs" class="btn-ghost">Read the Docs</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── What's Running Right Now ── -->
+  <section class="section fade-up" style="animation-delay: 0.1s">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2 class="section-title">What's Running Right Now</h2>
+        <span class="mono live-badge">
+          <span class="status-dot ok"></span>
+          Live
+        </span>
+      </div>
+      <div class="live-grid" id="live-grid">
+        <div class="live-card skeleton"></div>
+        <div class="live-card skeleton"></div>
+        <div class="live-card skeleton"></div>
+        <div class="live-card skeleton"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Cluster Status Strip ── -->
+  <section class="section fade-up" style="animation-delay: 0.2s">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2 class="section-title">Cluster Health</h2>
+        <a href="/status" class="mono link-subtle">Full dashboard →</a>
+      </div>
+      <div class="status-strip" id="status-strip">
+        <div class="status-strip-item skeleton" style="height: 56px; border-radius: 8px;"></div>
+        <div class="status-strip-item skeleton" style="height: 56px; border-radius: 8px;"></div>
+        <div class="status-strip-item skeleton" style="height: 56px; border-radius: 8px;"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Recent Digest + Active Project ── -->
+  <section class="section fade-up" style="animation-delay: 0.3s">
+    <div class="section-inner two-col">
+
+      <div>
+        <div class="section-header">
+          <h2 class="section-title">Recent Digest</h2>
+          <a href="/digest" class="mono link-subtle">All entries →</a>
+        </div>
+        <div id="digest-list">
+          <div class="skeleton" style="height: 80px; border-radius: 8px; margin-bottom: 0.75rem;"></div>
+          <div class="skeleton" style="height: 80px; border-radius: 8px; margin-bottom: 0.75rem;"></div>
+          <div class="skeleton" style="height: 80px; border-radius: 8px;"></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-header">
+          <h2 class="section-title">Active Project</h2>
+          <a href="/projects" class="mono link-subtle">All projects →</a>
+        </div>
+        <div id="active-project">
+          <div class="skeleton" style="height: 200px; border-radius: 12px;"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  .hero {
+    padding: 6rem 1.5rem 4rem;
+    text-align: center;
+  }
+
+  .hero-inner {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .hero-eyebrow {
+    color: var(--color-peach);
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+  }
+
+  h1 {
+    font-size: clamp(3rem, 6vw, 5rem);
+    margin: 0 0 1.5rem;
+  }
+
+  .hero-sub {
+    font-size: 1.125rem;
+    color: var(--color-subtle);
+    max-width: 520px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.7;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    padding: 0.625rem 1.5rem;
+    background: var(--color-peach);
+    color: var(--color-base);
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  .btn-primary:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+    color: var(--color-base);
+  }
+
+  .btn-ghost {
+    padding: 0.625rem 1.5rem;
+    border: 1px solid var(--color-muted);
+    color: var(--color-text);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--color-mauve);
+    color: var(--color-mauve);
+  }
+
+  .section {
+    padding: 3rem 1.5rem;
+    border-top: 1px solid var(--color-muted);
+  }
+
+  .section-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-title {
+    font-size: 1.125rem;
+    margin: 0;
+  }
+
+  .link-subtle {
+    color: var(--color-subtle);
+    transition: color 0.2s;
+  }
+
+  .link-subtle:hover { color: var(--color-peach); }
+
+  .live-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--color-ok);
+  }
+
+  .live-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+
+  .live-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-muted);
+    border-radius: 12px;
+    padding: 1.25rem;
+    min-height: 100px;
+  }
+
+  .status-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+  }
+
+  @media (max-width: 768px) {
+    .two-col { grid-template-columns: 1fr; gap: 2rem; }
+    .hero { padding: 4rem 1.5rem 3rem; }
+  }
+
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      var(--color-surface) 25%,
+      var(--color-overlay) 50%,
+      var(--color-surface) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+</style>
+
+<script>
+  async function loadLiveData() {
+    try {
+      const res = await fetch('/data/live.json');
+      if (!res.ok) throw new Error('no data');
+      const data = await res.json();
+
+      const grid = document.getElementById('live-grid');
+      if (grid && data.cards) {
+        grid.innerHTML = data.cards.map((card: any) => `
+          <div class="live-card fade-up">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem">
+              <span class="mono" style="color:var(--color-subtle)">${card.label}</span>
+              <span class="status-dot ${card.status}"></span>
+            </div>
+            <div style="font-size:1.5rem;font-weight:700;color:var(--color-heading);font-family:var(--font-mono)">${card.value}</div>
+            <div class="mono" style="margin-top:0.25rem">${card.sub ?? ''}</div>
+          </div>
+        `).join('');
+      }
+
+      const strip = document.getElementById('status-strip');
+      if (strip && data.nodes) {
+        strip.innerHTML = data.nodes.map((node: any) => `
+          <div style="background:var(--color-surface);border:1px solid var(--color-muted);border-radius:8px;padding:0.875rem 1rem;display:flex;align-items:center;gap:0.75rem">
+            <span class="status-dot ${node.status}"></span>
+            <div>
+              <div style="font-size:0.875rem;color:var(--color-heading);font-weight:600">${node.name}</div>
+              <div class="mono">${node.role}</div>
+            </div>
+            <div style="margin-left:auto;text-align:right">
+              <div class="mono" style="color:var(--color-peach)">${node.cpu}</div>
+              <div class="mono">${node.memory}</div>
+            </div>
+          </div>
+        `).join('');
+      }
+    } catch { /* skeletons stay */ }
+  }
+
+  async function loadDigest() {
+    try {
+      const res = await fetch('/data/digest.json');
+      if (!res.ok) throw new Error('no data');
+      const entries = await res.json();
+      const list = document.getElementById('digest-list');
+      if (list) {
+        list.innerHTML = entries.slice(0, 3).map((e: any) => `
+          <a href="/digest/${e.slug}" style="display:block;text-decoration:none;margin-bottom:0.75rem">
+            <div class="card" style="padding:1rem">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.25rem">
+                <span class="mono" style="color:var(--color-peach)">${e.date}</span>
+                <span class="mono" style="color:var(--color-mauve)">${e.tag}</span>
+              </div>
+              <div style="color:var(--color-heading);font-weight:600;font-size:0.9rem">${e.title}</div>
+            </div>
+          </a>
+        `).join('');
+      }
+    } catch { /* no data yet */ }
+  }
+
+  async function loadProject() {
+    try {
+      const res = await fetch('/data/projects.json');
+      if (!res.ok) throw new Error('no data');
+      const projects = await res.json();
+      const active = projects.find((p: any) => p.status === 'active');
+      if (!active) return;
+      const el = document.getElementById('active-project');
+      if (el) {
+        el.innerHTML = `
+          <div class="card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+              <span class="mono" style="color:var(--color-gold)">● active</span>
+              <span class="mono">${active.timeline}</span>
+            </div>
+            <h3 style="margin:0 0 0.5rem;font-size:1.1rem">${active.title}</h3>
+            <p style="color:var(--color-subtle);font-size:0.875rem;margin:0 0 1.25rem;line-height:1.6">${active.description}</p>
+            <div style="display:flex;flex-wrap:wrap;gap:0.75rem">
+              ${active.milestones.map((m: any) => `
+                <span style="font-size:0.8rem;color:${m.done ? 'var(--color-ok)' : 'var(--color-subtle)'};font-family:var(--font-mono)">
+                  ${m.done ? '✓' : '○'} ${m.label}
+                </span>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+    } catch { /* no data yet */ }
+  }
+
+  loadLiveData();
+  loadDigest();
+  loadProject();
+</script>

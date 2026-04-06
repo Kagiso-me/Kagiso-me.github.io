@@ -1,10 +1,351 @@
 ---
 import Layout from '../layouts/Layout.astro';
 ---
-<Layout title="Status">
-  <div style="max-width:1200px;margin:0 auto;padding:4rem 1.5rem;text-align:center">
-    <p class="mono" style="color:var(--color-peach)">~/status</p>
-    <h1 style="text-transform:capitalize">status</h1>
-    <p style="color:var(--color-subtle)">Coming soon.</p>
+
+<Layout title="Status" description="Live cluster health, node metrics, and service uptime.">
+
+  <div class="page-wrap">
+
+    <!-- ── Header ── -->
+    <div class="page-header fade-up">
+      <div>
+        <p class="mono" style="color:var(--color-peach); margin-bottom:0.25rem">~/status</p>
+        <h1 style="margin:0">Cluster Status</h1>
+      </div>
+      <div style="text-align:right">
+        <div class="mono live-badge">
+          <span class="status-dot ok"></span>
+          Live · auto-refresh 30s
+        </div>
+        <div class="mono" id="last-updated" style="color:var(--color-subtle); margin-top:0.25rem">—</div>
+      </div>
+    </div>
+
+    <!-- ── At a Glance ── -->
+    <section class="section fade-up" style="animation-delay:0.05s">
+      <h2 class="section-label">At a Glance</h2>
+      <div class="cards-grid" id="glance-cards">
+        <div class="card skeleton" style="height:100px"></div>
+        <div class="card skeleton" style="height:100px"></div>
+        <div class="card skeleton" style="height:100px"></div>
+        <div class="card skeleton" style="height:100px"></div>
+      </div>
+    </section>
+
+    <!-- ── Nodes ── -->
+    <section class="section fade-up" style="animation-delay:0.1s">
+      <h2 class="section-label">Nodes</h2>
+      <div class="nodes-grid" id="nodes-grid">
+        <div class="skeleton" style="height:160px; border-radius:12px"></div>
+        <div class="skeleton" style="height:160px; border-radius:12px"></div>
+        <div class="skeleton" style="height:160px; border-radius:12px"></div>
+      </div>
+    </section>
+
+    <!-- ── GitOps ── -->
+    <section class="section fade-up" style="animation-delay:0.15s">
+      <h2 class="section-label">GitOps — Flux Kustomizations</h2>
+      <div id="flux-section">
+        <div class="skeleton" style="height:220px; border-radius:12px"></div>
+      </div>
+    </section>
+
+    <!-- ── Backups ── -->
+    <section class="section fade-up" style="animation-delay:0.2s">
+      <h2 class="section-label">Backups</h2>
+      <div class="cards-grid" id="backup-cards">
+        <div class="card skeleton" style="height:100px"></div>
+        <div class="card skeleton" style="height:100px"></div>
+        <div class="card skeleton" style="height:100px"></div>
+      </div>
+    </section>
+
   </div>
+
 </Layout>
+
+<style>
+  .page-wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 4rem;
+  }
+
+  .page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  h1 { font-size: clamp(1.75rem, 4vw, 2.5rem); }
+
+  .live-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--color-ok);
+    justify-content: flex-end;
+  }
+
+  .section { margin-bottom: 3rem; }
+
+  .section-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-subtle);
+    margin: 0 0 1rem;
+    font-family: var(--font-mono);
+    font-weight: 500;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+
+  .nodes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1rem;
+  }
+
+  .node-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-muted);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border-left-width: 3px;
+  }
+
+  .node-card.ok   { border-left-color: var(--color-ok); }
+  .node-card.warn { border-left-color: var(--color-warn); }
+  .node-card.crit { border-left-color: var(--color-crit); }
+  .node-card.unknown { border-left-color: var(--color-muted); }
+
+  .node-metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+  }
+
+  .metric {
+    text-align: center;
+    background: var(--color-overlay);
+    border-radius: 8px;
+    padding: 0.625rem 0.5rem;
+  }
+
+  .metric-value {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-peach);
+    display: block;
+  }
+
+  .metric-label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--color-subtle);
+    display: block;
+    margin-top: 0.2rem;
+  }
+
+  .flux-table {
+    background: var(--color-surface);
+    border: 1px solid var(--color-muted);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .flux-row {
+    display: grid;
+    grid-template-columns: 1.5fr 120px 120px 100px;
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid var(--color-muted);
+    align-items: center;
+    gap: 1rem;
+    transition: background 0.15s;
+  }
+
+  .flux-row:last-child { border-bottom: none; }
+  .flux-row:not(.header):hover { background: var(--color-overlay); }
+
+  .flux-row.header {
+    background: var(--color-overlay);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-subtle);
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  .badge.ok      { background: color-mix(in srgb, var(--color-ok)     18%, transparent); color: var(--color-ok); }
+  .badge.warn    { background: color-mix(in srgb, var(--color-warn)   18%, transparent); color: var(--color-warn); }
+  .badge.crit    { background: color-mix(in srgb, var(--color-crit)   18%, transparent); color: var(--color-crit); }
+  .badge.unknown { background: color-mix(in srgb, var(--color-subtle) 18%, transparent); color: var(--color-subtle); }
+
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      var(--color-surface) 25%,
+      var(--color-overlay) 50%,
+      var(--color-surface) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  @media (max-width: 640px) {
+    .flux-row { grid-template-columns: 1fr 90px; }
+    .flux-row > *:nth-child(2),
+    .flux-row > *:nth-child(3) { display: none; }
+  }
+</style>
+
+<script>
+  async function loadStatus() {
+    try {
+      const res = await fetch('/data/live.json');
+      if (!res.ok) throw new Error('no data');
+      const data = await res.json();
+
+      // Last updated timestamp
+      if (data.updated) {
+        const el = document.getElementById('last-updated');
+        if (el) {
+          const d = new Date(data.updated);
+          el.textContent = 'Data as of ' + d.toLocaleTimeString('en-ZA', {
+            timeZone: 'Africa/Johannesburg',
+            hour: '2-digit', minute: '2-digit'
+          }) + ' SAST';
+        }
+      }
+
+      // Glance cards
+      const glance = document.getElementById('glance-cards');
+      if (glance && data.cards) {
+        glance.innerHTML = data.cards.map((c: any) => `
+          <div class="card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
+              <span class="mono" style="color:var(--color-subtle);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em">${c.label}</span>
+              <span class="status-dot ${c.status}"></span>
+            </div>
+            <div style="font-size:1.4rem;font-weight:700;color:var(--color-heading);font-family:var(--font-mono);margin-bottom:0.25rem">${c.value}</div>
+            <div class="mono">${c.sub ?? ''}</div>
+          </div>
+        `).join('');
+      }
+
+      // Nodes
+      const nodesGrid = document.getElementById('nodes-grid');
+      if (nodesGrid && data.nodes) {
+        nodesGrid.innerHTML = data.nodes.map((n: any) => `
+          <div class="node-card ${n.status}">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div>
+                <div style="font-size:1.05rem;font-weight:700;color:var(--color-heading)">${n.name}</div>
+                <div class="mono" style="color:var(--color-subtle);margin-top:0.15rem">${n.role}</div>
+              </div>
+              <span class="badge ${n.status}">
+                ${n.status === 'ok' ? '✓ Ready' : n.status === 'warn' ? '⚠ Degraded' : n.status === 'crit' ? '✗ Not Ready' : '? Unknown'}
+              </span>
+            </div>
+            <div class="node-metrics">
+              <div class="metric">
+                <span class="metric-value">${n.cpu}</span>
+                <span class="metric-label">CPU</span>
+              </div>
+              <div class="metric">
+                <span class="metric-value">${n.memory}</span>
+                <span class="metric-label">Memory</span>
+              </div>
+              <div class="metric">
+                <span class="metric-value" style="font-size:0.82rem">${n.uptime}</span>
+                <span class="metric-label">Uptime</span>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Flux
+      const fluxSection = document.getElementById('flux-section');
+      if (fluxSection && data.flux) {
+        const f = data.flux;
+        const ks = f.kustomizations ?? [];
+        fluxSection.innerHTML = `
+          <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;flex-wrap:wrap">
+            <span class="badge ${f.status}">${f.ready}/${f.total} synced</span>
+            <span class="mono" style="color:var(--color-subtle)">last sync ${f.last_sync}</span>
+          </div>
+          ${ks.length ? `
+          <div class="flux-table">
+            <div class="flux-row header">
+              <span>Kustomization</span>
+              <span>Namespace</span>
+              <span>Last Applied</span>
+              <span>Status</span>
+            </div>
+            ${ks.map((k: any) => `
+              <div class="flux-row">
+                <span style="font-family:var(--font-mono);font-size:0.875rem;color:var(--color-heading)">${k.name}</span>
+                <span style="font-family:var(--font-mono);font-size:0.75rem;color:var(--color-subtle)">${k.namespace}</span>
+                <span style="font-family:var(--font-mono);font-size:0.75rem;color:var(--color-subtle)">${k.age}</span>
+                <span class="badge ${k.ready ? 'ok' : 'crit'}">${k.ready ? '✓ Ready' : '✗ Failed'}</span>
+              </div>
+            `).join('')}
+          </div>` : `<div class="mono" style="color:var(--color-subtle);padding:1rem 0">No kustomization data yet — pipeline pending</div>`}
+        `;
+      }
+
+      // Backups
+      const backupCards = document.getElementById('backup-cards');
+      if (backupCards && data.cards) {
+        const bc = data.cards.find((c: any) => c.label === 'Last Backup');
+        const vc = data.cards.find((c: any) => c.label === 'Velero');
+        const items = [
+          { label: 'Docker Appdata', value: bc?.value ?? '—', sub: 'daily cron 02:00', status: bc?.status ?? 'unknown' },
+          { label: 'Velero (k8s)',   value: vc?.value ?? '—', sub: 'last cluster backup', status: vc?.status ?? 'unknown' },
+          { label: 'etcd Snapshot',  value: '—',              sub: 'daily cron 02:00', status: 'unknown' },
+        ];
+        backupCards.innerHTML = items.map(c => `
+          <div class="card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
+              <span class="mono" style="color:var(--color-subtle);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em">${c.label}</span>
+              <span class="status-dot ${c.status}"></span>
+            </div>
+            <div style="font-size:1.25rem;font-weight:700;color:var(--color-heading);font-family:var(--font-mono);margin-bottom:0.25rem">${c.value}</div>
+            <div class="mono">${c.sub}</div>
+          </div>
+        `).join('');
+      }
+
+    } catch { /* skeletons remain */ }
+  }
+
+  loadStatus();
+  setInterval(loadStatus, 30000);
+</script>

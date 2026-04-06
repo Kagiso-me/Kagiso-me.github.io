@@ -1,0 +1,40 @@
+name: Sync Digest
+
+on:
+  # Trigger when ops-log changes in homelab-infrastructure
+  repository_dispatch:
+    types: [ops-log-updated]
+  # Also run daily to catch anything missed
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  sync:
+    name: Sync ops-log to digest.json
+    runs-on: [self-hosted, linux, homelab]
+
+    steps:
+      - name: Checkout site repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.SITE_DEPLOY_TOKEN }}
+
+      - name: Checkout homelab-infrastructure
+        uses: actions/checkout@v4
+        with:
+          repository: Kagiso-me/homelab-infrastructure
+          path: homelab-infrastructure
+          token: ${{ secrets.SITE_DEPLOY_TOKEN }}
+
+      - name: Build digest.json
+        run: |
+          bash scripts/sync-digest.sh homelab-infrastructure/docs/ops-log
+
+      - name: Commit if changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/digest.json
+          git diff --staged --quiet || git commit -m "chore(data): sync ops-log digest [skip ci]"
+          git push

@@ -362,19 +362,23 @@ import Layout from '../layouts/Layout.astro';
 
       const strip = document.getElementById('status-strip');
       if (strip && data.nodes) {
-        strip.innerHTML = data.nodes.map((node: any) => `
+        strip.innerHTML = data.nodes.map((node: any) => {
+          const pressureWarning = node.pressure?.length
+            ? `<span style="color:var(--color-warn);font-size:0.7rem;margin-left:0.5rem">${node.pressure.join(', ')}</span>`
+            : '';
+          return `
           <div style="background:var(--color-surface);border:1px solid var(--color-muted);border-radius:8px;padding:0.875rem 1rem;display:flex;align-items:center;gap:0.75rem">
             <span class="status-dot ${node.status}"></span>
             <div>
-              <div style="font-size:0.875rem;color:var(--color-heading);font-weight:600">${node.name}</div>
+              <div style="font-size:0.875rem;color:var(--color-heading);font-weight:600">${node.name}${pressureWarning}</div>
               <div class="mono">${node.role}</div>
             </div>
             <div style="margin-left:auto;text-align:right">
-              <div class="mono" style="color:var(--color-peach)">${node.cpu}</div>
-              <div class="mono">${node.memory}</div>
+              <div class="mono" style="color:var(--color-peach)">${node.pods} pods</div>
+              <div class="mono">${node.cpu} CPU · ${node.memory} mem</div>
             </div>
-          </div>
-        `).join('');
+          </div>`;
+        }).join('');
       }
     } catch { /* skeletons stay, ticker already showing with static fallback */ }
   }

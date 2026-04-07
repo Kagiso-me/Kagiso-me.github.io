@@ -385,19 +385,11 @@ build_navidrome() {
   local user="${NAVIDROME_USER:-}" pass="${NAVIDROME_PASS:-}"
 
   if [[ -n "$user" && -n "$pass" ]]; then
-    local raw
-    raw=$(ND_USER="$user" ND_PASS="$pass" python3 -c "
-import os, urllib.parse, urllib.request
-u = os.environ['ND_USER']
-p = urllib.parse.quote(os.environ['ND_PASS'], safe='')
-url = '${NAVIDROME_URL}/rest/getNowPlaying.view?u=' + u + '&p=' + p + '&v=1.16.1&c=homelab&f=json'
-try:
-  import urllib.request
-  with urllib.request.urlopen(url, timeout=5) as r:
-    print(r.read().decode())
-except:
-  print('')
-" 2>/dev/null || echo "")
+    local raw enc_pass
+    enc_pass=$(python3 -c "import urllib.parse,os; print(urllib.parse.quote(os.environ['ND_PASS'],safe=''))" 2>/dev/null)
+    raw=$(curl -sf --max-time 5 \
+      "${NAVIDROME_URL}/rest/getNowPlaying.view?u=${user}&p=${enc_pass}&v=1.16.1&c=homelab&f=json" \
+      2>/dev/null || echo "")
     if [[ -n "$raw" ]]; then
       echo "$raw" | ND_URL="${NAVIDROME_URL}" ND_USER="$user" ND_PASS="$pass" python3 -c "
 import sys, json, os, urllib.parse

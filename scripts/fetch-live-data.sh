@@ -385,16 +385,21 @@ build_navidrome() {
   local user="${NAVIDROME_USER:-}" pass="${NAVIDROME_PASS:-}"
 
   if [[ -n "$user" && -n "$pass" ]]; then
-    local raw
+    # Use token auth: salt + md5(password+salt) — more reliable than plaintext
+    local salt raw
+    salt=$(python3 -c "import random,string; print(''.join(random.choices(string.ascii_lowercase+string.digits,k=8)))")
+    local token
+    token=$(python3 -c "import hashlib; print(hashlib.md5('${pass}${salt}'.encode()).hexdigest())")
     raw=$(curl -sf --max-time 5 \
-      "${NAVIDROME_URL}/rest/getNowPlaying.view?u=${user}&p=${pass}&v=1.16.1&c=homelab&f=json" \
+      "${NAVIDROME_URL}/rest/getNowPlaying.view?u=${user}&t=${token}&s=${salt}&v=1.16.1&c=homelab&f=json" \
       2>/dev/null || echo "")
     if [[ -n "$raw" ]]; then
       echo "$raw" | python3 -c "
 import sys, json
 nd_url = '${NAVIDROME_URL}'
 nd_user = '${user}'
-nd_pass = '${pass}'
+nd_token = '${token}'
+nd_salt = '${salt}'
 try:
   entries = json.load(sys.stdin).get('subsonic-response', {}) \
               .get('nowPlaying', {}).get('entry', [])
@@ -407,7 +412,7 @@ try:
     album    = e.get('album', '')
     artist   = e.get('artist', '')
     cover_id = e.get('coverArt', '')
-    cover_url = f'{nd_url}/rest/getCoverArt.view?u={nd_user}&p={nd_pass}&v=1.16.1&c=homelab&id={cover_id}&size=300' if cover_id else ''
+    cover_url = f'{nd_url}/rest/getCoverArt.view?u={nd_user}&t={nd_token}&s={nd_salt}&v=1.16.1&c=homelab&id={cover_id}&size=300' if cover_id else ''
     playing_str = f'{count} playing'
     label = f'{playing_str} · {title}' if title else playing_str
     print(json.dumps({

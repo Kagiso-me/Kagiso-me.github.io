@@ -286,7 +286,7 @@ import Layout from '../layouts/Layout.astro';
     align-items: center;
     gap: 0;
     width: max-content;
-    animation: ticker-scroll 60s linear infinite;
+    animation: ticker-scroll 90s linear infinite;
   }
 
   .ticker-track:hover { animation-play-state: paused; }
@@ -346,20 +346,16 @@ import Layout from '../layouts/Layout.astro';
     border: 1px solid var(--color-muted);
     border-radius: 12px;
     padding: 1.25rem;
-    position: relative;
-    overflow: hidden;
     transition: border-color 0.2s;
   }
 
-  .media-card.active {
-    border-color: var(--color-ok);
-  }
+  .media-card.active { border-color: var(--color-ok); }
 
   .media-card-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 1rem;
+    margin-bottom: 0.875rem;
   }
 
   .media-badge {
@@ -379,23 +375,10 @@ import Layout from '../layouts/Layout.astro';
     color: var(--color-subtle);
   }
 
-  .media-title {
-    font-weight: 700;
-    font-size: 1rem;
-    color: var(--color-heading);
-    margin: 0 0 0.25rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .media-sub {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--color-subtle);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  .media-body {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
   }
 
   .media-art {
@@ -403,8 +386,7 @@ import Layout from '../layouts/Layout.astro';
     height: 56px;
     border-radius: 6px;
     object-fit: cover;
-    float: right;
-    margin: 0 0 0.5rem 1rem;
+    flex-shrink: 0;
     background: var(--color-overlay);
   }
 
@@ -417,8 +399,28 @@ import Layout from '../layouts/Layout.astro';
     align-items: center;
     justify-content: center;
     font-size: 1.4rem;
-    float: right;
-    margin: 0 0 0.5rem 1rem;
+    flex-shrink: 0;
+  }
+
+  .media-text { min-width: 0; }
+
+  .media-title {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--color-heading);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .media-sub {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-subtle);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 0.2rem;
   }
 
   .two-col {
@@ -814,9 +816,9 @@ import Layout from '../layouts/Layout.astro';
         ? `<img class="media-art" src="${m.coverUrl}" alt="album art" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="media-art-placeholder" style="display:none">${icon}</div>`
         : `<div class="media-art-placeholder">${icon}</div>`;
 
-      const bodyHtml = playing
+      const textHtml = playing
         ? `<div class="media-title">${m.title || m.label}</div>
-           <div class="media-sub">${[m.artist, m.album].filter(Boolean).join(' · ') || '&nbsp;'}</div>`
+           <div class="media-sub">${[m.artist, m.album].filter(Boolean).join(' · ')}</div>`
         : `<div class="media-title" style="color:var(--color-subtle);font-weight:400">idle</div>`;
 
       return `
@@ -828,8 +830,10 @@ import Layout from '../layouts/Layout.astro';
           </span>
           <span class="media-service-label">${m.name}</span>
         </div>
-        ${artHtml}
-        ${bodyHtml}
+        <div class="media-body">
+          ${artHtml}
+          <div class="media-text">${textHtml}</div>
+        </div>
       </div>`;
     }).join('');
   }

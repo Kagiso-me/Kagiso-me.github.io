@@ -10,34 +10,18 @@
 
 set -euo pipefail
 
-# Prometheus ClusterIP — reachable from varys via k3s cluster network
-# TODO: replace with internal DNS name once USG DNS records are configured
-PROM="http://10.43.248.50:9090"
 NOW=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
-# ── Helper: query Prometheus instant ──────────────────────────────────────────
-prom_query() {
-  local query="$1"
-  curl -sf --max-time 5 \
-    "${PROM}/api/v1/query" \
-    --data-urlencode "query=${query}" \
-    2>/dev/null || echo '{"data":{"result":[]}}'
-}
-
-prom_value() {
-  local query="$1"
-  local default="${2:---}"
-  local result
-  result=$(prom_query "$query")
-  echo "$result" | python3 -c "
-import sys, json
-try:
-  d = json.load(sys.stdin)
-  r = d['data']['result']
-  print(r[0]['value'][1] if r else '${default}')
-except:
-  print('${default}')
-"
+# ── Helper: query node-exporter directly on each node ─────────────────────────
+# Node-exporters listen on :9100 on each node's LAN IP — reachable from varys.
+# Prometheus ClusterIP is NOT reachable from varys (pod network only).
+node_exporter_query() {
+  local node_ip="$1"
+  local metric="$2"
+  local default="${3:---}"
+  curl -sf --max-time 5 "http://${node_ip}:9100/metrics" 2>/dev/null \
+    | grep -E "^${metric}[{ ]" | head -1 | awk '{print $NF}' \
+    || echo "$default"
 }
 
 # ── Nodes ─────────────────────────────────────────────────────────────────────
@@ -55,26 +39,66 @@ build_nodes() {
     local status="crit"
     [[ "$kube_status" == "Ready" ]] && status="ok"
 
-    # CPU usage % (1 - idle)
-    local cpu
-    cpu=$(prom_value "round((1 - avg(rate(node_cpu_seconds_total{instance=\"${ip}:9100\",mode=\"idle\"}[2m]))) * 100, 0.1)")
-    [[ "$cpu" == "--" ]] && cpu="—" || cpu="${cpu}%"
+    # CPU: scrape node-exporter metrics directly, compute idle across all CPUs
+    local cpu="—"
+    local cpu_raw
+    cpu_raw=$(curl -sf --max-time 5 "http://${ip}:9100/metrics" 2>/dev/null || echo "")
+    if [[ -n "$cpu_raw" ]]; then
+      cpu=$(echo "$cpu_raw" | python3 -c "
+import sys, re
+lines = sys.stdin.read()
+idle_total = 0.0; total_total = 0.0
+for line in lines.splitlines():
+    m = re.match(r'node_cpu_seconds_total\{[^}]*mode=\"(\w+)\"[^}]*\}\s+([\d.e+]+)', line)
+    if not m: continue
+    val = float(m.group(2))
+    total_total += val
+    if m.group(1) == 'idle':
+        idle_total += val
+if total_total > 0:
+    used_pct = (1 - idle_total / total_total) * 100
+    print(f'{used_pct:.1f}%')
+else:
+    print('—')
+" 2>/dev/null || echo "—")
+    fi
 
-    # Memory usage %
-    local mem
-    mem=$(prom_value "round((1 - node_memory_MemAvailable_bytes{instance=\"${ip}:9100\"} / node_memory_MemTotal_bytes{instance=\"${ip}:9100\"}) * 100, 0.1)")
-    [[ "$mem" == "--" ]] && mem="—" || mem="${mem}%"
+    # Memory: MemAvailable and MemTotal from node-exporter
+    local mem="—"
+    if [[ -n "$cpu_raw" ]]; then
+      mem=$(echo "$cpu_raw" | python3 -c "
+import sys, re
+lines = sys.stdin.read()
+def get(metric):
+    m = re.search(rf'^{metric}\s+([\d.e+]+)', lines, re.MULTILINE)
+    return float(m.group(1)) if m else None
+total = get('node_memory_MemTotal_bytes')
+avail = get('node_memory_MemAvailable_bytes')
+if total and avail and total > 0:
+    used_pct = (1 - avail / total) * 100
+    print(f'{used_pct:.1f}%')
+else:
+    print('—')
+" 2>/dev/null || echo "—")
+    fi
 
-    # Uptime
-    local uptime_sec
-    uptime_sec=$(prom_value "node_time_seconds{instance=\"${ip}:9100\"} - node_boot_time_seconds{instance=\"${ip}:9100\"}")
+    # Uptime: node_time_seconds - node_boot_time_seconds
     local uptime_str="—"
-    if [[ "$uptime_sec" != "--" && "$uptime_sec" != "—" ]]; then
-      uptime_str=$(python3 -c "
-s=int(float('${uptime_sec}'))
-d,s=divmod(s,86400); h,s=divmod(s,3600); m,_=divmod(s,60)
-print(f'{d}d {h}h' if d else f'{h}h {m}m')
-")
+    if [[ -n "$cpu_raw" ]]; then
+      uptime_str=$(echo "$cpu_raw" | python3 -c "
+import sys, re, time
+lines = sys.stdin.read()
+def get(metric):
+    m = re.search(rf'^{metric}\s+([\d.e+]+)', lines, re.MULTILINE)
+    return float(m.group(1)) if m else None
+boot = get('node_boot_time_seconds')
+if boot:
+    s = int(time.time() - boot)
+    d, s = divmod(s, 86400); h, s = divmod(s, 3600); m, _ = divmod(s, 60)
+    print(f'{d}d {h}h' if d else f'{h}h {m}m')
+else:
+    print('—')
+" 2>/dev/null || echo "—")
     fi
 
     result="${result}${sep}{\"name\":\"${name}\",\"role\":\"${role}\",\"status\":\"${status}\",\"cpu\":\"${cpu}\",\"memory\":\"${mem}\",\"uptime\":\"${uptime_str}\"}"
@@ -167,15 +191,17 @@ SONARR_URL="http://${DOCKER_HOST}:8989"
 RADARR_URL="http://${DOCKER_HOST}:7878"
 SABNZBD_URL="http://${DOCKER_HOST}:8085"
 PLEX_URL="http://${DOCKER_HOST}:32400"
+LIDARR_URL="http://${DOCKER_HOST}:8686"
+NAVIDROME_URL="http://${DOCKER_HOST}:4533"
 UPTIME_KUMA_URL="http://${DOCKER_HOST}:3001"
 # API keys injected as environment variables from GitHub Actions secrets
 # Set locally on varys via ~/.bashrc if running the script manually:
-#   export SONARR_API_KEY=...
-#   export RADARR_API_KEY=...
-#   export SABNZBD_API_KEY=...
+#   export SONARR_API_KEY=...   export RADARR_API_KEY=...
+#   export SABNZBD_API_KEY=...  export LIDARR_API_KEY=...
 : "${SONARR_API_KEY:?SONARR_API_KEY env var not set}"
 : "${RADARR_API_KEY:?RADARR_API_KEY env var not set}"
 : "${SABNZBD_API_KEY:?SABNZBD_API_KEY env var not set}"
+: "${LIDARR_API_KEY:?LIDARR_API_KEY env var not set}"
 
 # ── Sonarr: series count ───────────────────────────────────────────────────────
 build_sonarr() {
@@ -276,6 +302,79 @@ except:
   echo "{\"label\":\"${label}\",\"status\":\"${status}\"}"
 }
 
+# ── Lidarr: artist count ──────────────────────────────────────────────────────
+build_lidarr() {
+  local raw
+  raw=$(curl -sf --max-time 5 \
+    -H "X-Api-Key: ${LIDARR_API_KEY}" \
+    "${LIDARR_URL}/api/v1/artist" 2>/dev/null || echo "")
+
+  local count="—" status="unknown"
+  if [[ -n "$raw" ]]; then
+    count=$(echo "$raw" | python3 -c "import sys,json; d=json.load(sys.stdin); print(len(d))" 2>/dev/null || echo "—")
+    status="ok"
+  fi
+  echo "{\"label\":\"${count} artists\",\"status\":\"${status}\"}"
+}
+
+# ── Navidrome: now playing / idle ─────────────────────────────────────────────
+build_navidrome() {
+  local label="idle" status="unknown"
+  # Navidrome /rest/getNowPlaying requires auth — check /ping first for online status
+  if curl -sf --max-time 5 "${NAVIDROME_URL}/ping" >/dev/null 2>&1; then
+    status="ok"
+    label="online"
+  fi
+  echo "{\"label\":\"${label}\",\"status\":\"${status}\"}"
+}
+
+# ── Vaultwarden: online check ─────────────────────────────────────────────────
+build_vaultwarden() {
+  # Vaultwarden exposes /alive endpoint
+  local label="offline" status="crit"
+  local vw_url
+  # TODO: replace with internal DNS / ingress URL once configured
+  vw_url=$(kubectl get ingress -A -o jsonpath='{range .items[?(@.metadata.name=="vaultwarden")]}{.spec.rules[0].host}{end}' 2>/dev/null || echo "")
+  if [[ -n "$vw_url" ]]; then
+    if curl -sf --max-time 5 "https://${vw_url}/alive" >/dev/null 2>&1; then
+      label="online"; status="ok"
+    fi
+  else
+    # Fallback: check via NodePort if ingress not resolvable from varys
+    local np
+    np=$(kubectl get svc -n vaultwarden -o jsonpath='{.items[0].spec.ports[0].nodePort}' 2>/dev/null || echo "")
+    if [[ -n "$np" ]] && curl -sf --max-time 5 "http://10.0.10.11:${np}/alive" >/dev/null 2>&1; then
+      label="online"; status="ok"
+    fi
+  fi
+  echo "{\"label\":\"${label}\",\"status\":\"${status}\"}"
+}
+
+# ── Nextcloud: online check ───────────────────────────────────────────────────
+build_nextcloud() {
+  local label="offline" status="crit"
+  local nc_url
+  nc_url=$(kubectl get ingress -A -o jsonpath='{range .items[?(@.metadata.name=="nextcloud")]}{.spec.rules[0].host}{end}' 2>/dev/null || echo "")
+  if [[ -n "$nc_url" ]]; then
+    if curl -sf --max-time 5 "https://${nc_url}/status.php" >/dev/null 2>&1; then
+      label="online"; status="ok"
+    fi
+  fi
+  echo "{\"label\":\"${label}\",\"status\":\"${status}\"}"
+}
+
+# ── Immich: photo count ───────────────────────────────────────────────────────
+build_immich() {
+  local label="—" status="unknown"
+  # Immich server-info endpoint requires API key — check via ingress
+  local immich_url
+  immich_url=$(kubectl get ingress -A -o jsonpath='{range .items[?(@.metadata.name=="immich")]}{.spec.rules[0].host}{end}' 2>/dev/null || echo "")
+  if [[ -n "$immich_url" ]] && curl -sf --max-time 5 "https://${immich_url}/api/server/ping" >/dev/null 2>&1; then
+    label="online"; status="ok"
+  fi
+  echo "{\"label\":\"${label}\",\"status\":\"${status}\"}"
+}
+
 # ── Service status via Uptime Kuma + enriched sub-labels ──────────────────────
 # Uptime Kuma status page slug: "homelab" — adjust if yours differs
 build_services() {
@@ -284,37 +383,44 @@ build_services() {
     "${UPTIME_KUMA_URL}/api/status-page/heartbeat/homelab" 2>/dev/null || echo "")
 
   # Fetch enriched sub-labels from individual service APIs
-  local sonarr radarr sabnzbd plex
+  local sonarr radarr sabnzbd plex lidarr navidrome vaultwarden nextcloud immich
   sonarr=$(build_sonarr)
   radarr=$(build_radarr)
   sabnzbd=$(build_sabnzbd)
   plex=$(build_plex)
+  lidarr=$(build_lidarr)
+  navidrome=$(build_navidrome)
+  vaultwarden=$(build_vaultwarden)
+  nextcloud=$(build_nextcloud)
+  immich=$(build_immich)
 
   python3 -c "
 import sys, json
 
-uk_raw   = '''${uk_raw}'''
-sonarr   = json.loads('''${sonarr}''')
-radarr   = json.loads('''${radarr}''')
-sabnzbd  = json.loads('''${sabnzbd}''')
-plex_d   = json.loads('''${plex}''')
+uk_raw      = '''${uk_raw}'''
+sonarr      = json.loads('''${sonarr}''')
+radarr      = json.loads('''${radarr}''')
+sabnzbd     = json.loads('''${sabnzbd}''')
+plex_d      = json.loads('''${plex}''')
+lidarr      = json.loads('''${lidarr}''')
+navidrome   = json.loads('''${navidrome}''')
+vaultwarden = json.loads('''${vaultwarden}''')
+nextcloud   = json.loads('''${nextcloud}''')
+immich      = json.loads('''${immich}''')
 
-# Base service list: name, ticker tag, optional override label + status
+# Service list — tag is the sub-label shown in the ticker
 SERVICES = [
   # k3s
-  {'name': 'Vaultwarden', 'tag': 'k3s · passwords'},
-  {'name': 'Immich',      'tag': 'k3s · photos'},
-  {'name': 'Nextcloud',   'tag': 'k3s · files'},
+  {'name': 'Vaultwarden', 'tag': vaultwarden['label'],               'status_override': vaultwarden['status']},
+  {'name': 'Immich',      'tag': immich['label'],                    'status_override': immich['status']},
+  {'name': 'Nextcloud',   'tag': nextcloud['label'],                 'status_override': nextcloud['status']},
   # Docker — media
-  {'name': 'Plex',        'tag': f'docker · {plex_d[\"label\"]}',  'status_override': plex_d['status']},
-  {'name': 'SABnzbd',     'tag': f'docker · {sabnzbd[\"label\"]}', 'status_override': sabnzbd['status']},
-  {'name': 'Sonarr',      'tag': f'docker · {sonarr[\"label\"]}',  'status_override': sonarr['status']},
-  {'name': 'Radarr',      'tag': f'docker · {radarr[\"label\"]}',  'status_override': radarr['status']},
-  {'name': 'Lidarr',      'tag': 'docker · music'},
-  {'name': 'Navidrome',   'tag': 'docker · music streaming'},
-  # Docker — platform
-  {'name': 'Uptime Kuma', 'tag': 'docker · monitoring'},
-  {'name': 'NPM',         'tag': 'docker · proxy'},
+  {'name': 'Plex',        'tag': plex_d['label'],                    'status_override': plex_d['status']},
+  {'name': 'SABnzbd',     'tag': sabnzbd['label'],                   'status_override': sabnzbd['status']},
+  {'name': 'Sonarr',      'tag': sonarr['label'],                    'status_override': sonarr['status']},
+  {'name': 'Radarr',      'tag': radarr['label'],                    'status_override': radarr['status']},
+  {'name': 'Lidarr',      'tag': lidarr['label'],                    'status_override': lidarr['status']},
+  {'name': 'Navidrome',   'tag': navidrome['label'],                 'status_override': navidrome['status']},
 ]
 
 # Build status map from Uptime Kuma heartbeats

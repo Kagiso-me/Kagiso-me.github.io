@@ -1,10 +1,340 @@
 ---
 import Layout from '../layouts/Layout.astro';
 ---
-<Layout title="Digest">
-  <div style="max-width:1200px;margin:0 auto;padding:4rem 1.5rem;text-align:center">
-    <p class="mono" style="color:var(--color-peach)">~/digest</p>
-    <h1 style="text-transform:capitalize">digest</h1>
-    <p style="color:var(--color-subtle)">Coming soon.</p>
+
+<Layout title="Digest" description="Ops log — infrastructure changes, deployments, and incidents.">
+
+  <div class="page-wrap">
+
+    <!-- ── Header ── -->
+    <div class="page-header fade-up">
+      <div>
+        <p class="mono" style="color:var(--color-peach);margin-bottom:0.25rem">~/digest</p>
+        <h1 style="margin:0">Ops Digest</h1>
+      </div>
+      <p class="hero-sub">
+        A running log of infrastructure changes — deployments, fixes, incidents, and architectural decisions.
+        Sourced directly from the <a href="https://github.com/Kagiso-me/homelab-infrastructure" target="_blank" rel="noopener" class="link-inline">homelab-infrastructure</a> changelog.
+      </p>
+    </div>
+
+    <!-- ── Filter bar ── -->
+    <div class="filter-bar fade-up" style="animation-delay:0.05s">
+      <button class="filter-btn active" data-type="all">All</button>
+      <button class="filter-btn" data-type="DEPLOY">Deploy</button>
+      <button class="filter-btn" data-type="FIX">Fix</button>
+      <button class="filter-btn" data-type="HARDWARE">Hardware</button>
+      <button class="filter-btn" data-type="INCIDENT">Incident</button>
+      <button class="filter-btn" data-type="NETWORK">Network</button>
+      <button class="filter-btn" data-type="SECURITY">Security</button>
+      <div class="filter-spacer"></div>
+      <span class="mono" id="entry-count" style="color:var(--color-subtle);font-size:0.8rem"></span>
+    </div>
+
+    <!-- ── Entries ── -->
+    <div id="digest-entries" class="fade-up" style="animation-delay:0.1s">
+      <!-- skeleton -->
+      <div class="skeleton" style="height:80px;border-radius:12px;margin-bottom:0.75rem"></div>
+      <div class="skeleton" style="height:80px;border-radius:12px;margin-bottom:0.75rem"></div>
+      <div class="skeleton" style="height:80px;border-radius:12px;margin-bottom:0.75rem"></div>
+      <div class="skeleton" style="height:80px;border-radius:12px;margin-bottom:0.75rem"></div>
+      <div class="skeleton" style="height:80px;border-radius:12px;margin-bottom:0.75rem"></div>
+    </div>
+
   </div>
+
 </Layout>
+
+<style>
+  .page-wrap {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+  }
+
+  .page-header {
+    margin-bottom: 2.5rem;
+  }
+
+  h1 { font-size: clamp(1.75rem, 4vw, 2.5rem); margin-bottom: 0.75rem; }
+
+  .hero-sub {
+    color: var(--color-subtle);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    max-width: 620px;
+    margin: 0.75rem 0 0;
+  }
+
+  .link-inline {
+    color: var(--color-peach);
+    text-decoration: none;
+  }
+  .link-inline:hover { text-decoration: underline; }
+
+  /* ── Filter bar ── */
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--color-muted);
+  }
+
+  .filter-spacer { flex: 1; }
+
+  .filter-btn {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    padding: 0.3rem 0.75rem;
+    border: 1px solid var(--color-muted);
+    border-radius: 6px;
+    color: var(--color-subtle);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .filter-btn:hover  { border-color: var(--color-peach); color: var(--color-peach); }
+  .filter-btn.active { border-color: var(--color-peach); color: var(--color-peach); background: color-mix(in srgb, var(--color-peach) 10%, transparent); }
+
+  /* ── Entry card ── */
+  .entry-card {
+    display: block;
+    text-decoration: none;
+    background: var(--color-surface);
+    border: 1px solid var(--color-muted);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 0.75rem;
+    transition: border-color 0.15s, transform 0.15s;
+    cursor: pointer;
+  }
+
+  .entry-card:hover {
+    border-color: var(--color-peach);
+    transform: translateY(-1px);
+  }
+
+  .entry-card.no-detail { cursor: default; }
+  .entry-card.no-detail:hover { transform: none; border-color: var(--color-muted); }
+
+  .entry-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .entry-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-shrink: 0;
+    padding-top: 0.15rem;
+  }
+
+  .entry-date {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--color-subtle);
+    white-space: nowrap;
+  }
+
+  .type-badge {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+
+  .type-DEPLOY   { background: color-mix(in srgb, var(--color-ok)   12%, transparent); color: var(--color-ok); }
+  .type-FIX      { background: color-mix(in srgb, var(--color-peach) 12%, transparent); color: var(--color-peach); }
+  .type-INCIDENT { background: color-mix(in srgb, var(--color-crit)  12%, transparent); color: var(--color-crit); }
+  .type-HARDWARE { background: color-mix(in srgb, var(--color-gold)  12%, transparent); color: var(--color-gold); }
+  .type-NETWORK  { background: color-mix(in srgb, var(--color-mauve) 12%, transparent); color: var(--color-mauve); }
+  .type-SECURITY { background: color-mix(in srgb, var(--color-warn)  12%, transparent); color: var(--color-warn); }
+  .type-SCALE    { background: color-mix(in srgb, var(--color-ok)    12%, transparent); color: var(--color-ok); }
+  .type-default  { background: color-mix(in srgb, var(--color-subtle) 12%, transparent); color: var(--color-subtle); }
+
+  .entry-body { flex: 1; min-width: 0; }
+
+  .entry-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-heading);
+    line-height: 1.4;
+    margin-bottom: 0.25rem;
+  }
+
+  .entry-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  .entry-commit {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-subtle);
+  }
+
+  .detail-link {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-peach);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  /* ── Month divider ── */
+  .month-divider {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-subtle);
+    margin: 2rem 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-muted);
+  }
+
+  .month-divider:first-child { margin-top: 0; }
+
+  .skeleton {
+    background: linear-gradient(90deg, var(--color-surface) 25%, var(--color-overlay) 50%, var(--color-surface) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  @media (max-width: 640px) {
+    .entry-row { flex-direction: column; gap: 0.5rem; }
+    .filter-bar { gap: 0.4rem; }
+  }
+</style>
+
+<script>
+  let allEntries: any[] = [];
+  let activeType = 'all';
+
+  const TYPE_COLORS: Record<string, string> = {
+    DEPLOY: 'type-DEPLOY', FIX: 'type-FIX', INCIDENT: 'type-INCIDENT',
+    HARDWARE: 'type-HARDWARE', NETWORK: 'type-NETWORK', SECURITY: 'type-SECURITY',
+    SCALE: 'type-SCALE',
+  };
+
+  function formatDate(d: string) {
+    // d is either "YYYY-MM-DD" or "YYYY-MM"
+    if (d.length === 7) {
+      const [y, m] = d.split('-');
+      return new Date(+y, +m - 1).toLocaleDateString('en-ZA', { month: 'short', year: 'numeric' });
+    }
+    return new Date(d + 'T12:00:00').toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
+  function monthKey(d: string) {
+    return d.substring(0, 7); // "YYYY-MM"
+  }
+
+  function monthLabel(ym: string) {
+    const [y, m] = ym.split('-');
+    return new Date(+y, +m - 1).toLocaleDateString('en-ZA', { month: 'long', year: 'numeric' });
+  }
+
+  function render(entries: any[]) {
+    const container = document.getElementById('digest-entries');
+    if (!container) return;
+
+    const countEl = document.getElementById('entry-count');
+    if (countEl) countEl.textContent = `${entries.length} entries`;
+
+    if (!entries.length) {
+      container.innerHTML = `<div class="mono" style="color:var(--color-subtle);padding:2rem 0;text-align:center">No entries for this filter.</div>`;
+      return;
+    }
+
+    // Group by month
+    const byMonth: Record<string, any[]> = {};
+    for (const e of entries) {
+      const mk = monthKey(e.date);
+      if (!byMonth[mk]) byMonth[mk] = [];
+      byMonth[mk].push(e);
+    }
+
+    let html = '';
+    for (const mk of Object.keys(byMonth).sort().reverse()) {
+      html += `<div class="month-divider">${monthLabel(mk)}</div>`;
+      for (const e of byMonth[mk]) {
+        const typeClass = TYPE_COLORS[e.type] ?? 'type-default';
+        const href = e.hasDetail ? `/digest/${e.slug}` : null;
+        const tag = href ? 'a' : 'div';
+        const hrefAttr = href ? `href="${href}"` : '';
+        const noDetailClass = href ? '' : ' no-detail';
+
+        html += `
+        <${tag} ${hrefAttr} class="entry-card${noDetailClass}">
+          <div class="entry-row">
+            <div class="entry-meta">
+              <span class="entry-date">${formatDate(e.date)}</span>
+              <span class="type-badge ${typeClass}">${e.type}</span>
+            </div>
+            <div class="entry-body">
+              <div class="entry-title">${e.title}</div>
+              <div class="entry-footer">
+                ${e.commit ? `<span class="entry-commit">${e.commit}</span>` : ''}
+                ${e.hasDetail ? `<span class="detail-link">read more →</span>` : ''}
+              </div>
+            </div>
+          </div>
+        </${tag}>`;
+      }
+    }
+    container.innerHTML = html;
+  }
+
+  async function loadDigest() {
+    try {
+      const res = await fetch('/data/digest.json');
+      if (!res.ok) throw new Error('no data');
+      allEntries = await res.json();
+      applyFilter();
+    } catch {
+      const container = document.getElementById('digest-entries');
+      if (container) container.innerHTML = `<div class="mono" style="color:var(--color-subtle);padding:2rem 0">Failed to load digest data.</div>`;
+    }
+  }
+
+  function applyFilter() {
+    const filtered = activeType === 'all'
+      ? allEntries
+      : allEntries.filter(e => e.type === activeType);
+    render(filtered);
+  }
+
+  // Filter button clicks
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeType = (btn as HTMLElement).dataset.type ?? 'all';
+      applyFilter();
+    });
+  });
+
+  loadDigest();
+</script>

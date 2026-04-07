@@ -896,17 +896,26 @@ import Layout from '../layouts/Layout.astro';
       const entries = await res.json();
       const list = document.getElementById('digest-list');
       if (list) {
-        list.innerHTML = entries.slice(0, 3).map((e: any) => `
-          <a href="/digest/${e.slug}" style="display:block;text-decoration:none;margin-bottom:0.75rem">
-            <div class="card" style="padding:1rem">
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.25rem">
-                <span class="mono" style="color:var(--color-peach)">${e.date}</span>
-                <span class="mono" style="color:var(--color-mauve)">${e.tag}</span>
+        const TYPE_COLOR: Record<string, string> = {
+          DEPLOY: 'var(--color-ok)', FIX: 'var(--color-peach)', INCIDENT: 'var(--color-crit)',
+          HARDWARE: 'var(--color-gold)', NETWORK: 'var(--color-mauve)', SECURITY: 'var(--color-warn)',
+        };
+        list.innerHTML = entries.slice(0, 3).map((e: any) => {
+          const color = TYPE_COLOR[e.type] ?? 'var(--color-subtle)';
+          const tag = e.hasDetail ? 'a' : 'div';
+          const href = e.hasDetail ? `href="/digest/${e.slug}"` : '';
+          return `
+          <${tag} ${href} style="display:block;text-decoration:none;margin-bottom:0.75rem">
+            <div class="card" style="padding:1rem;transition:border-color 0.15s${e.hasDetail ? ';cursor:pointer' : ''}">
+              <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.4rem">
+                <span style="font-family:var(--font-mono);font-size:0.65rem;font-weight:600;padding:0.15rem 0.45rem;border-radius:4px;background:color-mix(in srgb,${color} 12%,transparent);color:${color};text-transform:uppercase;letter-spacing:0.05em">${e.type}</span>
+                <span class="mono" style="color:var(--color-subtle);font-size:0.72rem">${e.date}</span>
+                ${e.hasDetail ? `<span class="mono" style="color:var(--color-peach);font-size:0.7rem;margin-left:auto">read more →</span>` : ''}
               </div>
-              <div style="color:var(--color-heading);font-weight:600;font-size:0.9rem">${e.title}</div>
+              <div style="color:var(--color-heading);font-weight:600;font-size:0.875rem;line-height:1.4">${e.title}</div>
             </div>
-          </a>
-        `).join('');
+          </${tag}>`;
+        }).join('');
       }
     } catch { /* no data yet */ }
   }

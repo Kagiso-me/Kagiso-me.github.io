@@ -33,6 +33,15 @@
   ],
   "planned": [
     {
+      "slug": "azuracast",
+      "title": "AzuraCast",
+      "subtitle": "Self-hosted internet radio",
+      "description": "Self-hosted radio station — streaming music, scheduled programming, and live shows. Planning content and broadcast schedule before deployment.",
+      "stack": ["AzuraCast", "Icecast", "Liquidsoap"],
+      "status": "planned",
+      "target": "~mid Apr 2026"
+    },
+    {
       "slug": "canvas",
       "title": "Canvas",
       "subtitle": "Visual Project Board",

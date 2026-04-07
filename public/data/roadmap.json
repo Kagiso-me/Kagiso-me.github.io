@@ -1,0 +1,44 @@
+{
+  "updated": "2026-04-07",
+  "active": [
+    {
+      "slug": "beesly",
+      "title": "Beesly",
+      "subtitle": "Personal AI Assistant",
+      "description": "Discord-native AI assistant with infra awareness, memory, and skills. Ask Beesly about pod health, disk usage, or your calendar — all from one interface.",
+      "stack": ["OpenClaw", "Claude API", "Discord"],
+      "status": "active",
+      "progress": 35
+    }
+  ],
+  "upcoming": [
+    {
+      "slug": "pikvm",
+      "title": "PiKVM",
+      "subtitle": "KVM-over-IP",
+      "description": "Out-of-band remote access for every node — keyboard, video, mouse over the network. Browser-based recovery regardless of OS state, BIOS access, virtual media.",
+      "stack": ["Pi Zero 2W", "PiKVM", "USB HDMI capture"],
+      "status": "upcoming",
+      "target": "Apr 2026"
+    },
+    {
+      "slug": "cpu-upgrade",
+      "title": "CPU Upgrade",
+      "subtitle": "k3s node hardware refresh",
+      "description": "Replacing i5-4570T (35W TDP, 4c/4t) with Xeon E3-1230L v3 (25W TDP, 4c/8t) across all three ThinkCentre M93p nodes. Lower TDP, hyperthreading, better performance-per-watt.",
+      "stack": ["tywin", "jaime", "tyrion"],
+      "status": "upcoming",
+      "target": "May 2026 (week 2)"
+    }
+  ],
+  "planned": [
+    {
+      "slug": "canvas",
+      "title": "Canvas",
+      "subtitle": "Visual Project Board",
+      "description": "Self-hosted freeform project board. Notes, tasks, images, links, and checklists on a spatial canvas. Built for planning and tracking creative projects.",
+      "stack": ["SvelteKit", "Fastify", "SQLite"],
+      "status": "planned"
+    }
+  ]
+}

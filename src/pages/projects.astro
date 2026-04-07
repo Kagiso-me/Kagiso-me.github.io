@@ -1,10 +1,333 @@
 ---
 import Layout from '../layouts/Layout.astro';
 ---
-<Layout title="Projects">
-  <div style="max-width:1200px;margin:0 auto;padding:4rem 1.5rem;text-align:center">
-    <p class="mono" style="color:var(--color-peach)">~/projects</p>
-    <h1 style="text-transform:capitalize">projects</h1>
-    <p style="color:var(--color-subtle)">Coming soon.</p>
+
+<Layout title="Roadmap" description="What's being built, what's coming, and what's planned in the homelab.">
+
+  <div class="page-wrap">
+
+    <!-- ── Header ── -->
+    <div class="page-header fade-up">
+      <div>
+        <p class="mono" style="color:var(--color-peach);margin-bottom:0.25rem">~/roadmap</p>
+        <h1 style="margin:0">Roadmap</h1>
+      </div>
+      <p class="hero-sub">
+        Active projects, upcoming hardware work, and things on the horizon.
+        Everything here is real — not aspirational.
+      </p>
+    </div>
+
+    <!-- ── Active ── -->
+    <section class="lane fade-up" style="animation-delay:0.05s" id="lane-active">
+      <div class="lane-header">
+        <span class="lane-dot active"></span>
+        <h2 class="lane-title">Active</h2>
+        <span class="lane-sub">In flight now</span>
+      </div>
+      <div class="cards-row" id="cards-active">
+        <div class="card skeleton" style="height:180px"></div>
+      </div>
+    </section>
+
+    <!-- ── Upcoming ── -->
+    <section class="lane fade-up" style="animation-delay:0.1s" id="lane-upcoming">
+      <div class="lane-header">
+        <span class="lane-dot upcoming"></span>
+        <h2 class="lane-title">Upcoming</h2>
+        <span class="lane-sub">Committed, target date set</span>
+      </div>
+      <div class="cards-row" id="cards-upcoming">
+        <div class="card skeleton" style="height:180px"></div>
+        <div class="card skeleton" style="height:180px"></div>
+      </div>
+    </section>
+
+    <!-- ── Planned ── -->
+    <section class="lane fade-up" style="animation-delay:0.15s" id="lane-planned">
+      <div class="lane-header">
+        <span class="lane-dot planned"></span>
+        <h2 class="lane-title">Planned</h2>
+        <span class="lane-sub">Decided, not yet scheduled</span>
+      </div>
+      <div class="cards-row" id="cards-planned">
+        <div class="card skeleton" style="height:180px"></div>
+      </div>
+    </section>
+
   </div>
+
 </Layout>
+
+<style is:global>
+  .page-wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+  }
+
+  .page-header {
+    margin-bottom: 3.5rem;
+  }
+
+  h1 { font-size: clamp(1.75rem, 4vw, 2.5rem); }
+
+  .hero-sub {
+    color: var(--color-subtle);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    max-width: 520px;
+    margin: 0.75rem 0 0;
+  }
+
+  /* ── Lane ── */
+  .lane {
+    margin-bottom: 3.5rem;
+  }
+
+  .lane-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-muted);
+  }
+
+  .lane-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .lane-dot.active   { background: var(--color-ok); box-shadow: 0 0 8px var(--color-ok); }
+  .lane-dot.upcoming { background: var(--color-peach); }
+  .lane-dot.planned  { background: var(--color-subtle); }
+
+  h2.lane-title {
+    font-size: 1rem;
+    margin: 0;
+    color: var(--color-heading);
+  }
+
+  .lane-sub {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--color-subtle);
+  }
+
+  /* ── Cards row ── */
+  .cards-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1rem;
+  }
+
+  /* ── Roadmap card ── */
+  .roadmap-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-muted);
+    border-radius: 14px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .roadmap-card:hover {
+    border-color: var(--color-peach);
+    transform: translateY(-2px);
+  }
+
+  .roadmap-card.active  { border-top: 3px solid var(--color-ok); }
+  .roadmap-card.upcoming { border-top: 3px solid var(--color-peach); }
+  .roadmap-card.planned  { border-top: 3px solid var(--color-subtle); }
+
+  .card-status-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .card-status-badge {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .card-status-badge.active   { color: var(--color-ok); }
+  .card-status-badge.upcoming { color: var(--color-peach); }
+  .card-status-badge.planned  { color: var(--color-subtle); }
+
+  .card-target {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-subtle);
+  }
+
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--color-heading);
+    margin: 0 0 0.2rem;
+    line-height: 1.2;
+  }
+
+  .card-subtitle {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-subtle);
+    margin-bottom: 0.875rem;
+  }
+
+  .card-description {
+    font-size: 0.875rem;
+    color: var(--color-text);
+    line-height: 1.65;
+    flex: 1;
+    margin-bottom: 1.25rem;
+  }
+
+  /* Progress bar (active only) */
+  .progress-wrap {
+    margin-bottom: 1rem;
+  }
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--color-subtle);
+    margin-bottom: 0.35rem;
+  }
+
+  .progress-bar {
+    height: 4px;
+    background: var(--color-overlay);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--color-ok);
+    border-radius: 2px;
+    transition: width 0.6s ease;
+  }
+
+  /* Stack tags */
+  .card-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: auto;
+  }
+
+  .stack-tag {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    background: var(--color-overlay);
+    color: var(--color-subtle);
+    border: 1px solid var(--color-muted);
+  }
+
+  .skeleton {
+    background: linear-gradient(90deg, var(--color-surface) 25%, var(--color-overlay) 50%, var(--color-surface) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 14px;
+  }
+
+  @keyframes shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  @media (max-width: 640px) {
+    .cards-row { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  const STATUS_ICONS: Record<string, string> = {
+    active:   '●',
+    upcoming: '◆',
+    planned:  '○',
+  };
+
+  function buildCard(item: any): string {
+    const icon = STATUS_ICONS[item.status] ?? '○';
+
+    const progressHtml = item.status === 'active' && item.progress != null ? `
+      <div class="progress-wrap">
+        <div class="progress-label">
+          <span>progress</span>
+          <span>${item.progress}%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width:${item.progress}%"></div>
+        </div>
+      </div>` : '';
+
+    const targetHtml = item.target
+      ? `<span class="card-target">${item.target}</span>`
+      : '';
+
+    const stackHtml = item.stack?.length
+      ? `<div class="card-stack">${item.stack.map((s: string) => `<span class="stack-tag">${s}</span>`).join('')}</div>`
+      : '';
+
+    return `
+    <div class="roadmap-card ${item.status}">
+      <div class="card-status-row">
+        <span class="card-status-badge ${item.status}">${icon} ${item.status}</span>
+        ${targetHtml}
+      </div>
+      <div class="card-title">${item.title}</div>
+      <div class="card-subtitle">${item.subtitle}</div>
+      <div class="card-description">${item.description}</div>
+      ${progressHtml}
+      ${stackHtml}
+    </div>`;
+  }
+
+  async function load() {
+    try {
+      const res = await fetch('/data/roadmap.json');
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+
+      const sections: Record<string, string> = {
+        active:   'cards-active',
+        upcoming: 'cards-upcoming',
+        planned:  'cards-planned',
+      };
+
+      for (const [key, elId] of Object.entries(sections)) {
+        const el = document.getElementById(elId);
+        if (!el) continue;
+        const items: any[] = data[key] ?? [];
+        if (!items.length) {
+          el.closest('.lane')?.remove();
+        } else {
+          el.innerHTML = items.map(buildCard).join('');
+        }
+      }
+    } catch { /* skeletons remain */ }
+  }
+
+  load();
+</script>

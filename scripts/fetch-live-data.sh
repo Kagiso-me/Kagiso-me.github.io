@@ -385,21 +385,25 @@ build_navidrome() {
   local user="${NAVIDROME_USER:-}" pass="${NAVIDROME_PASS:-}"
 
   if [[ -n "$user" && -n "$pass" ]]; then
-    # Token auth: pass password via env to avoid shell quoting issues with special chars
-    local salt token raw
-    salt=$(python3 -c "import random,string; print(''.join(random.choices(string.ascii_lowercase+string.digits,k=8)))")
-    token=$(ND_PASS="$pass" python3 -c "import hashlib,os,sys; p=os.environ['ND_PASS']; s=sys.argv[1]; print(hashlib.md5((p+s).encode()).hexdigest())" "$salt")
-    raw=$(curl -sf --max-time 5 \
-      "${NAVIDROME_URL}/rest/getNowPlaying.view?u=${user}&t=${token}&s=${salt}&v=1.16.1&c=homelab&f=json" \
-      2>/dev/null || echo "")
+    local raw
+    raw=$(ND_USER="$user" ND_PASS="$pass" python3 -c "
+import os, urllib.parse, urllib.request
+u = os.environ['ND_USER']
+p = urllib.parse.quote(os.environ['ND_PASS'], safe='')
+url = '${NAVIDROME_URL}/rest/getNowPlaying.view?u=' + u + '&p=' + p + '&v=1.16.1&c=homelab&f=json'
+try:
+  import urllib.request
+  with urllib.request.urlopen(url, timeout=5) as r:
+    print(r.read().decode())
+except:
+  print('')
+" 2>/dev/null || echo "")
     if [[ -n "$raw" ]]; then
-      local nd_url="${NAVIDROME_URL}" nd_user="$user" nd_token="$token" nd_salt="$salt"
-      echo "$raw" | ND_URL="$nd_url" ND_USER="$nd_user" ND_TOKEN="$nd_token" ND_SALT="$nd_salt" python3 -c "
-import sys, json, os
-nd_url   = os.environ['ND_URL']
-nd_user  = os.environ['ND_USER']
-nd_token = os.environ['ND_TOKEN']
-nd_salt  = os.environ['ND_SALT']
+      echo "$raw" | ND_URL="${NAVIDROME_URL}" ND_USER="$user" ND_PASS="$pass" python3 -c "
+import sys, json, os, urllib.parse
+nd_url  = os.environ['ND_URL']
+nd_user = os.environ['ND_USER']
+nd_pass = urllib.parse.quote(os.environ['ND_PASS'], safe='')
 try:
   entries = json.load(sys.stdin).get('subsonic-response', {}) \
               .get('nowPlaying', {}).get('entry', [])
@@ -412,7 +416,7 @@ try:
     album    = e.get('album', '')
     artist   = e.get('artist', '')
     cover_id = e.get('coverArt', '')
-    cover_url = f'{nd_url}/rest/getCoverArt.view?u={nd_user}&t={nd_token}&s={nd_salt}&v=1.16.1&c=homelab&id={cover_id}&size=300' if cover_id else ''
+    cover_url = f'{nd_url}/rest/getCoverArt.view?u={nd_user}&p={nd_pass}&v=1.16.1&c=homelab&id={cover_id}&size=300' if cover_id else ''
     playing_str = f'{count} playing'
     label = f'{playing_str} · {title}' if title else playing_str
     print(json.dumps({

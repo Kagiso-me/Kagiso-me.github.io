@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-07T01:56:26Z",
+  "updated": "2026-04-07T04:32:44Z",
   "cards": [
     {
       "label": "Workloads",
@@ -10,18 +10,18 @@
     {
       "label": "Flux",
       "value": "19/19 synced",
-      "sub": "3d9h",
+      "sub": "3d11h",
       "status": "ok"
     },
     {
       "label": "Last Backup",
-      "value": "\u2014",
+      "value": "",
       "sub": "docker appdata",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "57m",
+      "value": "92m",
       "sub": "last cluster backup",
       "status": "unknown"
     }
@@ -55,121 +55,121 @@
   "flux": {
     "ready": 19,
     "total": 19,
-    "last_sync": "3d9h",
+    "last_sync": "3d11h",
     "status": "ok",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
-        "age": "3d9h",
+        "age": "3d11h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "3d9h",
+        "age": "3d11h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-authentik",
-        "age": "3d9h",
+        "age": "3d11h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
-        "age": "3d9h",
+        "age": "3d11h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
-        "age": "3d9h",
+        "age": "3d11h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
-        "age": "3d9h",
+        "age": "3d11h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
-        "age": "3d9h",
+        "age": "3d11h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-namespaces",
-        "age": "3d9h",
+        "age": "3d11h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking",
-        "age": "3d9h",
+        "age": "3d11h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-config",
-        "age": "3d9h",
+        "age": "3d11h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-tls",
-        "age": "3d9h",
+        "age": "3d11h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability",
-        "age": "3d9h",
+        "age": "3d11h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
-        "age": "3d9h",
+        "age": "3d11h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
-        "age": "3d9h",
+        "age": "3d11h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security",
-        "age": "3d9h",
+        "age": "3d11h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security-issuers",
-        "age": "3d9h",
+        "age": "3d11h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-storage",
-        "age": "3d9h",
+        "age": "3d11h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade",
-        "age": "3d9h",
+        "age": "3d11h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade-plans",
-        "age": "3d9h",
+        "age": "3d11h",
         "ready": true
       }
     ]
@@ -177,58 +177,48 @@
   "services": [
     {
       "name": "Vaultwarden",
-      "tag": "k3s \u00b7 passwords",
-      "status": "unknown"
+      "tag": "offline",
+      "status": "crit"
     },
     {
       "name": "Immich",
-      "tag": "k3s \u00b7 photos",
+      "tag": "\u2014",
       "status": "unknown"
     },
     {
       "name": "Nextcloud",
-      "tag": "k3s \u00b7 files",
-      "status": "unknown"
+      "tag": "offline",
+      "status": "crit"
     },
     {
       "name": "Plex",
-      "tag": "docker \u00b7 online",
+      "tag": "online",
       "status": "ok"
     },
     {
       "name": "SABnzbd",
-      "tag": "docker \u00b7 downloading \u00b7 332.9 GB left",
+      "tag": "downloading \u00b7 242.2 GB left",
       "status": "ok"
     },
     {
       "name": "Sonarr",
-      "tag": "docker \u00b7 67 series",
+      "tag": "67 series",
       "status": "ok"
     },
     {
       "name": "Radarr",
-      "tag": "docker \u00b7 16 movies",
+      "tag": "16 movies",
       "status": "ok"
     },
     {
       "name": "Lidarr",
-      "tag": "docker \u00b7 music",
-      "status": "unknown"
+      "tag": "32 artists",
+      "status": "ok"
     },
     {
       "name": "Navidrome",
-      "tag": "docker \u00b7 music streaming",
-      "status": "unknown"
-    },
-    {
-      "name": "Uptime Kuma",
-      "tag": "docker \u00b7 monitoring",
-      "status": "unknown"
-    },
-    {
-      "name": "NPM",
-      "tag": "docker \u00b7 proxy",
-      "status": "unknown"
+      "tag": "online",
+      "status": "ok"
     }
   ]
 }

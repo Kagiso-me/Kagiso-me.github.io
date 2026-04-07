@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-07T18:50:37Z",
+  "updated": "2026-04-07T18:57:13Z",
   "cards": [
     {
       "label": "Workloads",
@@ -10,24 +10,24 @@
     {
       "label": "Flux",
       "value": "19/19 synced",
-      "sub": "4d1h",
+      "sub": "4d2h",
       "status": "ok"
     },
     {
       "label": "Docker Appdata",
-      "value": "16h 48m ago",
+      "value": "16h 55m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "6h 50m ago",
+      "value": "6h 57m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "5h 50m ago",
+      "value": "5h 57m ago",
       "sub": "last cluster backup",
       "status": "ok"
     }
@@ -64,121 +64,121 @@
   "flux": {
     "ready": 19,
     "total": 19,
-    "last_sync": "4d1h",
+    "last_sync": "4d2h",
     "status": "ok",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
-        "age": "4d1h",
+        "age": "4d2h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "4d1h",
+        "age": "4d2h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-authentik",
-        "age": "4d1h",
+        "age": "4d2h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
-        "age": "4d1h",
+        "age": "4d2h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
-        "age": "4d1h",
+        "age": "4d2h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
-        "age": "4d1h",
+        "age": "4d2h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
-        "age": "4d1h",
+        "age": "4d2h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-namespaces",
-        "age": "4d1h",
+        "age": "4d2h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking",
-        "age": "4d1h",
+        "age": "4d2h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-config",
-        "age": "4d1h",
+        "age": "4d2h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-tls",
-        "age": "4d1h",
+        "age": "4d2h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability",
-        "age": "4d1h",
+        "age": "4d2h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
-        "age": "4d1h",
+        "age": "4d2h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
-        "age": "4d1h",
+        "age": "4d2h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security",
-        "age": "4d1h",
+        "age": "4d2h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security-issuers",
-        "age": "4d1h",
+        "age": "4d2h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-storage",
-        "age": "4d1h",
+        "age": "4d2h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade",
-        "age": "4d1h",
+        "age": "4d2h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade-plans",
-        "age": "4d1h",
+        "age": "4d2h",
         "ready": true
       }
     ]
@@ -196,7 +196,7 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 169.5 GB left",
+      "tag": "SABnzbd: downloading \u00b7 166.4 GB left",
       "status": "ok"
     },
     {
@@ -224,13 +224,9 @@
     },
     {
       "name": "Navidrome",
-      "label": "1 playing \u00b7 Pressure",
+      "label": "idle",
       "status": "ok",
-      "playing": true,
-      "title": "Pressure",
-      "album": "age/sex/location",
-      "artist": "Ari Lennox",
-      "coverUrl": "http://10.0.10.20:4533/rest/getCoverArt.view?u=kagiso&p=Lannister_kagiso.me0&v=1.16.1&c=homelab&id=mf-oOMhPRo7UBrijQRTT5vMWq_645cdc0f&size=300"
+      "playing": false
     }
   ]
 }

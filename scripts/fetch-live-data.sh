@@ -153,13 +153,18 @@ print(json.dumps(rows))
 }
 
 # ── Backup status ─────────────────────────────────────────────────────────────
+# Reads the textfile metric directly from bronn via SSH.
+# Metric written by the docker-appdata backup cron on bronn.
 build_backup() {
-  local last_ts
-  last_ts=$(prom_value "backup_last_success_timestamp{exported_job=\"docker-appdata\"}")
-  local age_str="—"
-  local status="unknown"
+  local last_ts age_str status
+  age_str="—"
+  status="unknown"
 
-  if [[ "$last_ts" != "--" && "$last_ts" != "—" ]]; then
+  last_ts=$(ssh -o ConnectTimeout=5 -o BatchMode=yes 10.0.10.20 \
+    "grep -m1 'backup_last_success_timestamp{job=\"docker-appdata\"}' \
+     /var/lib/node_exporter/textfile_collector/docker_backup.prom 2>/dev/null | awk '{print \$2}'" 2>/dev/null || echo "")
+
+  if [[ -n "$last_ts" && "$last_ts" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
     age_str=$(python3 -c "
 import time
 age=time.time()-float('${last_ts}')
@@ -178,15 +183,18 @@ print(f'{h}h {m}m ago' if h else f'{m}m ago')
 
 # ── Velero last backup ─────────────────────────────────────────────────────────
 build_velero() {
-  local last_backup
-  last_backup=$(kubectl get backups -n velero --sort-by=.metadata.creationTimestamp --no-headers 2>/dev/null | tail -1 | awk '{print $1, $2}' || echo "— —")
-  local name status_str
-  name=$(echo "$last_backup" | awk '{print $1}')
-  status_str=$(echo "$last_backup" | awk '{print $2}')
-  local status="unknown"
-  [[ "$status_str" == "Completed" ]] && status="ok"
-  [[ "$status_str" == "Failed" ]]    && status="crit"
-  [[ "$status_str" == "PartiallyFailed" ]] && status="warn"
+  local last_line name phase status_str status
+  last_line=$(kubectl get backups -n velero \
+    --sort-by=.metadata.creationTimestamp \
+    -o custom-columns="NAME:.metadata.name,PHASE:.status.phase" \
+    --no-headers 2>/dev/null | tail -1 || echo "")
+  name=$(echo "$last_line"  | awk '{print $1}')
+  phase=$(echo "$last_line" | awk '{print $2}')
+  status_str="${phase:-—}"
+  status="unknown"
+  [[ "$phase" == "Completed" ]]       && status="ok"
+  [[ "$phase" == "Failed" ]]          && status="crit"
+  [[ "$phase" == "PartiallyFailed" ]] && status="warn"
 
   echo "{\"name\":\"${name}\",\"result\":\"${status_str}\",\"status\":\"${status}\"}"
 }
@@ -402,18 +410,22 @@ nextcloud   = json.loads('''${nextcloud}''')
 immich      = json.loads('''${immich}''')
 
 # Service list — tag is the sub-label shown in the ticker
+# Format: "Name: value" so the ticker reads naturally
+def fmt(name, label):
+  return f'{name}: {label}'
+
 SERVICES = [
   # k3s
-  {'name': 'Vaultwarden', 'tag': vaultwarden['label'],               'status_override': vaultwarden['status']},
-  {'name': 'Immich',      'tag': immich['label'],                    'status_override': immich['status']},
-  {'name': 'Nextcloud',   'tag': nextcloud['label'],                 'status_override': nextcloud['status']},
+  {'name': 'Vaultwarden', 'tag': fmt('Vaultwarden', vaultwarden['label']), 'status_override': vaultwarden['status']},
+  {'name': 'Immich',      'tag': fmt('Immich',      immich['label']),      'status_override': immich['status']},
+  {'name': 'Nextcloud',   'tag': fmt('Nextcloud',   nextcloud['label']),   'status_override': nextcloud['status']},
   # Docker — media
-  {'name': 'Plex',        'tag': plex_d['label'],                    'status_override': plex_d['status']},
-  {'name': 'SABnzbd',     'tag': sabnzbd['label'],                   'status_override': sabnzbd['status']},
-  {'name': 'Sonarr',      'tag': sonarr['label'],                    'status_override': sonarr['status']},
-  {'name': 'Radarr',      'tag': radarr['label'],                    'status_override': radarr['status']},
-  {'name': 'Lidarr',      'tag': lidarr['label'],                    'status_override': lidarr['status']},
-  {'name': 'Navidrome',   'tag': navidrome['label'],                 'status_override': navidrome['status']},
+  {'name': 'Plex',        'tag': fmt('Plex',        plex_d['label']),      'status_override': plex_d['status']},
+  {'name': 'SABnzbd',     'tag': fmt('SABnzbd',     sabnzbd['label']),     'status_override': sabnzbd['status']},
+  {'name': 'Sonarr',      'tag': fmt('Sonarr',      sonarr['label']),      'status_override': sonarr['status']},
+  {'name': 'Radarr',      'tag': fmt('Radarr',      radarr['label']),      'status_override': radarr['status']},
+  {'name': 'Lidarr',      'tag': fmt('Lidarr',      lidarr['label']),      'status_override': lidarr['status']},
+  {'name': 'Navidrome',   'tag': fmt('Navidrome',   navidrome['label']),   'status_override': navidrome['status']},
 ]
 
 # Build status map from Uptime Kuma heartbeats

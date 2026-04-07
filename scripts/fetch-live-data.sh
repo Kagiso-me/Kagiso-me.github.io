@@ -174,8 +174,8 @@ print(f'{h}h {m}m ago' if h else f'{m}m ago')
 }
 
 # ── Backup status ─────────────────────────────────────────────────────────────
-# bronn: SSH-reads textfile metric (backup_docker.sh writes it after each run)
-# varys: reads local textfile metric (varys-backup.sh writes it after each run)
+# bronn: SSH to 10.0.10.20 — reads textfile metric written by backup_docker.sh
+# varys: SSH to 10.0.10.10 — reads textfile metric written by varys-backup.sh
 build_backup() {
   # bronn — docker appdata
   local bronn_ts
@@ -185,10 +185,11 @@ build_backup() {
   local bronn_json
   bronn_json=$(backup_age_json "$bronn_ts")
 
-  # varys — key material backup (local file, no SSH needed)
+  # varys — key material backup (SSH, runner now on bran not varys)
   local varys_ts
-  varys_ts=$(grep -m1 'backup_last_success_timestamp{job="varys-keys"}' \
-    /var/lib/node_exporter/textfile_collector/varys_backup.prom 2>/dev/null | awk '{print $2}' || echo "")
+  varys_ts=$(ssh -o ConnectTimeout=5 -o BatchMode=yes 10.0.10.10 \
+    "grep -m1 'backup_last_success_timestamp{job=\"varys-keys\"}' \
+     /var/lib/node_exporter/textfile_collector/varys_backup.prom 2>/dev/null | awk '{print \$2}'" 2>/dev/null || echo "")
   local varys_json
   varys_json=$(backup_age_json "$varys_ts")
 

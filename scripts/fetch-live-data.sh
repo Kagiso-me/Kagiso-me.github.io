@@ -319,9 +319,7 @@ except:
 
 # ── Plex: active stream count ──────────────────────────────────────────────────
 build_plex() {
-  # Plex token stored as env var PLEX_TOKEN on varys, falls back to empty (status unknown)
   local token="${PLEX_TOKEN:-}"
-  local label="online"
   local status="unknown"
 
   if [[ -n "$token" ]]; then
@@ -333,30 +331,36 @@ build_plex() {
 
     if [[ -n "$raw" ]]; then
       status="ok"
-      label=$(echo "$raw" | python3 -c "
+      echo "$raw" | python3 -c "
 import sys, json
 try:
   d = json.load(sys.stdin).get('MediaContainer', {})
   size = int(d.get('size', 0))
   if size == 0:
-    print('idle')
+    print(json.dumps({'label': 'idle', 'status': 'ok', 'playing': False}))
   else:
-    # Try to get title of first stream
     items = d.get('Metadata', [])
-    title = items[0].get('title', '') if items else ''
+    item = items[0] if items else {}
+    title  = item.get('title', '')
+    album  = item.get('parentTitle', '')
+    artist = item.get('grandparentTitle', '')
     stream_str = f'{size} stream' + ('s' if size != 1 else '')
-    print(f'{stream_str} · {title}' if title else stream_str)
+    label = f'{stream_str} · {title}' if title else stream_str
+    print(json.dumps({
+      'label': label, 'status': 'ok', 'playing': True,
+      'title': title, 'album': album, 'artist': artist,
+    }))
 except:
-  print('idle')
-" 2>/dev/null || echo "idle")
+  print(json.dumps({'label': 'idle', 'status': 'ok', 'playing': False}))
+" 2>/dev/null || echo "{\"label\":\"idle\",\"status\":\"ok\",\"playing\":false}"
+      return
     fi
   else
     if curl -sf --max-time 5 "${PLEX_URL}/identity" >/dev/null 2>&1; then
       status="ok"
-      label="idle"
     fi
   fi
-  echo "{\"label\":\"${label}\",\"status\":\"${status}\"}"
+  echo "{\"label\":\"idle\",\"status\":\"${status}\",\"playing\":false}"
 }
 
 # ── Lidarr: artist count ──────────────────────────────────────────────────────
@@ -378,7 +382,6 @@ build_lidarr() {
 # Requires NAVIDROME_USER + NAVIDROME_PASS env vars for Subsonic auth.
 # Falls back to idle if creds not set or endpoint unreachable.
 build_navidrome() {
-  local label="idle" status="unknown"
   local user="${NAVIDROME_USER:-}" pass="${NAVIDROME_PASS:-}"
 
   if [[ -n "$user" && -n "$pass" ]]; then
@@ -387,31 +390,43 @@ build_navidrome() {
       "${NAVIDROME_URL}/rest/getNowPlaying.view?u=${user}&p=${pass}&v=1.16.1&c=homelab&f=json" \
       2>/dev/null || echo "")
     if [[ -n "$raw" ]]; then
-      status="ok"
-      label=$(echo "$raw" | python3 -c "
+      echo "$raw" | python3 -c "
 import sys, json
+nd_url = '${NAVIDROME_URL}'
+nd_user = '${user}'
+nd_pass = '${pass}'
 try:
   entries = json.load(sys.stdin).get('subsonic-response', {}) \
               .get('nowPlaying', {}).get('entry', [])
   count = len(entries)
   if count == 0:
-    print('idle')
+    print(json.dumps({'label': 'idle', 'status': 'ok', 'playing': False}))
   else:
-    title = entries[0].get('title', '')
+    e = entries[0]
+    title    = e.get('title', '')
+    album    = e.get('album', '')
+    artist   = e.get('artist', '')
+    cover_id = e.get('coverArt', '')
+    cover_url = f'{nd_url}/rest/getCoverArt.view?u={nd_user}&p={nd_pass}&v=1.16.1&c=homelab&id={cover_id}&size=300' if cover_id else ''
     playing_str = f'{count} playing'
-    print(f'{playing_str} · {title}' if title else playing_str)
+    label = f'{playing_str} · {title}' if title else playing_str
+    print(json.dumps({
+      'label': label, 'status': 'ok', 'playing': True,
+      'title': title, 'album': album, 'artist': artist,
+      'coverUrl': cover_url,
+    }))
 except:
-  print('idle')
-" 2>/dev/null || echo "idle")
+  print(json.dumps({'label': 'idle', 'status': 'ok', 'playing': False}))
+" 2>/dev/null || echo "{\"label\":\"idle\",\"status\":\"ok\",\"playing\":false}"
+      return
     fi
   else
-    # No creds — just ping for online check
     if curl -sf --max-time 5 "${NAVIDROME_URL}/ping" >/dev/null 2>&1; then
-      status="ok"
-      label="idle"
+      echo "{\"label\":\"idle\",\"status\":\"ok\",\"playing\":false}"
+      return
     fi
   fi
-  echo "{\"label\":\"${label}\",\"status\":\"${status}\"}"
+  echo "{\"label\":\"idle\",\"status\":\"unknown\",\"playing\":false}"
 }
 
 # ── Vaultwarden: online check ─────────────────────────────────────────────────
@@ -524,9 +539,15 @@ for svc in SERVICES:
   result.append({'name': svc['name'], 'tag': svc['tag'], 'status': status})
 
 # Media player cards — separate from ticker, shown as status cards
+def media_card(name, d):
+  card = {'name': name, 'label': d.get('label', 'idle'), 'status': d.get('status', 'unknown'), 'playing': d.get('playing', False)}
+  for k in ('title', 'album', 'artist', 'coverUrl'):
+    if d.get(k): card[k] = d[k]
+  return card
+
 media = [
-  {'name': 'Plex',      'label': plex_d['label'],    'status': plex_d['status']},
-  {'name': 'Navidrome', 'label': navidrome['label'],  'status': navidrome['status']},
+  media_card('Plex',      plex_d),
+  media_card('Navidrome', navidrome),
 ]
 
 print(json.dumps({'services': result, 'media': media}))

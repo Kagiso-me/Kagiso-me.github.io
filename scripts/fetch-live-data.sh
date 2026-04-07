@@ -12,122 +12,110 @@ set -euo pipefail
 
 NOW=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
-# ── Helper: fetch node-exporter metrics via kubectl port-forward ───────────────
-# Node-exporter ClusterIP is not routable from varys (pod network only).
-# We port-forward the DaemonSet pod on each node briefly, query, then kill.
-fetch_node_metrics() {
-  local node_name="$1"
-  local local_port="$2"
-
-  # Find the node-exporter pod running on this node
-  local pod
-  pod=$(kubectl get pod -n monitoring -l app.kubernetes.io/name=prometheus-node-exporter \
-    --field-selector "spec.nodeName=${node_name}" \
-    --no-headers -o custom-columns=":metadata.name" 2>/dev/null | head -1)
-
-  [[ -z "$pod" ]] && echo "" && return
-
-  # Start port-forward in background
-  kubectl port-forward -n monitoring "pod/${pod}" "${local_port}:9100" >/dev/null 2>&1 &
-  local pf_pid=$!
-
-  # Wait briefly for port-forward to be ready
-  sleep 2
-
-  # Fetch metrics
-  local metrics
-  metrics=$(curl -sf --max-time 5 "http://127.0.0.1:${local_port}/metrics" 2>/dev/null || echo "")
-
-  # Clean up port-forward
-  kill "$pf_pid" 2>/dev/null || true
-  wait "$pf_pid" 2>/dev/null || true
-
-  echo "$metrics"
-}
-
 # ── Nodes ─────────────────────────────────────────────────────────────────────
+# All metrics derived from a single kubectl get nodes -o json call.
+# No node-exporter, no port-forwarding needed.
 build_nodes() {
-  # Each node gets a different local port to avoid conflicts if run in parallel
-  local nodes=("tywin:control-plane:19101" "tyrion:worker:19102" "jaime:worker:19103")
-  local result="["
-  local sep=""
+  local nodes_json
+  nodes_json=$(kubectl get nodes -o json 2>/dev/null || echo "")
 
-  for entry in "${nodes[@]}"; do
-    IFS=':' read -r name role port <<< "$entry"
+  local pods_json
+  pods_json=$(kubectl get pods -A -o json 2>/dev/null || echo "")
 
-    # Node ready status from kubectl
-    local kube_status
-    kube_status=$(kubectl get node "$name" --no-headers 2>/dev/null | awk '{print $2}' || echo "Unknown")
-    local status="crit"
-    [[ "$kube_status" == "Ready" ]] && status="ok"
+  python3 -c "
+import json, sys
 
-    # Fetch metrics via port-forward
-    local raw
-    raw=$(fetch_node_metrics "$name" "$port")
+nodes_raw = '''${nodes_json}'''
+pods_raw  = '''${pods_json}'''
 
-    # CPU usage %
-    local cpu="—"
-    if [[ -n "$raw" ]]; then
-      cpu=$(echo "$raw" | python3 -c "
-import sys, re
-lines = sys.stdin.read()
-idle_total = 0.0; total_total = 0.0
-for line in lines.splitlines():
-    m = re.match(r'node_cpu_seconds_total\{[^}]*mode=\"(\w+)\"[^}]*\}\s+([\d.e+]+)', line)
-    if not m: continue
-    val = float(m.group(2))
-    total_total += val
-    if m.group(1) == 'idle':
-        idle_total += val
-if total_total > 0:
-    print(f'{(1 - idle_total/total_total)*100:.1f}%')
-else:
-    print('—')
-" 2>/dev/null || echo "—")
-    fi
+try:
+  nodes = json.loads(nodes_raw)['items']
+except Exception:
+  print('[]')
+  sys.exit(0)
 
-    # Memory usage %
-    local mem="—"
-    if [[ -n "$raw" ]]; then
-      mem=$(echo "$raw" | python3 -c "
-import sys, re
-lines = sys.stdin.read()
-def get(metric):
-    m = re.search(rf'^{metric}\s+([\d.e+]+)', lines, re.MULTILINE)
-    return float(m.group(1)) if m else None
-total = get('node_memory_MemTotal_bytes')
-avail = get('node_memory_MemAvailable_bytes')
-if total and avail and total > 0:
-    print(f'{(1 - avail/total)*100:.1f}%')
-else:
-    print('—')
-" 2>/dev/null || echo "—")
-    fi
+try:
+  pods = json.loads(pods_raw)['items']
+except Exception:
+  pods = []
 
-    # Uptime
-    local uptime_str="—"
-    if [[ -n "$raw" ]]; then
-      uptime_str=$(echo "$raw" | python3 -c "
-import sys, re, time
-lines = sys.stdin.read()
-def get(metric):
-    m = re.search(rf'^{metric}\s+([\d.e+]+)', lines, re.MULTILINE)
-    return float(m.group(1)) if m else None
-boot = get('node_boot_time_seconds')
-if boot:
-    s = int(time.time() - boot)
-    d, s = divmod(s, 86400); h, s = divmod(s, 3600); m, _ = divmod(s, 60)
-    print(f'{d}d {h}h' if d else f'{h}h {m}m')
-else:
-    print('—')
-" 2>/dev/null || echo "—")
-    fi
+# Build per-node pod resource request totals
+# cpu in millicores, memory in bytes
+node_cpu_req  = {}
+node_mem_req  = {}
+node_pod_count = {}
 
-    result="${result}${sep}{\"name\":\"${name}\",\"role\":\"${role}\",\"status\":\"${status}\",\"cpu\":\"${cpu}\",\"memory\":\"${mem}\",\"uptime\":\"${uptime_str}\"}"
-    sep=","
-  done
+def parse_cpu(s):
+  if not s: return 0
+  if s.endswith('m'): return int(s[:-1])
+  return int(float(s) * 1000)
 
-  echo "${result}]"
+def parse_mem(s):
+  if not s: return 0
+  units = {'Ki': 1024, 'Mi': 1024**2, 'Gi': 1024**3, 'Ti': 1024**4}
+  for suffix, mult in units.items():
+    if s.endswith(suffix): return int(s[:-len(suffix)]) * mult
+  return int(s)
+
+for pod in pods:
+  node = pod.get('spec', {}).get('nodeName', '')
+  phase = pod.get('status', {}).get('phase', '')
+  if not node or phase not in ('Running', 'Pending'):
+    continue
+  node_pod_count[node] = node_pod_count.get(node, 0) + 1
+  for container in pod.get('spec', {}).get('containers', []):
+    req = container.get('resources', {}).get('requests', {})
+    node_cpu_req[node] = node_cpu_req.get(node, 0) + parse_cpu(req.get('cpu', '0'))
+    node_mem_req[node] = node_mem_req.get(node, 0) + parse_mem(req.get('memory', '0'))
+
+result = []
+for node in nodes:
+  name = node['metadata']['name']
+
+  # Ready status + condition flags
+  status = 'crit'
+  pressure_flags = []
+  for cond in node.get('status', {}).get('conditions', []):
+    t = cond['type']
+    v = cond['status'] == 'True'
+    if t == 'Ready' and v:
+      status = 'ok'
+    if t in ('MemoryPressure', 'DiskPressure', 'PIDPressure') and v:
+      pressure_flags.append(t.replace('Pressure', ''))
+
+  # Role
+  labels = node['metadata'].get('labels', {})
+  role = 'control-plane' if 'node-role.kubernetes.io/control-plane' in labels else 'worker'
+
+  # Allocatable resources
+  alloc = node.get('status', {}).get('allocatable', {})
+  alloc_cpu_m  = parse_cpu(alloc.get('cpu', '0'))
+  alloc_mem_b  = parse_mem(alloc.get('memory', '0'))
+  alloc_pods   = int(alloc.get('pods', '110'))
+
+  # Scheduled pods
+  pod_count = node_pod_count.get(name, 0)
+
+  # CPU requested %
+  cpu_req_m = node_cpu_req.get(name, 0)
+  cpu_pct = f'{cpu_req_m * 100 // alloc_cpu_m}%' if alloc_cpu_m > 0 else '—'
+
+  # Memory requested %
+  mem_req_b = node_mem_req.get(name, 0)
+  mem_pct = f'{mem_req_b * 100 // alloc_mem_b}%' if alloc_mem_b > 0 else '—'
+
+  result.append({
+    'name':     name,
+    'role':     role,
+    'status':   status,
+    'pods':     f'{pod_count}/{alloc_pods}',
+    'cpu':      cpu_pct,
+    'memory':   mem_pct,
+    'pressure': pressure_flags,
+  })
+
+print(json.dumps(result))
+"
 }
 
 # ── Flux sync status ───────────────────────────────────────────────────────────

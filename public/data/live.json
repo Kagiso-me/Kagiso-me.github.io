@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-07T04:32:44Z",
+  "updated": "2026-04-07T06:17:19Z",
   "cards": [
     {
       "label": "Workloads",
@@ -10,7 +10,7 @@
     {
       "label": "Flux",
       "value": "19/19 synced",
-      "sub": "3d11h",
+      "sub": "3d13h",
       "status": "ok"
     },
     {
@@ -21,7 +21,7 @@
     },
     {
       "label": "Velero",
-      "value": "92m",
+      "value": "3h17m",
       "sub": "last cluster backup",
       "status": "unknown"
     }
@@ -31,145 +31,145 @@
       "name": "tywin",
       "role": "control-plane",
       "status": "ok",
-      "cpu": "\u2014",
-      "memory": "\u2014",
-      "uptime": "\u2014"
+      "cpu": "11.5%",
+      "memory": "28.0%",
+      "uptime": "3d 16h"
     },
     {
       "name": "tyrion",
       "role": "worker",
       "status": "ok",
-      "cpu": "\u2014",
-      "memory": "\u2014",
-      "uptime": "\u2014"
+      "cpu": "10.6%",
+      "memory": "19.8%",
+      "uptime": "3d 10h"
     },
     {
       "name": "jaime",
       "role": "worker",
       "status": "ok",
-      "cpu": "\u2014",
-      "memory": "\u2014",
-      "uptime": "\u2014"
+      "cpu": "9.7%",
+      "memory": "17.8%",
+      "uptime": "12h 33m"
     }
   ],
   "flux": {
     "ready": 19,
     "total": 19,
-    "last_sync": "3d11h",
+    "last_sync": "3d13h",
     "status": "ok",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
-        "age": "3d11h",
+        "age": "3d13h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "3d11h",
+        "age": "3d13h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-authentik",
-        "age": "3d11h",
+        "age": "3d13h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
-        "age": "3d11h",
+        "age": "3d13h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
-        "age": "3d11h",
+        "age": "3d13h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
-        "age": "3d11h",
+        "age": "3d13h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
-        "age": "3d11h",
+        "age": "3d13h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-namespaces",
-        "age": "3d11h",
+        "age": "3d13h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking",
-        "age": "3d11h",
+        "age": "3d13h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-config",
-        "age": "3d11h",
+        "age": "3d13h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-tls",
-        "age": "3d11h",
+        "age": "3d13h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability",
-        "age": "3d11h",
+        "age": "3d13h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
-        "age": "3d11h",
+        "age": "3d13h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
-        "age": "3d11h",
+        "age": "3d13h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security",
-        "age": "3d11h",
+        "age": "3d13h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security-issuers",
-        "age": "3d11h",
+        "age": "3d13h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-storage",
-        "age": "3d11h",
+        "age": "3d13h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade",
-        "age": "3d11h",
+        "age": "3d13h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade-plans",
-        "age": "3d11h",
+        "age": "3d13h",
         "ready": true
       }
     ]
@@ -182,8 +182,8 @@
     },
     {
       "name": "Immich",
-      "tag": "\u2014",
-      "status": "unknown"
+      "tag": "offline",
+      "status": "crit"
     },
     {
       "name": "Nextcloud",
@@ -197,7 +197,7 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "downloading \u00b7 242.2 GB left",
+      "tag": "idle",
       "status": "ok"
     },
     {

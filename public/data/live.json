@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-07T16:02:18Z",
+  "updated": "2026-04-07T16:19:34Z",
   "cards": [
     {
       "label": "Workloads",
@@ -15,19 +15,19 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "14h 0m ago",
+      "value": "14h 17m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "4h 2m ago",
+      "value": "4h 19m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 2m ago",
+      "value": "3h 19m ago",
       "sub": "last cluster backup",
       "status": "ok"
     }

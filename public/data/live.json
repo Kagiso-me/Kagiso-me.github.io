@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-07T18:33:16Z",
+  "updated": "2026-04-07T18:38:33Z",
   "cards": [
     {
       "label": "Workloads",
@@ -15,19 +15,19 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "16h 31m ago",
+      "value": "16h 36m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "6h 33m ago",
+      "value": "6h 38m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "5h 33m ago",
+      "value": "5h 38m ago",
       "sub": "last cluster backup",
       "status": "ok"
     }
@@ -196,7 +196,7 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: idle",
+      "tag": "SABnzbd: downloading \u00b7 175.6 GB left",
       "status": "ok"
     },
     {
@@ -224,9 +224,13 @@
     },
     {
       "name": "Navidrome",
-      "label": "idle",
+      "label": "1 playing \u00b7 Pressure",
       "status": "ok",
-      "playing": false
+      "playing": true,
+      "title": "Pressure",
+      "album": "age/sex/location",
+      "artist": "Ari Lennox",
+      "coverUrl": "http://10.0.10.20:4533/rest/getCoverArt.view?u=kagiso&p=Lannister_kagiso.me0&v=1.16.1&c=homelab&id=mf-oOMhPRo7UBrijQRTT5vMWq_645cdc0f&size=300"
     }
   ]
 }

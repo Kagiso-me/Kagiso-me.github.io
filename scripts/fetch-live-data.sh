@@ -330,22 +330,9 @@ build_navidrome() {
 
 # ── Vaultwarden: online check ─────────────────────────────────────────────────
 build_vaultwarden() {
-  # Vaultwarden exposes /alive endpoint
   local label="offline" status="crit"
-  local vw_url
-  # TODO: replace with internal DNS / ingress URL once configured
-  vw_url=$(kubectl get ingress -A -o jsonpath='{range .items[?(@.metadata.name=="vaultwarden")]}{.spec.rules[0].host}{end}' 2>/dev/null || echo "")
-  if [[ -n "$vw_url" ]]; then
-    if curl -sf --max-time 5 "https://${vw_url}/alive" >/dev/null 2>&1; then
-      label="online"; status="ok"
-    fi
-  else
-    # Fallback: check via NodePort if ingress not resolvable from varys
-    local np
-    np=$(kubectl get svc -n vaultwarden -o jsonpath='{.items[0].spec.ports[0].nodePort}' 2>/dev/null || echo "")
-    if [[ -n "$np" ]] && curl -sf --max-time 5 "http://10.0.10.11:${np}/alive" >/dev/null 2>&1; then
-      label="online"; status="ok"
-    fi
+  if curl -sf --max-time 5 "https://vault.kagiso.me/alive" >/dev/null 2>&1; then
+    label="online"; status="ok"
   fi
   echo "{\"label\":\"${label}\",\"status\":\"${status}\"}"
 }
@@ -353,23 +340,16 @@ build_vaultwarden() {
 # ── Nextcloud: online check ───────────────────────────────────────────────────
 build_nextcloud() {
   local label="offline" status="crit"
-  local nc_url
-  nc_url=$(kubectl get ingress -A -o jsonpath='{range .items[?(@.metadata.name=="nextcloud")]}{.spec.rules[0].host}{end}' 2>/dev/null || echo "")
-  if [[ -n "$nc_url" ]]; then
-    if curl -sf --max-time 5 "https://${nc_url}/status.php" >/dev/null 2>&1; then
-      label="online"; status="ok"
-    fi
+  if curl -sf --max-time 5 "https://cloud.kagiso.me/status.php" >/dev/null 2>&1; then
+    label="online"; status="ok"
   fi
   echo "{\"label\":\"${label}\",\"status\":\"${status}\"}"
 }
 
-# ── Immich: photo count ───────────────────────────────────────────────────────
+# ── Immich: online check ──────────────────────────────────────────────────────
 build_immich() {
-  local label="—" status="unknown"
-  # Immich server-info endpoint requires API key — check via ingress
-  local immich_url
-  immich_url=$(kubectl get ingress -A -o jsonpath='{range .items[?(@.metadata.name=="immich")]}{.spec.rules[0].host}{end}' 2>/dev/null || echo "")
-  if [[ -n "$immich_url" ]] && curl -sf --max-time 5 "https://${immich_url}/api/server/ping" >/dev/null 2>&1; then
+  local label="offline" status="crit"
+  if curl -sf --max-time 5 "https://photos.kagiso.me/api/server/ping" >/dev/null 2>&1; then
     label="online"; status="ok"
   fi
   echo "{\"label\":\"${label}\",\"status\":\"${status}\"}"

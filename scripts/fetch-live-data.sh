@@ -385,21 +385,21 @@ build_navidrome() {
   local user="${NAVIDROME_USER:-}" pass="${NAVIDROME_PASS:-}"
 
   if [[ -n "$user" && -n "$pass" ]]; then
-    # Use token auth: salt + md5(password+salt) — more reliable than plaintext
-    local salt raw
+    # Token auth: pass password via env to avoid shell quoting issues with special chars
+    local salt token raw
     salt=$(python3 -c "import random,string; print(''.join(random.choices(string.ascii_lowercase+string.digits,k=8)))")
-    local token
-    token=$(python3 -c "import hashlib; print(hashlib.md5('${pass}${salt}'.encode()).hexdigest())")
+    token=$(ND_PASS="$pass" python3 -c "import hashlib,os,sys; p=os.environ['ND_PASS']; s=sys.argv[1]; print(hashlib.md5((p+s).encode()).hexdigest())" "$salt")
     raw=$(curl -sf --max-time 5 \
       "${NAVIDROME_URL}/rest/getNowPlaying.view?u=${user}&t=${token}&s=${salt}&v=1.16.1&c=homelab&f=json" \
       2>/dev/null || echo "")
     if [[ -n "$raw" ]]; then
-      echo "$raw" | python3 -c "
-import sys, json
-nd_url = '${NAVIDROME_URL}'
-nd_user = '${user}'
-nd_token = '${token}'
-nd_salt = '${salt}'
+      local nd_url="${NAVIDROME_URL}" nd_user="$user" nd_token="$token" nd_salt="$salt"
+      echo "$raw" | ND_URL="$nd_url" ND_USER="$nd_user" ND_TOKEN="$nd_token" ND_SALT="$nd_salt" python3 -c "
+import sys, json, os
+nd_url   = os.environ['ND_URL']
+nd_user  = os.environ['ND_USER']
+nd_token = os.environ['ND_TOKEN']
+nd_salt  = os.environ['ND_SALT']
 try:
   entries = json.load(sys.stdin).get('subsonic-response', {}) \
               .get('nowPlaying', {}).get('entry', [])

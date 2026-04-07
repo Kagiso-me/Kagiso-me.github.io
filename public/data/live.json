@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-07T17:55:02Z",
+  "updated": "2026-04-07T18:21:45Z",
   "cards": [
     {
       "label": "Workloads",
@@ -10,24 +10,24 @@
     {
       "label": "Flux",
       "value": "19/19 synced",
-      "sub": "4d",
+      "sub": "4d1h",
       "status": "ok"
     },
     {
       "label": "Docker Appdata",
-      "value": "15h 53m ago",
+      "value": "16h 19m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "5h 55m ago",
+      "value": "6h 21m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "4h 54m ago",
+      "value": "5h 21m ago",
       "sub": "last cluster backup",
       "status": "ok"
     }
@@ -64,13 +64,13 @@
   "flux": {
     "ready": 19,
     "total": 19,
-    "last_sync": "4d",
+    "last_sync": "4d1h",
     "status": "ok",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
-        "age": "4d",
+        "age": "4d1h",
         "ready": true
       },
       {
@@ -82,103 +82,103 @@
       {
         "namespace": "flux-system",
         "name": "platform-authentik",
-        "age": "4d",
+        "age": "4d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
-        "age": "4d",
+        "age": "4d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
-        "age": "4d",
+        "age": "4d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
-        "age": "4d",
+        "age": "4d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
-        "age": "4d",
+        "age": "4d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-namespaces",
-        "age": "4d",
+        "age": "4d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking",
-        "age": "4d",
+        "age": "4d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-config",
-        "age": "4d",
+        "age": "4d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-tls",
-        "age": "4d",
+        "age": "4d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability",
-        "age": "4d",
+        "age": "4d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
-        "age": "4d",
+        "age": "4d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
-        "age": "4d",
+        "age": "4d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security",
-        "age": "4d",
+        "age": "4d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security-issuers",
-        "age": "4d",
+        "age": "4d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-storage",
-        "age": "4d",
+        "age": "4d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade",
-        "age": "4d",
+        "age": "4d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade-plans",
-        "age": "4d",
+        "age": "4d1h",
         "ready": true
       }
     ]
@@ -196,7 +196,7 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 191.7 GB left",
+      "tag": "SABnzbd: downloading \u00b7 179.6 GB left",
       "status": "ok"
     },
     {
@@ -223,7 +223,7 @@
     },
     {
       "name": "Navidrome",
-      "label": "idle",
+      "label": "1 playing \u00b7 Piano & I",
       "status": "ok"
     }
   ]

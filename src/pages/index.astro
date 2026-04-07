@@ -230,9 +230,10 @@ import Layout from '../layouts/Layout.astro';
 
   .ticker-track {
     display: flex;
-    gap: 0.75rem;
+    align-items: center;
+    gap: 0;
     width: max-content;
-    animation: ticker-scroll 40s linear infinite;
+    animation: ticker-scroll 50s linear infinite;
   }
 
   .ticker-track:hover { animation-play-state: paused; }
@@ -249,29 +250,32 @@ import Layout from '../layouts/Layout.astro';
     background: var(--color-surface);
     border: 1px solid var(--color-muted);
     border-radius: 8px;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1.25rem;
     white-space: nowrap;
     flex-shrink: 0;
+    margin: 0 0.5rem;
     transition: border-color 0.2s;
   }
 
   .ticker-item:hover { border-color: var(--color-peach); }
 
-  .ticker-item .svc-name {
+  .ticker-sep {
+    flex-shrink: 0;
+    color: var(--color-muted);
     font-family: var(--font-mono);
-    font-size: 0.8rem;
-    color: var(--color-heading);
-    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0 0.25rem;
+    user-select: none;
   }
 
   .ticker-item .svc-tag {
     font-family: var(--font-mono);
-    font-size: 0.68rem;
-    color: var(--color-subtle);
+    font-size: 0.78rem;
+    color: var(--color-text);
   }
 
   .ticker-skeleton {
-    height: 40px;
+    height: 36px;
     border-radius: 8px;
     margin-top: 1.5rem;
   }
@@ -323,13 +327,14 @@ import Layout from '../layouts/Layout.astro';
     if (!track) return;
     // Duplicate for seamless loop
     const all = [...services, ...services];
-    track.innerHTML = all.map(s => `
-      <div class="ticker-item">
+    const items = all.map((s, i) => {
+      const sep = i < all.length - 1 ? `<span class="ticker-sep">—</span>` : '';
+      return `<div class="ticker-item">
         <span class="status-dot ${s.status}"></span>
-        <span class="svc-name">${s.name}</span>
         <span class="svc-tag">${s.tag}</span>
-      </div>
-    `).join('');
+      </div>${sep}`;
+    });
+    track.innerHTML = items.join('');
   }
 
   async function loadLiveData() {

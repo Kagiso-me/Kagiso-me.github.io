@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-07T19:40:29Z",
+  "updated": "2026-04-07T19:45:05Z",
   "cards": [
     {
       "label": "Workloads",
@@ -15,19 +15,19 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "17h 38m ago",
+      "value": "17h 43m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "7h 40m ago",
+      "value": "7h 45m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "39m ago",
+      "value": "44m ago",
       "sub": "last cluster backup",
       "status": "ok"
     }
@@ -196,7 +196,7 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 139.4 GB left",
+      "tag": "SABnzbd: downloading \u00b7 136.3 GB left",
       "status": "ok"
     },
     {
@@ -218,9 +218,12 @@
   "media": [
     {
       "name": "Plex",
-      "label": "idle",
+      "label": "1 stream \u00b7 He Built the Saturn V",
       "status": "ok",
-      "playing": false
+      "playing": true,
+      "title": "He Built the Saturn V",
+      "album": "Season 1",
+      "artist": "For All Mankind"
     },
     {
       "name": "Navidrome",

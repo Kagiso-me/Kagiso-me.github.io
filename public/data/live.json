@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-07T14:07:15Z",
+  "updated": "2026-04-07T14:16:37Z",
   "cards": [
     {
       "label": "Workloads",
@@ -9,9 +9,9 @@
     },
     {
       "label": "Flux",
-      "value": "19/19 synced",
+      "value": "10/19 synced",
       "sub": "3d21h",
-      "status": "ok"
+      "status": "warn"
     },
     {
       "label": "Docker Appdata",
@@ -62,16 +62,16 @@
     }
   ],
   "flux": {
-    "ready": 19,
+    "ready": 10,
     "total": 19,
     "last_sync": "3d21h",
-    "status": "ok",
+    "status": "warn",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
         "age": "3d21h",
-        "ready": true
+        "ready": false
       },
       {
         "namespace": "flux-system",
@@ -83,31 +83,31 @@
         "namespace": "flux-system",
         "name": "platform-authentik",
         "age": "3d21h",
-        "ready": true
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
         "age": "3d21h",
-        "ready": true
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
         "age": "3d21h",
-        "ready": true
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
         "age": "3d21h",
-        "ready": true
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
         "age": "3d21h",
-        "ready": true
+        "ready": false
       },
       {
         "namespace": "flux-system",
@@ -131,7 +131,7 @@
         "namespace": "flux-system",
         "name": "platform-networking-tls",
         "age": "3d21h",
-        "ready": true
+        "ready": false
       },
       {
         "namespace": "flux-system",
@@ -143,13 +143,13 @@
         "namespace": "flux-system",
         "name": "platform-observability-config",
         "age": "3d21h",
-        "ready": true
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
         "age": "3d21h",
-        "ready": true
+        "ready": false
       },
       {
         "namespace": "flux-system",

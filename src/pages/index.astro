@@ -903,7 +903,7 @@ import Layout from '../layouts/Layout.astro';
         list.innerHTML = entries.slice(0, 3).map((e: any) => {
           const color = TYPE_COLOR[e.type] ?? 'var(--color-subtle)';
           const tag = e.hasDetail ? 'a' : 'div';
-          const href = e.hasDetail ? `href="/digest/${e.slug}"` : '';
+          const href = e.hasDetail ? `href="/digest/entry?slug=${e.slug}"` : '';
           return `
           <${tag} ${href} style="display:block;text-decoration:none;margin-bottom:0.75rem">
             <div class="card" style="padding:1rem;transition:border-color 0.15s${e.hasDetail ? ';cursor:pointer' : ''}">

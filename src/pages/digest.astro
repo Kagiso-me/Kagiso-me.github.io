@@ -281,7 +281,7 @@ import Layout from '../layouts/Layout.astro';
       html += `<div class="month-divider">${monthLabel(mk)}</div>`;
       for (const e of byMonth[mk]) {
         const typeClass = TYPE_COLORS[e.type] ?? 'type-default';
-        const href = e.hasDetail ? `/digest/${e.slug}` : null;
+        const href = e.hasDetail ? `/digest/entry?slug=${e.slug}` : null;
         const tag = href ? 'a' : 'div';
         const hrefAttr = href ? `href="${href}"` : '';
         const noDetailClass = href ? '' : ' no-detail';

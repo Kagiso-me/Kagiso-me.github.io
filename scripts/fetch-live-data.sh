@@ -12,26 +12,48 @@ set -euo pipefail
 
 NOW=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
-# ── Helper: query node-exporter directly on each node ─────────────────────────
-# Node-exporters listen on :9100 on each node's LAN IP — reachable from varys.
-# Prometheus ClusterIP is NOT reachable from varys (pod network only).
-node_exporter_query() {
-  local node_ip="$1"
-  local metric="$2"
-  local default="${3:---}"
-  curl -sf --max-time 5 "http://${node_ip}:9100/metrics" 2>/dev/null \
-    | grep -E "^${metric}[{ ]" | head -1 | awk '{print $NF}' \
-    || echo "$default"
+# ── Helper: fetch node-exporter metrics via kubectl port-forward ───────────────
+# Node-exporter ClusterIP is not routable from varys (pod network only).
+# We port-forward the DaemonSet pod on each node briefly, query, then kill.
+fetch_node_metrics() {
+  local node_name="$1"
+  local local_port="$2"
+
+  # Find the node-exporter pod running on this node
+  local pod
+  pod=$(kubectl get pod -n monitoring -l app.kubernetes.io/name=prometheus-node-exporter \
+    --field-selector "spec.nodeName=${node_name}" \
+    --no-headers -o custom-columns=":metadata.name" 2>/dev/null | head -1)
+
+  [[ -z "$pod" ]] && echo "" && return
+
+  # Start port-forward in background
+  kubectl port-forward -n monitoring "pod/${pod}" "${local_port}:9100" >/dev/null 2>&1 &
+  local pf_pid=$!
+
+  # Wait briefly for port-forward to be ready
+  sleep 2
+
+  # Fetch metrics
+  local metrics
+  metrics=$(curl -sf --max-time 5 "http://127.0.0.1:${local_port}/metrics" 2>/dev/null || echo "")
+
+  # Clean up port-forward
+  kill "$pf_pid" 2>/dev/null || true
+  wait "$pf_pid" 2>/dev/null || true
+
+  echo "$metrics"
 }
 
 # ── Nodes ─────────────────────────────────────────────────────────────────────
 build_nodes() {
-  local nodes=("tywin:control-plane:10.0.10.11" "tyrion:worker:10.0.10.12" "jaime:worker:10.0.10.13")
+  # Each node gets a different local port to avoid conflicts if run in parallel
+  local nodes=("tywin:control-plane:19101" "tyrion:worker:19102" "jaime:worker:19103")
   local result="["
   local sep=""
 
   for entry in "${nodes[@]}"; do
-    IFS=':' read -r name role ip <<< "$entry"
+    IFS=':' read -r name role port <<< "$entry"
 
     # Node ready status from kubectl
     local kube_status
@@ -39,12 +61,14 @@ build_nodes() {
     local status="crit"
     [[ "$kube_status" == "Ready" ]] && status="ok"
 
-    # CPU: scrape node-exporter metrics directly, compute idle across all CPUs
+    # Fetch metrics via port-forward
+    local raw
+    raw=$(fetch_node_metrics "$name" "$port")
+
+    # CPU usage %
     local cpu="—"
-    local cpu_raw
-    cpu_raw=$(curl -sf --max-time 5 "http://${ip}:9100/metrics" 2>/dev/null || echo "")
-    if [[ -n "$cpu_raw" ]]; then
-      cpu=$(echo "$cpu_raw" | python3 -c "
+    if [[ -n "$raw" ]]; then
+      cpu=$(echo "$raw" | python3 -c "
 import sys, re
 lines = sys.stdin.read()
 idle_total = 0.0; total_total = 0.0
@@ -56,17 +80,16 @@ for line in lines.splitlines():
     if m.group(1) == 'idle':
         idle_total += val
 if total_total > 0:
-    used_pct = (1 - idle_total / total_total) * 100
-    print(f'{used_pct:.1f}%')
+    print(f'{(1 - idle_total/total_total)*100:.1f}%')
 else:
     print('—')
 " 2>/dev/null || echo "—")
     fi
 
-    # Memory: MemAvailable and MemTotal from node-exporter
+    # Memory usage %
     local mem="—"
-    if [[ -n "$cpu_raw" ]]; then
-      mem=$(echo "$cpu_raw" | python3 -c "
+    if [[ -n "$raw" ]]; then
+      mem=$(echo "$raw" | python3 -c "
 import sys, re
 lines = sys.stdin.read()
 def get(metric):
@@ -75,17 +98,16 @@ def get(metric):
 total = get('node_memory_MemTotal_bytes')
 avail = get('node_memory_MemAvailable_bytes')
 if total and avail and total > 0:
-    used_pct = (1 - avail / total) * 100
-    print(f'{used_pct:.1f}%')
+    print(f'{(1 - avail/total)*100:.1f}%')
 else:
     print('—')
 " 2>/dev/null || echo "—")
     fi
 
-    # Uptime: node_time_seconds - node_boot_time_seconds
+    # Uptime
     local uptime_str="—"
-    if [[ -n "$cpu_raw" ]]; then
-      uptime_str=$(echo "$cpu_raw" | python3 -c "
+    if [[ -n "$raw" ]]; then
+      uptime_str=$(echo "$raw" | python3 -c "
 import sys, re, time
 lines = sys.stdin.read()
 def get(metric):

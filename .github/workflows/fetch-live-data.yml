@@ -24,6 +24,7 @@ jobs:
           LIDARR_API_KEY:    ${{ secrets.LIDARR_API_KEY }}
           NAVIDROME_USER:    ${{ secrets.NAVIDROME_USER }}
           NAVIDROME_PASS:    ${{ secrets.NAVIDROME_PASS }}
+          PLEX_TOKEN:        ${{ secrets.PLEX_TOKEN }}
         run: |
           bash scripts/fetch-live-data.sh > public/data/live.json
 

@@ -299,14 +299,14 @@ import Layout from '../layouts/Layout.astro';
   .ticker-item {
     display: flex;
     align-items: center;
-    gap: 2.6rem;
+    gap: 0.6rem;
     background: var(--color-surface);
     border: 1px solid var(--color-muted);
     border-radius: 8px;
-    padding: 2.6rem 3.75rem;
+    padding: 0.55rem 1.25rem;
     white-space: nowrap;
     flex-shrink: 0;
-    margin: 0 3.5rem;
+    margin: 0 6rem;
     transition: border-color 0.2s;
   }
 
@@ -344,63 +344,46 @@ import Layout from '../layouts/Layout.astro';
   .media-card {
     background: var(--color-surface);
     border: 1px solid var(--color-muted);
-    border-left-width: 3px;
-    border-left-color: var(--color-muted);
     border-radius: 12px;
     padding: 1.25rem;
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    min-height: 90px;
+    position: relative;
+    overflow: hidden;
     transition: border-color 0.2s;
   }
 
   .media-card.active {
-    border-left-color: var(--color-ok);
+    border-color: var(--color-ok);
   }
 
-  .media-art {
-    width: 64px;
-    height: 64px;
-    border-radius: 6px;
-    object-fit: cover;
-    flex-shrink: 0;
-    background: var(--color-overlay);
-  }
-
-  .media-art-placeholder {
-    width: 64px;
-    height: 64px;
-    border-radius: 6px;
-    flex-shrink: 0;
-    background: var(--color-overlay);
+  .media-card-header {
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
+    justify-content: space-between;
+    margin-bottom: 1rem;
   }
 
-  .media-info {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .media-service-name {
+  .media-badge {
     font-family: var(--font-mono);
-    font-size: 0.68rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--color-subtle);
-    margin-bottom: 0.3rem;
+    font-size: 0.72rem;
     display: flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.35rem;
+  }
+
+  .media-badge.playing { color: var(--color-ok); }
+  .media-badge.idle    { color: var(--color-subtle); }
+
+  .media-service-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--color-subtle);
   }
 
   .media-title {
     font-weight: 700;
-    font-size: 0.95rem;
+    font-size: 1rem;
     color: var(--color-heading);
+    margin: 0 0 0.25rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -408,18 +391,34 @@ import Layout from '../layouts/Layout.astro';
 
   .media-sub {
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     color: var(--color-subtle);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    margin-top: 0.2rem;
   }
 
-  .media-idle {
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
-    color: var(--color-subtle);
+  .media-art {
+    width: 56px;
+    height: 56px;
+    border-radius: 6px;
+    object-fit: cover;
+    float: right;
+    margin: 0 0 0.5rem 1rem;
+    background: var(--color-overlay);
+  }
+
+  .media-art-placeholder {
+    width: 56px;
+    height: 56px;
+    border-radius: 6px;
+    background: var(--color-overlay);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    float: right;
+    margin: 0 0 0.5rem 1rem;
   }
 
   .two-col {
@@ -812,25 +811,25 @@ import Layout from '../layouts/Layout.astro';
       const icon = icons[m.name] ?? '▶';
 
       const artHtml = playing && m.coverUrl
-        ? `<img class="media-art" src="${m.coverUrl}" alt="album art" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
-          + `<div class="media-art-placeholder" style="display:none">${icon}</div>`
+        ? `<img class="media-art" src="${m.coverUrl}" alt="album art" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="media-art-placeholder" style="display:none">${icon}</div>`
         : `<div class="media-art-placeholder">${icon}</div>`;
 
-      const infoHtml = playing
+      const bodyHtml = playing
         ? `<div class="media-title">${m.title || m.label}</div>
-           ${m.artist || m.album ? `<div class="media-sub">${[m.artist, m.album].filter(Boolean).join(' · ')}</div>` : ''}`
-        : `<div class="media-idle">idle</div>`;
+           <div class="media-sub">${[m.artist, m.album].filter(Boolean).join(' · ') || '&nbsp;'}</div>`
+        : `<div class="media-title" style="color:var(--color-subtle);font-weight:400">idle</div>`;
 
       return `
       <div class="media-card${playing ? ' active' : ''}">
-        ${artHtml}
-        <div class="media-info">
-          <div class="media-service-name">
+        <div class="media-card-header">
+          <span class="media-badge ${playing ? 'playing' : 'idle'}">
             <span class="status-dot ${m.status}"></span>
-            ${m.name}
-          </div>
-          ${infoHtml}
+            ${playing ? 'playing' : 'idle'}
+          </span>
+          <span class="media-service-label">${m.name}</span>
         </div>
+        ${artHtml}
+        ${bodyHtml}
       </div>`;
     }).join('');
   }

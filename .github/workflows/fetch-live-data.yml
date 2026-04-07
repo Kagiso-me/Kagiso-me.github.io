@@ -8,7 +8,7 @@ on:
 jobs:
   fetch:
     name: Fetch and commit live data
-    runs-on: [self-hosted, linux, homelab]
+    runs-on: [self-hosted, linux, homelab, bran-site]
 
     steps:
       - name: Checkout site repo

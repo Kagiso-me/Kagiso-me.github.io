@@ -262,7 +262,12 @@ import Layout from '../layouts/Layout.astro';
       // Nodes
       const nodesGrid = document.getElementById('nodes-grid');
       if (nodesGrid && data.nodes) {
-        nodesGrid.innerHTML = data.nodes.map((n: any) => `
+        nodesGrid.innerHTML = data.nodes.map((n: any) => {
+          const notReady = n.status === 'crit';
+          const alertBanner = notReady
+            ? `<div style="margin-top:0.75rem;padding:0.4rem 0.75rem;background:color-mix(in srgb,var(--color-crit) 15%,transparent);border-radius:6px;font-family:var(--font-mono);font-size:0.72rem;color:var(--color-crit)">⚠ Node not ready — check kubelet</div>`
+            : '';
+          return `
           <div class="node-card ${n.status}">
             <div style="display:flex;align-items:center;justify-content:space-between">
               <div>
@@ -276,19 +281,20 @@ import Layout from '../layouts/Layout.astro';
             <div class="node-metrics">
               <div class="metric">
                 <span class="metric-value">${n.cpu}</span>
-                <span class="metric-label">CPU</span>
+                <span class="metric-label">CPU req</span>
               </div>
               <div class="metric">
                 <span class="metric-value">${n.memory}</span>
-                <span class="metric-label">Memory</span>
+                <span class="metric-label">Mem req</span>
               </div>
               <div class="metric">
-                <span class="metric-value" style="font-size:0.82rem">${n.uptime}</span>
-                <span class="metric-label">Uptime</span>
+                <span class="metric-value">${n.pods}</span>
+                <span class="metric-label">Pods</span>
               </div>
             </div>
-          </div>
-        `).join('');
+            ${alertBanner}
+          </div>`;
+        }).join('');
       }
 
       // Flux
@@ -326,11 +332,11 @@ import Layout from '../layouts/Layout.astro';
       if (backupCards && data.cards) {
         const find = (label: string) => data.cards.find((c: any) => c.label === label);
         const da = find('Docker Appdata');
-        const vk = find('Varys Keys');
+        const et = find('etcd Snapshot');
         const vc = find('Velero');
         const items = [
           { label: 'Docker Appdata', value: da?.value ?? '—', sub: 'bronn · daily 02:00', status: da?.status ?? 'unknown' },
-          { label: 'Varys Keys',     value: vk?.value ?? '—', sub: 'varys · daily 01:00', status: vk?.status ?? 'unknown' },
+          { label: 'etcd Snapshot',  value: et?.value ?? '—', sub: 'k3s · daily',         status: et?.status ?? 'unknown' },
           { label: 'Velero (k8s)',   value: vc?.value ?? '—', sub: 'last cluster backup',  status: vc?.status ?? 'unknown' },
         ];
         backupCards.innerHTML = items.map(c => `

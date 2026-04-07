@@ -1,29 +1,29 @@
 {
-  "updated": "2026-04-07T12:08:39Z",
+  "updated": "2026-04-07T14:07:15Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "53/63",
+      "value": "53/65",
       "sub": "pods running",
       "status": "warn"
     },
     {
       "label": "Flux",
       "value": "19/19 synced",
-      "sub": "3d19h",
+      "sub": "3d21h",
       "status": "ok"
     },
     {
       "label": "Docker Appdata",
-      "value": "10h 6m ago",
+      "value": "\u2014",
       "sub": "bronn backup",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "Varys Keys",
-      "value": "11h 8m ago",
+      "value": "\u2014",
       "sub": "varys backup",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "Velero",
@@ -64,121 +64,121 @@
   "flux": {
     "ready": 19,
     "total": 19,
-    "last_sync": "3d19h",
+    "last_sync": "3d21h",
     "status": "ok",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
-        "age": "3d19h",
+        "age": "3d21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "3d19h",
+        "age": "3d21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-authentik",
-        "age": "3d19h",
+        "age": "3d21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
-        "age": "3d19h",
+        "age": "3d21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
-        "age": "3d19h",
+        "age": "3d21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
-        "age": "3d19h",
+        "age": "3d21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
-        "age": "3d19h",
+        "age": "3d21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-namespaces",
-        "age": "3d19h",
+        "age": "3d21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking",
-        "age": "3d19h",
+        "age": "3d21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-config",
-        "age": "3d19h",
+        "age": "3d21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-tls",
-        "age": "3d19h",
+        "age": "3d21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability",
-        "age": "3d19h",
+        "age": "3d21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
-        "age": "3d19h",
+        "age": "3d21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
-        "age": "3d19h",
+        "age": "3d21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security",
-        "age": "3d19h",
+        "age": "3d21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security-issuers",
-        "age": "3d19h",
+        "age": "3d21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-storage",
-        "age": "3d19h",
+        "age": "3d21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade",
-        "age": "3d19h",
+        "age": "3d21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade-plans",
-        "age": "3d19h",
+        "age": "3d21h",
         "ready": true
       }
     ]

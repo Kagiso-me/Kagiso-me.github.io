@@ -136,8 +136,8 @@ import Layout from '../layouts/Layout.astro';
 
       <div>
         <div class="section-header">
-          <h2 class="section-title">Active Project</h2>
-          <a href="/projects" class="mono link-subtle">All projects →</a>
+          <h2 class="section-title">Active Work</h2>
+          <a href="/projects" class="mono link-subtle">Roadmap →</a>
         </div>
         <div id="active-project">
           <div class="skeleton" style="height: 200px; border-radius: 12px;"></div>
@@ -922,29 +922,39 @@ import Layout from '../layouts/Layout.astro';
 
   async function loadProject() {
     try {
-      const res = await fetch('/data/projects.json');
+      const res = await fetch('/data/roadmap.json');
       if (!res.ok) throw new Error('no data');
-      const projects = await res.json();
-      const active = projects.find((p: any) => p.status === 'active');
+      const data = await res.json();
+      const active = data.active?.[0];
       if (!active) return;
       const el = document.getElementById('active-project');
       if (el) {
+        const progressHtml = active.progress != null ? `
+          <div style="margin:1rem 0">
+            <div style="display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:0.68rem;color:var(--color-subtle);margin-bottom:0.35rem">
+              <span>progress</span><span>${active.progress}%</span>
+            </div>
+            <div style="height:4px;background:var(--color-overlay);border-radius:2px;overflow:hidden">
+              <div style="height:100%;width:${active.progress}%;background:var(--color-ok);border-radius:2px"></div>
+            </div>
+          </div>` : '';
+        const stackHtml = active.stack?.length
+          ? `<div style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:1rem">${active.stack.map((s: string) => `<span style="font-family:var(--font-mono);font-size:0.68rem;padding:0.2rem 0.55rem;border-radius:4px;background:var(--color-overlay);color:var(--color-subtle);border:1px solid var(--color-muted)">${s}</span>`).join('')}</div>`
+          : '';
         el.innerHTML = `
-          <div class="card">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
-              <span class="mono" style="color:var(--color-gold)">● active</span>
-              <span class="mono">${active.timeline}</span>
+          <a href="/projects" style="display:block;text-decoration:none">
+            <div class="card" style="transition:border-color 0.15s">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
+                <span class="mono" style="color:var(--color-ok);font-size:0.75rem;display:flex;align-items:center;gap:0.35rem">● active</span>
+                <span class="mono" style="color:var(--color-subtle);font-size:0.72rem">→ roadmap</span>
+              </div>
+              <h3 style="margin:0 0 0.2rem;font-size:1.1rem">${active.title}</h3>
+              <div class="mono" style="color:var(--color-subtle);font-size:0.75rem;margin-bottom:0.75rem">${active.subtitle}</div>
+              <p style="color:var(--color-subtle);font-size:0.875rem;margin:0;line-height:1.6">${active.description}</p>
+              ${progressHtml}
+              ${stackHtml}
             </div>
-            <h3 style="margin:0 0 0.5rem;font-size:1.1rem">${active.title}</h3>
-            <p style="color:var(--color-subtle);font-size:0.875rem;margin:0 0 1.25rem;line-height:1.6">${active.description}</p>
-            <div style="display:flex;flex-wrap:wrap;gap:0.75rem">
-              ${active.milestones.map((m: any) => `
-                <span style="font-size:0.8rem;color:${m.done ? 'var(--color-ok)' : 'var(--color-subtle)'};font-family:var(--font-mono)">
-                  ${m.done ? '✓' : '○'} ${m.label}
-                </span>
-              `).join('')}
-            </div>
-          </div>
+          </a>
         `;
       }
     } catch { /* no data yet */ }

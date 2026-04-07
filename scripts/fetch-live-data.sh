@@ -16,28 +16,25 @@ NOW=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 # All metrics derived from a single kubectl get nodes -o json call.
 # No node-exporter, no port-forwarding needed.
 build_nodes() {
-  local nodes_json
-  nodes_json=$(kubectl get nodes -o json 2>/dev/null || echo "")
+  local nodes_json pods_json tmp_nodes tmp_pods
+  nodes_json=$(kubectl get nodes -o json 2>/dev/null || echo "{}")
+  pods_json=$(kubectl get pods -A -o json 2>/dev/null || echo "{}")
 
-  local pods_json
-  pods_json=$(kubectl get pods -A -o json 2>/dev/null || echo "")
+  tmp_nodes=$(mktemp)
+  tmp_pods=$(mktemp)
+  echo "$nodes_json" > "$tmp_nodes"
+  echo "$pods_json"  > "$tmp_pods"
 
-  python3 -c "
+  python3 - "$tmp_nodes" "$tmp_pods" <<'PYEOF'
 import json, sys
 
-nodes_raw = '''${nodes_json}'''
-pods_raw  = '''${pods_json}'''
+with open(sys.argv[1]) as f:
+  try:    nodes = json.load(f)['items']
+  except: nodes = []
 
-try:
-  nodes = json.loads(nodes_raw)['items']
-except Exception:
-  print('[]')
-  sys.exit(0)
-
-try:
-  pods = json.loads(pods_raw)['items']
-except Exception:
-  pods = []
+with open(sys.argv[2]) as f:
+  try:    pods = json.load(f)['items']
+  except: pods = []
 
 # Build per-node pod resource request totals
 # cpu in millicores, memory in bytes
@@ -115,7 +112,8 @@ for node in nodes:
   })
 
 print(json.dumps(result))
-"
+PYEOF
+  rm -f "$tmp_nodes" "$tmp_pods"
 }
 
 # ── Flux sync status ───────────────────────────────────────────────────────────
@@ -152,33 +150,49 @@ print(json.dumps(rows))
   echo "{\"ready\":${ready_count},\"total\":${total_count},\"last_sync\":\"${last_sync}\",\"status\":\"${status}\",\"kustomizations\":${ks_json}}"
 }
 
-# ── Backup status ─────────────────────────────────────────────────────────────
-# Reads the textfile metric directly from bronn via SSH.
-# Metric written by the docker-appdata backup cron on bronn.
-build_backup() {
-  local last_ts age_str status
-  age_str="—"
-  status="unknown"
-
-  last_ts=$(ssh -o ConnectTimeout=5 -o BatchMode=yes 10.0.10.20 \
-    "grep -m1 'backup_last_success_timestamp{job=\"docker-appdata\"}' \
-     /var/lib/node_exporter/textfile_collector/docker_backup.prom 2>/dev/null | awk '{print \$2}'" 2>/dev/null || echo "")
-
-  if [[ -n "$last_ts" && "$last_ts" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
-    age_str=$(python3 -c "
+# ── Backup age helper ─────────────────────────────────────────────────────────
+# Usage: backup_age_json <unix_timestamp>
+# Returns JSON {age, status} — warn >25h, crit >48h
+backup_age_json() {
+  local ts="$1" age_str status
+  if [[ -z "$ts" || ! "$ts" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
+    echo '{"age":"—","status":"unknown"}'
+    return
+  fi
+  age_str=$(python3 -c "
 import time
-age=time.time()-float('${last_ts}')
+age=time.time()-float('${ts}')
 h=int(age//3600); m=int((age%3600)//60)
 print(f'{h}h {m}m ago' if h else f'{m}m ago')
 ")
-    local age_hours
-    age_hours=$(python3 -c "print(int(($(date +%s) - int(float('${last_ts}'))) / 3600))")
-    status="ok"
-    [[ "$age_hours" -gt 25 ]] && status="warn"
-    [[ "$age_hours" -gt 48 ]] && status="crit"
-  fi
-
+  local age_hours
+  age_hours=$(python3 -c "print(int(($(date +%s) - int(float('${ts}'))) / 3600))")
+  status="ok"
+  [[ "$age_hours" -gt 25 ]] && status="warn"
+  [[ "$age_hours" -gt 48 ]] && status="crit"
   echo "{\"age\":\"${age_str}\",\"status\":\"${status}\"}"
+}
+
+# ── Backup status ─────────────────────────────────────────────────────────────
+# bronn: SSH-reads textfile metric (backup_docker.sh writes it after each run)
+# varys: reads local textfile metric (varys-backup.sh writes it after each run)
+build_backup() {
+  # bronn — docker appdata
+  local bronn_ts
+  bronn_ts=$(ssh -o ConnectTimeout=5 -o BatchMode=yes 10.0.10.20 \
+    "grep -m1 'backup_last_success_timestamp{job=\"docker-appdata\"}' \
+     /var/lib/node_exporter/textfile_collector/docker_backup.prom 2>/dev/null | awk '{print \$2}'" 2>/dev/null || echo "")
+  local bronn_json
+  bronn_json=$(backup_age_json "$bronn_ts")
+
+  # varys — key material backup (local file, no SSH needed)
+  local varys_ts
+  varys_ts=$(grep -m1 'backup_last_success_timestamp{job="varys-keys"}' \
+    /var/lib/node_exporter/textfile_collector/varys_backup.prom 2>/dev/null | awk '{print $2}' || echo "")
+  local varys_json
+  varys_json=$(backup_age_json "$varys_ts")
+
+  echo "{\"bronn\":${bronn_json},\"varys\":${varys_json}}"
 }
 
 # ── Velero last backup ─────────────────────────────────────────────────────────
@@ -395,46 +409,58 @@ build_services() {
   nextcloud=$(build_nextcloud)
   immich=$(build_immich)
 
-  python3 -c "
-import sys, json
+  local tmp_svc
+  tmp_svc=$(mktemp)
+  # Write all service data as a single JSON object to avoid shell quoting issues
+  python3 -c "import json,sys; print(json.dumps({
+    'uk':          sys.argv[1],
+    'sonarr':      json.loads(sys.argv[2]),
+    'radarr':      json.loads(sys.argv[3]),
+    'sabnzbd':     json.loads(sys.argv[4]),
+    'plex':        json.loads(sys.argv[5]),
+    'lidarr':      json.loads(sys.argv[6]),
+    'navidrome':   json.loads(sys.argv[7]),
+    'vaultwarden': json.loads(sys.argv[8]),
+    'nextcloud':   json.loads(sys.argv[9]),
+    'immich':      json.loads(sys.argv[10]),
+  }))" \
+    "$uk_raw" "$sonarr" "$radarr" "$sabnzbd" "$plex" \
+    "$lidarr" "$navidrome" "$vaultwarden" "$nextcloud" "$immich" > "$tmp_svc"
 
-uk_raw      = '''${uk_raw}'''
-sonarr      = json.loads('''${sonarr}''')
-radarr      = json.loads('''${radarr}''')
-sabnzbd     = json.loads('''${sabnzbd}''')
-plex_d      = json.loads('''${plex}''')
-lidarr      = json.loads('''${lidarr}''')
-navidrome   = json.loads('''${navidrome}''')
-vaultwarden = json.loads('''${vaultwarden}''')
-nextcloud   = json.loads('''${nextcloud}''')
-immich      = json.loads('''${immich}''')
+  python3 - "$tmp_svc" <<'PYEOF'
+import json, sys
 
-# Service list — tag is the sub-label shown in the ticker
-# Format: "Name: value" so the ticker reads naturally
-def fmt(name, label):
-  return f'{name}: {label}'
+with open(sys.argv[1]) as f:
+  d = json.load(f)
+
+uk_raw      = d['uk']
+sonarr      = d['sonarr']
+radarr      = d['radarr']
+sabnzbd     = d['sabnzbd']
+plex_d      = d['plex']
+lidarr      = d['lidarr']
+navidrome   = d['navidrome']
+vaultwarden = d['vaultwarden']
+nextcloud   = d['nextcloud']
+immich      = d['immich']
 
 SERVICES = [
-  # k3s
-  {'name': 'Vaultwarden', 'tag': fmt('Vaultwarden', vaultwarden['label']), 'status_override': vaultwarden['status']},
-  {'name': 'Immich',      'tag': fmt('Immich',      immich['label']),      'status_override': immich['status']},
-  {'name': 'Nextcloud',   'tag': fmt('Nextcloud',   nextcloud['label']),   'status_override': nextcloud['status']},
-  # Docker — media
-  {'name': 'Plex',        'tag': fmt('Plex',        plex_d['label']),      'status_override': plex_d['status']},
-  {'name': 'SABnzbd',     'tag': fmt('SABnzbd',     sabnzbd['label']),     'status_override': sabnzbd['status']},
-  {'name': 'Sonarr',      'tag': fmt('Sonarr',      sonarr['label']),      'status_override': sonarr['status']},
-  {'name': 'Radarr',      'tag': fmt('Radarr',      radarr['label']),      'status_override': radarr['status']},
-  {'name': 'Lidarr',      'tag': fmt('Lidarr',      lidarr['label']),      'status_override': lidarr['status']},
-  {'name': 'Navidrome',   'tag': fmt('Navidrome',   navidrome['label']),   'status_override': navidrome['status']},
+  {'name': 'Vaultwarden', 'tag': vaultwarden['label'], 'status_override': vaultwarden['status']},
+  {'name': 'Immich',      'tag': immich['label'],      'status_override': immich['status']},
+  {'name': 'Nextcloud',   'tag': nextcloud['label'],   'status_override': nextcloud['status']},
+  {'name': 'Plex',        'tag': plex_d['label'],      'status_override': plex_d['status']},
+  {'name': 'SABnzbd',     'tag': sabnzbd['label'],     'status_override': sabnzbd['status']},
+  {'name': 'Sonarr',      'tag': sonarr['label'],      'status_override': sonarr['status']},
+  {'name': 'Radarr',      'tag': radarr['label'],      'status_override': radarr['status']},
+  {'name': 'Lidarr',      'tag': lidarr['label'],      'status_override': lidarr['status']},
+  {'name': 'Navidrome',   'tag': navidrome['label'],   'status_override': navidrome['status']},
 ]
 
-# Build status map from Uptime Kuma heartbeats
 status_map = {}
 try:
-  d = json.loads(uk_raw)
-  for monitor_id, beats in d.get('heartbeatList', {}).items():
-    if not beats:
-      continue
+  uk = json.loads(uk_raw)
+  for monitor_id, beats in uk.get('heartbeatList', {}).items():
+    if not beats: continue
     latest = beats[-1]
     s = latest.get('status')
     name_key = latest.get('name', '').lower()
@@ -446,12 +472,12 @@ except Exception:
 
 result = []
 for svc in SERVICES:
-  # status_override (from direct API) takes priority over Uptime Kuma
   status = svc.get('status_override') or status_map.get(svc['name'].lower(), 'unknown')
   result.append({'name': svc['name'], 'tag': svc['tag'], 'status': status})
 
 print(json.dumps(result))
-"
+PYEOF
+  rm -f "$tmp_svc"
 }
 
 # ── Assemble live cards ────────────────────────────────────────────────────────
@@ -465,8 +491,10 @@ FLUX_STATUS=$(echo "$FLUX" | python3 -c "import sys,json; d=json.load(sys.stdin)
 FLUX_LABEL=$(echo "$FLUX" | python3 -c "import sys,json; d=json.load(sys.stdin); print(f\"{d['ready']}/{d['total']} synced\")")
 FLUX_SYNC=$(echo "$FLUX" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['last_sync'])")
 
-BACKUP_AGE=$(echo "$BACKUP" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['age'])")
-BACKUP_STATUS=$(echo "$BACKUP" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['status'])")
+BRONN_BACKUP_AGE=$(echo    "$BACKUP" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['bronn']['age'])")
+BRONN_BACKUP_STATUS=$(echo "$BACKUP" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['bronn']['status'])")
+VARYS_BACKUP_AGE=$(echo    "$BACKUP" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['varys']['age'])")
+VARYS_BACKUP_STATUS=$(echo "$BACKUP" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['varys']['status'])")
 
 VELERO_RESULT=$(echo "$VELERO" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['result'])")
 VELERO_STATUS=$(echo "$VELERO" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['status'])")
@@ -475,39 +503,36 @@ VELERO_STATUS=$(echo "$VELERO" | python3 -c "import sys,json; d=json.load(sys.st
 RUNNING_PODS=$(kubectl get pods -A --no-headers 2>/dev/null | grep -c "Running" || echo "0")
 TOTAL_PODS=$(kubectl get pods -A --no-headers 2>/dev/null | wc -l | tr -d ' ' || echo "0")
 
-python3 -c "
-import json
+# Write JSON via temp files to avoid shell quoting issues
+TMP_NODES=$(mktemp); TMP_FLUX=$(mktemp); TMP_SERVICES=$(mktemp)
+echo "$NODES"    > "$TMP_NODES"
+echo "$FLUX"     > "$TMP_FLUX"
+echo "$SERVICES" > "$TMP_SERVICES"
+
+python3 - "$TMP_NODES" "$TMP_FLUX" "$TMP_SERVICES" <<PYEOF
+import json, sys
+
+with open(sys.argv[1]) as f: nodes    = json.load(f)
+with open(sys.argv[2]) as f: flux     = json.load(f)
+with open(sys.argv[3]) as f: services = json.load(f)
+
+running = int('${RUNNING_PODS}')
+total   = int('${TOTAL_PODS}')
+
 data = {
   'updated': '${NOW}',
   'cards': [
-    {
-      'label': 'Workloads',
-      'value': '${RUNNING_PODS}/${TOTAL_PODS}',
-      'sub': 'pods running',
-      'status': 'ok' if '${RUNNING_PODS}' == '${TOTAL_PODS}' else 'warn'
-    },
-    {
-      'label': 'Flux',
-      'value': '${FLUX_LABEL}',
-      'sub': '${FLUX_SYNC}',
-      'status': '${FLUX_STATUS}'
-    },
-    {
-      'label': 'Last Backup',
-      'value': '${BACKUP_AGE}',
-      'sub': 'docker appdata',
-      'status': '${BACKUP_STATUS}'
-    },
-    {
-      'label': 'Velero',
-      'value': '${VELERO_RESULT}',
-      'sub': 'last cluster backup',
-      'status': '${VELERO_STATUS}'
-    }
+    {'label': 'Workloads',      'value': f'{running}/{total}',          'sub': 'pods running',       'status': 'ok' if running == total else 'warn'},
+    {'label': 'Flux',           'value': '${FLUX_LABEL}',               'sub': '${FLUX_SYNC}',       'status': '${FLUX_STATUS}'},
+    {'label': 'Docker Appdata', 'value': '${BRONN_BACKUP_AGE}',         'sub': 'bronn backup',       'status': '${BRONN_BACKUP_STATUS}'},
+    {'label': 'Varys Keys',     'value': '${VARYS_BACKUP_AGE}',         'sub': 'varys backup',       'status': '${VARYS_BACKUP_STATUS}'},
+    {'label': 'Velero',         'value': '${VELERO_RESULT}',            'sub': 'last cluster backup','status': '${VELERO_STATUS}'},
   ],
-  'nodes': json.loads('${NODES}'),
-  'flux': json.loads('${FLUX}'),
-  'services': json.loads('${SERVICES}')
+  'nodes':    nodes,
+  'flux':     flux,
+  'services': services,
 }
 print(json.dumps(data, indent=2))
-"
+PYEOF
+
+rm -f "$TMP_NODES" "$TMP_FLUX" "$TMP_SERVICES"

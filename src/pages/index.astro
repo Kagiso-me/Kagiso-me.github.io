@@ -268,10 +268,17 @@ import Layout from '../layouts/Layout.astro';
     user-select: none;
   }
 
+  .ticker-item .svc-name {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--color-heading);
+    font-weight: 600;
+  }
+
   .ticker-item .svc-tag {
     font-family: var(--font-mono);
-    font-size: 0.78rem;
-    color: var(--color-text);
+    font-size: 0.75rem;
+    color: var(--color-subtle);
   }
 
   .ticker-skeleton {
@@ -331,6 +338,7 @@ import Layout from '../layouts/Layout.astro';
       const sep = i < all.length - 1 ? `<span class="ticker-sep">—</span>` : '';
       return `<div class="ticker-item">
         <span class="status-dot ${s.status}"></span>
+        <span class="svc-name">${s.name}</span>
         <span class="svc-tag">${s.tag}</span>
       </div>${sep}`;
     });

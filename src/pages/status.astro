@@ -324,12 +324,14 @@ import Layout from '../layouts/Layout.astro';
       // Backups
       const backupCards = document.getElementById('backup-cards');
       if (backupCards && data.cards) {
-        const bc = data.cards.find((c: any) => c.label === 'Last Backup');
-        const vc = data.cards.find((c: any) => c.label === 'Velero');
+        const find = (label: string) => data.cards.find((c: any) => c.label === label);
+        const da = find('Docker Appdata');
+        const vk = find('Varys Keys');
+        const vc = find('Velero');
         const items = [
-          { label: 'Docker Appdata', value: bc?.value ?? '—', sub: 'daily cron 02:00', status: bc?.status ?? 'unknown' },
-          { label: 'Velero (k8s)',   value: vc?.value ?? '—', sub: 'last cluster backup', status: vc?.status ?? 'unknown' },
-          { label: 'etcd Snapshot',  value: '—',              sub: 'daily cron 02:00', status: 'unknown' },
+          { label: 'Docker Appdata', value: da?.value ?? '—', sub: 'bronn · daily 02:00', status: da?.status ?? 'unknown' },
+          { label: 'Varys Keys',     value: vk?.value ?? '—', sub: 'varys · daily 01:00', status: vk?.status ?? 'unknown' },
+          { label: 'Velero (k8s)',   value: vc?.value ?? '—', sub: 'last cluster backup',  status: vc?.status ?? 'unknown' },
         ];
         backupCards.innerHTML = items.map(c => `
           <div class="card">

@@ -267,7 +267,7 @@ build_sonarr() {
     count=$(echo "$raw" | python3 -c "import sys,json; d=json.load(sys.stdin); print(len(d))" 2>/dev/null || echo "—")
     status="ok"
   fi
-  echo "{\"count\":\"${count}\",\"label\":\"${count} series\",\"status\":\"${status}\"}"
+  echo "{\"count\":\"${count}\",\"label\":\"Sonarr: ${count} series\",\"status\":\"${status}\"}"
 }
 
 # ── Radarr: movie count ────────────────────────────────────────────────────────
@@ -283,7 +283,7 @@ build_radarr() {
     count=$(echo "$raw" | python3 -c "import sys,json; d=json.load(sys.stdin); print(len(d))" 2>/dev/null || echo "—")
     status="ok"
   fi
-  echo "{\"count\":\"${count}\",\"label\":\"${count} movies\",\"status\":\"${status}\"}"
+  echo "{\"count\":\"${count}\",\"label\":\"Radarr: ${count} movies\",\"status\":\"${status}\"}"
 }
 
 # ── SABnzbd: queue size remaining ─────────────────────────────────────────────
@@ -336,18 +336,24 @@ build_plex() {
       label=$(echo "$raw" | python3 -c "
 import sys, json
 try:
-  d = json.load(sys.stdin)
-  size = int(d.get('MediaContainer', {}).get('size', 0))
-  print(f'{size} stream{\"s\" if size != 1 else \"\"}')
+  d = json.load(sys.stdin).get('MediaContainer', {})
+  size = int(d.get('size', 0))
+  if size == 0:
+    print('idle')
+  else:
+    # Try to get title of first stream
+    items = d.get('Metadata', [])
+    title = items[0].get('title', '') if items else ''
+    stream_str = f'{size} stream' + ('s' if size != 1 else '')
+    print(f'{stream_str} · {title}' if title else stream_str)
 except:
-  print('online')
-" 2>/dev/null || echo "online")
+  print('idle')
+" 2>/dev/null || echo "idle")
     fi
   else
-    # No token — just check if Plex responds at all
     if curl -sf --max-time 5 "${PLEX_URL}/identity" >/dev/null 2>&1; then
       status="ok"
-      label="online"
+      label="idle"
     fi
   fi
   echo "{\"label\":\"${label}\",\"status\":\"${status}\"}"
@@ -365,16 +371,45 @@ build_lidarr() {
     count=$(echo "$raw" | python3 -c "import sys,json; d=json.load(sys.stdin); print(len(d))" 2>/dev/null || echo "—")
     status="ok"
   fi
-  echo "{\"label\":\"${count} artists\",\"status\":\"${status}\"}"
+  echo "{\"label\":\"Lidarr: ${count} artists\",\"status\":\"${status}\"}"
 }
 
-# ── Navidrome: now playing / idle ─────────────────────────────────────────────
+# ── Navidrome: now playing via Subsonic API ───────────────────────────────────
+# Requires NAVIDROME_USER + NAVIDROME_PASS env vars for Subsonic auth.
+# Falls back to idle if creds not set or endpoint unreachable.
 build_navidrome() {
   local label="idle" status="unknown"
-  # Navidrome /rest/getNowPlaying requires auth — check /ping first for online status
-  if curl -sf --max-time 5 "${NAVIDROME_URL}/ping" >/dev/null 2>&1; then
-    status="ok"
-    label="online"
+  local user="${NAVIDROME_USER:-}" pass="${NAVIDROME_PASS:-}"
+
+  if [[ -n "$user" && -n "$pass" ]]; then
+    local raw
+    raw=$(curl -sf --max-time 5 \
+      "${NAVIDROME_URL}/rest/getNowPlaying.view?u=${user}&p=${pass}&v=1.16.1&c=homelab&f=json" \
+      2>/dev/null || echo "")
+    if [[ -n "$raw" ]]; then
+      status="ok"
+      label=$(echo "$raw" | python3 -c "
+import sys, json
+try:
+  entries = json.load(sys.stdin).get('subsonic-response', {}) \
+              .get('nowPlaying', {}).get('entry', [])
+  count = len(entries)
+  if count == 0:
+    print('idle')
+  else:
+    title = entries[0].get('title', '')
+    playing_str = f'{count} playing'
+    print(f'{playing_str} · {title}' if title else playing_str)
+except:
+  print('idle')
+" 2>/dev/null || echo "idle")
+    fi
+  else
+    # No creds — just ping for online check
+    if curl -sf --max-time 5 "${NAVIDROME_URL}/ping" >/dev/null 2>&1; then
+      status="ok"
+      label="idle"
+    fi
   fi
   echo "{\"label\":\"${label}\",\"status\":\"${status}\"}"
 }
@@ -457,13 +492,16 @@ nextcloud = d['nextcloud']
 immich    = d['immich']
 
 # Ticker services — media/download stack only, no Plex/Navidrome (they get cards)
+# All tags prefixed "Name: value" for readability
+def tag(name, label): return f'{name}: {label}'
+
 SERVICES = [
-  {'name': 'Immich',    'tag': immich['label'],    'status_override': immich['status']},
-  {'name': 'Nextcloud', 'tag': nextcloud['label'], 'status_override': nextcloud['status']},
-  {'name': 'SABnzbd',   'tag': sabnzbd['label'],   'status_override': sabnzbd['status']},
-  {'name': 'Sonarr',    'tag': sonarr['label'],    'status_override': sonarr['status']},
-  {'name': 'Radarr',    'tag': radarr['label'],    'status_override': radarr['status']},
-  {'name': 'Lidarr',    'tag': lidarr['label'],    'status_override': lidarr['status']},
+  {'name': 'Immich',    'tag': tag('Immich',    immich['label']),    'status_override': immich['status']},
+  {'name': 'Nextcloud', 'tag': tag('Nextcloud', nextcloud['label']), 'status_override': nextcloud['status']},
+  {'name': 'SABnzbd',   'tag': tag('SABnzbd',   sabnzbd['label']),   'status_override': sabnzbd['status']},
+  {'name': 'Sonarr',    'tag': sonarr['label'],                      'status_override': sonarr['status']},
+  {'name': 'Radarr',    'tag': radarr['label'],                      'status_override': radarr['status']},
+  {'name': 'Lidarr',    'tag': lidarr['label'],                      'status_override': lidarr['status']},
 ]
 
 status_map = {}

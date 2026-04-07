@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-07T20:36:00Z",
+  "updated": "2026-04-07T20:37:32Z",
   "cards": [
     {
       "label": "Workloads",
@@ -15,19 +15,19 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "18h 34m ago",
+      "value": "18h 35m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "8h 36m ago",
+      "value": "8h 37m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "1h 35m ago",
+      "value": "1h 36m ago",
       "sub": "last cluster backup",
       "status": "ok"
     }
@@ -196,7 +196,7 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 113.1 GB left",
+      "tag": "SABnzbd: downloading \u00b7 112.4 GB left",
       "status": "ok"
     },
     {

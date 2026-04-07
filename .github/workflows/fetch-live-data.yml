@@ -21,6 +21,7 @@ jobs:
           SONARR_API_KEY: ${{ secrets.SONARR_API_KEY }}
           RADARR_API_KEY: ${{ secrets.RADARR_API_KEY }}
           SABNZBD_API_KEY: ${{ secrets.SABNZBD_API_KEY }}
+          LIDARR_API_KEY: ${{ secrets.LIDARR_API_KEY }}
         run: |
           bash scripts/fetch-live-data.sh > public/data/live.json
 

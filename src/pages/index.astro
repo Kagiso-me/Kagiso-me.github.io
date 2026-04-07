@@ -307,17 +307,15 @@ import Layout from '../layouts/Layout.astro';
 <script>
   // Fallback static list — shown immediately before live.json loads
   const STATIC_SERVICES = [
-    { name: 'Vaultwarden', tag: 'k3s · passwords',        status: 'unknown' },
-    { name: 'Immich',      tag: 'k3s · photos',            status: 'unknown' },
-    { name: 'Nextcloud',   tag: 'k3s · files',             status: 'unknown' },
-    { name: 'Plex',        tag: 'docker · media',          status: 'unknown' },
-    { name: 'SABnzbd',     tag: 'docker · downloads',      status: 'unknown' },
-    { name: 'Sonarr',      tag: 'docker · tv',             status: 'unknown' },
-    { name: 'Radarr',      tag: 'docker · movies',         status: 'unknown' },
-    { name: 'Lidarr',      tag: 'docker · music',          status: 'unknown' },
-    { name: 'Navidrome',   tag: 'docker · music streaming',status: 'unknown' },
-    { name: 'Uptime Kuma', tag: 'docker · monitoring',     status: 'unknown' },
-    { name: 'NPM',         tag: 'docker · proxy',          status: 'unknown' },
+    { name: 'Vaultwarden', tag: 'offline', status: 'unknown' },
+    { name: 'Immich',      tag: '—',       status: 'unknown' },
+    { name: 'Nextcloud',   tag: 'offline', status: 'unknown' },
+    { name: 'Plex',        tag: 'online',  status: 'unknown' },
+    { name: 'SABnzbd',     tag: 'idle',    status: 'unknown' },
+    { name: 'Sonarr',      tag: '—',       status: 'unknown' },
+    { name: 'Radarr',      tag: '—',       status: 'unknown' },
+    { name: 'Lidarr',      tag: '—',       status: 'unknown' },
+    { name: 'Navidrome',   tag: 'online',  status: 'unknown' },
   ];
 
   function buildTicker(services: {name: string; tag: string; status: string}[]) {

@@ -794,12 +794,11 @@ import Layout from '../layouts/Layout.astro';
     const track = document.getElementById('ticker-track');
     if (!track) return;
     const all = [...services, ...services];
-    const items = all.map((s, i) => {
-      const sep = i < all.length - 1 ? `<span class="ticker-sep">·</span>` : '';
+    const items = all.map((s) => {
       return `<div class="ticker-item">
         <span class="status-dot ${s.status}"></span>
         <span class="svc-tag">${s.tag}</span>
-      </div>${sep}`;
+      </div>`;
     });
     track.innerHTML = items.join('');
   }

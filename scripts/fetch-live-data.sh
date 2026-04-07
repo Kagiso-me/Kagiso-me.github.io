@@ -192,11 +192,11 @@ build_velero() {
 }
 
 # =============================================================================
-# Service endpoints
-# TODO: replace IPs with internal DNS names once USG DNS records are configured
-#   e.g. sonarr.home, radarr.home, sabnzbd.home, plex.home
+# Service endpoints — internal DNS via Pi-hole on hodor (10.0.10.15)
+# Docker host services use IP:port (no internal DNS for these yet)
+# k3s services use *.local.kagiso.me DNS entries
 # =============================================================================
-DOCKER_HOST="10.0.10.20"          # Docker host — all media stack services
+DOCKER_HOST="10.0.10.20"
 SONARR_URL="http://${DOCKER_HOST}:8989"
 RADARR_URL="http://${DOCKER_HOST}:7878"
 SABNZBD_URL="http://${DOCKER_HOST}:8085"
@@ -204,6 +204,9 @@ PLEX_URL="http://${DOCKER_HOST}:32400"
 LIDARR_URL="http://${DOCKER_HOST}:8686"
 NAVIDROME_URL="http://${DOCKER_HOST}:4533"
 UPTIME_KUMA_URL="http://${DOCKER_HOST}:3001"
+VAULTWARDEN_URL="https://vault.local.kagiso.me"
+NEXTCLOUD_URL="https://cloud.local.kagiso.me"
+IMMICH_URL="https://photos.local.kagiso.me"
 # API keys injected as environment variables from GitHub Actions secrets
 # Set locally on varys via ~/.bashrc if running the script manually:
 #   export SONARR_API_KEY=...   export RADARR_API_KEY=...
@@ -341,7 +344,7 @@ build_navidrome() {
 # ── Vaultwarden: online check ─────────────────────────────────────────────────
 build_vaultwarden() {
   local label="offline" status="crit"
-  if curl -sf --max-time 5 "https://vault.kagiso.me/alive" >/dev/null 2>&1; then
+  if curl -sf --max-time 5 "${VAULTWARDEN_URL}/alive" >/dev/null 2>&1; then
     label="online"; status="ok"
   fi
   echo "{\"label\":\"${label}\",\"status\":\"${status}\"}"
@@ -350,7 +353,7 @@ build_vaultwarden() {
 # ── Nextcloud: online check ───────────────────────────────────────────────────
 build_nextcloud() {
   local label="offline" status="crit"
-  if curl -sf --max-time 5 "https://cloud.kagiso.me/status.php" >/dev/null 2>&1; then
+  if curl -sf --max-time 5 "${NEXTCLOUD_URL}/status.php" >/dev/null 2>&1; then
     label="online"; status="ok"
   fi
   echo "{\"label\":\"${label}\",\"status\":\"${status}\"}"
@@ -359,7 +362,7 @@ build_nextcloud() {
 # ── Immich: online check ──────────────────────────────────────────────────────
 build_immich() {
   local label="offline" status="crit"
-  if curl -sf --max-time 5 "https://photos.kagiso.me/api/server/ping" >/dev/null 2>&1; then
+  if curl -sf --max-time 5 "${IMMICH_URL}/api/server/ping" >/dev/null 2>&1; then
     label="online"; status="ok"
   fi
   echo "{\"label\":\"${label}\",\"status\":\"${status}\"}"

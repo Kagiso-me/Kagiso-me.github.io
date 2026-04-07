@@ -47,6 +47,12 @@ import Layout from '../layouts/Layout.astro';
           <!-- populated by JS -->
         </div>
       </div>
+
+      <!-- Media player cards -->
+      <div class="media-grid" id="media-grid">
+        <div class="media-card skeleton"></div>
+        <div class="media-card skeleton"></div>
+      </div>
     </div>
   </section>
 
@@ -287,6 +293,38 @@ import Layout from '../layouts/Layout.astro';
     margin-top: 1.5rem;
   }
 
+  .media-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .media-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-muted);
+    border-radius: 10px;
+    padding: 0.875rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 52px;
+  }
+
+  .media-card .media-name {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-heading);
+  }
+
+  .media-card .media-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--color-subtle);
+    margin-top: 0.1rem;
+  }
+
   .two-col {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -318,15 +356,17 @@ import Layout from '../layouts/Layout.astro';
 <script>
   // Fallback static list — shown immediately before live.json loads
   const STATIC_SERVICES = [
-    { name: 'Vaultwarden', tag: 'offline', status: 'unknown' },
-    { name: 'Immich',      tag: '—',       status: 'unknown' },
-    { name: 'Nextcloud',   tag: 'offline', status: 'unknown' },
-    { name: 'Plex',        tag: 'online',  status: 'unknown' },
-    { name: 'SABnzbd',     tag: 'idle',    status: 'unknown' },
-    { name: 'Sonarr',      tag: '—',       status: 'unknown' },
-    { name: 'Radarr',      tag: '—',       status: 'unknown' },
-    { name: 'Lidarr',      tag: '—',       status: 'unknown' },
-    { name: 'Navidrome',   tag: 'online',  status: 'unknown' },
+    { name: 'Immich',    tag: '—',    status: 'unknown' },
+    { name: 'Nextcloud', tag: '—',    status: 'unknown' },
+    { name: 'SABnzbd',   tag: 'idle', status: 'unknown' },
+    { name: 'Sonarr',    tag: '—',    status: 'unknown' },
+    { name: 'Radarr',    tag: '—',    status: 'unknown' },
+    { name: 'Lidarr',    tag: '—',    status: 'unknown' },
+  ];
+
+  const STATIC_MEDIA = [
+    { name: 'Plex',      label: 'idle', status: 'unknown' },
+    { name: 'Navidrome', label: 'idle', status: 'unknown' },
   ];
 
   function buildTicker(services: {name: string; tag: string; status: string}[]) {
@@ -345,9 +385,24 @@ import Layout from '../layouts/Layout.astro';
     track.innerHTML = items.join('');
   }
 
+  function buildMedia(items: {name: string; label: string; status: string}[]) {
+    const grid = document.getElementById('media-grid');
+    if (!grid) return;
+    grid.innerHTML = items.map(m => `
+      <div class="media-card">
+        <span class="status-dot ${m.status}"></span>
+        <div>
+          <div class="media-name">${m.name}</div>
+          <div class="media-label">${m.label}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
   async function loadLiveData() {
-    // Render ticker immediately with static fallback
+    // Render immediately with static fallback
     buildTicker(STATIC_SERVICES);
+    buildMedia(STATIC_MEDIA);
 
     try {
       const res = await fetch('/data/live.json');
@@ -368,10 +423,8 @@ import Layout from '../layouts/Layout.astro';
         `).join('');
       }
 
-      // Rebuild ticker with live data (includes enriched tags from APIs)
-      if (data.services?.length) {
-        buildTicker(data.services);
-      }
+      if (data.services?.length) buildTicker(data.services);
+      if (data.media?.length)    buildMedia(data.media);
 
       const strip = document.getElementById('status-strip');
       if (strip && data.nodes) {

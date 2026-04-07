@@ -5,9 +5,12 @@
       "slug": "beesly",
       "title": "Beesly",
       "subtitle": "Personal AI Assistant",
-      "description": "Discord-native AI assistant with infra awareness, memory, and skills. Ask Beesly about pod health, disk usage, or your calendar — all from one interface.",
-      "stack": ["OpenClaw", "Claude API", "Discord"],
+      "category": "DEV",
+      "description": "Discord-native AI assistant with full infra awareness, persistent memory, and a skill system. Ask Beesly about pod health, disk usage, or your calendar — all from one interface. No SSH, no dashboards, no digging through logs.",
+      "detail": "Beesly is the homelab's Siri. She lives on the cluster, connects via Discord, remembers context across sessions, and has direct access to every layer of the infrastructure. Built on OpenClaw with Claude API — operational in an afternoon rather than several weekends of telephony plumbing.",
+      "stack": ["OpenClaw", "Claude API", "Discord", "k3s"],
       "status": "active",
+      "target": "19 Apr 2026",
       "progress": 35
     }
   ],
@@ -16,19 +19,23 @@
       "slug": "pikvm",
       "title": "PiKVM",
       "subtitle": "KVM-over-IP",
-      "description": "Out-of-band remote access for every node — keyboard, video, mouse over the network. Browser-based recovery regardless of OS state, BIOS access, virtual media.",
+      "category": "INFRA",
+      "description": "Out-of-band remote access for every node — keyboard, video, and mouse over the network. Browser-based recovery regardless of OS state, full BIOS access, virtual media for remote OS reinstall.",
+      "detail": "A Pi Zero 2W with a cheap USB HDMI capture card replicates JetKVM functionality for ~$30. When a node is locked out — failed SSH, bad k3s config, kernel panic — PiKVM means recovery doesn't require physical presence.",
       "stack": ["Pi Zero 2W", "PiKVM", "USB HDMI capture"],
       "status": "upcoming",
-      "target": "Apr 2026"
+      "target": "12 Apr 2026"
     },
     {
       "slug": "cpu-upgrade",
       "title": "CPU Upgrade",
       "subtitle": "k3s node hardware refresh",
-      "description": "Replacing i5-4570T (35W TDP, 4c/4t) with Xeon E3-1230L v3 (25W TDP, 4c/8t) across all three ThinkCentre M93p nodes. Lower TDP, hyperthreading, better performance-per-watt.",
+      "category": "INFRA",
+      "description": "Replacing i5-4570T (35W TDP, 4c/4t) with Xeon E3-1230L v3 (25W TDP, 4c/8t) across all three ThinkCentre M93p nodes. Lower TDP, hyperthreading, better performance-per-watt — meaningful gains for a cluster that runs 24/7.",
+      "detail": "The i5-4570T has been the bottleneck for scheduling-heavy workloads. The E3-1230L v3 is a drop-in replacement for the M93p socket, adds hyperthreading (4c/8t vs 4c/4t), and actually draws less power. All three nodes — tywin, jaime, tyrion — will be upgraded in the same window.",
       "stack": ["tywin", "jaime", "tyrion"],
       "status": "upcoming",
-      "target": "May 2026 (week 2)"
+      "target": "15 May 2026"
     }
   ],
   "planned": [
@@ -36,18 +43,34 @@
       "slug": "azuracast",
       "title": "AzuraCast",
       "subtitle": "Self-hosted internet radio",
-      "description": "Self-hosted radio station — streaming music, scheduled programming, and live shows. Planning content and broadcast schedule before deployment.",
-      "stack": ["AzuraCast", "Icecast", "Liquidsoap"],
+      "category": "INFRA",
+      "description": "Self-hosted radio station running on the cluster — streaming music, scheduled programming, and live shows. Currently planning content and broadcast schedules before deployment.",
+      "detail": "AzuraCast handles the full broadcast stack: Liquidsoap for automation, Icecast for streaming, and a web UI for scheduling. The goal is a personal internet radio station — curated playlists, scheduled shows, and eventually live sessions.",
+      "stack": ["AzuraCast", "Icecast", "Liquidsoap", "k3s"],
       "status": "planned",
-      "target": "~mid Apr 2026"
+      "target": "Early May 2026"
     },
     {
       "slug": "canvas",
       "title": "Canvas",
       "subtitle": "Visual Project Board",
-      "description": "Self-hosted freeform project board. Notes, tasks, images, links, and checklists on a spatial canvas. Built for planning and tracking creative projects.",
-      "stack": ["SvelteKit", "Fastify", "SQLite"],
-      "status": "planned"
+      "category": "DEV",
+      "description": "Self-hosted freeform project board. Notes, tasks, images, links, and checklists on a spatial canvas — built for planning and tracking creative projects that don't fit neatly into a list.",
+      "detail": "Built from scratch with SvelteKit and Fastify. The goal is a tool that feels like a physical desk — spatial, freeform, and fast. Not another linear task tracker.",
+      "stack": ["SvelteKit", "Fastify", "SQLite", "k3s"],
+      "status": "planned",
+      "target": "Late May – Early Jun 2026"
+    },
+    {
+      "slug": "fitness-tracker",
+      "title": "FitLog",
+      "subtitle": "Custom fitness & calorie tracker",
+      "category": "DEV",
+      "description": "A self-hosted fitness and calorie counter built to fill the gaps that MyFitnessPal and similar apps leave. Still in brainstorming — details to follow, but the aim is something meaningfully better, not just another clone.",
+      "detail": "The goal is a custom app that actually fits the way I train and eat — not a generic off-the-shelf tracker. Self-hosted, running in the k3s cluster, with full ownership of the data. Details and feature scope to be defined before build begins.",
+      "stack": ["k3s"],
+      "status": "planned",
+      "target": "Early Jul 2026"
     }
   ]
 }

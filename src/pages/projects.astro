@@ -226,6 +226,20 @@ import Layout from '../layouts/Layout.astro';
     transition: width 0.6s ease;
   }
 
+  /* Category tag */
+  .cat-tag {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+  .cat-DEV    { background: color-mix(in srgb, var(--color-mauve) 15%, transparent); color: var(--color-mauve); }
+  .cat-INFRA  { background: color-mix(in srgb, var(--color-peach) 15%, transparent); color: var(--color-peach); }
+  .cat-CONFIG { background: color-mix(in srgb, var(--color-gold)  15%, transparent); color: var(--color-gold); }
+
   /* Stack tags */
   .card-stack {
     display: flex;
@@ -243,6 +257,33 @@ import Layout from '../layouts/Layout.astro';
     color: var(--color-subtle);
     border: 1px solid var(--color-muted);
   }
+
+  /* Clickable card */
+  .roadmap-card.has-detail { cursor: pointer; }
+
+  /* Detail expand panel */
+  .card-detail {
+    display: none;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-muted);
+    font-size: 0.875rem;
+    color: var(--color-subtle);
+    line-height: 1.7;
+  }
+  .card-detail.open { display: block; }
+
+  .card-expand-hint {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--color-subtle);
+    margin-top: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    transition: color 0.15s;
+  }
+  .roadmap-card.has-detail:hover .card-expand-hint { color: var(--color-peach); }
 
   .skeleton {
     background: linear-gradient(90deg, var(--color-surface) 25%, var(--color-overlay) 50%, var(--color-surface) 75%);
@@ -271,6 +312,10 @@ import Layout from '../layouts/Layout.astro';
   function buildCard(item: any): string {
     const icon = STATUS_ICONS[item.status] ?? '○';
 
+    const catHtml = item.category
+      ? `<span class="cat-tag cat-${item.category}">${item.category}</span>`
+      : '';
+
     const progressHtml = item.status === 'active' && item.progress != null ? `
       <div class="progress-wrap">
         <div class="progress-label">
@@ -283,17 +328,27 @@ import Layout from '../layouts/Layout.astro';
       </div>` : '';
 
     const targetHtml = item.target
-      ? `<span class="card-target">${item.target}</span>`
+      ? `<span class="card-target">⏱ ${item.target}</span>`
       : '';
 
     const stackHtml = item.stack?.length
       ? `<div class="card-stack">${item.stack.map((s: string) => `<span class="stack-tag">${s}</span>`).join('')}</div>`
       : '';
 
+    const detailHtml = item.detail ? `
+      <div class="card-detail">${item.detail}</div>
+      <div class="card-expand-hint">
+        <span class="expand-arrow">▸</span>
+        <span class="expand-label">more details</span>
+      </div>` : '';
+
     return `
-    <div class="roadmap-card ${item.status}">
+    <div class="roadmap-card ${item.status}${item.detail ? ' has-detail' : ''}">
       <div class="card-status-row">
-        <span class="card-status-badge ${item.status}">${icon} ${item.status}</span>
+        <div style="display:flex;align-items:center;gap:0.5rem">
+          <span class="card-status-badge ${item.status}">${icon} ${item.status}</span>
+          ${catHtml}
+        </div>
         ${targetHtml}
       </div>
       <div class="card-title">${item.title}</div>
@@ -301,6 +356,7 @@ import Layout from '../layouts/Layout.astro';
       <div class="card-description">${item.description}</div>
       ${progressHtml}
       ${stackHtml}
+      ${detailHtml}
     </div>`;
   }
 
@@ -326,6 +382,19 @@ import Layout from '../layouts/Layout.astro';
           el.innerHTML = items.map(buildCard).join('');
         }
       }
+
+      // Click to expand detail
+      document.querySelectorAll('.roadmap-card.has-detail').forEach(card => {
+        card.addEventListener('click', () => {
+          const detail = card.querySelector('.card-detail');
+          const arrow  = card.querySelector('.expand-arrow');
+          const label  = card.querySelector('.expand-label');
+          const open   = detail?.classList.toggle('open');
+          if (arrow) (arrow as HTMLElement).textContent = open ? '▾' : '▸';
+          if (label) (label as HTMLElement).textContent = open ? 'less' : 'more details';
+        });
+      });
+
     } catch { /* skeletons remain */ }
   }
 

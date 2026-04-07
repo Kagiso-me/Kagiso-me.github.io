@@ -386,7 +386,7 @@ build_navidrome() {
 
   if [[ -n "$user" && -n "$pass" ]]; then
     local raw enc_pass
-    enc_pass=$(python3 -c "import urllib.parse,os; print(urllib.parse.quote(os.environ['ND_PASS'],safe=''))" 2>/dev/null)
+    enc_pass=$(ND_PASS="$pass" python3 -c "import urllib.parse,os; print(urllib.parse.quote(os.environ['ND_PASS'],safe=''))" 2>/dev/null)
     raw=$(curl -sf --max-time 5 \
       "${NAVIDROME_URL}/rest/getNowPlaying.view?u=${user}&p=${enc_pass}&v=1.16.1&c=homelab&f=json" \
       2>/dev/null || echo "")

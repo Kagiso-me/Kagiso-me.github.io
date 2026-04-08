@@ -1,33 +1,33 @@
 {
-  "updated": "2026-04-08T23:07:00Z",
+  "updated": "2026-04-08T23:58:12Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "59/62",
+      "value": "56/59",
       "sub": "pods running",
       "status": "warn"
     },
     {
       "label": "Flux",
       "value": "19/19 synced",
-      "sub": "9h",
+      "sub": "10h",
       "status": "ok"
     },
     {
       "label": "Docker Appdata",
-      "value": "21h 5m ago",
+      "value": "\u2014",
       "sub": "last backup",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "etcd Snapshot",
-      "value": "11h 7m ago",
+      "value": "11h 58m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "4h 6m ago",
+      "value": "4h 58m ago",
       "sub": "last cluster backup",
       "status": "ok"
     }
@@ -37,7 +37,7 @@
       "name": "jaime",
       "role": "control-plane",
       "status": "ok",
-      "pods": "18/110",
+      "pods": "17/110",
       "cpu": "25%",
       "memory": "4%",
       "pressure": []
@@ -46,7 +46,7 @@
       "name": "tyrion",
       "role": "control-plane",
       "status": "ok",
-      "pods": "20/110",
+      "pods": "19/110",
       "cpu": "24%",
       "memory": "4%",
       "pressure": []
@@ -55,7 +55,7 @@
       "name": "tywin",
       "role": "control-plane",
       "status": "ok",
-      "pods": "21/110",
+      "pods": "20/110",
       "cpu": "26%",
       "memory": "5%",
       "pressure": []
@@ -64,121 +64,121 @@
   "flux": {
     "ready": 19,
     "total": 19,
-    "last_sync": "9h",
+    "last_sync": "10h",
     "status": "ok",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
-        "age": "9h",
+        "age": "10h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "11h",
+        "age": "12h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-authentik",
-        "age": "9h",
+        "age": "10h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
-        "age": "9h",
+        "age": "10h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
-        "age": "9h",
+        "age": "10h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
-        "age": "9h",
+        "age": "10h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
-        "age": "9h",
+        "age": "10h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-namespaces",
-        "age": "9h",
+        "age": "10h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking",
-        "age": "9h",
+        "age": "10h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-config",
-        "age": "9h",
+        "age": "10h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-tls",
-        "age": "9h",
+        "age": "10h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability",
-        "age": "9h",
+        "age": "10h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
-        "age": "9h",
+        "age": "10h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
-        "age": "9h",
+        "age": "10h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security",
-        "age": "9h",
+        "age": "10h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security-issuers",
-        "age": "9h",
+        "age": "10h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-storage",
-        "age": "9h",
+        "age": "10h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade",
-        "age": "9h",
+        "age": "10h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade-plans",
-        "age": "9h",
+        "age": "10h",
         "ready": true
       }
     ]
@@ -197,17 +197,17 @@
     {
       "name": "SABnzbd",
       "tag": "SABnzbd: idle",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: 64 series",
-      "status": "ok"
+      "tag": "Sonarr: \u2014 series",
+      "status": "unknown"
     },
     {
       "name": "Radarr",
-      "tag": "Radarr: 16 movies",
-      "status": "ok"
+      "tag": "Radarr: \u2014 movies",
+      "status": "unknown"
     },
     {
       "name": "Lidarr",
@@ -219,13 +219,13 @@
     {
       "name": "Plex",
       "label": "idle",
-      "status": "ok",
+      "status": "unknown",
       "playing": false
     },
     {
       "name": "Navidrome",
       "label": "idle",
-      "status": "ok",
+      "status": "unknown",
       "playing": false
     }
   ]

@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-08T06:19:06Z",
+  "updated": "2026-04-08T07:58:13Z",
   "cards": [
     {
       "label": "Workloads",
@@ -10,26 +10,26 @@
     {
       "label": "Flux",
       "value": "19/19 synced",
-      "sub": "4d13h",
+      "sub": "4d15h",
       "status": "ok"
     },
     {
       "label": "Docker Appdata",
-      "value": "4h 17m ago",
+      "value": "5h 56m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "6h 19m ago",
+      "value": "7h 58m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 18m ago",
+      "value": "57m ago",
       "sub": "last cluster backup",
-      "status": "warn"
+      "status": "ok"
     }
   ],
   "nodes": [
@@ -64,121 +64,121 @@
   "flux": {
     "ready": 19,
     "total": 19,
-    "last_sync": "4d13h",
+    "last_sync": "4d15h",
     "status": "ok",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
-        "age": "4d13h",
+        "age": "4d15h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "4d13h",
+        "age": "4d15h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-authentik",
-        "age": "4d13h",
+        "age": "4d15h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
-        "age": "4d13h",
+        "age": "4d15h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
-        "age": "4d13h",
+        "age": "4d15h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
-        "age": "4d13h",
+        "age": "4d15h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
-        "age": "4d13h",
+        "age": "4d15h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-namespaces",
-        "age": "4d13h",
+        "age": "4d15h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking",
-        "age": "4d13h",
+        "age": "4d15h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-config",
-        "age": "4d13h",
+        "age": "4d15h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-tls",
-        "age": "4d13h",
+        "age": "4d15h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability",
-        "age": "4d13h",
+        "age": "4d15h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
-        "age": "4d13h",
+        "age": "4d15h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
-        "age": "4d13h",
+        "age": "4d15h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security",
-        "age": "4d13h",
+        "age": "4d15h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security-issuers",
-        "age": "4d13h",
+        "age": "4d15h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-storage",
-        "age": "4d13h",
+        "age": "4d15h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade",
-        "age": "4d13h",
+        "age": "4d15h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade-plans",
-        "age": "4d13h",
+        "age": "4d15h",
         "ready": true
       }
     ]
@@ -196,7 +196,7 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 30.1 GB left",
+      "tag": "SABnzbd: downloading \u00b7 22.9 GB left",
       "status": "ok"
     },
     {

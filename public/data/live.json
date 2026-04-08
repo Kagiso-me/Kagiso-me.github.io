@@ -1,33 +1,33 @@
 {
-  "updated": "2026-04-08T17:38:57Z",
+  "updated": "2026-04-08T19:09:34Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "50/53",
+      "value": "50/54",
       "sub": "pods running",
       "status": "warn"
     },
     {
       "label": "Flux",
       "value": "1/19 synced",
-      "sub": "4h7m",
+      "sub": "5h37m",
       "status": "warn"
     },
     {
       "label": "Docker Appdata",
-      "value": "15h 37m ago",
+      "value": "17h 7m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "5h 39m ago",
+      "value": "7h 9m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "2h 36m ago",
+      "value": "9m ago",
       "sub": "last cluster backup",
       "status": "ok"
     }
@@ -64,121 +64,121 @@
   "flux": {
     "ready": 1,
     "total": 19,
-    "last_sync": "4h7m",
+    "last_sync": "5h37m",
     "status": "warn",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
-        "age": "4h7m",
+        "age": "5h37m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "6h25m",
+        "age": "7h56m",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-authentik",
-        "age": "4h7m",
+        "age": "5h37m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
-        "age": "4h7m",
+        "age": "5h37m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
-        "age": "4h7m",
+        "age": "5h37m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
-        "age": "4h7m",
+        "age": "5h37m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
-        "age": "4h7m",
+        "age": "5h37m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-namespaces",
-        "age": "4h7m",
+        "age": "5h37m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking",
-        "age": "4h7m",
+        "age": "5h37m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-config",
-        "age": "4h7m",
+        "age": "5h37m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-tls",
-        "age": "4h7m",
+        "age": "5h37m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability",
-        "age": "4h7m",
+        "age": "5h37m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
-        "age": "4h7m",
+        "age": "5h37m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
-        "age": "4h7m",
+        "age": "5h37m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-security",
-        "age": "4h7m",
+        "age": "5h37m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-security-issuers",
-        "age": "4h7m",
+        "age": "5h37m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-storage",
-        "age": "4h7m",
+        "age": "5h37m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade",
-        "age": "4h7m",
+        "age": "5h37m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade-plans",
-        "age": "4h7m",
+        "age": "5h37m",
         "ready": false
       }
     ]

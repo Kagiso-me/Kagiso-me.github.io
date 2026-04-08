@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-08T19:09:34Z",
+  "updated": "2026-04-08T20:07:56Z",
   "cards": [
     {
       "label": "Workloads",
@@ -10,24 +10,24 @@
     {
       "label": "Flux",
       "value": "1/19 synced",
-      "sub": "5h37m",
+      "sub": "6h36m",
       "status": "warn"
     },
     {
       "label": "Docker Appdata",
-      "value": "17h 7m ago",
+      "value": "18h 6m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "7h 9m ago",
+      "value": "8h 8m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "9m ago",
+      "value": "1h 7m ago",
       "sub": "last cluster backup",
       "status": "ok"
     }
@@ -64,121 +64,121 @@
   "flux": {
     "ready": 1,
     "total": 19,
-    "last_sync": "5h37m",
+    "last_sync": "6h36m",
     "status": "warn",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
-        "age": "5h37m",
+        "age": "6h36m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "7h56m",
+        "age": "8h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-authentik",
-        "age": "5h37m",
+        "age": "6h36m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
-        "age": "5h37m",
+        "age": "6h36m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
-        "age": "5h37m",
+        "age": "6h36m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
-        "age": "5h37m",
+        "age": "6h36m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
-        "age": "5h37m",
+        "age": "6h36m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-namespaces",
-        "age": "5h37m",
+        "age": "6h36m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking",
-        "age": "5h37m",
+        "age": "6h36m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-config",
-        "age": "5h37m",
+        "age": "6h36m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-tls",
-        "age": "5h37m",
+        "age": "6h36m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability",
-        "age": "5h37m",
+        "age": "6h36m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
-        "age": "5h37m",
+        "age": "6h36m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
-        "age": "5h37m",
+        "age": "6h36m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-security",
-        "age": "5h37m",
+        "age": "6h36m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-security-issuers",
-        "age": "5h37m",
+        "age": "6h36m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-storage",
-        "age": "5h37m",
+        "age": "6h36m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade",
-        "age": "5h37m",
+        "age": "6h36m",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade-plans",
-        "age": "5h37m",
+        "age": "6h36m",
         "ready": false
       }
     ]

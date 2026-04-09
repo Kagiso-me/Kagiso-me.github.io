@@ -644,9 +644,14 @@ for rule in fw:
     try: fw_hits += int(rule.get('packets', '0').replace(' ', ''))
     except: pass
 
-# WAN latency: avg of avg-rtt across ping results
+# WAN latency: avg-rtt format is "4ms544us" — parse ms + us components
+def parse_rtt(s):
+  import re as _re
+  ms = _re.search(r'(\d+)ms', s)
+  us = _re.search(r'(\d+)us', s)
+  return (int(ms.group(1)) if ms else 0) + (int(us.group(1)) if us else 0) / 1000
 try:
-  rtts = [float(p['avg-rtt'].replace('ms','').strip()) for p in pings if 'avg-rtt' in p]
+  rtts = [parse_rtt(p['avg-rtt']) for p in pings if 'avg-rtt' in p]
   latency_ms = round(sum(rtts)/len(rtts), 1) if rtts else None
 except:
   latency_ms = None
@@ -678,7 +683,7 @@ try:
   offenders = [
     {'ip': ip, 'hits': cnt, 'type': ip_type.get(ip, '—')}
     for ip, cnt in ip_freq.most_common(20)
-    if cnt >= 3
+    if cnt >= 2
   ]
 except:
   pass

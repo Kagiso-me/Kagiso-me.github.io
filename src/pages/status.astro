@@ -605,7 +605,8 @@ import Layout from '../layouts/Layout.astro';
             </svg>`;
           };
 
-          storageGrid.innerHTML = `<div class="storage-grid">${pools.map((p: any) => `
+          storageGrid.className = 'storage-grid';
+          storageGrid.innerHTML = pools.map((p: any) => `
             <div class="storage-card ${p.status}">
               <div class="storage-pool-name">${p.name}</div>
               <div class="storage-health" style="color:var(--color-${p.healthy ? 'ok' : 'crit'})">
@@ -634,7 +635,7 @@ import Layout from '../layouts/Layout.astro';
                 </div>
               </div>
             </div>
-          `).join('')}</div>`;
+          `).join('');
         } else {
           storageGrid.innerHTML = '<div class="mono" style="color:var(--color-subtle);padding:0.5rem 0">Storage data unavailable</div>';
         }

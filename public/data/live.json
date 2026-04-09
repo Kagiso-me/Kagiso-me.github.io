@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-09T11:07:03Z",
+  "updated": "2026-04-09T11:10:56Z",
   "cards": [
     {
       "label": "Workloads",
@@ -15,25 +15,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "33h 5m ago",
+      "value": "33h 9m ago",
       "sub": "last backup",
       "status": "warn"
     },
     {
       "label": "etcd Snapshot",
-      "value": "11h 7m ago",
+      "value": "11h 11m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "4h 7m ago",
+      "value": "4h 11m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "10h 7m ago",
+      "value": "10h 11m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     }
@@ -246,10 +246,10 @@
     }
   },
   "bran": {
-    "temp_c": 61.8,
+    "temp_c": 61.2,
     "temp_status": "ok",
-    "load": 0.85,
-    "mem_pct": 46.2
+    "load": 1.05,
+    "mem_pct": 45.9
   },
   "last_deploy": {
     "age": "14 hours ago",
@@ -260,22 +260,22 @@
     {
       "name": "tera",
       "used": "5.1 TB",
-      "total": "7.7 TB",
-      "pct": 66.4,
+      "total": "7.9 TB",
+      "pct": 65.2,
       "status": "ok"
     },
     {
       "name": "archive",
-      "used": "441.4 GB",
-      "total": "3.9 TB",
-      "pct": 11.4,
+      "used": "441.5 GB",
+      "total": "4.0 TB",
+      "pct": 11.1,
       "status": "ok"
     },
     {
       "name": "core",
       "used": "5.9 GB",
-      "total": "462.0 GB",
-      "pct": 1.3,
+      "total": "476.7 GB",
+      "pct": 1.2,
       "status": "ok"
     }
   ]

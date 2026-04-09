@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-09T10:43:06Z",
+  "updated": "2026-04-09T10:46:36Z",
   "cards": [
     {
       "label": "Workloads",
@@ -15,25 +15,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "32h 41m ago",
+      "value": "32h 45m ago",
       "sub": "last backup",
       "status": "warn"
     },
     {
       "label": "etcd Snapshot",
-      "value": "10h 43m ago",
+      "value": "10h 46m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 43m ago",
+      "value": "3h 46m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "9h 43m ago",
+      "value": "9h 46m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     }
@@ -248,8 +248,8 @@
   "bran": {
     "temp_c": 61.8,
     "temp_status": "ok",
-    "load": 1.21,
-    "mem_pct": 45.0
+    "load": 0.83,
+    "mem_pct": 45.6
   },
   "last_deploy": {
     "age": "13 hours ago",

@@ -754,8 +754,8 @@ build_last_deployment() {
     "/home/kagiso/homelab-infrastructure" \
     "$HOME/homelab-infrastructure"; do
     if [[ -d "$path/.git" && -f "$path/platform/security/crowdsec/helmrelease.yaml" ]]; then
-      # --no-merges skips GitHub PR merge commits that have no useful subject
-      log_line=$(git -C "$path" log --no-merges --pretty="%ar|||%s|||%H" -1 2>/dev/null || echo "")
+      # Skip commits whose subject starts with "Merge" (squash merges have 1 parent so --no-merges misses them)
+      log_line=$(git -C "$path" log --pretty="%ar|||%s|||%H" | grep -v "^[^|]*|||Merge " | head -1 2>/dev/null || echo "")
       break
     fi
   done

@@ -470,7 +470,7 @@ import Layout from '../layouts/Layout.astro';
               <span class="status-dot ${c.status}"></span>
             </div>
             <div style="font-size:1.4rem;font-weight:700;color:var(--color-heading);font-family:var(--font-mono);margin-bottom:0.25rem">${c.value}</div>
-            <div class="mono">${c.sub ?? ''}</div>
+            <div class="mono" style="font-size:0.85rem">${c.sub ?? ''}</div>
           </div>
         `).join('');
       }
@@ -569,7 +569,7 @@ import Layout from '../layouts/Layout.astro';
               <span class="status-dot unknown"></span>
             </div>
             <div style="font-size:1.25rem;font-weight:700;color:var(--color-subtle);font-family:var(--font-mono);margin-bottom:0.25rem">— W</div>
-            <div class="mono" style="color:var(--color-subtle)">Sonoff POW on PDU · not yet connected</div>
+            <div class="mono" style="color:var(--color-subtle);font-size:0.85rem">Sonoff POW on PDU · not yet connected</div>
           </div>
           <div class="card" style="opacity:0.6;border-style:dashed">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
@@ -577,7 +577,7 @@ import Layout from '../layouts/Layout.astro';
               <span class="status-dot unknown"></span>
             </div>
             <div style="font-size:1.25rem;font-weight:700;color:var(--color-subtle);font-family:var(--font-mono);margin-bottom:0.25rem">—</div>
-            <div class="mono" style="color:var(--color-subtle)">configure NUT to enable</div>
+            <div class="mono" style="color:var(--color-subtle);font-size:0.85rem">configure NUT to enable</div>
           </div>`;
       }
 
@@ -691,7 +691,7 @@ import Layout from '../layouts/Layout.astro';
               <span class="status-dot ${c.status}"></span>
             </div>
             <div style="font-size:1.25rem;font-weight:700;color:var(--color-heading);font-family:var(--font-mono);margin-bottom:0.25rem">${c.value}</div>
-            <div class="mono">${c.sub}</div>
+            <div class="mono" style="font-size:0.85rem">${c.sub}</div>
           </div>
         `).join('');
       }
@@ -726,7 +726,7 @@ import Layout from '../layouts/Layout.astro';
                 <span class="status-dot ${c.status}"></span>
               </div>
               <div style="font-size:1.25rem;font-weight:700;color:var(--color-heading);font-family:var(--font-mono);margin-bottom:0.25rem">${c.value}</div>
-              <div class="mono">${c.sub}</div>
+              <div class="mono" style="font-size:0.85rem">${c.sub}</div>
             </div>
           `).join('');
         }

@@ -1,39 +1,39 @@
 {
-  "updated": "2026-04-09T16:47:11Z",
+  "updated": "2026-04-09T17:56:25Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "54/59",
+      "value": "54/60",
       "sub": "pods running",
       "status": "warn"
     },
     {
       "label": "Flux",
-      "value": "19/19 synced",
-      "sub": "27h",
-      "status": "ok"
+      "value": "10/19 synced",
+      "sub": "28h",
+      "status": "warn"
     },
     {
       "label": "Docker Appdata",
-      "value": "38h 45m ago",
+      "value": "39h 54m ago",
       "sub": "last backup",
       "status": "warn"
     },
     {
       "label": "etcd Snapshot",
-      "value": "4h 47m ago",
+      "value": "5h 56m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 46m ago",
+      "value": "4h 55m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "15h 47m ago",
+      "value": "16h 56m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     }
@@ -43,9 +43,9 @@
       "name": "jaime",
       "role": "control-plane",
       "status": "ok",
-      "pods": "6/110",
+      "pods": "9/110",
       "cpu": "13%",
-      "memory": "1%",
+      "memory": "3%",
       "pressure": []
     },
     {
@@ -61,130 +61,130 @@
       "name": "tywin",
       "role": "control-plane",
       "status": "ok",
-      "pods": "26/110",
+      "pods": "24/110",
       "cpu": "39%",
-      "memory": "9%",
+      "memory": "7%",
       "pressure": []
     }
   ],
   "flux": {
-    "ready": 19,
+    "ready": 10,
     "total": 19,
-    "last_sync": "27h",
-    "status": "ok",
+    "last_sync": "28h",
+    "status": "warn",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
-        "age": "27h",
-        "ready": true
+        "age": "28h",
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "29h",
+        "age": "30h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-authentik",
-        "age": "27h",
-        "ready": true
+        "age": "28h",
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
-        "age": "27h",
-        "ready": true
+        "age": "28h",
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
-        "age": "27h",
-        "ready": true
+        "age": "28h",
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
-        "age": "27h",
-        "ready": true
+        "age": "28h",
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
-        "age": "27h",
-        "ready": true
+        "age": "28h",
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-namespaces",
-        "age": "27h",
+        "age": "28h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking",
-        "age": "27h",
+        "age": "28h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-config",
-        "age": "27h",
+        "age": "28h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-tls",
-        "age": "27h",
+        "age": "28h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability",
-        "age": "27h",
-        "ready": true
+        "age": "28h",
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
-        "age": "27h",
-        "ready": true
+        "age": "28h",
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
-        "age": "27h",
-        "ready": true
+        "age": "28h",
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-security",
-        "age": "27h",
+        "age": "28h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security-issuers",
-        "age": "27h",
+        "age": "28h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-storage",
-        "age": "27h",
+        "age": "28h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade",
-        "age": "27h",
+        "age": "28h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade-plans",
-        "age": "27h",
+        "age": "28h",
         "ready": true
       }
     ]
@@ -217,8 +217,8 @@
     },
     {
       "name": "Lidarr",
-      "tag": "Lidarr: \u2014 artists",
-      "status": "unknown"
+      "tag": "Lidarr: 33 artists",
+      "status": "ok"
     }
   ],
   "media": [
@@ -236,25 +236,25 @@
     }
   ],
   "network": {
-    "fw_hits": 4877,
-    "latency_ms": 5.1,
+    "fw_hits": 5933,
+    "latency_ms": 5.3,
     "offenders": [],
     "pihole": {
-      "total": 17463,
-      "blocked": 872,
-      "percent": 5.0
+      "total": 25212,
+      "blocked": 1645,
+      "percent": 6.5
     }
   },
   "bran": {
-    "temp_c": 66.6,
+    "temp_c": 58.0,
     "temp_status": "ok",
-    "load": 4.19,
-    "mem_pct": 54.8
+    "load": 0.78,
+    "mem_pct": 42.0
   },
   "last_deploy": {
-    "age": "19h ago",
-    "message": "docs(changelog): append entry for dbd1908",
-    "sha": "fea4211"
+    "age": "54m ago",
+    "message": "chore(deps): update helm release kube-prometheus-stack to v83.4.0",
+    "sha": "aab945e"
   },
   "storage": [
     {
@@ -277,7 +277,7 @@
     },
     {
       "name": "core",
-      "used": "6.4 GB",
+      "used": "6.3 GB",
       "total": "476.7 GB",
       "pct": 1.3,
       "status": "ok",

@@ -756,7 +756,7 @@ else:
 " 2>/dev/null || echo '{"age":"—","message":"unavailable","sha":"—"}'
 }
 
-# ── TrueNAS storage pools ──────────────────────────────────────────────────────
+# ── TrueNAS storage pools (WebSocket JSON-RPC API) ────────────────────────────
 build_storage() {
   local api_key="${TRUENAS_API_KEY:-}"
   if [[ -z "$api_key" ]]; then
@@ -764,47 +764,83 @@ build_storage() {
     return
   fi
 
-  local raw
-  raw=$(curl -sf --max-time 8 -k \
-    -H "Authorization: Bearer $api_key" \
-    "https://10.0.10.80/api/v2.0/pool" 2>/dev/null || echo "[]")
+  python3 - "$api_key" <<'PYEOF' 2>/dev/null || echo '[]'
+import json, sys, ssl
 
-  echo "$raw" | python3 -c "
-import json, sys
+api_key = sys.argv[1].strip()
+
+def fmt(b):
+    b = float(b)
+    if b >= 1e12: return f'{b/1e12:.1f} TB'
+    if b >= 1e9:  return f'{b/1e9:.1f} GB'
+    return f'{b/1e6:.0f} MB'
 
 try:
-  pools = json.load(sys.stdin)
-except:
-  pools = []
+    import websocket
+except ImportError:
+    print('[]'); sys.exit(0)
 
-result = []
-for p in pools:
-  try:
-    name  = p.get('name', '?')
-    # size/free in bytes — may be in p['topology'] summary or top-level
-    size  = p.get('size', 0) or 0
-    free  = p.get('free', 0) or 0
-    used  = size - free
-    pct   = round(used / size * 100, 1) if size > 0 else 0
+try:
+    ssl_ctx = ssl.create_default_context()
+    ssl_ctx.check_hostname = False
+    ssl_ctx.verify_mode = ssl.CERT_NONE
 
-    def fmt(b):
-      if b >= 1e12: return f'{b/1e12:.1f} TB'
-      if b >= 1e9:  return f'{b/1e9:.1f} GB'
-      return f'{b/1e6:.0f} MB'
+    ws = websocket.create_connection(
+        'wss://10.0.10.80/api/current',
+        sslopt={'context': ssl_ctx},
+        timeout=10
+    )
 
-    status = 'crit' if pct >= 90 else 'warn' if pct >= 75 else 'ok'
-    result.append({
-      'name':    name,
-      'used':    fmt(used),
-      'total':   fmt(size),
-      'pct':     pct,
-      'status':  status,
-    })
-  except:
-    pass
+    # Authenticate
+    ws.send(json.dumps({
+        'jsonrpc': '2.0', 'id': 1,
+        'method': 'auth.login_with_api_key',
+        'params': [api_key]
+    }))
+    auth_resp = json.loads(ws.recv())
+    if not auth_resp.get('result'):
+        ws.close(); print('[]'); sys.exit(0)
 
-print(json.dumps(result))
-" 2>/dev/null || echo '[]'
+    # Query pools
+    ws.send(json.dumps({
+        'jsonrpc': '2.0', 'id': 2,
+        'method': 'pool.query',
+        'params': []
+    }))
+    pool_resp = json.loads(ws.recv())
+    pools = pool_resp.get('result', [])
+
+    # Query root datasets for used/available byte counts
+    ws.send(json.dumps({
+        'jsonrpc': '2.0', 'id': 3,
+        'method': 'pool.dataset.query',
+        'params': [[['type', '=', 'FILESYSTEM']], {'extra': {'retrieve_children': False}}]
+    }))
+    ds_resp = json.loads(ws.recv())
+    datasets = {d['id']: d for d in ds_resp.get('result', [])}
+    ws.close()
+
+    result = []
+    for p in pools:
+        name = p.get('name', '?')
+        ds = datasets.get(name, {})
+        used_raw  = ds.get('used', {})
+        avail_raw = ds.get('available', {})
+        # TrueNAS returns {'rawvalue': '123', 'value': '1.2 GiB', ...}
+        used  = int(used_raw.get('rawvalue', 0) if isinstance(used_raw, dict) else used_raw or 0)
+        avail = int(avail_raw.get('rawvalue', 0) if isinstance(avail_raw, dict) else avail_raw or 0)
+        total = used + avail
+        pct   = round(used / total * 100, 1) if total > 0 else 0
+        status = 'crit' if pct >= 90 else 'warn' if pct >= 75 else 'ok'
+        result.append({
+            'name': name, 'used': fmt(used), 'total': fmt(total),
+            'pct': pct, 'status': status,
+        })
+    print(json.dumps(result))
+
+except Exception:
+    print('[]')
+PYEOF
 }
 
 # ── Assemble live cards ────────────────────────────────────────────────────────

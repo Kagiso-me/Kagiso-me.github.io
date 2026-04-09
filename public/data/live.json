@@ -1,9 +1,9 @@
 {
-  "updated": "2026-04-09T12:58:34Z",
+  "updated": "2026-04-09T13:00:22Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "54/59",
+      "value": "57/62",
       "sub": "pods running",
       "status": "warn"
     },
@@ -15,25 +15,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "34h 56m ago",
+      "value": "34h 58m ago",
       "sub": "last backup",
       "status": "warn"
     },
     {
       "label": "etcd Snapshot",
-      "value": "58m ago",
+      "value": "1h 0m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "5h 58m ago",
+      "value": "6h 0m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "11h 58m ago",
+      "value": "12h 0m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     }
@@ -236,11 +236,11 @@
     }
   ],
   "network": {
-    "fw_hits": 22716,
+    "fw_hits": 22777,
     "latency_ms": null,
     "offenders": [],
     "pihole": {
-      "total": 55,
+      "total": 56,
       "blocked": 0,
       "percent": 0.0
     }
@@ -248,8 +248,8 @@
   "bran": {
     "temp_c": 62.3,
     "temp_status": "ok",
-    "load": 0.85,
-    "mem_pct": 48.1
+    "load": 0.99,
+    "mem_pct": 47.6
   },
   "last_deploy": {
     "age": "16 hours ago",
@@ -277,7 +277,7 @@
     },
     {
       "name": "core",
-      "used": "6.3 GB",
+      "used": "6.2 GB",
       "total": "476.7 GB",
       "pct": 1.3,
       "status": "ok",

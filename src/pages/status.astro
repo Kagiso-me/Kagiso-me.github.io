@@ -710,8 +710,8 @@ import Layout from '../layouts/Layout.astro';
               <span class="mono" style="color:var(--color-subtle);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em">Privacy Shield</span>
             </div>
             <div style="font-size:1.25rem;font-weight:700;color:var(--color-ok);font-family:var(--font-mono);margin-bottom:0.25rem">${ph.percent}%</div>
-            <div class="mono">of your internet, blocked</div>
-            <div class="mono" style="color:var(--color-subtle);font-size:0.75rem;margin-top:0.2rem">${ph.blocked.toLocaleString()} trackers silenced today</div>
+            <div class="mono" style="font-size:0.85rem">of your internet, blocked</div>
+            <div class="mono" style="color:var(--color-subtle);font-size:0.82rem;margin-top:0.25rem">${ph.blocked.toLocaleString()} trackers silenced today</div>
           </div>` : '';
 
         const netCards = document.getElementById('network-cards');

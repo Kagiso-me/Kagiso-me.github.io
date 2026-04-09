@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-09T11:10:56Z",
+  "updated": "2026-04-09T11:15:53Z",
   "cards": [
     {
       "label": "Workloads",
@@ -15,25 +15,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "33h 9m ago",
+      "value": "33h 14m ago",
       "sub": "last backup",
       "status": "warn"
     },
     {
       "label": "etcd Snapshot",
-      "value": "11h 11m ago",
+      "value": "11h 16m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "4h 11m ago",
+      "value": "4h 16m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "10h 11m ago",
+      "value": "10h 16m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     }
@@ -82,7 +82,7 @@
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "23h",
+        "age": "24h",
         "ready": true
       },
       {
@@ -246,10 +246,10 @@
     }
   },
   "bran": {
-    "temp_c": 61.2,
+    "temp_c": 61.8,
     "temp_status": "ok",
-    "load": 1.05,
-    "mem_pct": 45.9
+    "load": 0.94,
+    "mem_pct": 45.6
   },
   "last_deploy": {
     "age": "14 hours ago",
@@ -262,21 +262,27 @@
       "used": "5.1 TB",
       "total": "7.9 TB",
       "pct": 65.2,
-      "status": "ok"
+      "status": "ok",
+      "pool_status": "ONLINE",
+      "healthy": true
     },
     {
       "name": "archive",
       "used": "441.5 GB",
       "total": "4.0 TB",
       "pct": 11.1,
-      "status": "ok"
+      "status": "ok",
+      "pool_status": "ONLINE",
+      "healthy": true
     },
     {
       "name": "core",
       "used": "5.9 GB",
       "total": "476.7 GB",
       "pct": 1.2,
-      "status": "ok"
+      "status": "ok",
+      "pool_status": "ONLINE",
+      "healthy": true
     }
   ]
 }

@@ -1,33 +1,33 @@
 {
-  "updated": "2026-04-09T09:47:04Z",
+  "updated": "2026-04-09T10:41:08Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "56/59",
+      "value": "55/68",
       "sub": "pods running",
       "status": "warn"
     },
     {
       "label": "Flux",
       "value": "19/19 synced",
-      "sub": "20h",
+      "sub": "21h",
       "status": "ok"
     },
     {
       "label": "Docker Appdata",
-      "value": "31h 45m ago",
+      "value": "32h 39m ago",
       "sub": "last backup",
       "status": "warn"
     },
     {
       "label": "etcd Snapshot",
-      "value": "9h 47m ago",
+      "value": "10h 41m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "2h 47m ago",
+      "value": "3h 41m ago",
       "sub": "last cluster backup",
       "status": "ok"
     }
@@ -36,8 +36,8 @@
     {
       "name": "jaime",
       "role": "control-plane",
-      "status": "ok",
-      "pods": "17/110",
+      "status": "crit",
+      "pods": "16/110",
       "cpu": "25%",
       "memory": "4%",
       "pressure": []
@@ -46,7 +46,7 @@
       "name": "tyrion",
       "role": "control-plane",
       "status": "ok",
-      "pods": "19/110",
+      "pods": "24/110",
       "cpu": "24%",
       "memory": "4%",
       "pressure": []
@@ -55,130 +55,130 @@
       "name": "tywin",
       "role": "control-plane",
       "status": "ok",
-      "pods": "20/110",
-      "cpu": "26%",
-      "memory": "5%",
+      "pods": "26/110",
+      "cpu": "39%",
+      "memory": "9%",
       "pressure": []
     }
   ],
   "flux": {
     "ready": 19,
     "total": 19,
-    "last_sync": "20h",
+    "last_sync": "21h",
     "status": "ok",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
-        "age": "20h",
+        "age": "21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "22h",
+        "age": "23h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-authentik",
-        "age": "20h",
+        "age": "21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
-        "age": "20h",
+        "age": "21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
-        "age": "20h",
+        "age": "21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
-        "age": "20h",
+        "age": "21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
-        "age": "20h",
+        "age": "21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-namespaces",
-        "age": "20h",
+        "age": "21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking",
-        "age": "20h",
+        "age": "21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-config",
-        "age": "20h",
+        "age": "21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-tls",
-        "age": "20h",
+        "age": "21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability",
-        "age": "20h",
+        "age": "21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
-        "age": "20h",
+        "age": "21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
-        "age": "20h",
+        "age": "21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security",
-        "age": "20h",
+        "age": "21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security-issuers",
-        "age": "20h",
+        "age": "21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-storage",
-        "age": "20h",
+        "age": "21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade",
-        "age": "20h",
+        "age": "21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade-plans",
-        "age": "20h",
+        "age": "21h",
         "ready": true
       }
     ]

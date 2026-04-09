@@ -42,6 +42,23 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </section>
 
+    <!-- ── Infrastructure ── -->
+    <section class="section fade-up" style="animation-delay:0.13s">
+      <h2 class="section-label">Infrastructure</h2>
+      <div id="infra-deploy" style="margin-bottom:1rem">
+        <div class="skeleton" style="height:56px;border-radius:10px"></div>
+      </div>
+      <div class="cards-grid" id="infra-cards">
+        <div class="card skeleton" style="height:120px"></div>
+        <div class="card skeleton" style="height:120px"></div>
+        <div class="card skeleton" style="height:120px"></div>
+        <div class="card skeleton" style="height:120px"></div>
+      </div>
+      <div id="storage-grid" style="margin-top:1rem">
+        <div class="skeleton" style="height:80px;border-radius:10px"></div>
+      </div>
+    </section>
+
     <!-- ── GitOps ── -->
     <section class="section fade-up" style="animation-delay:0.15s">
       <h2 class="section-label">GitOps — Flux Kustomizations</h2>
@@ -57,6 +74,20 @@ import Layout from '../layouts/Layout.astro';
         <div class="card skeleton" style="height:100px"></div>
         <div class="card skeleton" style="height:100px"></div>
         <div class="card skeleton" style="height:100px"></div>
+        <div class="card skeleton" style="height:100px"></div>
+      </div>
+    </section>
+
+    <!-- ── Network ── -->
+    <section class="section fade-up" style="animation-delay:0.25s">
+      <h2 class="section-label">Network</h2>
+      <div class="cards-grid" id="network-cards" style="margin-bottom:1.5rem">
+        <div class="card skeleton" style="height:100px"></div>
+        <div class="card skeleton" style="height:100px"></div>
+        <div class="card skeleton" style="height:100px"></div>
+      </div>
+      <div id="offenders-section">
+        <div class="skeleton" style="height:180px;border-radius:12px"></div>
       </div>
     </section>
 
@@ -118,44 +149,89 @@ import Layout from '../layouts/Layout.astro';
     background: var(--color-surface);
     border: 1px solid var(--color-muted);
     border-radius: 12px;
-    padding: 1.5rem;
+    padding: 1.25rem 1.5rem 1.5rem;
     border-left-width: 3px;
+    transition: box-shadow 0.2s;
   }
 
-  .node-card.ok   { border-left-color: var(--color-ok); }
-  .node-card.warn { border-left-color: var(--color-warn); }
-  .node-card.crit { border-left-color: var(--color-crit); }
+  .node-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.25); }
+
+  .node-card.ok      { border-left-color: var(--color-ok); }
+  .node-card.warn    { border-left-color: var(--color-warn); }
+  .node-card.crit    { border-left-color: var(--color-crit); }
   .node-card.unknown { border-left-color: var(--color-muted); }
+
+  .node-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .node-name {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--color-heading);
+    line-height: 1.2;
+  }
+
+  .node-role {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-subtle);
+    margin-top: 0.2rem;
+  }
 
   .node-metrics {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 0.5rem;
-    margin-top: 1.25rem;
   }
 
   .metric {
-    text-align: center;
     background: var(--color-overlay);
     border-radius: 8px;
-    padding: 0.625rem 0.5rem;
+    padding: 0.625rem 0.5rem 0.5rem;
+    overflow: hidden;
   }
 
   .metric-value {
     font-family: var(--font-mono);
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 600;
     color: var(--color-peach);
     display: block;
+    text-align: center;
   }
 
   .metric-label {
     font-family: var(--font-mono);
-    font-size: 0.68rem;
+    font-size: 0.65rem;
     color: var(--color-subtle);
     display: block;
+    text-align: center;
     margin-top: 0.2rem;
+    margin-bottom: 0.5rem;
   }
+
+  .metric-bar-track {
+    height: 3px;
+    background: color-mix(in srgb, var(--color-muted) 60%, transparent);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 0.4rem;
+  }
+
+  .metric-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--color-peach);
+    transition: width 0.4s ease;
+  }
+
+  .metric-bar-fill.warn { background: var(--color-warn); }
+  .metric-bar-fill.crit { background: var(--color-crit); }
 
   .flux-table {
     background: var(--color-surface);
@@ -218,6 +294,74 @@ import Layout from '../layouts/Layout.astro';
     100% { background-position: -200% 0; }
   }
 
+  /* ── Deploy banner ── */
+  .deploy-banner {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-muted);
+    border-radius: 10px;
+    padding: 0.875rem 1.25rem;
+    font-family: var(--font-mono);
+  }
+
+  .deploy-sha {
+    font-size: 0.72rem;
+    color: var(--color-peach);
+    background: color-mix(in srgb, var(--color-peach) 12%, transparent);
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .deploy-msg {
+    font-size: 0.85rem;
+    color: var(--color-heading);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+  }
+
+  .deploy-age {
+    font-size: 0.75rem;
+    color: var(--color-subtle);
+    flex-shrink: 0;
+  }
+
+  /* ── Storage pool bars ── */
+  .storage-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .storage-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-muted);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+  }
+
+  .storage-bar-track {
+    height: 5px;
+    background: var(--color-overlay);
+    border-radius: 3px;
+    margin-top: 0.625rem;
+    overflow: hidden;
+  }
+
+  .storage-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--color-ok);
+    transition: width 0.5s ease;
+  }
+
+  .storage-bar-fill.warn { background: var(--color-warn); }
+  .storage-bar-fill.crit { background: var(--color-crit); }
+
   @media (max-width: 640px) {
     .flux-row { grid-template-columns: 1fr 90px; }
     .flux-row > *:nth-child(2),
@@ -262,31 +406,35 @@ import Layout from '../layouts/Layout.astro';
       // Nodes
       const nodesGrid = document.getElementById('nodes-grid');
       if (nodesGrid && data.nodes) {
+        // Parse "16%" → 16, "—" → null
+        const parsePct = (s: string) => { const m = s?.match(/(\d+)/); return m ? parseInt(m[1]) : null; };
+        const barClass = (pct: number | null) => pct == null ? '' : pct >= 85 ? 'crit' : pct >= 70 ? 'warn' : '';
+        const metricBar = (val: string, label: string) => {
+          const pct = parsePct(val);
+          const fill = pct != null ? `<div class="metric-bar-track"><div class="metric-bar-fill ${barClass(pct)}" style="width:${Math.min(pct,100)}%"></div></div>` : '';
+          return `<div class="metric">
+            <span class="metric-value">${val}</span>
+            <span class="metric-label">${label}</span>
+            ${fill}
+          </div>`;
+        };
         nodesGrid.innerHTML = data.nodes.map((n: any) => {
-          const notReady = n.status === 'crit';
-          const alertBanner = notReady
-            ? `<div style="margin-top:0.75rem;padding:0.4rem 0.75rem;background:color-mix(in srgb,var(--color-crit) 15%,transparent);border-radius:6px;font-family:var(--font-mono);font-size:0.72rem;color:var(--color-crit)">⚠ Node not ready — check kubelet</div>`
+          const statusText = n.status === 'ok' ? '✓ Ready' : n.status === 'warn' ? '⚠ Degraded' : n.status === 'crit' ? '✗ Not Ready' : '? Unknown';
+          const alertBanner = n.status === 'crit'
+            ? `<div style="margin-top:1rem;padding:0.4rem 0.75rem;background:color-mix(in srgb,var(--color-crit) 15%,transparent);border-radius:6px;font-family:var(--font-mono);font-size:0.72rem;color:var(--color-crit)">⚠ Node not ready — check kubelet</div>`
             : '';
           return `
           <div class="node-card ${n.status}">
-            <div style="display:flex;align-items:center;justify-content:space-between">
+            <div class="node-header">
               <div>
-                <div style="font-size:1.05rem;font-weight:700;color:var(--color-heading)">${n.name}</div>
-                <div class="mono" style="color:var(--color-subtle);margin-top:0.15rem">${n.role}</div>
+                <div class="node-name">${n.name}</div>
+                <div class="node-role">${n.role}</div>
               </div>
-              <span class="badge ${n.status}">
-                ${n.status === 'ok' ? '✓ Ready' : n.status === 'warn' ? '⚠ Degraded' : n.status === 'crit' ? '✗ Not Ready' : '? Unknown'}
-              </span>
+              <span class="badge ${n.status}">${statusText}</span>
             </div>
             <div class="node-metrics">
-              <div class="metric">
-                <span class="metric-value">${n.cpu}</span>
-                <span class="metric-label">CPU</span>
-              </div>
-              <div class="metric">
-                <span class="metric-value">${n.memory}</span>
-                <span class="metric-label">Memory</span>
-              </div>
+              ${metricBar(n.cpu,    'CPU')}
+              ${metricBar(n.memory, 'Memory')}
               <div class="metric">
                 <span class="metric-value">${n.pods}</span>
                 <span class="metric-label">Pods</span>
@@ -295,6 +443,91 @@ import Layout from '../layouts/Layout.astro';
             ${alertBanner}
           </div>`;
         }).join('');
+      }
+
+      // Infrastructure — Last Deployment
+      const deployEl = document.getElementById('infra-deploy');
+      if (deployEl && data.last_deploy) {
+        const d = data.last_deploy;
+        deployEl.innerHTML = `
+          <div class="deploy-banner">
+            <span class="deploy-sha">${d.sha}</span>
+            <span class="deploy-msg">${d.message}</span>
+            <span class="deploy-age">${d.age}</span>
+          </div>`;
+      }
+
+      // Infrastructure — bran + UPS + Power placeholders
+      const infraCards = document.getElementById('infra-cards');
+      if (infraCards) {
+        const b = data.bran ?? {};
+        const tempStatus = b.temp_status ?? 'unknown';
+        const tempVal    = b.temp_c != null ? b.temp_c + '°C' : '—';
+        const loadVal    = b.load   != null ? b.load.toFixed(2) : '—';
+        const memVal     = b.mem_pct != null ? b.mem_pct + '%' : '—';
+
+        infraCards.innerHTML = `
+          <div class="card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem">
+              <div>
+                <span class="mono" style="color:var(--color-subtle);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em">bran</span>
+                <div style="font-size:0.72rem;color:var(--color-subtle);font-family:var(--font-mono);margin-top:0.1rem">RPi 4 · automation runner, DNS &amp; Pi-hole</div>
+              </div>
+              <span class="status-dot ${tempStatus}"></span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.4rem;margin-top:0.75rem">
+              <div class="metric">
+                <span class="metric-value" style="font-size:0.85rem">${tempVal}</span>
+                <span class="metric-label">Temp</span>
+              </div>
+              <div class="metric">
+                <span class="metric-value" style="font-size:0.85rem">${memVal}</span>
+                <span class="metric-label">Mem</span>
+              </div>
+              <div class="metric">
+                <span class="metric-value" style="font-size:0.85rem">${loadVal}</span>
+                <span class="metric-label">Load</span>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="opacity:0.6;border-style:dashed">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
+              <span class="mono" style="color:var(--color-subtle);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em">Homelab Power</span>
+              <span class="status-dot unknown"></span>
+            </div>
+            <div style="font-size:1.25rem;font-weight:700;color:var(--color-subtle);font-family:var(--font-mono);margin-bottom:0.25rem">— W</div>
+            <div class="mono" style="color:var(--color-subtle)">Sonoff POW on PDU · not yet connected</div>
+          </div>
+          <div class="card" style="opacity:0.6;border-style:dashed">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
+              <span class="mono" style="color:var(--color-subtle);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em">UPS</span>
+              <span class="status-dot unknown"></span>
+            </div>
+            <div style="font-size:1.25rem;font-weight:700;color:var(--color-subtle);font-family:var(--font-mono);margin-bottom:0.25rem">—</div>
+            <div class="mono" style="color:var(--color-subtle)">configure NUT to enable</div>
+          </div>`;
+      }
+
+      // Infrastructure — Storage pools
+      const storageGrid = document.getElementById('storage-grid');
+      if (storageGrid) {
+        const pools = data.storage ?? [];
+        if (pools.length > 0) {
+          storageGrid.innerHTML = `<div class="storage-grid">${pools.map((p: any) => `
+            <div class="storage-card">
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <span style="font-family:var(--font-mono);font-size:0.85rem;font-weight:600;color:var(--color-heading)">${p.name}</span>
+                <span class="badge ${p.status}">${p.pct}%</span>
+              </div>
+              <div class="mono" style="font-size:0.72rem;color:var(--color-subtle);margin-top:0.2rem">${p.used} used of ${p.total}</div>
+              <div class="storage-bar-track">
+                <div class="storage-bar-fill ${p.status}" style="width:${Math.min(p.pct,100)}%"></div>
+              </div>
+            </div>
+          `).join('')}</div>`;
+        } else {
+          storageGrid.innerHTML = '<div class="mono" style="color:var(--color-subtle);padding:0.5rem 0">Storage data unavailable — add TRUENAS_API_KEY secret to enable</div>';
+        }
       }
 
       // Flux
@@ -334,10 +567,12 @@ import Layout from '../layouts/Layout.astro';
         const da = find('Docker Appdata');
         const et = find('etcd Snapshot');
         const vc = find('Velero');
+        const vy = find('varys Keys');
         const items = [
-          { label: 'Docker Appdata', value: da?.value ?? '—', sub: 'bronn · daily 02:00', status: da?.status ?? 'unknown' },
-          { label: 'etcd Snapshot',  value: et?.value ?? '—', sub: 'k3s · daily',         status: et?.status ?? 'unknown' },
-          { label: 'Velero (k8s)',   value: vc?.value ?? '—', sub: 'last cluster backup',  status: vc?.status ?? 'unknown' },
+          { label: 'Docker Appdata', value: da?.value ?? '—', sub: 'bronn · daily 02:00',  status: da?.status ?? 'unknown' },
+          { label: 'etcd Snapshot',  value: et?.value ?? '—', sub: 'k3s · daily',           status: et?.status ?? 'unknown' },
+          { label: 'Velero (k8s)',   value: vc?.value ?? '—', sub: 'last cluster backup',    status: vc?.status ?? 'unknown' },
+          { label: 'varys Keys',     value: vy?.value ?? '—', sub: 'age keys · varys',       status: vy?.status ?? 'unknown' },
         ];
         backupCards.innerHTML = items.map(c => `
           <div class="card">
@@ -349,6 +584,65 @@ import Layout from '../layouts/Layout.astro';
             <div class="mono">${c.sub}</div>
           </div>
         `).join('');
+      }
+
+      // Network
+      const net = data.network;
+      if (net) {
+        const latencyStatus = net.latency_ms == null ? 'unknown'
+          : net.latency_ms < 30 ? 'ok'
+          : net.latency_ms < 80 ? 'warn' : 'crit';
+
+        const ph = net.pihole;
+        const piholeCard = ph ? `
+          <div class="card" style="border-left:3px solid var(--color-ok)">
+            <div style="margin-bottom:0.5rem">
+              <span class="mono" style="color:var(--color-subtle);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em">Privacy Shield</span>
+            </div>
+            <div style="font-size:1.25rem;font-weight:700;color:var(--color-ok);font-family:var(--font-mono);margin-bottom:0.25rem">${ph.percent}%</div>
+            <div class="mono">of your internet, blocked</div>
+            <div class="mono" style="color:var(--color-subtle);font-size:0.75rem;margin-top:0.2rem">${ph.blocked.toLocaleString()} trackers silenced today</div>
+          </div>` : '';
+
+        const netCards = document.getElementById('network-cards');
+        if (netCards) {
+          netCards.innerHTML = piholeCard + [
+            { label: 'Firewall Blocks', value: net.fw_hits != null ? net.fw_hits.toLocaleString() : '—', sub: 'packets dropped at router', status: 'ok' },
+            { label: 'WAN Latency',     value: net.latency_ms != null ? net.latency_ms + ' ms' : '—',    sub: 'avg RTT to 8.8.8.8',       status: latencyStatus },
+          ].map(c => `
+            <div class="card">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
+                <span class="mono" style="color:var(--color-subtle);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em">${c.label}</span>
+                <span class="status-dot ${c.status}"></span>
+              </div>
+              <div style="font-size:1.25rem;font-weight:700;color:var(--color-heading);font-family:var(--font-mono);margin-bottom:0.25rem">${c.value}</div>
+              <div class="mono">${c.sub}</div>
+            </div>
+          `).join('');
+        }
+
+        // Persistent offenders table
+        const offEl = document.getElementById('offenders-section');
+        if (offEl) {
+          const offs = net.offenders ?? [];
+          if (offs.length > 0) {
+            offEl.innerHTML = `
+              <div class="flux-table">
+                <div class="flux-row header" style="grid-template-columns:1.5fr 80px 120px">
+                  <span>IP Address</span><span>Hits</span><span>Interface</span>
+                </div>
+                ${offs.map((o: any) => `
+                  <div class="flux-row" style="grid-template-columns:1.5fr 80px 120px">
+                    <span style="font-family:var(--font-mono);font-size:0.875rem;color:var(--color-peach)">${o.ip}</span>
+                    <span class="badge crit">${o.hits}</span>
+                    <span style="font-family:var(--font-mono);font-size:0.75rem;color:var(--color-subtle)">${o.iface}</span>
+                  </div>
+                `).join('')}
+              </div>`;
+          } else {
+            offEl.innerHTML = '<div class="mono" style="color:var(--color-subtle);padding:0.5rem 0">No persistent offenders detected</div>';
+          }
+        }
       }
 
     } catch { /* skeletons remain */ }

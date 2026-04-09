@@ -745,6 +745,52 @@ print(json.dumps({
 " 2>/dev/null || echo '{"temp_c":null,"temp_status":"unknown","load":null,"mem_pct":null}'
 }
 
+# ── UPS (NUT — runs locally on bran) ──────────────────────────────────────────
+build_ups() {
+  upsc apc@localhost 2>/dev/null | python3 -c "
+import sys, json
+data = {}
+for line in sys.stdin:
+    if ':' in line:
+        k, _, v = line.partition(':')
+        data[k.strip()] = v.strip()
+
+charge    = data.get('battery.charge')
+runtime   = data.get('battery.runtime')
+load      = data.get('ups.load')
+status    = data.get('ups.status', '')
+nominal_w = data.get('ups.realpower.nominal')
+
+charge    = int(charge)   if charge    is not None else None
+runtime   = int(runtime)  if runtime   is not None else None
+load      = int(load)     if load      is not None else None
+nominal_w = int(nominal_w) if nominal_w is not None else None
+
+on_battery = 'OB' in status
+low_batt   = charge is not None and charge <= 20
+
+dot = 'crit' if (on_battery or low_batt) else 'warn' if (charge is not None and charge <= 50) else 'ok'
+
+# Human-readable runtime
+if runtime is not None:
+    mins = runtime // 60
+    runtime_str = f'{mins}m' if mins < 60 else f'{mins // 60}h {mins % 60}m'
+else:
+    runtime_str = None
+
+print(json.dumps({
+  'charge':      charge,
+  'runtime_s':   runtime,
+  'runtime_str': runtime_str,
+  'load_pct':    load,
+  'status':      status,
+  'nominal_w':   nominal_w,
+  'on_battery':  on_battery,
+  'dot':         dot,
+}))
+" 2>/dev/null || echo '{"charge":null,"runtime_s":null,"runtime_str":null,"load_pct":null,"status":"unknown","nominal_w":null,"on_battery":false,"dot":"unknown"}'
+}
+
 # ── Last deployment (git log on infra repo) ────────────────────────────────────
 build_last_deployment() {
   # Use GitHub API to get latest non-merge commit — avoids shallow clone limitations
@@ -864,6 +910,7 @@ VELERO=$(build_velero)
 SERVICES=$(build_services)
 NETWORK=$(build_network)
 BRAN=$(build_bran)
+UPS=$(build_ups)
 LAST_DEPLOY=$(build_last_deployment)
 STORAGE=$(build_storage)
 
@@ -887,16 +934,17 @@ TOTAL_PODS=$(kubectl get pods -A --no-headers 2>/dev/null | wc -l | tr -d ' ' ||
 
 # Write JSON via temp files to avoid shell quoting issues
 TMP_NODES=$(mktemp); TMP_FLUX=$(mktemp); TMP_SVC_DATA=$(mktemp); TMP_NETWORK=$(mktemp)
-TMP_BRAN=$(mktemp); TMP_DEPLOY=$(mktemp); TMP_STORAGE=$(mktemp)
+TMP_BRAN=$(mktemp); TMP_UPS=$(mktemp); TMP_DEPLOY=$(mktemp); TMP_STORAGE=$(mktemp)
 echo "$NODES"       > "$TMP_NODES"
 echo "$FLUX"        > "$TMP_FLUX"
 echo "$SERVICES"    > "$TMP_SVC_DATA"
 echo "$NETWORK"     > "$TMP_NETWORK"
 echo "$BRAN"        > "$TMP_BRAN"
+echo "$UPS"         > "$TMP_UPS"
 echo "$LAST_DEPLOY" > "$TMP_DEPLOY"
 echo "$STORAGE"     > "$TMP_STORAGE"
 
-python3 - "$TMP_NODES" "$TMP_FLUX" "$TMP_SVC_DATA" "$TMP_NETWORK" "$TMP_BRAN" "$TMP_DEPLOY" "$TMP_STORAGE" <<PYEOF
+python3 - "$TMP_NODES" "$TMP_FLUX" "$TMP_SVC_DATA" "$TMP_NETWORK" "$TMP_BRAN" "$TMP_UPS" "$TMP_DEPLOY" "$TMP_STORAGE" <<PYEOF
 import json, sys
 
 with open(sys.argv[1]) as f: nodes       = json.load(f)
@@ -904,8 +952,9 @@ with open(sys.argv[2]) as f: flux        = json.load(f)
 with open(sys.argv[3]) as f: svc_data    = json.load(f)
 with open(sys.argv[4]) as f: network     = json.load(f)
 with open(sys.argv[5]) as f: bran        = json.load(f)
-with open(sys.argv[6]) as f: last_deploy = json.load(f)
-with open(sys.argv[7]) as f: storage     = json.load(f)
+with open(sys.argv[6]) as f: ups         = json.load(f)
+with open(sys.argv[7]) as f: last_deploy = json.load(f)
+with open(sys.argv[8]) as f: storage     = json.load(f)
 
 running = int('${RUNNING_PODS}')
 total   = int('${TOTAL_PODS}')
@@ -927,10 +976,11 @@ data = {
   'media':       svc_data['media'],
   'network':     network,
   'bran':        bran,
+  'ups':         ups,
   'last_deploy': last_deploy,
   'storage':     storage,
 }
 print(json.dumps(data, indent=2))
 PYEOF
 
-rm -f "$TMP_NODES" "$TMP_FLUX" "$TMP_SVC_DATA" "$TMP_NETWORK" "$TMP_BRAN" "$TMP_DEPLOY" "$TMP_STORAGE"
+rm -f "$TMP_NODES" "$TMP_FLUX" "$TMP_SVC_DATA" "$TMP_NETWORK" "$TMP_BRAN" "$TMP_UPS" "$TMP_DEPLOY" "$TMP_STORAGE"

@@ -1,9 +1,9 @@
 {
-  "updated": "2026-04-09T13:00:22Z",
+  "updated": "2026-04-09T13:15:59Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "57/62",
+      "value": "54/59",
       "sub": "pods running",
       "status": "warn"
     },
@@ -15,25 +15,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "34h 58m ago",
+      "value": "35h 14m ago",
       "sub": "last backup",
       "status": "warn"
     },
     {
       "label": "etcd Snapshot",
-      "value": "1h 0m ago",
+      "value": "1h 16m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "6h 0m ago",
+      "value": "15m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "12h 0m ago",
+      "value": "12h 16m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     }
@@ -82,7 +82,7 @@
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "25h",
+        "age": "26h",
         "ready": true
       },
       {
@@ -236,20 +236,20 @@
     }
   ],
   "network": {
-    "fw_hits": 22777,
+    "fw_hits": 23040,
     "latency_ms": null,
     "offenders": [],
     "pihole": {
-      "total": 56,
-      "blocked": 0,
-      "percent": 0.0
+      "total": 3519,
+      "blocked": 12,
+      "percent": 0.3
     }
   },
   "bran": {
-    "temp_c": 62.3,
+    "temp_c": 60.7,
     "temp_status": "ok",
-    "load": 0.99,
-    "mem_pct": 47.6
+    "load": 0.7,
+    "mem_pct": 48.6
   },
   "last_deploy": {
     "age": "16 hours ago",
@@ -277,7 +277,7 @@
     },
     {
       "name": "core",
-      "used": "6.2 GB",
+      "used": "6.3 GB",
       "total": "476.7 GB",
       "pct": 1.3,
       "status": "ok",

@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-09T08:17:33Z",
+  "updated": "2026-04-09T09:47:04Z",
   "cards": [
     {
       "label": "Workloads",
@@ -10,24 +10,24 @@
     {
       "label": "Flux",
       "value": "19/19 synced",
-      "sub": "18h",
+      "sub": "20h",
       "status": "ok"
     },
     {
       "label": "Docker Appdata",
-      "value": "30h 15m ago",
+      "value": "31h 45m ago",
       "sub": "last backup",
       "status": "warn"
     },
     {
       "label": "etcd Snapshot",
-      "value": "8h 17m ago",
+      "value": "9h 47m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "1h 17m ago",
+      "value": "2h 47m ago",
       "sub": "last cluster backup",
       "status": "ok"
     }
@@ -64,121 +64,121 @@
   "flux": {
     "ready": 19,
     "total": 19,
-    "last_sync": "18h",
+    "last_sync": "20h",
     "status": "ok",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
-        "age": "18h",
+        "age": "20h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "21h",
+        "age": "22h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-authentik",
-        "age": "18h",
+        "age": "20h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
-        "age": "18h",
+        "age": "20h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
-        "age": "18h",
+        "age": "20h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
-        "age": "18h",
+        "age": "20h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
-        "age": "18h",
+        "age": "20h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-namespaces",
-        "age": "18h",
+        "age": "20h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking",
-        "age": "18h",
+        "age": "20h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-config",
-        "age": "18h",
+        "age": "20h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-tls",
-        "age": "18h",
+        "age": "20h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability",
-        "age": "18h",
+        "age": "20h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
-        "age": "18h",
+        "age": "20h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
-        "age": "18h",
+        "age": "20h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security",
-        "age": "18h",
+        "age": "20h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security-issuers",
-        "age": "18h",
+        "age": "20h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-storage",
-        "age": "18h",
+        "age": "20h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade",
-        "age": "18h",
+        "age": "20h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade-plans",
-        "age": "18h",
+        "age": "20h",
         "ready": true
       }
     ]

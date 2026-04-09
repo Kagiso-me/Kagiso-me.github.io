@@ -31,8 +31,6 @@ jobs:
           PIHOLE_PASSWORD:   ${{ secrets.PIHOLE_PASSWORD }}
           TRUENAS_API_KEY:   ${{ secrets.TRUENAS_API_KEY }}
         run: |
-          echo "DEBUG: MIKROTIK_HOST len=${#MIKROTIK_HOST} USER len=${#MIKROTIK_USER} PASS len=${#MIKROTIK_PASS}"
-          curl -sf --max-time 5 -k -u "$MIKROTIK_USER:$MIKROTIK_PASS" "https://$MIKROTIK_HOST/rest/ip/address" 2>&1 | head -c 100 || echo "DEBUG: curl failed exit=$?"
           bash scripts/fetch-live-data.sh > public/data/live.json
 
       - name: Commit if changed

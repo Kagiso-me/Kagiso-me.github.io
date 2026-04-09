@@ -443,7 +443,7 @@ import Layout from '../layouts/Layout.astro';
 <script>
   async function loadStatus() {
     try {
-      const res = await fetch('/data/live.json');
+      const res = await fetch('/data/live.json?t=' + Date.now());
       if (!res.ok) throw new Error('no data');
       const data = await res.json();
 

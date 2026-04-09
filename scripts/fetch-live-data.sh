@@ -595,7 +595,7 @@ build_network() {
       -H "Content-Type: application/json" \
       -d '{"address":"8.8.8.8","count":"4"}' 2>/dev/null || echo "[]")
     log_json=$(curl -sf --max-time 5 -k -u "$mt_user:$mt_pass" \
-      "$base/log/print?.proplist=message&topics=firewall&.count=500" \
+      "$base/log/print?.proplist=message,topics&.count=1000" \
       2>/dev/null || echo "[]")
   fi
 

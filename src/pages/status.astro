@@ -336,8 +336,16 @@ import Layout from '../layouts/Layout.astro';
   /* ── Storage pools ── */
   .storage-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
+  }
+
+  @media (max-width: 860px) {
+    .storage-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 560px) {
+    .storage-grid { grid-template-columns: 1fr; }
   }
 
   .storage-card {
@@ -515,6 +523,7 @@ import Layout from '../layouts/Layout.astro';
         const d = data.last_deploy;
         deployEl.innerHTML = `
           <div class="deploy-banner">
+            <span class="mono" style="font-size:0.72rem;color:var(--color-subtle);text-transform:uppercase;letter-spacing:0.06em;flex-shrink:0">Last commit</span>
             <span class="deploy-sha">${d.sha}</span>
             <span class="deploy-msg">${d.message}</span>
             <span class="deploy-age">${d.age}</span>

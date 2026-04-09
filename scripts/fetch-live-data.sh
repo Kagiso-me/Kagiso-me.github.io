@@ -588,15 +588,21 @@ build_network() {
   local fw_json="[]" ping_json="[]" log_json="[]"
   if [[ -n "$mt_host" && -n "$mt_user" && -n "$mt_pass" ]]; then
     local base="https://$mt_host/rest"
-    fw_json=$(curl -sf --max-time 45 -k -u "$mt_user:$mt_pass" \
+    # Use a shared session cookie jar so TLS is negotiated once across all calls
+    local mt_jar; mt_jar=$(mktemp)
+    fw_json=$(curl -sf --max-time 45 -k -c "$mt_jar" -b "$mt_jar" \
+      -u "$mt_user:$mt_pass" \
       "$base/ip/firewall/filter" 2>/dev/null || echo "[]")
-    ping_json=$(curl -sf --max-time 45 -k -u "$mt_user:$mt_pass" \
+    ping_json=$(curl -sf --max-time 45 -k -c "$mt_jar" -b "$mt_jar" \
+      -u "$mt_user:$mt_pass" \
       -X POST "$base/ping" \
       -H "Content-Type: application/json" \
       -d '{"address":"8.8.8.8","count":"4"}' 2>/dev/null || echo "[]")
-    log_json=$(curl -sf --max-time 45 -k -u "$mt_user:$mt_pass" \
+    log_json=$(curl -sf --max-time 45 -k -c "$mt_jar" -b "$mt_jar" \
+      -u "$mt_user:$mt_pass" \
       "$base/log/print?.proplist=message,topics&.count=1000" \
       2>/dev/null || echo "[]")
+    rm -f "$mt_jar"
   fi
 
   # ── Pi-hole v6 ──────────────────────────────────────────────────────────────

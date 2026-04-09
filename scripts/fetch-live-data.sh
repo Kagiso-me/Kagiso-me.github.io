@@ -810,28 +810,17 @@ try:
     pool_resp = json.loads(ws.recv())
     pools = pool_resp.get('result', [])
 
-    # Query root datasets for used/available byte counts
-    ws.send(json.dumps({
-        'jsonrpc': '2.0', 'id': 3,
-        'method': 'pool.dataset.query',
-        'params': [[['type', '=', 'FILESYSTEM']], {'extra': {'retrieve_children': False}}]
-    }))
-    ds_resp = json.loads(ws.recv())
-    datasets = {d['id']: d for d in ds_resp.get('result', [])}
     ws.close()
 
     result = []
     for p in pools:
-        name = p.get('name', '?')
-        ds = datasets.get(name, {})
-        used_raw  = ds.get('used', {})
-        avail_raw = ds.get('available', {})
-        # TrueNAS returns {'rawvalue': '123', 'value': '1.2 GiB', ...}
-        used  = int(used_raw.get('rawvalue', 0) if isinstance(used_raw, dict) else used_raw or 0)
-        avail = int(avail_raw.get('rawvalue', 0) if isinstance(avail_raw, dict) else avail_raw or 0)
-        total = used + avail
-        pct   = round(used / total * 100, 1) if total > 0 else 0
-        status = 'crit' if pct >= 90 else 'warn' if pct >= 75 else 'ok'
+        name      = p.get('name', '?')
+        total     = int(p.get('size', 0) or 0)
+        allocated = int(p.get('allocated', 0) or 0)
+        free      = int(p.get('free', 0) or 0)
+        used      = allocated if allocated else (total - free)
+        pct       = round(used / total * 100, 1) if total > 0 else 0
+        status    = 'crit' if pct >= 90 else 'warn' if pct >= 75 else 'ok'
         result.append({
             'name': name, 'used': fmt(used), 'total': fmt(total),
             'pct': pct, 'status': status,

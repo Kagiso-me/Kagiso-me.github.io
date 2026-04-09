@@ -729,11 +729,13 @@ print(json.dumps({
 
 # ── Last deployment (git log on infra repo) ────────────────────────────────────
 build_last_deployment() {
-  local repo_path="$HOME/actions-runner-k3s/_work/homelab-infrastructure/homelab-infrastructure"
-  # Fallback paths in case workspace differs
+  # Look for the infra repo specifically — verify by checking for a known file
   local log_line=""
-  for path in "$repo_path" "$HOME/homelab-infrastructure" "/home/kagiso/homelab-infrastructure"; do
-    if [[ -d "$path/.git" ]]; then
+  for path in \
+    "$HOME/actions-runner-k3s/_work/homelab-infrastructure/homelab-infrastructure" \
+    "/home/kagiso/homelab-infrastructure" \
+    "$HOME/homelab-infrastructure"; do
+    if [[ -d "$path/.git" && -f "$path/platform/security/crowdsec/helmrelease.yaml" ]]; then
       # --no-merges skips GitHub PR merge commits that have no useful subject
       log_line=$(git -C "$path" log --no-merges --pretty="%ar|||%s|||%H" -1 2>/dev/null || echo "")
       break

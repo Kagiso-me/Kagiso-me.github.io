@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-09T06:54:23Z",
+  "updated": "2026-04-09T08:17:33Z",
   "cards": [
     {
       "label": "Workloads",
@@ -10,26 +10,26 @@
     {
       "label": "Flux",
       "value": "19/19 synced",
-      "sub": "17h",
+      "sub": "18h",
       "status": "ok"
     },
     {
       "label": "Docker Appdata",
-      "value": "28h 52m ago",
+      "value": "30h 15m ago",
       "sub": "last backup",
       "status": "warn"
     },
     {
       "label": "etcd Snapshot",
-      "value": "6h 54m ago",
+      "value": "8h 17m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 54m ago",
+      "value": "1h 17m ago",
       "sub": "last cluster backup",
-      "status": "warn"
+      "status": "ok"
     }
   ],
   "nodes": [
@@ -64,121 +64,121 @@
   "flux": {
     "ready": 19,
     "total": 19,
-    "last_sync": "17h",
+    "last_sync": "18h",
     "status": "ok",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
-        "age": "17h",
+        "age": "18h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "19h",
+        "age": "21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-authentik",
-        "age": "17h",
+        "age": "18h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
-        "age": "17h",
+        "age": "18h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
-        "age": "17h",
+        "age": "18h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
-        "age": "17h",
+        "age": "18h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
-        "age": "17h",
+        "age": "18h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-namespaces",
-        "age": "17h",
+        "age": "18h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking",
-        "age": "17h",
+        "age": "18h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-config",
-        "age": "17h",
+        "age": "18h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-tls",
-        "age": "17h",
+        "age": "18h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability",
-        "age": "17h",
+        "age": "18h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
-        "age": "17h",
+        "age": "18h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
-        "age": "17h",
+        "age": "18h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security",
-        "age": "17h",
+        "age": "18h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security-issuers",
-        "age": "17h",
+        "age": "18h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-storage",
-        "age": "17h",
+        "age": "18h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade",
-        "age": "17h",
+        "age": "18h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade-plans",
-        "age": "17h",
+        "age": "18h",
         "ready": true
       }
     ]

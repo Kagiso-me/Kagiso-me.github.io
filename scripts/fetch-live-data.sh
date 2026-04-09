@@ -600,7 +600,7 @@ build_network() {
       -d '{"address":"8.8.8.8","count":"4"}' 2>/dev/null || echo "[]")
     log_json=$(curl -sf --max-time 45 -k -c "$mt_jar" -b "$mt_jar" \
       -u "$mt_user:$mt_pass" \
-      "$base/log/print?.proplist=message,topics&.count=1000" \
+      "$base/log/print?.proplist=message,topics&.count=5000" \
       2>/dev/null || echo "[]")
     rm -f "$mt_jar"
   fi

@@ -34,29 +34,8 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </section>
 
-    <!-- ── At a Glance ── -->
-    <section class="section fade-up" style="animation-delay:0.1s">
-      <h2 class="section-label">At a Glance</h2>
-      <div class="cards-grid" id="glance-cards">
-        <div class="card skeleton" style="height:100px"></div>
-        <div class="card skeleton" style="height:100px"></div>
-        <div class="card skeleton" style="height:100px"></div>
-        <div class="card skeleton" style="height:100px"></div>
-      </div>
-    </section>
-
-    <!-- ── Nodes ── -->
-    <section class="section fade-up" style="animation-delay:0.13s">
-      <h2 class="section-label">Nodes</h2>
-      <div class="nodes-grid" id="nodes-grid">
-        <div class="skeleton" style="height:160px; border-radius:12px"></div>
-        <div class="skeleton" style="height:160px; border-radius:12px"></div>
-        <div class="skeleton" style="height:160px; border-radius:12px"></div>
-      </div>
-    </section>
-
     <!-- ── Infrastructure ── -->
-    <section class="section fade-up" style="animation-delay:0.15s">
+    <section class="section fade-up" style="animation-delay:0.1s">
       <h2 class="section-label">Infrastructure</h2>
       <div id="infra-deploy" style="margin-bottom:1rem">
         <div class="skeleton" style="height:56px;border-radius:10px"></div>
@@ -67,13 +46,37 @@ import Layout from '../layouts/Layout.astro';
         <div class="card skeleton" style="height:120px"></div>
         <div class="card skeleton" style="height:120px"></div>
       </div>
-      <div id="storage-grid" style="margin-top:1rem">
-        <div class="skeleton" style="height:80px;border-radius:10px"></div>
+    </section>
+
+    <!-- ── Storage ── -->
+    <section class="section fade-up" style="animation-delay:0.13s">
+      <h2 class="section-label">Storage</h2>
+      <div id="storage-grid">
+        <div class="skeleton" style="height:120px;border-radius:12px"></div>
+      </div>
+    </section>
+
+    <!-- ── At a Glance ── -->
+    <section class="section fade-up" style="animation-delay:0.15s">
+      <h2 class="section-label">At a Glance</h2>
+      <div class="cards-grid" id="glance-cards">
+        <div class="card skeleton" style="height:100px"></div>
+        <div class="card skeleton" style="height:100px"></div>
+      </div>
+    </section>
+
+    <!-- ── Nodes ── -->
+    <section class="section fade-up" style="animation-delay:0.18s">
+      <h2 class="section-label">Nodes</h2>
+      <div class="nodes-grid" id="nodes-grid">
+        <div class="skeleton" style="height:160px; border-radius:12px"></div>
+        <div class="skeleton" style="height:160px; border-radius:12px"></div>
+        <div class="skeleton" style="height:160px; border-radius:12px"></div>
       </div>
     </section>
 
     <!-- ── GitOps ── -->
-    <section class="section fade-up" style="animation-delay:0.18s">
+    <section class="section fade-up" style="animation-delay:0.20s">
       <h2 class="section-label">GitOps — Flux Kustomizations</h2>
       <div id="flux-section">
         <div class="skeleton" style="height:220px; border-radius:12px"></div>
@@ -81,7 +84,7 @@ import Layout from '../layouts/Layout.astro';
     </section>
 
     <!-- ── Backups ── -->
-    <section class="section fade-up" style="animation-delay:0.22s">
+    <section class="section fade-up" style="animation-delay:0.23s">
       <h2 class="section-label">Backups</h2>
       <div class="cards-grid" id="backup-cards">
         <div class="card skeleton" style="height:100px"></div>
@@ -330,41 +333,95 @@ import Layout from '../layouts/Layout.astro';
     flex-shrink: 0;
   }
 
-  /* ── Storage pool bars ── */
+  /* ── Storage pools ── */
   .storage-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
   }
 
   .storage-card {
     background: var(--color-surface);
     border: 1px solid var(--color-muted);
-    border-radius: 10px;
-    padding: 1rem 1.25rem;
+    border-radius: 14px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
   }
 
-  .storage-card-header {
+  .storage-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--color-ok);
+    border-radius: 14px 14px 0 0;
+  }
+  .storage-card.warn::before { background: var(--color-warn); }
+  .storage-card.crit::before { background: var(--color-crit); }
+
+  .storage-pool-name {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-heading);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+  }
+
+  .storage-health {
+    font-size: 0.72rem;
+    font-family: var(--font-mono);
+    margin-bottom: 1.25rem;
+  }
+
+  .storage-donut-row {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .storage-donut {
+    flex-shrink: 0;
+  }
+
+  .storage-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    flex: 1;
+  }
+
+  .storage-legend-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+
+  .storage-legend-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-right: 0.4rem;
+    flex-shrink: 0;
   }
 
   .storage-bar-track {
-    height: 8px;
+    height: 6px;
     background: var(--color-overlay);
-    border-radius: 4px;
+    border-radius: 3px;
     overflow: hidden;
   }
 
   .storage-bar-fill {
     height: 100%;
-    border-radius: 4px;
+    border-radius: 3px;
     background: var(--color-ok);
-    transition: width 0.6s ease;
+    transition: width 0.7s ease;
   }
-
   .storage-bar-fill.warn { background: var(--color-warn); }
   .storage-bar-fill.crit { background: var(--color-crit); }
 
@@ -394,10 +451,11 @@ import Layout from '../layouts/Layout.astro';
         }
       }
 
-      // Glance cards
+      // Glance cards — only Workloads + Flux (backups live in their own section)
       const glance = document.getElementById('glance-cards');
       if (glance && data.cards) {
-        glance.innerHTML = data.cards.map((c: any) => `
+        const glanceLabels = ['workloads', 'flux'];
+        glance.innerHTML = data.cards.filter((c: any) => glanceLabels.includes(c.label.toLowerCase())).map((c: any) => `
           <div class="card">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
               <span class="mono" style="color:var(--color-subtle);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em">${c.label}</span>
@@ -514,30 +572,62 @@ import Layout from '../layouts/Layout.astro';
           </div>`;
       }
 
-      // Infrastructure — Storage pools
+      // Storage pools
       const storageGrid = document.getElementById('storage-grid');
       if (storageGrid) {
         const pools = data.storage ?? [];
         if (pools.length > 0) {
+          const colorVar = (status: string) =>
+            status === 'crit' ? 'var(--color-crit)' : status === 'warn' ? 'var(--color-warn)' : 'var(--color-ok)';
+
+          const donut = (pct: number, status: string) => {
+            const r = 36, cx = 44, cy = 44, stroke = 10;
+            const circ = 2 * Math.PI * r;
+            const used = (pct / 100) * circ;
+            const free = circ - used;
+            const color = colorVar(status);
+            return `<svg class="storage-donut" width="88" height="88" viewBox="0 0 88 88">
+              <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--color-overlay)" stroke-width="${stroke}"/>
+              <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="${stroke}"
+                stroke-dasharray="${used} ${free}" stroke-dashoffset="${circ * 0.25}"
+                stroke-linecap="round" style="transition:stroke-dasharray 0.7s ease"/>
+              <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="middle"
+                font-family="var(--font-mono)" font-size="13" font-weight="700" fill="${color}">${pct}%</text>
+            </svg>`;
+          };
+
           storageGrid.innerHTML = `<div class="storage-grid">${pools.map((p: any) => `
-            <div class="storage-card">
-              <div class="storage-card-header">
-                <div style="display:flex;align-items:center;gap:0.75rem">
-                  <span style="font-family:var(--font-mono);font-size:0.9rem;font-weight:600;color:var(--color-heading)">${p.name}</span>
-                  <span class="mono" style="font-size:0.72rem;color:var(--color-${p.healthy ? 'ok' : 'crit'})">● ${p.pool_status ?? 'UNKNOWN'}</span>
-                </div>
-                <div style="display:flex;align-items:center;gap:1rem">
-                  <span class="mono" style="font-size:0.78rem;color:var(--color-subtle)">${p.used} / ${p.total}</span>
-                  <span class="badge ${p.status}" style="font-size:0.78rem;min-width:3.5rem;text-align:center">${p.pct}%</span>
-                </div>
+            <div class="storage-card ${p.status}">
+              <div class="storage-pool-name">${p.name}</div>
+              <div class="storage-health" style="color:var(--color-${p.healthy ? 'ok' : 'crit'})">
+                ● ${p.pool_status ?? 'UNKNOWN'}
               </div>
-              <div class="storage-bar-track">
-                <div class="storage-bar-fill ${p.status}" style="width:${Math.min(p.pct,100)}%"></div>
+              <div class="storage-donut-row">
+                ${donut(p.pct, p.status)}
+                <div class="storage-legend">
+                  <div class="storage-legend-item">
+                    <div style="display:flex;align-items:center">
+                      <div class="storage-legend-dot" style="background:${colorVar(p.status)}"></div>
+                      <span style="color:var(--color-subtle)">Used</span>
+                    </div>
+                    <span style="color:var(--color-heading);font-weight:600">${p.used}</span>
+                  </div>
+                  <div class="storage-legend-item">
+                    <div style="display:flex;align-items:center">
+                      <div class="storage-legend-dot" style="background:var(--color-overlay)"></div>
+                      <span style="color:var(--color-subtle)">Total</span>
+                    </div>
+                    <span style="color:var(--color-heading);font-weight:600">${p.total}</span>
+                  </div>
+                  <div class="storage-bar-track" style="margin-top:0.5rem">
+                    <div class="storage-bar-fill ${p.status}" style="width:${Math.min(p.pct,100)}%"></div>
+                  </div>
+                </div>
               </div>
             </div>
           `).join('')}</div>`;
         } else {
-          storageGrid.innerHTML = '<div class="mono" style="color:var(--color-subtle);padding:0.5rem 0">Storage data unavailable — add TRUENAS_API_KEY secret to enable</div>';
+          storageGrid.innerHTML = '<div class="mono" style="color:var(--color-subtle);padding:0.5rem 0">Storage data unavailable</div>';
         }
       }
 

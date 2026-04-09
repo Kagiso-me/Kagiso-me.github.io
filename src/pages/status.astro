@@ -21,8 +21,21 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </div>
 
-    <!-- ── At a Glance ── -->
+    <!-- ── Network ── -->
     <section class="section fade-up" style="animation-delay:0.05s">
+      <h2 class="section-label">Network</h2>
+      <div class="cards-grid" id="network-cards" style="margin-bottom:1.5rem">
+        <div class="card skeleton" style="height:100px"></div>
+        <div class="card skeleton" style="height:100px"></div>
+        <div class="card skeleton" style="height:100px"></div>
+      </div>
+      <div id="offenders-section">
+        <div class="skeleton" style="height:180px;border-radius:12px"></div>
+      </div>
+    </section>
+
+    <!-- ── At a Glance ── -->
+    <section class="section fade-up" style="animation-delay:0.1s">
       <h2 class="section-label">At a Glance</h2>
       <div class="cards-grid" id="glance-cards">
         <div class="card skeleton" style="height:100px"></div>
@@ -33,7 +46,7 @@ import Layout from '../layouts/Layout.astro';
     </section>
 
     <!-- ── Nodes ── -->
-    <section class="section fade-up" style="animation-delay:0.1s">
+    <section class="section fade-up" style="animation-delay:0.13s">
       <h2 class="section-label">Nodes</h2>
       <div class="nodes-grid" id="nodes-grid">
         <div class="skeleton" style="height:160px; border-radius:12px"></div>
@@ -43,7 +56,7 @@ import Layout from '../layouts/Layout.astro';
     </section>
 
     <!-- ── Infrastructure ── -->
-    <section class="section fade-up" style="animation-delay:0.13s">
+    <section class="section fade-up" style="animation-delay:0.15s">
       <h2 class="section-label">Infrastructure</h2>
       <div id="infra-deploy" style="margin-bottom:1rem">
         <div class="skeleton" style="height:56px;border-radius:10px"></div>
@@ -60,7 +73,7 @@ import Layout from '../layouts/Layout.astro';
     </section>
 
     <!-- ── GitOps ── -->
-    <section class="section fade-up" style="animation-delay:0.15s">
+    <section class="section fade-up" style="animation-delay:0.18s">
       <h2 class="section-label">GitOps — Flux Kustomizations</h2>
       <div id="flux-section">
         <div class="skeleton" style="height:220px; border-radius:12px"></div>
@@ -68,26 +81,13 @@ import Layout from '../layouts/Layout.astro';
     </section>
 
     <!-- ── Backups ── -->
-    <section class="section fade-up" style="animation-delay:0.2s">
+    <section class="section fade-up" style="animation-delay:0.22s">
       <h2 class="section-label">Backups</h2>
       <div class="cards-grid" id="backup-cards">
         <div class="card skeleton" style="height:100px"></div>
         <div class="card skeleton" style="height:100px"></div>
         <div class="card skeleton" style="height:100px"></div>
         <div class="card skeleton" style="height:100px"></div>
-      </div>
-    </section>
-
-    <!-- ── Network ── -->
-    <section class="section fade-up" style="animation-delay:0.25s">
-      <h2 class="section-label">Network</h2>
-      <div class="cards-grid" id="network-cards" style="margin-bottom:1.5rem">
-        <div class="card skeleton" style="height:100px"></div>
-        <div class="card skeleton" style="height:100px"></div>
-        <div class="card skeleton" style="height:100px"></div>
-      </div>
-      <div id="offenders-section">
-        <div class="skeleton" style="height:180px;border-radius:12px"></div>
       </div>
     </section>
 
@@ -332,9 +332,9 @@ import Layout from '../layouts/Layout.astro';
 
   /* ── Storage pool bars ── */
   .storage-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
   }
 
   .storage-card {
@@ -344,19 +344,25 @@ import Layout from '../layouts/Layout.astro';
     padding: 1rem 1.25rem;
   }
 
+  .storage-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.6rem;
+  }
+
   .storage-bar-track {
-    height: 5px;
+    height: 8px;
     background: var(--color-overlay);
-    border-radius: 3px;
-    margin-top: 0.625rem;
+    border-radius: 4px;
     overflow: hidden;
   }
 
   .storage-bar-fill {
     height: 100%;
-    border-radius: 3px;
+    border-radius: 4px;
     background: var(--color-ok);
-    transition: width 0.5s ease;
+    transition: width 0.6s ease;
   }
 
   .storage-bar-fill.warn { background: var(--color-warn); }
@@ -515,14 +521,16 @@ import Layout from '../layouts/Layout.astro';
         if (pools.length > 0) {
           storageGrid.innerHTML = `<div class="storage-grid">${pools.map((p: any) => `
             <div class="storage-card">
-              <div style="display:flex;align-items:center;justify-content:space-between">
-                <span style="font-family:var(--font-mono);font-size:0.85rem;font-weight:600;color:var(--color-heading)">${p.name}</span>
-                <div style="display:flex;align-items:center;gap:0.5rem">
-                  <span class="mono" style="font-size:0.7rem;color:var(--color-${p.healthy ? 'ok' : 'crit'})">● ${p.pool_status ?? 'UNKNOWN'}</span>
-                  <span class="badge ${p.status}">${p.pct}%</span>
+              <div class="storage-card-header">
+                <div style="display:flex;align-items:center;gap:0.75rem">
+                  <span style="font-family:var(--font-mono);font-size:0.9rem;font-weight:600;color:var(--color-heading)">${p.name}</span>
+                  <span class="mono" style="font-size:0.72rem;color:var(--color-${p.healthy ? 'ok' : 'crit'})">● ${p.pool_status ?? 'UNKNOWN'}</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:1rem">
+                  <span class="mono" style="font-size:0.78rem;color:var(--color-subtle)">${p.used} / ${p.total}</span>
+                  <span class="badge ${p.status}" style="font-size:0.78rem;min-width:3.5rem;text-align:center">${p.pct}%</span>
                 </div>
               </div>
-              <div class="mono" style="font-size:0.72rem;color:var(--color-subtle);margin-top:0.2rem">${p.used} used of ${p.total}</div>
               <div class="storage-bar-track">
                 <div class="storage-bar-fill ${p.status}" style="width:${Math.min(p.pct,100)}%"></div>
               </div>

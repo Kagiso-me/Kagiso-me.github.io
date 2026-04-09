@@ -1,9 +1,9 @@
 {
-  "updated": "2026-04-09T19:02:20Z",
+  "updated": "2026-04-09T19:24:32Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "54/60",
+      "value": "55/59",
       "sub": "pods running",
       "status": "warn"
     },
@@ -15,25 +15,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "41h 0m ago",
+      "value": "41h 22m ago",
       "sub": "last backup",
       "status": "warn"
     },
     {
       "label": "etcd Snapshot",
-      "value": "7h 2m ago",
+      "value": "7h 24m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "1m ago",
+      "value": "24m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "18h 2m ago",
+      "value": "18h 24m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     }
@@ -52,7 +52,7 @@
       "name": "tyrion",
       "role": "control-plane",
       "status": "ok",
-      "pods": "24/110",
+      "pods": "23/110",
       "cpu": "24%",
       "memory": "4%",
       "pressure": []
@@ -82,7 +82,7 @@
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "31h",
+        "age": "32h",
         "ready": true
       },
       {
@@ -236,25 +236,25 @@
     }
   ],
   "network": {
-    "fw_hits": 6821,
-    "latency_ms": 6.2,
+    "fw_hits": 7120,
+    "latency_ms": 5.3,
     "offenders": [],
     "pihole": {
-      "total": 30050,
-      "blocked": 2403,
-      "percent": 8.0
+      "total": 32082,
+      "blocked": 2795,
+      "percent": 8.7
     }
   },
   "bran": {
-    "temp_c": 59.1,
+    "temp_c": 58.0,
     "temp_status": "ok",
-    "load": 1.74,
-    "mem_pct": 43.9
+    "load": 0.58,
+    "mem_pct": 41.0
   },
   "last_deploy": {
-    "age": "36m ago",
-    "message": "docs(changelog): append entry for 8d18e17",
-    "sha": "0e19f11"
+    "age": "15m ago",
+    "message": "docs(changelog): append entry for 0880230",
+    "sha": "3aa83bd"
   },
   "storage": [
     {

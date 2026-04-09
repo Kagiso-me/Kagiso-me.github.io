@@ -668,7 +668,7 @@ except:
 offenders = []
 try:
   # Match source IP: digits before :port then arrow (→ or ->)
-  ip_pat     = re.compile(r'(\d+\.\d+\.\d+\.\d+):\d+[\u2192>]')
+  ip_pat     = re.compile(r'(\d+\.\d+\.\d+\.\d+):\d+(?:\u2192|->|>)')
   prefix_pat = re.compile(r'^FW_\w+|^BRUTE_\w+')
   type_pat   = re.compile(r'^(FW_\w+|BRUTE_\w+)')
 
@@ -689,7 +689,7 @@ try:
   offenders = [
     {'ip': ip, 'hits': cnt, 'type': ip_type.get(ip, '—')}
     for ip, cnt in ip_freq.most_common(20)
-    if cnt >= 2
+    if cnt >= 1
   ]
 except:
   pass

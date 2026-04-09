@@ -820,10 +820,13 @@ try:
         free      = int(p.get('free', 0) or 0)
         used      = allocated if allocated else (total - free)
         pct       = round(used / total * 100, 1) if total > 0 else 0
-        status    = 'crit' if pct >= 90 else 'warn' if pct >= 75 else 'ok'
+        pool_status = p.get('status', 'UNKNOWN')   # ONLINE / DEGRADED / FAULTED
+        healthy     = p.get('healthy', False)
+        status    = 'ok' if healthy and pct < 75 else 'crit' if (not healthy or pct >= 90) else 'warn'
         result.append({
             'name': name, 'used': fmt(used), 'total': fmt(total),
             'pct': pct, 'status': status,
+            'pool_status': pool_status, 'healthy': healthy,
         })
     print(json.dumps(result))
 

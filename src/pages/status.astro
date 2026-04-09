@@ -738,14 +738,14 @@ import Layout from '../layouts/Layout.astro';
           if (offs.length > 0) {
             offEl.innerHTML = `
               <div class="flux-table">
-                <div class="flux-row header" style="grid-template-columns:1.5fr 80px 120px">
-                  <span>IP Address</span><span>Hits</span><span>Interface</span>
+                <div class="flux-row header" style="grid-template-columns:1.5fr 80px 140px">
+                  <span>IP Address</span><span>Hits</span><span>Rule</span>
                 </div>
                 ${offs.map((o: any) => `
-                  <div class="flux-row" style="grid-template-columns:1.5fr 80px 120px">
+                  <div class="flux-row" style="grid-template-columns:1.5fr 80px 140px">
                     <span style="font-family:var(--font-mono);font-size:0.875rem;color:var(--color-peach)">${o.ip}</span>
                     <span class="badge crit">${o.hits}</span>
-                    <span style="font-family:var(--font-mono);font-size:0.75rem;color:var(--color-subtle)">${o.iface}</span>
+                    <span style="font-family:var(--font-mono);font-size:0.75rem;color:var(--color-subtle)">${o.type}</span>
                   </div>
                 `).join('')}
               </div>`;

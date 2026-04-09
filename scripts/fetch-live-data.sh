@@ -651,25 +651,32 @@ try:
 except:
   latency_ms = None
 
-# Persistent offenders: IPs with 3+ hits in firewall log, sorted by hit count desc
+# Persistent offenders from FW_ prefixed log rules
+# Log format: "FW_INPUT_DROP input: in:pppoe-out1 ..., proto TCP (SYN), 1.2.3.4:PORT→5.6.7.8:PORT, ..."
+# Source IP sits before :PORT→ (arrow may be unicode → or ASCII ->)
 offenders = []
 try:
-  ip_pat   = re.compile(r'src-address=(\d+\.\d+\.\d+\.\d+)')
-  rule_pat = re.compile(r'forward: in:(\S+)')
-  # Build per-IP hit count and last seen rule from log messages
-  ip_freq  = collections.Counter()
-  ip_rule  = {}
+  # Match source IP: digits before :port then arrow (→ or ->)
+  ip_pat     = re.compile(r'(\d+\.\d+\.\d+\.\d+):\d+[\u2192>]')
+  prefix_pat = re.compile(r'^FW_\w+|^BRUTE_\w+')
+  type_pat   = re.compile(r'^(FW_\w+|BRUTE_\w+)')
+
+  ip_freq = collections.Counter()
+  ip_type = {}
   for entry in logs:
     msg = entry.get('message', '')
+    if not prefix_pat.match(msg): continue
     m_ip = ip_pat.search(msg)
     if not m_ip: continue
     ip = m_ip.group(1)
     ip_freq[ip] += 1
-    if ip not in ip_rule:
-      m_rule = rule_pat.search(msg)
-      ip_rule[ip] = m_rule.group(1) if m_rule else '—'
+    if ip not in ip_type:
+      m_t = type_pat.match(msg)
+      raw = m_t.group(1) if m_t else ''
+      ip_type[ip] = raw.replace('FW_', '').replace('_', ' ').title() if raw else '—'
+
   offenders = [
-    {'ip': ip, 'hits': cnt, 'iface': ip_rule.get(ip, '—')}
+    {'ip': ip, 'hits': cnt, 'type': ip_type.get(ip, '—')}
     for ip, cnt in ip_freq.most_common(20)
     if cnt >= 3
   ]

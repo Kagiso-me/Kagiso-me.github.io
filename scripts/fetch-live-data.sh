@@ -192,7 +192,15 @@ build_backup() {
   local etcd_json
   etcd_json=$(backup_age_json "$etcd_ts")
 
-  echo "{\"bronn\":${bronn_json},\"etcd\":${etcd_json}}"
+  # varys — SSH keys backup (textfile metric on varys itself)
+  local varys_ts
+  varys_ts=$(ssh -o ConnectTimeout=5 -o BatchMode=yes 10.0.10.10 \
+    "grep -m1 'backup_last_success_timestamp{job=\"varys-keys\"}' \
+     /var/lib/node_exporter/textfile_collector/varys_backup.prom 2>/dev/null | awk '{print \$2}'" 2>/dev/null || echo "")
+  local varys_json
+  varys_json=$(backup_age_json "$varys_ts")
+
+  echo "{\"bronn\":${bronn_json},\"etcd\":${etcd_json},\"varys\":${varys_json}}"
 }
 
 # ── Velero last backup ─────────────────────────────────────────────────────────
@@ -385,49 +393,60 @@ build_navidrome() {
   local user="${NAVIDROME_USER:-}" pass="${NAVIDROME_PASS:-}"
 
   if [[ -n "$user" && -n "$pass" ]]; then
-    local raw enc_pass
-    enc_pass=$(ND_PASS="$pass" python3 -c "import urllib.parse,os; print(urllib.parse.quote(os.environ['ND_PASS'],safe=''))" 2>/dev/null)
+    # Navidrome v0.50+ requires token auth: token=md5(password+salt), salt=random string
+    # Plain password auth (p=) is unreliable on modern Navidrome — use token mode.
+    local salt token raw
+    salt=$(python3 -c "import random,string; print(''.join(random.choices(string.ascii_lowercase+string.digits,k=6)))")
+    token=$(ND_PASS="$pass" ND_SALT="$salt" python3 -c "
+import hashlib, os
+print(hashlib.md5((os.environ['ND_PASS'] + os.environ['ND_SALT']).encode()).hexdigest())
+")
     raw=$(curl -sf --max-time 5 \
-      "${NAVIDROME_URL}/rest/getNowPlaying.view?u=${user}&p=${enc_pass}&v=1.16.1&c=homelab&f=json" \
+      "${NAVIDROME_URL}/rest/getNowPlaying.view?u=${user}&t=${token}&s=${salt}&v=1.16.1&c=homelab&f=json" \
       2>/dev/null || echo "")
     if [[ -n "$raw" ]]; then
-      echo "$raw" | ND_URL="${NAVIDROME_URL}" ND_USER="$user" ND_PASS="$pass" python3 -c "
-import sys, json, os, urllib.parse
-nd_url  = os.environ['ND_URL']
-nd_user = os.environ['ND_USER']
-nd_pass = urllib.parse.quote(os.environ['ND_PASS'], safe='')
+      echo "$raw" | ND_URL="${NAVIDROME_URL}" ND_USER="$user" ND_TOKEN="$token" ND_SALT="$salt" python3 -c "
+import sys, json, os
+nd_url   = os.environ['ND_URL']
+nd_user  = os.environ['ND_USER']
+nd_token = os.environ['ND_TOKEN']
+nd_salt  = os.environ['ND_SALT']
 try:
-  entries = json.load(sys.stdin).get('subsonic-response', {}) \
-              .get('nowPlaying', {}).get('entry', [])
-  count = len(entries)
-  if count == 0:
+  resp = json.load(sys.stdin).get('subsonic-response', {})
+  if resp.get('status') != 'ok':
     print(json.dumps({'label': 'idle', 'status': 'ok', 'playing': False}))
   else:
-    e = entries[0]
-    title    = e.get('title', '')
-    album    = e.get('album', '')
-    artist   = e.get('artist', '')
-    cover_id = e.get('coverArt', '')
-    cover_url = f'{nd_url}/rest/getCoverArt.view?u={nd_user}&p={nd_pass}&v=1.16.1&c=homelab&id={cover_id}&size=300' if cover_id else ''
-    playing_str = f'{count} playing'
-    label = f'{playing_str} · {title}' if title else playing_str
-    print(json.dumps({
-      'label': label, 'status': 'ok', 'playing': True,
-      'title': title, 'album': album, 'artist': artist,
-      'coverUrl': cover_url,
-    }))
+    entries = resp.get('nowPlaying', {}).get('entry', [])
+    count = len(entries)
+    if count == 0:
+      print(json.dumps({'label': 'idle', 'status': 'ok', 'playing': False}))
+    else:
+      e = entries[0]
+      title    = e.get('title', '')
+      album    = e.get('album', '')
+      artist   = e.get('artist', '')
+      cover_id = e.get('coverArt', '')
+      cover_url = (f'{nd_url}/rest/getCoverArt.view'
+                   f'?u={nd_user}&t={nd_token}&s={nd_salt}'
+                   f'&v=1.16.1&c=homelab&id={cover_id}&size=500') if cover_id else ''
+      label = f'{count} playing · {title}' if title else f'{count} playing'
+      print(json.dumps({
+        'label': label, 'status': 'ok', 'playing': True,
+        'title': title, 'album': album, 'artist': artist,
+        'coverUrl': cover_url,
+      }))
 except:
   print(json.dumps({'label': 'idle', 'status': 'ok', 'playing': False}))
 " 2>/dev/null || echo "{\"label\":\"idle\",\"status\":\"ok\",\"playing\":false}"
       return
     fi
-  else
-    if curl -sf --max-time 5 "${NAVIDROME_URL}/ping" >/dev/null 2>&1; then
-      echo "{\"label\":\"idle\",\"status\":\"ok\",\"playing\":false}"
-      return
-    fi
   fi
-  echo "{\"label\":\"idle\",\"status\":\"unknown\",\"playing\":false}"
+  # No creds or unreachable — check if Navidrome is at least up
+  if curl -sf --max-time 5 "${NAVIDROME_URL}/ping" >/dev/null 2>&1; then
+    echo "{\"label\":\"idle\",\"status\":\"ok\",\"playing\":false}"
+  else
+    echo "{\"label\":\"offline\",\"status\":\"crit\",\"playing\":false}"
+  fi
 }
 
 # ── Vaultwarden: online check ─────────────────────────────────────────────────
@@ -546,14 +565,243 @@ def media_card(name, d):
     if d.get(k): card[k] = d[k]
   return card
 
+azuracast = {'label': 'coming soon', 'status': 'unknown', 'playing': False, 'placeholder': True}
+
 media = [
   media_card('Plex',      plex_d),
-  media_card('Navidrome', navidrome),
+  media_card('AzuraCast', azuracast),
 ]
 
 print(json.dumps({'services': result, 'media': media}))
 PYEOF
   rm -f "$tmp_svc"
+}
+
+# ── Network (MikroTik + Pi-hole) ──────────────────────────────────────────────
+build_network() {
+  local mt_host="${MIKROTIK_HOST:-}"
+  local mt_user="${MIKROTIK_USER:-}"
+  local mt_pass="${MIKROTIK_PASS:-}"
+  local ph_pass="${PIHOLE_PASSWORD:-}"
+
+  # ── MikroTik ────────────────────────────────────────────────────────────────
+  local fw_json="[]" ping_json="[]" log_json="[]"
+  if [[ -n "$mt_host" && -n "$mt_user" && -n "$mt_pass" ]]; then
+    local base="https://$mt_host/rest"
+    fw_json=$(curl -sf --max-time 5 -k -u "$mt_user:$mt_pass" \
+      "$base/ip/firewall/filter" 2>/dev/null || echo "[]")
+    ping_json=$(curl -sf --max-time 10 -k -u "$mt_user:$mt_pass" \
+      -X POST "$base/ping" \
+      -H "Content-Type: application/json" \
+      -d '{"address":"8.8.8.8","count":"4"}' 2>/dev/null || echo "[]")
+    log_json=$(curl -sf --max-time 5 -k -u "$mt_user:$mt_pass" \
+      "$base/log/print?.proplist=message&topics=firewall&.count=500" \
+      2>/dev/null || echo "[]")
+  fi
+
+  # ── Pi-hole v6 ──────────────────────────────────────────────────────────────
+  local ph_token="" ph_stats="{}"
+  if [[ -n "$ph_pass" ]]; then
+    ph_token=$(curl -sf --max-time 5 -X POST "http://localhost/api/auth" \
+      -H "Content-Type: application/json" \
+      -d "{\"password\":\"$ph_pass\"}" 2>/dev/null \
+      | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('session',{}).get('sid',''))" \
+      2>/dev/null || echo "")
+    if [[ -n "$ph_token" ]]; then
+      ph_stats=$(curl -sf --max-time 5 \
+        -H "X-FTL-SID: $ph_token" \
+        "http://localhost/api/stats/summary" 2>/dev/null || echo "{}")
+      curl -sf --max-time 3 -X DELETE \
+        -H "X-FTL-SID: $ph_token" \
+        "http://localhost/api/auth" >/dev/null 2>&1 || true
+    fi
+  fi
+
+  local tmp_fw tmp_ping tmp_log tmp_ph
+  tmp_fw=$(mktemp); tmp_ping=$(mktemp); tmp_log=$(mktemp); tmp_ph=$(mktemp)
+  echo "$fw_json"   > "$tmp_fw"
+  echo "$ping_json" > "$tmp_ping"
+  echo "$log_json"  > "$tmp_log"
+  echo "$ph_stats"  > "$tmp_ph"
+
+  python3 - "$tmp_fw" "$tmp_ping" "$tmp_log" "$tmp_ph" <<'PYEOF'
+import json, collections, re, sys
+
+def load(path):
+  try:
+    with open(path) as f: return json.load(f)
+  except: return None
+
+fw      = load(sys.argv[1]) or []
+pings   = load(sys.argv[2]) or []
+logs    = load(sys.argv[3]) or []
+ph_data = load(sys.argv[4]) or {}
+
+# Firewall: sum packets on drop rules
+fw_hits = 0
+for rule in fw:
+  if rule.get('action') == 'drop':
+    try: fw_hits += int(rule.get('packets', '0').replace(' ', ''))
+    except: pass
+
+# WAN latency: avg of avg-rtt across ping results
+try:
+  rtts = [float(p['avg-rtt'].replace('ms','').strip()) for p in pings if 'avg-rtt' in p]
+  latency_ms = round(sum(rtts)/len(rtts), 1) if rtts else None
+except:
+  latency_ms = None
+
+# Persistent offenders: IPs with 3+ hits in firewall log, sorted by hit count desc
+offenders = []
+try:
+  ip_pat   = re.compile(r'src-address=(\d+\.\d+\.\d+\.\d+)')
+  rule_pat = re.compile(r'forward: in:(\S+)')
+  # Build per-IP hit count and last seen rule from log messages
+  ip_freq  = collections.Counter()
+  ip_rule  = {}
+  for entry in logs:
+    msg = entry.get('message', '')
+    m_ip = ip_pat.search(msg)
+    if not m_ip: continue
+    ip = m_ip.group(1)
+    ip_freq[ip] += 1
+    if ip not in ip_rule:
+      m_rule = rule_pat.search(msg)
+      ip_rule[ip] = m_rule.group(1) if m_rule else '—'
+  offenders = [
+    {'ip': ip, 'hits': cnt, 'iface': ip_rule.get(ip, '—')}
+    for ip, cnt in ip_freq.most_common(20)
+    if cnt >= 3
+  ]
+except:
+  pass
+
+# Pi-hole stats
+pihole = None
+try:
+  total   = ph_data.get('queries', {}).get('total', 0)
+  blocked = ph_data.get('queries', {}).get('blocked', 0)
+  pct     = round(blocked / total * 100, 1) if total > 0 else 0
+  pihole  = {'total': total, 'blocked': blocked, 'percent': pct}
+except:
+  pass
+
+print(json.dumps({
+  'fw_hits':    fw_hits,
+  'latency_ms': latency_ms,
+  'offenders':  offenders,
+  'pihole':     pihole,
+}))
+PYEOF
+  rm -f "$tmp_fw" "$tmp_ping" "$tmp_log" "$tmp_ph"
+}
+
+# ── bran health (runs locally — bran IS the runner) ───────────────────────────
+build_bran() {
+  local temp_raw load_raw mem_total mem_avail
+  temp_raw=$(cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null || echo "")
+  load_raw=$(cut -d' ' -f1 /proc/loadavg 2>/dev/null || echo "")
+  mem_total=$(grep MemTotal /proc/meminfo 2>/dev/null | awk '{print $2}' || echo "0")
+  mem_avail=$(grep MemAvailable /proc/meminfo 2>/dev/null | awk '{print $2}' || echo "0")
+
+  python3 -c "
+import json, sys
+temp_raw  = '$temp_raw'
+load_raw  = '$load_raw'
+mem_total = int('$mem_total' or 0)
+mem_avail = int('$mem_avail' or 0)
+
+temp_c = round(int(temp_raw) / 1000, 1) if temp_raw.isdigit() else None
+load   = float(load_raw) if load_raw else None
+mem_pct = round((mem_total - mem_avail) / mem_total * 100, 1) if mem_total > 0 else None
+
+# Warn >70°C, crit >80°C
+temp_status = 'ok' if temp_c is None else 'crit' if temp_c >= 80 else 'warn' if temp_c >= 70 else 'ok'
+
+print(json.dumps({
+  'temp_c':      temp_c,
+  'temp_status': temp_status,
+  'load':        load,
+  'mem_pct':     mem_pct,
+}))
+" 2>/dev/null || echo '{"temp_c":null,"temp_status":"unknown","load":null,"mem_pct":null}'
+}
+
+# ── Last deployment (git log on infra repo) ────────────────────────────────────
+build_last_deployment() {
+  local repo_path="$HOME/actions-runner-k3s/_work/homelab-infrastructure/homelab-infrastructure"
+  # Fallback paths in case workspace differs
+  local log_line=""
+  for path in "$repo_path" "$HOME/homelab-infrastructure" "/home/kagiso/homelab-infrastructure"; do
+    if [[ -d "$path/.git" ]]; then
+      log_line=$(git -C "$path" log --pretty="%ar|||%s|||%H" -1 2>/dev/null || echo "")
+      break
+    fi
+  done
+
+  python3 -c "
+import json
+line = '''$log_line'''
+if '|||' in line:
+  parts = line.split('|||', 2)
+  age  = parts[0].strip()
+  msg  = parts[1].strip()[:80]   # cap subject length
+  sha  = parts[2].strip()[:7]
+  print(json.dumps({'age': age, 'message': msg, 'sha': sha}))
+else:
+  print(json.dumps({'age': '—', 'message': 'unavailable', 'sha': '—'}))
+" 2>/dev/null || echo '{"age":"—","message":"unavailable","sha":"—"}'
+}
+
+# ── TrueNAS storage pools ──────────────────────────────────────────────────────
+build_storage() {
+  local api_key="${TRUENAS_API_KEY:-}"
+  if [[ -z "$api_key" ]]; then
+    echo '[]'
+    return
+  fi
+
+  local raw
+  raw=$(curl -sf --max-time 8 \
+    -H "Authorization: Bearer $api_key" \
+    "http://10.0.10.80/api/v2.0/pool" 2>/dev/null || echo "[]")
+
+  echo "$raw" | python3 -c "
+import json, sys
+
+try:
+  pools = json.load(sys.stdin)
+except:
+  pools = []
+
+result = []
+for p in pools:
+  try:
+    name  = p.get('name', '?')
+    # size/free in bytes — may be in p['topology'] summary or top-level
+    size  = p.get('size', 0) or 0
+    free  = p.get('free', 0) or 0
+    used  = size - free
+    pct   = round(used / size * 100, 1) if size > 0 else 0
+
+    def fmt(b):
+      if b >= 1e12: return f'{b/1e12:.1f} TB'
+      if b >= 1e9:  return f'{b/1e9:.1f} GB'
+      return f'{b/1e6:.0f} MB'
+
+    status = 'crit' if pct >= 90 else 'warn' if pct >= 75 else 'ok'
+    result.append({
+      'name':    name,
+      'used':    fmt(used),
+      'total':   fmt(size),
+      'pct':     pct,
+      'status':  status,
+    })
+  except:
+    pass
+
+print(json.dumps(result))
+" 2>/dev/null || echo '[]'
 }
 
 # ── Assemble live cards ────────────────────────────────────────────────────────
@@ -562,6 +810,10 @@ FLUX=$(build_flux)
 BACKUP=$(build_backup)
 VELERO=$(build_velero)
 SERVICES=$(build_services)
+NETWORK=$(build_network)
+BRAN=$(build_bran)
+LAST_DEPLOY=$(build_last_deployment)
+STORAGE=$(build_storage)
 
 FLUX_STATUS=$(echo "$FLUX" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['status'])")
 FLUX_LABEL=$(echo "$FLUX" | python3 -c "import sys,json; d=json.load(sys.stdin); print(f\"{d['ready']}/{d['total']} synced\")")
@@ -571,6 +823,8 @@ BRONN_BACKUP_AGE=$(echo    "$BACKUP" | python3 -c "import sys,json; d=json.load(
 BRONN_BACKUP_STATUS=$(echo "$BACKUP" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['bronn']['status'])")
 ETCD_BACKUP_AGE=$(echo     "$BACKUP" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['etcd']['age'])")
 ETCD_BACKUP_STATUS=$(echo  "$BACKUP" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['etcd']['status'])")
+VARYS_BACKUP_AGE=$(echo    "$BACKUP" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['varys']['age'])")
+VARYS_BACKUP_STATUS=$(echo "$BACKUP" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['varys']['status'])")
 
 VELERO_AGE=$(echo    "$VELERO" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['age'])")
 VELERO_STATUS=$(echo "$VELERO" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['status'])")
@@ -580,17 +834,26 @@ RUNNING_PODS=$(kubectl get pods -A --no-headers 2>/dev/null | grep -c "Running" 
 TOTAL_PODS=$(kubectl get pods -A --no-headers 2>/dev/null | wc -l | tr -d ' ' || echo "0")
 
 # Write JSON via temp files to avoid shell quoting issues
-TMP_NODES=$(mktemp); TMP_FLUX=$(mktemp); TMP_SVC_DATA=$(mktemp)
-echo "$NODES"    > "$TMP_NODES"
-echo "$FLUX"     > "$TMP_FLUX"
-echo "$SERVICES" > "$TMP_SVC_DATA"
+TMP_NODES=$(mktemp); TMP_FLUX=$(mktemp); TMP_SVC_DATA=$(mktemp); TMP_NETWORK=$(mktemp)
+TMP_BRAN=$(mktemp); TMP_DEPLOY=$(mktemp); TMP_STORAGE=$(mktemp)
+echo "$NODES"       > "$TMP_NODES"
+echo "$FLUX"        > "$TMP_FLUX"
+echo "$SERVICES"    > "$TMP_SVC_DATA"
+echo "$NETWORK"     > "$TMP_NETWORK"
+echo "$BRAN"        > "$TMP_BRAN"
+echo "$LAST_DEPLOY" > "$TMP_DEPLOY"
+echo "$STORAGE"     > "$TMP_STORAGE"
 
-python3 - "$TMP_NODES" "$TMP_FLUX" "$TMP_SVC_DATA" <<PYEOF
+python3 - "$TMP_NODES" "$TMP_FLUX" "$TMP_SVC_DATA" "$TMP_NETWORK" "$TMP_BRAN" "$TMP_DEPLOY" "$TMP_STORAGE" <<PYEOF
 import json, sys
 
-with open(sys.argv[1]) as f: nodes    = json.load(f)
-with open(sys.argv[2]) as f: flux     = json.load(f)
-with open(sys.argv[3]) as f: svc_data = json.load(f)
+with open(sys.argv[1]) as f: nodes       = json.load(f)
+with open(sys.argv[2]) as f: flux        = json.load(f)
+with open(sys.argv[3]) as f: svc_data    = json.load(f)
+with open(sys.argv[4]) as f: network     = json.load(f)
+with open(sys.argv[5]) as f: bran        = json.load(f)
+with open(sys.argv[6]) as f: last_deploy = json.load(f)
+with open(sys.argv[7]) as f: storage     = json.load(f)
 
 running = int('${RUNNING_PODS}')
 total   = int('${TOTAL_PODS}')
@@ -603,13 +866,18 @@ data = {
     {'label': 'Docker Appdata', 'value': '${BRONN_BACKUP_AGE}',  'sub': 'last backup',        'status': '${BRONN_BACKUP_STATUS}'},
     {'label': 'etcd Snapshot',  'value': '${ETCD_BACKUP_AGE}',   'sub': 'last snapshot',      'status': '${ETCD_BACKUP_STATUS}'},
     {'label': 'Velero',         'value': '${VELERO_AGE}',        'sub': 'last cluster backup','status': '${VELERO_STATUS}'},
+    {'label': 'varys Keys',     'value': '${VARYS_BACKUP_AGE}',  'sub': 'age keys · varys',   'status': '${VARYS_BACKUP_STATUS}'},
   ],
-  'nodes':    nodes,
-  'flux':     flux,
-  'services': svc_data['services'],
-  'media':    svc_data['media'],
+  'nodes':       nodes,
+  'flux':        flux,
+  'services':    svc_data['services'],
+  'media':       svc_data['media'],
+  'network':     network,
+  'bran':        bran,
+  'last_deploy': last_deploy,
+  'storage':     storage,
 }
 print(json.dumps(data, indent=2))
 PYEOF
 
-rm -f "$TMP_NODES" "$TMP_FLUX" "$TMP_SVC_DATA"
+rm -f "$TMP_NODES" "$TMP_FLUX" "$TMP_SVC_DATA" "$TMP_NETWORK" "$TMP_BRAN" "$TMP_DEPLOY" "$TMP_STORAGE"

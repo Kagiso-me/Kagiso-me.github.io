@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-09T10:41:08Z",
+  "updated": "2026-04-09T10:43:06Z",
   "cards": [
     {
       "label": "Workloads",
@@ -15,20 +15,26 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "32h 39m ago",
+      "value": "32h 41m ago",
       "sub": "last backup",
       "status": "warn"
     },
     {
       "label": "etcd Snapshot",
-      "value": "10h 41m ago",
+      "value": "10h 43m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 41m ago",
+      "value": "3h 43m ago",
       "sub": "last cluster backup",
+      "status": "ok"
+    },
+    {
+      "label": "varys Keys",
+      "value": "9h 43m ago",
+      "sub": "age keys \u00b7 varys",
       "status": "ok"
     }
   ],
@@ -223,10 +229,32 @@
       "playing": false
     },
     {
-      "name": "Navidrome",
-      "label": "idle",
-      "status": "ok",
+      "name": "AzuraCast",
+      "label": "coming soon",
+      "status": "unknown",
       "playing": false
     }
-  ]
+  ],
+  "network": {
+    "fw_hits": 0,
+    "latency_ms": null,
+    "offenders": [],
+    "pihole": {
+      "total": 63,
+      "blocked": 0,
+      "percent": 0.0
+    }
+  },
+  "bran": {
+    "temp_c": 61.8,
+    "temp_status": "ok",
+    "load": 1.21,
+    "mem_pct": 45.0
+  },
+  "last_deploy": {
+    "age": "13 hours ago",
+    "message": "Merge 5d1f82999556eab2ace9b8ce5d4aa107d327e7ca into dbd1908b4e8bb71942e04c427057",
+    "sha": "5ef8e5b"
+  },
+  "storage": []
 }

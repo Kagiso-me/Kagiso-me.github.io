@@ -517,7 +517,10 @@ import Layout from '../layouts/Layout.astro';
             <div class="storage-card">
               <div style="display:flex;align-items:center;justify-content:space-between">
                 <span style="font-family:var(--font-mono);font-size:0.85rem;font-weight:600;color:var(--color-heading)">${p.name}</span>
-                <span class="badge ${p.status}">${p.pct}%</span>
+                <div style="display:flex;align-items:center;gap:0.5rem">
+                  <span class="mono" style="font-size:0.7rem;color:var(--color-${p.healthy ? 'ok' : 'crit'})">● ${p.pool_status ?? 'UNKNOWN'}</span>
+                  <span class="badge ${p.status}">${p.pct}%</span>
+                </div>
               </div>
               <div class="mono" style="font-size:0.72rem;color:var(--color-subtle);margin-top:0.2rem">${p.used} used of ${p.total}</div>
               <div class="storage-bar-track">

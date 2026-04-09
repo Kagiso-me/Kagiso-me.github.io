@@ -571,14 +571,45 @@ import Layout from '../layouts/Layout.astro';
             <div style="font-size:1.25rem;font-weight:700;color:var(--color-subtle);font-family:var(--font-mono);margin-bottom:0.25rem">— W</div>
             <div class="mono" style="color:var(--color-subtle);font-size:0.85rem">Sonoff POW on PDU · not yet connected</div>
           </div>
+          ${(() => {
+            const u = data.ups ?? {};
+            const dot = u.dot ?? 'unknown';
+            const hasData = u.charge != null;
+            if (!hasData) return `
           <div class="card" style="opacity:0.6;border-style:dashed">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
               <span class="mono" style="color:var(--color-subtle);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em">UPS</span>
               <span class="status-dot unknown"></span>
             </div>
             <div style="font-size:1.25rem;font-weight:700;color:var(--color-subtle);font-family:var(--font-mono);margin-bottom:0.25rem">—</div>
-            <div class="mono" style="color:var(--color-subtle);font-size:0.85rem">configure NUT to enable</div>
+            <div class="mono" style="color:var(--color-subtle);font-size:0.85rem">NUT unavailable</div>
           </div>`;
+            const onBattery = u.on_battery ? ' · ON BATTERY' : '';
+            return `
+          <div class="card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem">
+              <div>
+                <span class="mono" style="color:var(--color-subtle);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em">UPS</span>
+                <div style="font-size:0.72rem;color:var(--color-subtle);font-family:var(--font-mono);margin-top:0.1rem">APC · ${u.nominal_w ?? '—'}W nominal${onBattery}</div>
+              </div>
+              <span class="status-dot ${dot}"></span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.4rem;margin-top:0.75rem">
+              <div class="metric">
+                <span class="metric-value" style="font-size:0.85rem">${u.charge ?? '—'}%</span>
+                <span class="metric-label">Charge</span>
+              </div>
+              <div class="metric">
+                <span class="metric-value" style="font-size:0.85rem">${u.runtime_str ?? '—'}</span>
+                <span class="metric-label">Runtime</span>
+              </div>
+              <div class="metric">
+                <span class="metric-value" style="font-size:0.85rem">${u.load_pct ?? '—'}%</span>
+                <span class="metric-label">Load</span>
+              </div>
+            </div>
+          </div>`;
+          })()}`;
       }
 
       // Storage pools

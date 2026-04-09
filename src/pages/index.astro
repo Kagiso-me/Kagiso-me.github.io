@@ -286,32 +286,13 @@ import Layout from '../layouts/Layout.astro';
   .svc-item {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.6rem;
     background: var(--color-surface);
     border: 1px solid var(--color-muted);
     border-radius: 8px;
     padding: 0.625rem 1rem;
     transition: border-color 0.2s, background 0.2s;
   }
-
-  .svc-icon {
-    flex-shrink: 0;
-    width: 22px;
-    height: 22px;
-    color: var(--color-subtle);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .svc-icon svg {
-    width: 100%;
-    height: 100%;
-  }
-
-  .svc-item.ok   .svc-icon { color: var(--color-ok); }
-  .svc-item.warn .svc-icon { color: var(--color-warn); }
-  .svc-item.crit .svc-icon { color: var(--color-crit); }
 
   .svc-item:hover { background: var(--color-overlay); }
   .svc-item.ok   { border-left: 3px solid var(--color-ok); }
@@ -844,19 +825,6 @@ import Layout from '../layouts/Layout.astro';
     { name: 'AzuraCast',  label: 'coming soon', status: 'unknown', playing: false, placeholder: true },
   ];
 
-  const SVC_ICONS: Record<string, string> = {
-    'Immich':     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`,
-    'Nextcloud':  `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.75a7.25 7.25 0 0 0-6.94 5.14A4.25 4.25 0 0 0 5.75 18h12.5a4.25 4.25 0 0 0 .69-8.11A7.25 7.25 0 0 0 12 4.75z"/></svg>`,
-    'SABnzbd':    `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>`,
-    'Sonarr':     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49M7.76 16.24a6 6 0 0 1 0-8.49M19.07 4.93a10 10 0 0 1 0 14.14M4.93 19.07a10 10 0 0 1 0-14.14"/></svg>`,
-    'Radarr':     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>`,
-    'Lidarr':     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="9"/></svg>`,
-    'Vaultwarden':`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
-    'Plex':       `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l7 4.5-7 4.5z"/></svg>`,
-    'AzuraCast':  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>`,
-    'Navidrome':  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>`,
-  };
-
   function buildSvcGrid(services: {name: string; tag: string; status: string}[]) {
     const grid = document.getElementById('svc-grid');
     if (!grid) return;
@@ -864,10 +832,9 @@ import Layout from '../layouts/Layout.astro';
       const colonIdx = s.tag.indexOf(':');
       const name = colonIdx > -1 ? s.tag.slice(0, colonIdx).trim() : s.name;
       const meta = colonIdx > -1 ? s.tag.slice(colonIdx + 1).trim() : s.tag;
-      const icon = SVC_ICONS[s.name] ?? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/></svg>`;
       return `
         <div class="svc-item ${s.status}">
-          <span class="svc-icon">${icon}</span>
+          <span class="status-dot ${s.status}"></span>
           <div style="min-width:0">
             <div class="svc-name">${name}</div>
             ${meta ? `<div class="svc-meta">${meta}</div>` : ''}

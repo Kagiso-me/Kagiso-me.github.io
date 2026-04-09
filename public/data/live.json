@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-09T15:05:44Z",
+  "updated": "2026-04-09T15:52:16Z",
   "cards": [
     {
       "label": "Workloads",
@@ -10,30 +10,30 @@
     {
       "label": "Flux",
       "value": "19/19 synced",
-      "sub": "25h",
+      "sub": "26h",
       "status": "ok"
     },
     {
       "label": "Docker Appdata",
-      "value": "37h 4m ago",
+      "value": "37h 50m ago",
       "sub": "last backup",
       "status": "warn"
     },
     {
       "label": "etcd Snapshot",
-      "value": "3h 5m ago",
+      "value": "3h 52m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "2h 5m ago",
+      "value": "2h 51m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "14h 5m ago",
+      "value": "14h 52m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     }
@@ -70,121 +70,121 @@
   "flux": {
     "ready": 19,
     "total": 19,
-    "last_sync": "25h",
+    "last_sync": "26h",
     "status": "ok",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
-        "age": "25h",
+        "age": "26h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "27h",
+        "age": "28h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-authentik",
-        "age": "25h",
+        "age": "26h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
-        "age": "25h",
+        "age": "26h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
-        "age": "25h",
+        "age": "26h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
-        "age": "25h",
+        "age": "26h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
-        "age": "25h",
+        "age": "26h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-namespaces",
-        "age": "25h",
+        "age": "26h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking",
-        "age": "25h",
+        "age": "26h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-config",
-        "age": "25h",
+        "age": "26h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-tls",
-        "age": "25h",
+        "age": "26h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability",
-        "age": "25h",
+        "age": "26h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
-        "age": "25h",
+        "age": "26h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
-        "age": "25h",
+        "age": "26h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security",
-        "age": "25h",
+        "age": "26h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security-issuers",
-        "age": "25h",
+        "age": "26h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-storage",
-        "age": "25h",
+        "age": "26h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade",
-        "age": "25h",
+        "age": "26h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade-plans",
-        "age": "25h",
+        "age": "26h",
         "ready": true
       }
     ]
@@ -236,25 +236,25 @@
     }
   ],
   "network": {
-    "fw_hits": 1161,
-    "latency_ms": 5.0,
+    "fw_hits": 2004,
+    "latency_ms": 5.3,
     "offenders": [],
     "pihole": {
-      "total": 12514,
-      "blocked": 487,
-      "percent": 3.9
+      "total": 13835,
+      "blocked": 629,
+      "percent": 4.5
     }
   },
   "bran": {
     "temp_c": 58.0,
     "temp_status": "ok",
-    "load": 0.95,
-    "mem_pct": 50.1
+    "load": 0.7,
+    "mem_pct": 50.3
   },
   "last_deploy": {
-    "age": "18 hours ago",
-    "message": "Merge 5d1f82999556eab2ace9b8ce5d4aa107d327e7ca into dbd1908b4e8bb71942e04c427057",
-    "sha": "5ef8e5b"
+    "age": "18h ago",
+    "message": "docs(changelog): append entry for dbd1908",
+    "sha": "fea4211"
   },
   "storage": [
     {
@@ -277,7 +277,7 @@
     },
     {
       "name": "core",
-      "used": "6.2 GB",
+      "used": "6.3 GB",
       "total": "476.7 GB",
       "pct": 1.3,
       "status": "ok",

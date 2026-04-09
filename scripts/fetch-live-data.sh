@@ -734,7 +734,8 @@ build_last_deployment() {
   local log_line=""
   for path in "$repo_path" "$HOME/homelab-infrastructure" "/home/kagiso/homelab-infrastructure"; do
     if [[ -d "$path/.git" ]]; then
-      log_line=$(git -C "$path" log --pretty="%ar|||%s|||%H" -1 2>/dev/null || echo "")
+      # --no-merges skips GitHub PR merge commits that have no useful subject
+      log_line=$(git -C "$path" log --no-merges --pretty="%ar|||%s|||%H" -1 2>/dev/null || echo "")
       break
     fi
   done
@@ -762,9 +763,9 @@ build_storage() {
   fi
 
   local raw
-  raw=$(curl -sf --max-time 8 \
+  raw=$(curl -sf --max-time 8 -k \
     -H "Authorization: Bearer $api_key" \
-    "http://10.0.10.80/api/v2.0/pool" 2>/dev/null || echo "[]")
+    "https://10.0.10.80/api/v2.0/pool" 2>/dev/null || echo "[]")
 
   echo "$raw" | python3 -c "
 import json, sys

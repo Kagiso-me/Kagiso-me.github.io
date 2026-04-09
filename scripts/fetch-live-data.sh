@@ -747,29 +747,32 @@ print(json.dumps({
 
 # ── Last deployment (git log on infra repo) ────────────────────────────────────
 build_last_deployment() {
-  # Look for the infra repo specifically — verify by checking for a known file
-  local log_line=""
-  for path in \
-    "$HOME/actions-runner-k3s/_work/homelab-infrastructure/homelab-infrastructure" \
-    "/home/kagiso/homelab-infrastructure" \
-    "$HOME/homelab-infrastructure"; do
-    if [[ -d "$path/.git" && -f "$path/platform/security/crowdsec/helmrelease.yaml" ]]; then
-      # Skip commits whose subject starts with "Merge" (squash merges have 1 parent so --no-merges misses them)
-      log_line=$(git -C "$path" log --pretty="%ar|||%s|||%H" | grep -v "^[^|]*|||Merge " | head -1 2>/dev/null || echo "")
-      break
-    fi
-  done
-
+  # Use GitHub API to get latest non-merge commit — avoids shallow clone limitations
   python3 -c "
-import json
-line = '''$log_line'''
-if '|||' in line:
-  parts = line.split('|||', 2)
-  age  = parts[0].strip()
-  msg  = parts[1].strip()[:80]   # cap subject length
-  sha  = parts[2].strip()[:7]
-  print(json.dumps({'age': age, 'message': msg, 'sha': sha}))
-else:
+import json, urllib.request, urllib.error
+try:
+  url = 'https://api.github.com/repos/Kagiso-me/homelab-infrastructure/commits?per_page=20'
+  req = urllib.request.Request(url, headers={'User-Agent': 'fetch-live-data/1.0'})
+  with urllib.request.urlopen(req, timeout=10) as r:
+    commits = json.loads(r.read())
+  # Skip merge commits (subject starts with 'Merge')
+  for c in commits:
+    msg = c['commit']['message'].split('\n')[0].strip()
+    if msg.startswith('Merge '): continue
+    sha  = c['sha'][:7]
+    from datetime import datetime, timezone
+    dt   = datetime.fromisoformat(c['commit']['committer']['date'].replace('Z','+00:00'))
+    now  = datetime.now(timezone.utc)
+    diff = now - dt
+    mins = int(diff.total_seconds() // 60)
+    if mins < 60:   age = f'{mins}m ago'
+    elif mins < 1440: age = f'{mins//60}h ago'
+    else:           age = f'{mins//1440}d ago'
+    print(json.dumps({'age': age, 'message': msg[:80], 'sha': sha}))
+    break
+  else:
+    print(json.dumps({'age': '—', 'message': 'unavailable', 'sha': '—'}))
+except Exception as e:
   print(json.dumps({'age': '—', 'message': 'unavailable', 'sha': '—'}))
 " 2>/dev/null || echo '{"age":"—","message":"unavailable","sha":"—"}'
 }

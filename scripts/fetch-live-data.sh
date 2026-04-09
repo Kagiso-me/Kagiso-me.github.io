@@ -911,7 +911,8 @@ running = int('${RUNNING_PODS}')
 total   = int('${TOTAL_PODS}')
 
 data = {
-  'updated': '${NOW}',
+  'updated':    '${NOW}',
+  'fetched_at': '${NOW}',
   'cards': [
     {'label': 'Workloads',      'value': f'{running}/{total}',   'sub': 'pods running',       'status': 'ok' if running == total else 'warn'},
     {'label': 'Flux',           'value': '${FLUX_LABEL}',        'sub': '${FLUX_SYNC}',       'status': '${FLUX_STATUS}'},

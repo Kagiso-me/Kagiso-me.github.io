@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-10T21:29:37Z",
-  "fetched_at": "2026-04-10T21:29:37Z",
+  "updated": "2026-04-10T21:32:39Z",
+  "fetched_at": "2026-04-10T21:32:39Z",
   "cards": [
     {
       "label": "Workloads",
@@ -11,7 +11,7 @@
     {
       "label": "Flux",
       "value": "19/19 synced",
-      "sub": "2d7h",
+      "sub": "2d8h",
       "status": "ok"
     },
     {
@@ -22,19 +22,19 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "21h 29m ago",
+      "value": "21h 32m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "9m ago",
+      "value": "12m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "20h 29m ago",
+      "value": "20h 32m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     }
@@ -71,13 +71,13 @@
   "flux": {
     "ready": 19,
     "total": 19,
-    "last_sync": "2d7h",
+    "last_sync": "2d8h",
     "status": "ok",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
-        "age": "2d7h",
+        "age": "2d8h",
         "ready": true
       },
       {
@@ -89,103 +89,103 @@
       {
         "namespace": "flux-system",
         "name": "platform-authentik",
-        "age": "2d7h",
+        "age": "2d8h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
-        "age": "2d7h",
+        "age": "2d8h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
-        "age": "2d7h",
+        "age": "2d8h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
-        "age": "2d7h",
+        "age": "2d8h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
-        "age": "2d7h",
+        "age": "2d8h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-namespaces",
-        "age": "2d7h",
+        "age": "2d8h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking",
-        "age": "2d7h",
+        "age": "2d8h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-config",
-        "age": "2d7h",
+        "age": "2d8h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-tls",
-        "age": "2d7h",
+        "age": "2d8h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability",
-        "age": "2d7h",
+        "age": "2d8h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
-        "age": "2d7h",
+        "age": "2d8h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
-        "age": "2d7h",
+        "age": "2d8h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security",
-        "age": "2d7h",
+        "age": "2d8h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security-issuers",
-        "age": "2d7h",
+        "age": "2d8h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-storage",
-        "age": "2d7h",
+        "age": "2d8h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade",
-        "age": "2d7h",
+        "age": "2d8h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade-plans",
-        "age": "2d7h",
+        "age": "2d8h",
         "ready": true
       }
     ]
@@ -204,29 +204,29 @@
     {
       "name": "SABnzbd",
       "tag": "SABnzbd: idle",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: 63 series",
-      "status": "ok"
+      "tag": "Sonarr: \u2014 series",
+      "status": "unknown"
     },
     {
       "name": "Radarr",
-      "tag": "Radarr: 16 movies",
-      "status": "ok"
+      "tag": "Radarr: \u2014 movies",
+      "status": "unknown"
     },
     {
       "name": "Lidarr",
-      "tag": "Lidarr: 36 artists",
-      "status": "ok"
+      "tag": "Lidarr: \u2014 artists",
+      "status": "unknown"
     }
   ],
   "media": [
     {
       "name": "Plex",
       "label": "idle",
-      "status": "ok",
+      "status": "unknown",
       "playing": false
     },
     {
@@ -237,7 +237,7 @@
     }
   ],
   "network": {
-    "fw_hits": 3079,
+    "fw_hits": 3141,
     "latency_ms": 5.3,
     "offenders": [],
     "pihole": {
@@ -247,10 +247,10 @@
     }
   },
   "bran": {
-    "temp_c": 54.8,
+    "temp_c": 53.7,
     "temp_status": "ok",
-    "load": 0.65,
-    "mem_pct": 45.1
+    "load": 0.47,
+    "mem_pct": 44.8
   },
   "ups": {
     "charge": 100,

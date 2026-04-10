@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-09T23:41:50Z",
-  "fetched_at": "2026-04-09T23:41:50Z",
+  "updated": "2026-04-09T23:59:34Z",
+  "fetched_at": "2026-04-09T23:59:34Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "45h 40m ago",
+      "value": "45h 57m ago",
       "sub": "last backup",
       "status": "warn"
     },
     {
       "label": "etcd Snapshot",
-      "value": "11h 41m ago",
+      "value": "11h 59m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "4h 41m ago",
+      "value": "4h 59m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "22h 41m ago",
+      "value": "22h 59m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     }
@@ -237,27 +237,27 @@
     }
   ],
   "network": {
-    "fw_hits": 11134,
+    "fw_hits": 11362,
     "latency_ms": 5.2,
     "offenders": [],
     "pihole": {
-      "total": 41136,
+      "total": 41138,
       "blocked": 4093,
       "percent": 9.9
     }
   },
   "bran": {
-    "temp_c": 54.8,
+    "temp_c": 53.7,
     "temp_status": "ok",
-    "load": 0.86,
-    "mem_pct": 47.6
+    "load": 0.66,
+    "mem_pct": 48.0
   },
   "ups": {
-    "charge": 98,
-    "runtime_s": 6808,
-    "runtime_str": "1h 53m",
+    "charge": 100,
+    "runtime_s": 6948,
+    "runtime_str": "1h 55m",
     "load_pct": 0,
-    "status": "OL CHRG",
+    "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
     "dot": "ok"

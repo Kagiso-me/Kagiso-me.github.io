@@ -1,42 +1,42 @@
 {
-  "updated": "2026-04-10T21:32:39Z",
-  "fetched_at": "2026-04-10T21:32:39Z",
+  "updated": "2026-04-11T18:00:17Z",
+  "fetched_at": "2026-04-11T18:00:17Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "53/58",
+      "value": "38/59",
       "sub": "pods running",
       "status": "warn"
     },
     {
       "label": "Flux",
       "value": "19/19 synced",
-      "sub": "2d8h",
+      "sub": "3d4h",
       "status": "ok"
     },
     {
       "label": "Docker Appdata",
-      "value": "\u2014",
+      "value": "39h 58m ago",
       "sub": "last backup",
-      "status": "unknown"
+      "status": "warn"
     },
     {
       "label": "etcd Snapshot",
-      "value": "21h 32m ago",
+      "value": "42h 0m ago",
       "sub": "last snapshot",
-      "status": "ok"
+      "status": "warn"
     },
     {
       "label": "Velero",
-      "value": "12m ago",
+      "value": "2m ago",
       "sub": "last cluster backup",
-      "status": "ok"
+      "status": "crit"
     },
     {
       "label": "varys Keys",
-      "value": "20h 32m ago",
+      "value": "41h 0m ago",
       "sub": "age keys \u00b7 varys",
-      "status": "ok"
+      "status": "warn"
     }
   ],
   "nodes": [
@@ -71,121 +71,121 @@
   "flux": {
     "ready": 19,
     "total": 19,
-    "last_sync": "2d8h",
+    "last_sync": "3d4h",
     "status": "ok",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
-        "age": "2d8h",
+        "age": "3d4h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "2d10h",
+        "age": "3d6h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-authentik",
-        "age": "2d8h",
+        "age": "3d4h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
-        "age": "2d8h",
+        "age": "3d4h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
-        "age": "2d8h",
+        "age": "3d4h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
-        "age": "2d8h",
+        "age": "3d4h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
-        "age": "2d8h",
+        "age": "3d4h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-namespaces",
-        "age": "2d8h",
+        "age": "3d4h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking",
-        "age": "2d8h",
+        "age": "3d4h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-config",
-        "age": "2d8h",
+        "age": "3d4h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-tls",
-        "age": "2d8h",
+        "age": "3d4h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability",
-        "age": "2d8h",
+        "age": "3d4h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
-        "age": "2d8h",
+        "age": "3d4h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
-        "age": "2d8h",
+        "age": "3d4h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security",
-        "age": "2d8h",
+        "age": "3d4h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security-issuers",
-        "age": "2d8h",
+        "age": "3d4h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-storage",
-        "age": "2d8h",
+        "age": "3d4h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade",
-        "age": "2d8h",
+        "age": "3d4h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade-plans",
-        "age": "2d8h",
+        "age": "3d4h",
         "ready": true
       }
     ]
@@ -204,29 +204,29 @@
     {
       "name": "SABnzbd",
       "tag": "SABnzbd: idle",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: \u2014 series",
-      "status": "unknown"
+      "tag": "Sonarr: 63 series",
+      "status": "ok"
     },
     {
       "name": "Radarr",
-      "tag": "Radarr: \u2014 movies",
-      "status": "unknown"
+      "tag": "Radarr: 16 movies",
+      "status": "ok"
     },
     {
       "name": "Lidarr",
-      "tag": "Lidarr: \u2014 artists",
-      "status": "unknown"
+      "tag": "Lidarr: 36 artists",
+      "status": "ok"
     }
   ],
   "media": [
     {
       "name": "Plex",
       "label": "idle",
-      "status": "unknown",
+      "status": "ok",
       "playing": false
     },
     {
@@ -237,20 +237,20 @@
     }
   ],
   "network": {
-    "fw_hits": 3141,
-    "latency_ms": 5.3,
+    "fw_hits": 7464,
+    "latency_ms": 4.4,
     "offenders": [],
     "pihole": {
-      "total": 46,
-      "blocked": 0,
-      "percent": 0.0
+      "total": 1510,
+      "blocked": 295,
+      "percent": 19.5
     }
   },
   "bran": {
-    "temp_c": 53.7,
+    "temp_c": 51.0,
     "temp_status": "ok",
-    "load": 0.47,
-    "mem_pct": 44.8
+    "load": 1.44,
+    "mem_pct": 42.7
   },
   "ups": {
     "charge": 100,
@@ -263,37 +263,9 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "4h ago",
+    "age": "1d ago",
     "message": "chore(deps): update prom/node-exporter docker tag to v1.11.1 (#76)",
     "sha": "dc7d0fe"
   },
-  "storage": [
-    {
-      "name": "tera",
-      "used": "5.2 TB",
-      "total": "7.9 TB",
-      "pct": 65.6,
-      "status": "ok",
-      "pool_status": "ONLINE",
-      "healthy": true
-    },
-    {
-      "name": "archive",
-      "used": "443.2 GB",
-      "total": "4.0 TB",
-      "pct": 11.1,
-      "status": "ok",
-      "pool_status": "ONLINE",
-      "healthy": true
-    },
-    {
-      "name": "core",
-      "used": "7.6 GB",
-      "total": "476.7 GB",
-      "pct": 1.6,
-      "status": "ok",
-      "pool_status": "ONLINE",
-      "healthy": true
-    }
-  ]
+  "storage": []
 }

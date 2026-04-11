@@ -32,6 +32,7 @@ const { title, description = 'Living Homelab — built in public by Kagiso.' } =
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body>
+    <div id="maintenance-banner" style="display:none"></div>
     <Nav />
     <main>
       <slot />
@@ -46,6 +47,16 @@ const { title, description = 'Living Homelab — built in public by Kagiso.' } =
 </html>
 
 <style>
+  #maintenance-banner {
+    background: #b45309;
+    color: #fef3c7;
+    text-align: center;
+    padding: 0.6rem 1.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    letter-spacing: 0.02em;
+  }
+
   main {
     min-height: calc(100vh - 60px - 56px);
   }
@@ -67,6 +78,19 @@ const { title, description = 'Living Homelab — built in public by Kagiso.' } =
 </style>
 
 <script>
+  fetch('/data/maintenance.json')
+    .then(r => r.json())
+    .then(data => {
+      if (data.active) {
+        const banner = document.getElementById('maintenance-banner');
+        if (banner) {
+          banner.textContent = data.message || 'Homelab is currently under maintenance — some services may be unavailable.';
+          banner.style.display = 'block';
+        }
+      }
+    })
+    .catch(() => {});
+
   const el = document.getElementById('footer-time');
   if (el) {
     const update = () => {

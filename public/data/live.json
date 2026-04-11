@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-11T20:27:17Z",
-  "fetched_at": "2026-04-11T20:27:17Z",
+  "updated": "2026-04-11T20:59:53Z",
+  "fetched_at": "2026-04-11T20:59:53Z",
   "cards": [
     {
       "label": "Workloads",
@@ -11,7 +11,7 @@
     {
       "label": "Flux",
       "value": "19/19 synced",
-      "sub": "3d6h",
+      "sub": "3d7h",
       "status": "ok"
     },
     {
@@ -22,13 +22,13 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "44h 27m ago",
+      "value": "45h 0m ago",
       "sub": "last snapshot",
       "status": "warn"
     },
     {
       "label": "Velero",
-      "value": "1h 27m ago",
+      "value": "2h 0m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
@@ -71,13 +71,13 @@
   "flux": {
     "ready": 19,
     "total": 19,
-    "last_sync": "3d6h",
+    "last_sync": "3d7h",
     "status": "ok",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
-        "age": "3d6h",
+        "age": "3d7h",
         "ready": true
       },
       {
@@ -89,103 +89,103 @@
       {
         "namespace": "flux-system",
         "name": "platform-authentik",
-        "age": "3d6h",
+        "age": "3d7h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
-        "age": "3d6h",
+        "age": "3d7h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
-        "age": "3d6h",
+        "age": "3d7h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
-        "age": "3d6h",
+        "age": "3d7h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
-        "age": "3d6h",
+        "age": "3d7h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-namespaces",
-        "age": "3d6h",
+        "age": "3d7h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking",
-        "age": "3d6h",
+        "age": "3d7h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-config",
-        "age": "3d6h",
+        "age": "3d7h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-tls",
-        "age": "3d6h",
+        "age": "3d7h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability",
-        "age": "3d6h",
+        "age": "3d7h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
-        "age": "3d6h",
+        "age": "3d7h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
-        "age": "3d6h",
+        "age": "3d7h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security",
-        "age": "3d6h",
+        "age": "3d7h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security-issuers",
-        "age": "3d6h",
+        "age": "3d7h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-storage",
-        "age": "3d6h",
+        "age": "3d7h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade",
-        "age": "3d6h",
+        "age": "3d7h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade-plans",
-        "age": "3d6h",
+        "age": "3d7h",
         "ready": true
       }
     ]
@@ -214,12 +214,12 @@
     {
       "name": "Radarr",
       "tag": "Radarr: \u2014 movies",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "name": "Lidarr",
       "tag": "Lidarr: \u2014 artists",
-      "status": "ok"
+      "status": "unknown"
     }
   ],
   "media": [
@@ -237,8 +237,8 @@
     }
   ],
   "network": {
-    "fw_hits": 8856,
-    "latency_ms": 4.9,
+    "fw_hits": 9138,
+    "latency_ms": 5.0,
     "offenders": [],
     "pihole": {
       "total": 1510,
@@ -249,8 +249,8 @@
   "bran": {
     "temp_c": 55.3,
     "temp_status": "ok",
-    "load": 0.57,
-    "mem_pct": 43.1
+    "load": 0.38,
+    "mem_pct": 44.0
   },
   "ups": {
     "charge": 100,
@@ -288,7 +288,7 @@
     },
     {
       "name": "core",
-      "used": "7.8 GB",
+      "used": "7.9 GB",
       "total": "476.7 GB",
       "pct": 1.6,
       "status": "ok",

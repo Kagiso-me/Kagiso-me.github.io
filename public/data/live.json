@@ -1,18 +1,18 @@
 {
-  "updated": "2026-04-11T23:00:40Z",
-  "fetched_at": "2026-04-11T23:00:40Z",
+  "updated": "2026-04-11T23:57:55Z",
+  "fetched_at": "2026-04-11T23:57:55Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "54/60",
+      "value": "58/64",
       "sub": "pods running",
       "status": "warn"
     },
     {
       "label": "Flux",
-      "value": "19/19 synced",
-      "sub": "3d9h",
-      "status": "ok"
+      "value": "1/19 synced",
+      "sub": "3d10h",
+      "status": "warn"
     },
     {
       "label": "Docker Appdata",
@@ -22,13 +22,13 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "47h 1m ago",
+      "value": "47h 58m ago",
       "sub": "last snapshot",
       "status": "warn"
     },
     {
       "label": "Velero",
-      "value": "4h 1m ago",
+      "value": "4h 58m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
@@ -44,16 +44,16 @@
       "name": "jaime",
       "role": "control-plane",
       "status": "ok",
-      "pods": "6/110",
-      "cpu": "13%",
-      "memory": "1%",
+      "pods": "9/110",
+      "cpu": "14%",
+      "memory": "2%",
       "pressure": []
     },
     {
       "name": "tyrion",
       "role": "control-plane",
       "status": "ok",
-      "pods": "7/110",
+      "pods": "9/110",
       "cpu": "14%",
       "memory": "3%",
       "pressure": []
@@ -62,131 +62,131 @@
       "name": "tywin",
       "role": "control-plane",
       "status": "ok",
-      "pods": "44/110",
+      "pods": "43/110",
       "cpu": "50%",
       "memory": "11%",
       "pressure": []
     }
   ],
   "flux": {
-    "ready": 19,
+    "ready": 1,
     "total": 19,
-    "last_sync": "3d9h",
-    "status": "ok",
+    "last_sync": "3d10h",
+    "status": "warn",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
-        "age": "3d9h",
-        "ready": true
+        "age": "3d10h",
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "3d11h",
+        "age": "3d12h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-authentik",
-        "age": "3d9h",
-        "ready": true
+        "age": "3d10h",
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
-        "age": "3d9h",
-        "ready": true
+        "age": "3d10h",
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
-        "age": "3d9h",
-        "ready": true
+        "age": "3d10h",
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
-        "age": "3d9h",
-        "ready": true
+        "age": "3d10h",
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
-        "age": "3d9h",
-        "ready": true
+        "age": "3d10h",
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-namespaces",
-        "age": "3d9h",
-        "ready": true
+        "age": "3d10h",
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking",
-        "age": "3d9h",
-        "ready": true
+        "age": "3d10h",
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-config",
-        "age": "3d9h",
-        "ready": true
+        "age": "3d10h",
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-tls",
-        "age": "3d9h",
-        "ready": true
+        "age": "3d10h",
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability",
-        "age": "3d9h",
-        "ready": true
+        "age": "3d10h",
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
-        "age": "3d9h",
-        "ready": true
+        "age": "3d10h",
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
-        "age": "3d9h",
-        "ready": true
+        "age": "3d10h",
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-security",
-        "age": "3d9h",
-        "ready": true
+        "age": "3d10h",
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-security-issuers",
-        "age": "3d9h",
-        "ready": true
+        "age": "3d10h",
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-storage",
-        "age": "3d9h",
-        "ready": true
+        "age": "3d10h",
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade",
-        "age": "3d9h",
-        "ready": true
+        "age": "3d10h",
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade-plans",
-        "age": "3d9h",
-        "ready": true
+        "age": "3d10h",
+        "ready": false
       }
     ]
   },
@@ -209,7 +209,7 @@
     {
       "name": "Sonarr",
       "tag": "Sonarr: \u2014 series",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "name": "Radarr",
@@ -226,7 +226,7 @@
     {
       "name": "Plex",
       "label": "idle",
-      "status": "ok",
+      "status": "unknown",
       "playing": false
     },
     {
@@ -237,7 +237,7 @@
     }
   ],
   "network": {
-    "fw_hits": 10509,
+    "fw_hits": 11001,
     "latency_ms": 5.0,
     "offenders": [],
     "pihole": {
@@ -247,10 +247,10 @@
     }
   },
   "bran": {
-    "temp_c": 55.8,
+    "temp_c": 56.9,
     "temp_status": "ok",
-    "load": 0.4,
-    "mem_pct": 41.8
+    "load": 0.56,
+    "mem_pct": 50.9
   },
   "ups": {
     "charge": 100,
@@ -263,9 +263,9 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "19m ago",
-    "message": "docs(changelog): append entry for 588f635",
-    "sha": "8c30eb6"
+    "age": "3m ago",
+    "message": "fix(ingress): correct HTTP\u2192HTTPS redirect entrypoint key for traefik-internal",
+    "sha": "4a64840"
   },
   "storage": [
     {
@@ -288,9 +288,9 @@
     },
     {
       "name": "core",
-      "used": "7.8 GB",
+      "used": "7.9 GB",
       "total": "476.7 GB",
-      "pct": 1.6,
+      "pct": 1.7,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true

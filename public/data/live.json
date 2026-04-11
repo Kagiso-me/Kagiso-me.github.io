@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-11T21:40:45Z",
-  "fetched_at": "2026-04-11T21:40:45Z",
+  "updated": "2026-04-11T22:27:04Z",
+  "fetched_at": "2026-04-11T22:27:04Z",
   "cards": [
     {
       "label": "Workloads",
@@ -10,9 +10,9 @@
     },
     {
       "label": "Flux",
-      "value": "19/19 synced",
+      "value": "18/19 synced",
       "sub": "3d8h",
-      "status": "ok"
+      "status": "warn"
     },
     {
       "label": "Docker Appdata",
@@ -22,13 +22,13 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "45h 41m ago",
+      "value": "46h 27m ago",
       "sub": "last snapshot",
       "status": "warn"
     },
     {
       "label": "Velero",
-      "value": "2h 41m ago",
+      "value": "3h 27m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
@@ -69,21 +69,21 @@
     }
   ],
   "flux": {
-    "ready": 19,
+    "ready": 18,
     "total": 19,
     "last_sync": "3d8h",
-    "status": "ok",
+    "status": "warn",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
         "age": "3d8h",
-        "ready": true
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "3d10h",
+        "age": "3d11h",
         "ready": true
       },
       {
@@ -204,12 +204,12 @@
     {
       "name": "SABnzbd",
       "tag": "SABnzbd: idle",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "name": "Sonarr",
       "tag": "Sonarr: \u2014 series",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "name": "Radarr",
@@ -219,7 +219,7 @@
     {
       "name": "Lidarr",
       "tag": "Lidarr: \u2014 artists",
-      "status": "ok"
+      "status": "unknown"
     }
   ],
   "media": [
@@ -237,20 +237,20 @@
     }
   ],
   "network": {
-    "fw_hits": 9670,
-    "latency_ms": 8.3,
+    "fw_hits": 10173,
+    "latency_ms": 4.9,
     "offenders": [],
     "pihole": {
-      "total": 1510,
-      "blocked": 295,
-      "percent": 19.5
+      "total": 0,
+      "blocked": 0,
+      "percent": 0
     }
   },
   "bran": {
-    "temp_c": 55.3,
+    "temp_c": 55.8,
     "temp_status": "ok",
-    "load": 0.29,
-    "mem_pct": 41.0
+    "load": 0.54,
+    "mem_pct": 41.6
   },
   "ups": {
     "charge": 100,
@@ -263,9 +263,9 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "1d ago",
-    "message": "chore(deps): update prom/node-exporter docker tag to v1.11.1 (#76)",
-    "sha": "dc7d0fe"
+    "age": "34m ago",
+    "message": "docs(changelog): append entry for efb4a1b",
+    "sha": "4f6a605"
   },
   "storage": [
     {
@@ -288,7 +288,7 @@
     },
     {
       "name": "core",
-      "used": "7.8 GB",
+      "used": "7.9 GB",
       "total": "476.7 GB",
       "pct": 1.6,
       "status": "ok",

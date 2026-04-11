@@ -1,5 +1,17 @@
 [
   {
+    "slug": "2026-04-add-seerr-and-cluster-maintenance-playbooks",
+    "date": "2026-04",
+    "type": "DEPLOY",
+    "title": "add Seerr and cluster maintenance playbooks",
+    "summary": "add Seerr and cluster maintenance playbooks",
+    "commit": "efb4a1b",
+    "hasDetail": false,
+    "tags": [
+      "DEPLOY"
+    ]
+  },
+  {
     "slug": "2026-04-migrate-all-ci-runners-from-varys-to-bran",
     "date": "2026-04",
     "type": "DEPLOY",

@@ -494,12 +494,12 @@ build_immich() {
     local stats
     stats=$(curl -sf --max-time 5 \
       -H "x-api-key: ${IMMICH_API_KEY:-}" \
-      "${IMMICH_URL}/api/user/statistics" 2>/dev/null || echo "")
+      "${IMMICH_URL}/api/assets/statistics" 2>/dev/null || echo "")
     if [ -n "$stats" ]; then
       label=$(python3 -c "
 import json, sys
 d = json.loads(sys.argv[1])
-photos = d.get('photos', 0)
+photos = d.get('images', 0)
 videos = d.get('videos', 0)
 if photos >= 1000:
   p = f'{photos/1000:.1f}k'

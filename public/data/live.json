@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-12T10:05:50Z",
-  "fetched_at": "2026-04-12T10:05:50Z",
+  "updated": "2026-04-12T11:05:23Z",
+  "fetched_at": "2026-04-12T11:05:23Z",
   "cards": [
     {
       "label": "Workloads",
@@ -10,8 +10,8 @@
     },
     {
       "label": "Flux",
-      "value": "2/19 synced",
-      "sub": "3d20h",
+      "value": "17/19 synced",
+      "sub": "3d21h",
       "status": "warn"
     },
     {
@@ -22,19 +22,19 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "10h 6m ago",
+      "value": "11h 5m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 6m ago",
+      "value": "4h 5m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "9h 6m ago",
+      "value": "10h 5m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     }
@@ -69,124 +69,124 @@
     }
   ],
   "flux": {
-    "ready": 2,
+    "ready": 17,
     "total": 19,
-    "last_sync": "3d20h",
+    "last_sync": "3d21h",
     "status": "warn",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
-        "age": "3d20h",
+        "age": "3d21h",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "3d22h",
+        "age": "3d23h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-authentik",
-        "age": "3d20h",
+        "age": "3d21h",
         "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
-        "age": "3d20h",
-        "ready": false
+        "age": "3d21h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
-        "age": "3d20h",
-        "ready": false
+        "age": "3d21h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
-        "age": "3d20h",
-        "ready": false
+        "age": "3d21h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
-        "age": "3d20h",
-        "ready": false
+        "age": "3d21h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-namespaces",
-        "age": "3d20h",
-        "ready": false
+        "age": "3d21h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking",
-        "age": "3d20h",
+        "age": "3d21h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-config",
-        "age": "3d20h",
-        "ready": false
+        "age": "3d21h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-tls",
-        "age": "3d20h",
-        "ready": false
+        "age": "3d21h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability",
-        "age": "3d20h",
-        "ready": false
+        "age": "3d21h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
-        "age": "3d20h",
-        "ready": false
+        "age": "3d21h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
-        "age": "3d20h",
-        "ready": false
+        "age": "3d21h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security",
-        "age": "3d20h",
-        "ready": false
+        "age": "3d21h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security-issuers",
-        "age": "3d20h",
-        "ready": false
+        "age": "3d21h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-storage",
-        "age": "3d20h",
-        "ready": false
+        "age": "3d21h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade",
-        "age": "3d20h",
-        "ready": false
+        "age": "3d21h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade-plans",
-        "age": "3d20h",
-        "ready": false
+        "age": "3d21h",
+        "ready": true
       }
     ]
   },
@@ -237,8 +237,8 @@
     }
   ],
   "network": {
-    "fw_hits": 16639,
-    "latency_ms": 4.9,
+    "fw_hits": 17505,
+    "latency_ms": 5.1,
     "offenders": [],
     "pihole": {
       "total": 0,
@@ -247,10 +247,10 @@
     }
   },
   "bran": {
-    "temp_c": 56.9,
+    "temp_c": 55.8,
     "temp_status": "ok",
-    "load": 1.99,
-    "mem_pct": 50.2
+    "load": 0.62,
+    "mem_pct": 41.3
   },
   "ups": {
     "charge": 100,
@@ -263,9 +263,9 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "1m ago",
-    "message": "fix(auth): move authentik admin paths to internal ingress only",
-    "sha": "2dcca4c"
+    "age": "15m ago",
+    "message": "docs(changelog): append entry for 2dcca4c",
+    "sha": "a4462c4"
   },
   "storage": [
     {
@@ -288,7 +288,7 @@
     },
     {
       "name": "core",
-      "used": "8.5 GB",
+      "used": "8.6 GB",
       "total": "476.7 GB",
       "pct": 1.8,
       "status": "ok",

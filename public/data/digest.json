@@ -1,5 +1,17 @@
 [
   {
+    "slug": "2026-04-wire-resend-smtp-into-nextcloud-vaultwarden-and-authentik",
+    "date": "2026-04",
+    "type": "DEPLOY",
+    "title": "wire Resend SMTP into Nextcloud, Vaultwarden, and Authentik",
+    "summary": "wire Resend SMTP into Nextcloud, Vaultwarden, and Authentik",
+    "commit": "43b9cee",
+    "hasDetail": false,
+    "tags": [
+      "DEPLOY"
+    ]
+  },
+  {
     "slug": "2026-04-add-seerr-and-cluster-maintenance-playbooks",
     "date": "2026-04",
     "type": "DEPLOY",

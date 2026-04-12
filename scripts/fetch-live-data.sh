@@ -251,7 +251,7 @@ LIDARR_URL="http://${DOCKER_HOST}:8686"
 NAVIDROME_URL="http://${DOCKER_HOST}:4533"
 UPTIME_KUMA_URL="http://${DOCKER_HOST}:3001"
 VAULTWARDEN_URL="https://vault.local.kagiso.me"
-NEXTCLOUD_URL="https://cloud.local.kagiso.me"
+NEXTCLOUD_URL="https://cloud.kagiso.me"
 IMMICH_URL="https://photos.kagiso.me"
 # API keys injected as environment variables from GitHub Actions secrets
 # Set locally on varys via ~/.bashrc if running the script manually:

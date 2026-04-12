@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-12T22:33:22Z",
-  "fetched_at": "2026-04-12T22:33:22Z",
+  "updated": "2026-04-12T22:42:17Z",
+  "fetched_at": "2026-04-12T22:42:17Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "68h 31m ago",
+      "value": "68h 40m ago",
       "sub": "last backup",
       "status": "crit"
     },
     {
       "label": "etcd Snapshot",
-      "value": "10h 33m ago",
+      "value": "10h 42m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 33m ago",
+      "value": "3h 42m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "21h 33m ago",
+      "value": "21h 42m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     }
@@ -203,7 +203,7 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 215.9 GB left",
+      "tag": "SABnzbd: downloading \u00b7 234.5 GB left",
       "status": "ok"
     },
     {
@@ -237,8 +237,8 @@
     }
   ],
   "network": {
-    "fw_hits": 25429,
-    "latency_ms": 4.8,
+    "fw_hits": 25595,
+    "latency_ms": 5.0,
     "offenders": [],
     "pihole": {
       "total": 0,
@@ -247,10 +247,10 @@
     }
   },
   "bran": {
-    "temp_c": 54.8,
+    "temp_c": 55.3,
     "temp_status": "ok",
-    "load": 0.98,
-    "mem_pct": 42.5
+    "load": 1.0,
+    "mem_pct": 42.6
   },
   "ups": {
     "charge": 100,
@@ -263,7 +263,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "56m ago",
+    "age": "1h ago",
     "message": "fix(nextcloud): allow local remote servers for OIDC discovery via split-horizon ",
     "sha": "94512f3"
   },
@@ -288,7 +288,7 @@
     },
     {
       "name": "core",
-      "used": "9.5 GB",
+      "used": "9.6 GB",
       "total": "476.7 GB",
       "pct": 2.0,
       "status": "ok",

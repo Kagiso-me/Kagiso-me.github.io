@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-12T23:19:07Z",
-  "fetched_at": "2026-04-12T23:19:07Z",
+  "updated": "2026-04-12T23:29:50Z",
+  "fetched_at": "2026-04-12T23:29:50Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "69h 17m ago",
+      "value": "69h 28m ago",
       "sub": "last backup",
       "status": "crit"
     },
     {
       "label": "etcd Snapshot",
-      "value": "11h 19m ago",
+      "value": "11h 29m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "4h 19m ago",
+      "value": "4h 30m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "22h 19m ago",
+      "value": "22h 29m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     }
@@ -203,12 +203,12 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 341.4 GB left",
+      "tag": "SABnzbd: downloading \u00b7 330.2 GB left",
       "status": "ok"
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: 83 series",
+      "tag": "Sonarr: 77 series",
       "status": "ok"
     },
     {
@@ -237,8 +237,8 @@
     }
   ],
   "network": {
-    "fw_hits": 25930,
-    "latency_ms": 5.0,
+    "fw_hits": 26007,
+    "latency_ms": 4.9,
     "offenders": [],
     "pihole": {
       "total": 0,
@@ -247,10 +247,10 @@
     }
   },
   "bran": {
-    "temp_c": 55.8,
+    "temp_c": 54.8,
     "temp_status": "ok",
-    "load": 0.48,
-    "mem_pct": 41.0
+    "load": 0.79,
+    "mem_pct": 41.5
   },
   "ups": {
     "charge": 100,
@@ -263,7 +263,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "10m ago",
+    "age": "21m ago",
     "message": "feat(traefik): apply secure-headers, compress, and crowdsec-bouncer middlewares ",
     "sha": "a6fc69c"
   },
@@ -272,7 +272,7 @@
       "name": "tera",
       "used": "5.3 TB",
       "total": "7.9 TB",
-      "pct": 67.4,
+      "pct": 67.2,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true

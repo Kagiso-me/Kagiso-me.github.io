@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-12T22:59:00Z",
-  "fetched_at": "2026-04-12T22:59:00Z",
+  "updated": "2026-04-12T23:09:16Z",
+  "fetched_at": "2026-04-12T23:09:16Z",
   "cards": [
     {
       "label": "Workloads",
@@ -10,31 +10,31 @@
     },
     {
       "label": "Flux",
-      "value": "13/19 synced",
+      "value": "19/19 synced",
       "sub": "4d9h",
-      "status": "warn"
+      "status": "ok"
     },
     {
       "label": "Docker Appdata",
-      "value": "68h 57m ago",
+      "value": "69h 7m ago",
       "sub": "last backup",
       "status": "crit"
     },
     {
       "label": "etcd Snapshot",
-      "value": "10h 59m ago",
+      "value": "11h 9m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 59m ago",
+      "value": "4h 9m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "21h 59m ago",
+      "value": "22h 9m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     }
@@ -54,8 +54,8 @@
       "role": "control-plane",
       "status": "ok",
       "pods": "9/110",
-      "cpu": "13%",
-      "memory": "1%",
+      "cpu": "25%",
+      "memory": "5%",
       "pressure": []
     },
     {
@@ -69,16 +69,16 @@
     }
   ],
   "flux": {
-    "ready": 13,
+    "ready": 19,
     "total": 19,
     "last_sync": "4d9h",
-    "status": "warn",
+    "status": "ok",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
         "age": "4d9h",
-        "ready": false
+        "ready": true
       },
       {
         "namespace": "flux-system",
@@ -90,7 +90,7 @@
         "namespace": "flux-system",
         "name": "platform-authentik",
         "age": "4d9h",
-        "ready": false
+        "ready": true
       },
       {
         "namespace": "flux-system",
@@ -102,19 +102,19 @@
         "namespace": "flux-system",
         "name": "platform-backup-config",
         "age": "4d9h",
-        "ready": false
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
         "age": "4d9h",
-        "ready": false
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
         "age": "4d9h",
-        "ready": false
+        "ready": true
       },
       {
         "namespace": "flux-system",
@@ -150,7 +150,7 @@
         "namespace": "flux-system",
         "name": "platform-observability-config",
         "age": "4d9h",
-        "ready": false
+        "ready": true
       },
       {
         "namespace": "flux-system",
@@ -193,18 +193,18 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: online",
+      "tag": "Immich: 0 photos \u00b7 0 videos",
       "status": "ok"
     },
     {
       "name": "Nextcloud",
-      "tag": "Nextcloud: 60.9 MB used",
-      "status": "ok"
+      "tag": "Nextcloud: offline",
+      "status": "crit"
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 297.0 GB left",
-      "status": "ok"
+      "tag": "SABnzbd: idle",
+      "status": "unknown"
     },
     {
       "name": "Sonarr",
@@ -237,8 +237,8 @@
     }
   ],
   "network": {
-    "fw_hits": 25737,
-    "latency_ms": 4.4,
+    "fw_hits": 25842,
+    "latency_ms": 4.8,
     "offenders": [],
     "pihole": {
       "total": 0,
@@ -247,10 +247,10 @@
     }
   },
   "bran": {
-    "temp_c": 56.9,
+    "temp_c": 60.7,
     "temp_status": "ok",
-    "load": 1.08,
-    "mem_pct": 48.5
+    "load": 1.95,
+    "mem_pct": 48.8
   },
   "ups": {
     "charge": 100,
@@ -263,16 +263,16 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "2m ago",
-    "message": "fix(nextcloud): resolve admin warnings and improve performance",
-    "sha": "8d1bbb8"
+    "age": "0m ago",
+    "message": "feat(traefik): apply secure-headers, compress, and crowdsec-bouncer middlewares ",
+    "sha": "a6fc69c"
   },
   "storage": [
     {
       "name": "tera",
       "used": "5.3 TB",
       "total": "7.9 TB",
-      "pct": 67.3,
+      "pct": 67.4,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -288,7 +288,7 @@
     },
     {
       "name": "core",
-      "used": "9.6 GB",
+      "used": "9.4 GB",
       "total": "476.7 GB",
       "pct": 2.0,
       "status": "ok",

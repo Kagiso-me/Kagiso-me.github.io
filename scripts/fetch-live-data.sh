@@ -458,11 +458,31 @@ build_vaultwarden() {
   echo "{\"label\":\"${label}\",\"status\":\"${status}\"}"
 }
 
-# ── Nextcloud: online check ───────────────────────────────────────────────────
+# ── Nextcloud: storage used ───────────────────────────────────────────────────
 build_nextcloud() {
   local label="offline" status="crit"
   if curl -sf --max-time 5 "${NEXTCLOUD_URL}/status.php" >/dev/null 2>&1; then
-    label="online"; status="ok"
+    local stats
+    stats=$(curl -sf --max-time 5 \
+      -u "${NEXTCLOUD_USER:-}:${NEXTCLOUD_PASS:-}" \
+      -H "OCS-APIRequest: true" \
+      "${NEXTCLOUD_URL}/ocs/v1.php/cloud/user?format=json" 2>/dev/null || echo "")
+    if [ -n "$stats" ]; then
+      label=$(python3 -c "
+import json, sys
+d = json.loads(sys.argv[1])
+used = d.get('ocs', {}).get('data', {}).get('quota', {}).get('used', 0)
+for unit, div in [('TB', 1e12), ('GB', 1e9), ('MB', 1e6)]:
+    if used >= div:
+        print(f'{used/div:.1f} {unit} used')
+        break
+else:
+    print(f'{used} B used')
+" "$stats" 2>/dev/null || echo "online")
+    else
+      label="online"
+    fi
+    status="ok"
   fi
   echo "{\"label\":\"${label}\",\"status\":\"${status}\"}"
 }

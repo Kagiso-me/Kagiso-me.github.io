@@ -467,11 +467,30 @@ build_nextcloud() {
   echo "{\"label\":\"${label}\",\"status\":\"${status}\"}"
 }
 
-# ── Immich: online check ──────────────────────────────────────────────────────
+# ── Immich: photo + video count ───────────────────────────────────────────────
 build_immich() {
   local label="offline" status="crit"
   if curl -sf --max-time 5 "${IMMICH_URL}/api/server/ping" >/dev/null 2>&1; then
-    label="online"; status="ok"
+    local stats
+    stats=$(curl -sf --max-time 5 \
+      -H "x-api-key: ${IMMICH_API_KEY:-}" \
+      "${IMMICH_URL}/api/user/statistics" 2>/dev/null || echo "")
+    if [ -n "$stats" ]; then
+      label=$(python3 -c "
+import json, sys
+d = json.loads(sys.argv[1])
+photos = d.get('photos', 0)
+videos = d.get('videos', 0)
+if photos >= 1000:
+  p = f'{photos/1000:.1f}k'
+else:
+  p = str(photos)
+print(f'{p} photos · {videos} videos')
+" "$stats" 2>/dev/null || echo "online")
+    else
+      label="online"
+    fi
+    status="ok"
   fi
   echo "{\"label\":\"${label}\",\"status\":\"${status}\"}"
 }

@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-12T23:09:16Z",
-  "fetched_at": "2026-04-12T23:09:16Z",
+  "updated": "2026-04-12T23:19:07Z",
+  "fetched_at": "2026-04-12T23:19:07Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "69h 7m ago",
+      "value": "69h 17m ago",
       "sub": "last backup",
       "status": "crit"
     },
     {
       "label": "etcd Snapshot",
-      "value": "11h 9m ago",
+      "value": "11h 19m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "4h 9m ago",
+      "value": "4h 19m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "22h 9m ago",
+      "value": "22h 19m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     }
@@ -83,7 +83,7 @@
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "4d11h",
+        "age": "4d12h",
         "ready": true
       },
       {
@@ -198,13 +198,13 @@
     },
     {
       "name": "Nextcloud",
-      "tag": "Nextcloud: offline",
-      "status": "crit"
+      "tag": "Nextcloud: 60.9 MB used",
+      "status": "ok"
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: idle",
-      "status": "unknown"
+      "tag": "SABnzbd: downloading \u00b7 341.4 GB left",
+      "status": "ok"
     },
     {
       "name": "Sonarr",
@@ -237,8 +237,8 @@
     }
   ],
   "network": {
-    "fw_hits": 25842,
-    "latency_ms": 4.8,
+    "fw_hits": 25930,
+    "latency_ms": 5.0,
     "offenders": [],
     "pihole": {
       "total": 0,
@@ -247,10 +247,10 @@
     }
   },
   "bran": {
-    "temp_c": 60.7,
+    "temp_c": 55.8,
     "temp_status": "ok",
-    "load": 1.95,
-    "mem_pct": 48.8
+    "load": 0.48,
+    "mem_pct": 41.0
   },
   "ups": {
     "charge": 100,
@@ -263,7 +263,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "0m ago",
+    "age": "10m ago",
     "message": "feat(traefik): apply secure-headers, compress, and crowdsec-bouncer middlewares ",
     "sha": "a6fc69c"
   },

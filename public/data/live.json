@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-12T19:36:14Z",
-  "fetched_at": "2026-04-12T19:36:14Z",
+  "updated": "2026-04-12T20:30:09Z",
+  "fetched_at": "2026-04-12T20:30:09Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "65h 34m ago",
+      "value": "66h 28m ago",
       "sub": "last backup",
       "status": "crit"
     },
     {
       "label": "etcd Snapshot",
-      "value": "7h 36m ago",
+      "value": "8h 30m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "36m ago",
+      "value": "1h 30m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "18h 36m ago",
+      "value": "19h 30m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     }
@@ -83,7 +83,7 @@
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "4d8h",
+        "age": "4d9h",
         "ready": true
       },
       {
@@ -203,7 +203,7 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 295.2 GB left",
+      "tag": "SABnzbd: downloading \u00b7 257.2 GB left",
       "status": "ok"
     },
     {
@@ -237,8 +237,8 @@
     }
   ],
   "network": {
-    "fw_hits": 23647,
-    "latency_ms": 7.8,
+    "fw_hits": 24236,
+    "latency_ms": 14.5,
     "offenders": [],
     "pihole": {
       "total": 0,
@@ -249,8 +249,8 @@
   "bran": {
     "temp_c": 55.3,
     "temp_status": "ok",
-    "load": 1.06,
-    "mem_pct": 43.9
+    "load": 0.58,
+    "mem_pct": 43.7
   },
   "ups": {
     "charge": 100,
@@ -263,7 +263,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "1h ago",
+    "age": "2h ago",
     "message": "fix(nextcloud): remove hostAliases \u2014 CoreDNS split-horizon handles auth.kagiso.m",
     "sha": "76cffd5"
   },
@@ -272,7 +272,7 @@
       "name": "tera",
       "used": "5.2 TB",
       "total": "7.9 TB",
-      "pct": 66.3,
+      "pct": 66.5,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -288,7 +288,7 @@
     },
     {
       "name": "core",
-      "used": "9.4 GB",
+      "used": "9.5 GB",
       "total": "476.7 GB",
       "pct": 2.0,
       "status": "ok",

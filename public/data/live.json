@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-11T23:57:55Z",
-  "fetched_at": "2026-04-11T23:57:55Z",
+  "updated": "2026-04-12T02:45:18Z",
+  "fetched_at": "2026-04-12T02:45:18Z",
   "cards": [
     {
       "label": "Workloads",
@@ -10,9 +10,9 @@
     },
     {
       "label": "Flux",
-      "value": "1/19 synced",
-      "sub": "3d10h",
-      "status": "warn"
+      "value": "19/19 synced",
+      "sub": "3d13h",
+      "status": "ok"
     },
     {
       "label": "Docker Appdata",
@@ -22,21 +22,21 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "47h 58m ago",
+      "value": "2h 45m ago",
       "sub": "last snapshot",
-      "status": "warn"
+      "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "4h 58m ago",
+      "value": "1h 45m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "\u2014",
+      "value": "1h 45m ago",
       "sub": "age keys \u00b7 varys",
-      "status": "unknown"
+      "status": "ok"
     }
   ],
   "nodes": [
@@ -69,124 +69,124 @@
     }
   ],
   "flux": {
-    "ready": 1,
+    "ready": 19,
     "total": 19,
-    "last_sync": "3d10h",
-    "status": "warn",
+    "last_sync": "3d13h",
+    "status": "ok",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
-        "age": "3d10h",
-        "ready": false
+        "age": "3d13h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "3d12h",
+        "age": "3d15h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-authentik",
-        "age": "3d10h",
-        "ready": false
+        "age": "3d13h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
-        "age": "3d10h",
-        "ready": false
+        "age": "3d13h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
-        "age": "3d10h",
-        "ready": false
+        "age": "3d13h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
-        "age": "3d10h",
-        "ready": false
+        "age": "3d13h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
-        "age": "3d10h",
-        "ready": false
+        "age": "3d13h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-namespaces",
-        "age": "3d10h",
-        "ready": false
+        "age": "3d13h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking",
-        "age": "3d10h",
-        "ready": false
+        "age": "3d13h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-config",
-        "age": "3d10h",
-        "ready": false
+        "age": "3d13h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-tls",
-        "age": "3d10h",
-        "ready": false
+        "age": "3d13h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability",
-        "age": "3d10h",
-        "ready": false
+        "age": "3d13h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
-        "age": "3d10h",
-        "ready": false
+        "age": "3d13h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
-        "age": "3d10h",
-        "ready": false
+        "age": "3d13h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security",
-        "age": "3d10h",
-        "ready": false
+        "age": "3d13h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security-issuers",
-        "age": "3d10h",
-        "ready": false
+        "age": "3d13h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-storage",
-        "age": "3d10h",
-        "ready": false
+        "age": "3d13h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade",
-        "age": "3d10h",
-        "ready": false
+        "age": "3d13h",
+        "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade-plans",
-        "age": "3d10h",
-        "ready": false
+        "age": "3d13h",
+        "ready": true
       }
     ]
   },
@@ -237,8 +237,8 @@
     }
   ],
   "network": {
-    "fw_hits": 11001,
-    "latency_ms": 5.0,
+    "fw_hits": 12460,
+    "latency_ms": 5.1,
     "offenders": [],
     "pihole": {
       "total": 0,
@@ -247,10 +247,10 @@
     }
   },
   "bran": {
-    "temp_c": 56.9,
+    "temp_c": 54.2,
     "temp_status": "ok",
-    "load": 0.56,
-    "mem_pct": 50.9
+    "load": 0.62,
+    "mem_pct": 43.0
   },
   "ups": {
     "charge": 100,
@@ -263,9 +263,9 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "3m ago",
-    "message": "fix(ingress): correct HTTP\u2192HTTPS redirect entrypoint key for traefik-internal",
-    "sha": "4a64840"
+    "age": "2h ago",
+    "message": "fix(ingress): add missing exposedPort to websecure-int entrypoint",
+    "sha": "04a2715"
   },
   "storage": [
     {
@@ -279,7 +279,7 @@
     },
     {
       "name": "archive",
-      "used": "443.3 GB",
+      "used": "443.4 GB",
       "total": "4.0 TB",
       "pct": 11.1,
       "status": "ok",
@@ -288,7 +288,7 @@
     },
     {
       "name": "core",
-      "used": "7.9 GB",
+      "used": "8.0 GB",
       "total": "476.7 GB",
       "pct": 1.7,
       "status": "ok",

@@ -31,6 +31,8 @@ jobs:
           PIHOLE_PASSWORD:   ${{ secrets.PIHOLE_PASSWORD }}
           TRUENAS_API_KEY:   ${{ secrets.TRUENAS_API_KEY }}
           IMMICH_API_KEY:    ${{ secrets.IMMICH_API_KEY }}
+          NEXTCLOUD_USER:    ${{ secrets.NEXTCLOUD_USER }}
+          NEXTCLOUD_PASS:    ${{ secrets.NEXTCLOUD_PASS }}
         run: |
           bash scripts/fetch-live-data.sh > public/data/live.json
 

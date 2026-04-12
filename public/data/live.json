@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-12T16:32:31Z",
-  "fetched_at": "2026-04-12T16:32:31Z",
+  "updated": "2026-04-12T17:30:44Z",
+  "fetched_at": "2026-04-12T17:30:44Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "62h 31m ago",
+      "value": "63h 29m ago",
       "sub": "last backup",
       "status": "crit"
     },
     {
       "label": "etcd Snapshot",
-      "value": "4h 32m ago",
+      "value": "5h 30m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 32m ago",
+      "value": "4h 30m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "15h 32m ago",
+      "value": "16h 30m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     }
@@ -83,7 +83,7 @@
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "4d5h",
+        "age": "4d6h",
         "ready": true
       },
       {
@@ -203,7 +203,7 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 363.5 GB left",
+      "tag": "SABnzbd: idle",
       "status": "ok"
     },
     {
@@ -237,8 +237,8 @@
     }
   ],
   "network": {
-    "fw_hits": 21453,
-    "latency_ms": 7.8,
+    "fw_hits": 22190,
+    "latency_ms": 4.7,
     "offenders": [],
     "pihole": {
       "total": 0,
@@ -247,10 +247,10 @@
     }
   },
   "bran": {
-    "temp_c": 55.8,
+    "temp_c": 56.4,
     "temp_status": "ok",
-    "load": 0.77,
-    "mem_pct": 44.5
+    "load": 0.58,
+    "mem_pct": 50.1
   },
   "ups": {
     "charge": 100,
@@ -263,16 +263,16 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "1h ago",
-    "message": "fix: block admin paths from external ingress (traefik dashboard + immich) (#108)",
-    "sha": "41f58f9"
+    "age": "8m ago",
+    "message": "fix(network-policies): allow apps namespace to reach auth for OIDC (#110)",
+    "sha": "872c9f6"
   },
   "storage": [
     {
       "name": "tera",
       "used": "5.2 TB",
       "total": "7.9 TB",
-      "pct": 65.8,
+      "pct": 65.9,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -288,9 +288,9 @@
     },
     {
       "name": "core",
-      "used": "8.9 GB",
+      "used": "9.3 GB",
       "total": "476.7 GB",
-      "pct": 1.9,
+      "pct": 2.0,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true

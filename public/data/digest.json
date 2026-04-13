@@ -1,5 +1,17 @@
 [
   {
+    "slug": "2026-04-apply-secure-headers-compress-and-crowdsec-bouncer-middlewar",
+    "date": "2026-04",
+    "type": "DEPLOY",
+    "title": "apply secure-headers, compress, and crowdsec-bouncer middlewares globally",
+    "summary": "apply secure-headers, compress, and crowdsec-bouncer middlewares globally",
+    "commit": "a6fc69c",
+    "hasDetail": false,
+    "tags": [
+      "DEPLOY"
+    ]
+  },
+  {
     "slug": "2026-04-wire-resend-smtp-into-nextcloud-vaultwarden-and-authentik",
     "date": "2026-04",
     "type": "DEPLOY",

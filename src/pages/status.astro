@@ -172,24 +172,61 @@ import Layout from '../layouts/Layout.astro';
     margin-bottom: 1.25rem;
   }
 
-  .node-name {
-    font-size: 1.15rem;
+  .node-identity { display: flex; flex-direction: column; gap: 0.35rem; }
+  .node-identity-row { display: flex; align-items: baseline; gap: 0.5rem; }
+
+  .node-field-label {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-muted);
+    flex-shrink: 0;
+    min-width: 2.4rem;
+  }
+
+  .node-field-value {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
     font-weight: 700;
     color: var(--color-heading);
     line-height: 1.2;
   }
 
-  .node-role {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
+  .node-field-value.role {
+    font-size: 0.75rem;
+    font-weight: 500;
     color: var(--color-subtle);
-    margin-top: 0.2rem;
   }
 
-  .node-metrics {
+  .node-status-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.1rem;
+    flex-shrink: 0;
+  }
+
+  .node-status-ring { width: 52px; height: 52px; }
+
+  .node-ring-label {
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    color: var(--color-subtle);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .node-metrics-4 {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 0.5rem;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 0.4rem;
+  }
+
+  @media (max-width: 440px) {
+    .node-metrics-4 { grid-template-columns: 1fr 1fr; }
   }
 
   .metric {
@@ -263,6 +300,63 @@ import Layout from '../layouts/Layout.astro';
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: var(--color-subtle);
+  }
+
+  .flux-row.crit-row {
+    background: color-mix(in srgb, var(--color-crit) 7%, transparent);
+    border-left: 3px solid var(--color-crit);
+    padding-left: calc(1.25rem - 3px);
+  }
+  .flux-row.crit-row:hover {
+    background: color-mix(in srgb, var(--color-crit) 12%, transparent);
+  }
+
+  .flux-summary {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .flux-ratio-bar {
+    flex: 1;
+    min-width: 140px;
+    max-width: 300px;
+    height: 6px;
+    background: var(--color-overlay);
+    border-radius: 3px;
+    overflow: hidden;
+    display: flex;
+  }
+  .flux-ratio-bar-ok   { height: 100%; background: var(--color-ok);   transition: width 0.6s ease; }
+  .flux-ratio-bar-crit { height: 100%; background: var(--color-crit); transition: width 0.6s ease; }
+
+  .flux-ratio-label {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--color-subtle);
+    white-space: nowrap;
+  }
+
+  .flux-name-cell { display: flex; align-items: center; min-width: 0; overflow: hidden; }
+  .flux-name-icon {
+    display: inline-block;
+    width: 1rem;
+    text-align: center;
+    margin-right: 0.4rem;
+    flex-shrink: 0;
+    font-size: 0.85rem;
+  }
+  .flux-name-icon.ok   { color: var(--color-ok); }
+  .flux-name-icon.crit { color: var(--color-crit); }
+  .flux-name-text {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--color-heading);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .badge {
@@ -478,7 +572,6 @@ import Layout from '../layouts/Layout.astro';
       // Nodes
       const nodesGrid = document.getElementById('nodes-grid');
       if (nodesGrid && data.nodes) {
-        // Parse "16%" → 16, "—" → null
         const parsePct = (s: string) => { const m = s?.match(/(\d+)/); return m ? parseInt(m[1]) : null; };
         const barClass = (pct: number | null) => pct == null ? '' : pct >= 85 ? 'crit' : pct >= 70 ? 'warn' : '';
         const metricBar = (val: string, label: string) => {
@@ -490,27 +583,72 @@ import Layout from '../layouts/Layout.astro';
             ${fill}
           </div>`;
         };
+
+        const uptimeRing = (status: string) => {
+          const r = 20, cx = 26, cy = 26, stroke = 4;
+          const circ = 2 * Math.PI * r;
+          const fillPct = status === 'ok' ? 100 : status === 'warn' ? 75 : 25;
+          const used = (fillPct / 100) * circ;
+          const color = status === 'ok' ? 'var(--color-ok)' : status === 'warn' ? 'var(--color-warn)' : 'var(--color-crit)';
+          const glyph = status === 'ok' ? '✓' : status === 'warn' ? '!' : '✗';
+          const label = status === 'ok' ? 'Ready' : status === 'warn' ? 'Degraded' : 'Not Ready';
+          return `<div class="node-status-badge">
+            <svg class="node-status-ring" viewBox="0 0 52 52" fill="none">
+              <circle cx="${cx}" cy="${cy}" r="${r}" stroke="var(--color-overlay)" stroke-width="${stroke}"/>
+              <circle cx="${cx}" cy="${cy}" r="${r}" stroke="${color}" stroke-width="${stroke}"
+                stroke-dasharray="${used.toFixed(1)} ${(circ - used).toFixed(1)}"
+                stroke-dashoffset="${(circ * 0.25).toFixed(1)}"
+                stroke-linecap="round" style="transition:stroke-dasharray 0.6s ease"/>
+              <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="middle"
+                font-family="var(--font-mono)" font-size="11" font-weight="700"
+                fill="${color}">${glyph}</text>
+            </svg>
+            <div class="node-ring-label">${label}</div>
+          </div>`;
+        };
+
+        const fourthMetric = (n: any) => {
+          const pressures = (n.pressure ?? []).filter((p: string) => !/false/i.test(p));
+          const podCap = (n.pods ?? '—/—').split('/')[1] ?? '—';
+          if (pressures.length > 0) {
+            return `<div class="metric" style="border:1px solid color-mix(in srgb,var(--color-crit) 40%,transparent)">
+              <span class="metric-value" style="color:var(--color-crit)">${pressures.length}</span>
+              <span class="metric-label" style="color:var(--color-crit)">Pressure</span>
+            </div>`;
+          }
+          return `<div class="metric">
+            <span class="metric-value" style="font-size:0.8rem">${podCap}</span>
+            <span class="metric-label">Pod Cap</span>
+          </div>`;
+        };
+
         nodesGrid.innerHTML = data.nodes.map((n: any) => {
-          const statusText = n.status === 'ok' ? '✓ Ready' : n.status === 'warn' ? '⚠ Degraded' : n.status === 'crit' ? '✗ Not Ready' : '? Unknown';
           const alertBanner = n.status === 'crit'
-            ? `<div style="margin-top:1rem;padding:0.4rem 0.75rem;background:color-mix(in srgb,var(--color-crit) 15%,transparent);border-radius:6px;font-family:var(--font-mono);font-size:0.72rem;color:var(--color-crit)">⚠ Node not ready — check kubelet</div>`
+            ? `<div style="margin-top:0.875rem;padding:0.4rem 0.75rem;background:color-mix(in srgb,var(--color-crit) 15%,transparent);border-radius:6px;font-family:var(--font-mono);font-size:0.72rem;color:var(--color-crit)">⚠ Node not ready — check kubelet</div>`
             : '';
           return `
           <div class="node-card ${n.status}">
             <div class="node-header">
-              <div>
-                <div class="node-name">${n.name}</div>
-                <div class="node-role">${n.role}</div>
+              <div class="node-identity">
+                <div class="node-identity-row">
+                  <span class="node-field-label">Node</span>
+                  <span class="node-field-value">${n.name}</span>
+                </div>
+                <div class="node-identity-row">
+                  <span class="node-field-label">Role</span>
+                  <span class="node-field-value role">${n.role}</span>
+                </div>
               </div>
-              <span class="badge ${n.status}">${statusText}</span>
+              ${uptimeRing(n.status)}
             </div>
-            <div class="node-metrics">
+            <div class="node-metrics-4">
               ${metricBar(n.cpu,    'CPU')}
               ${metricBar(n.memory, 'Memory')}
               <div class="metric">
                 <span class="metric-value">${n.pods}</span>
                 <span class="metric-label">Pods</span>
               </div>
+              ${fourthMetric(n)}
             </div>
             ${alertBanner}
           </div>`;
@@ -677,12 +815,42 @@ import Layout from '../layouts/Layout.astro';
       if (fluxSection && data.flux) {
         const f = data.flux;
         const ks = f.kustomizations ?? [];
-        fluxSection.innerHTML = `
-          <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;flex-wrap:wrap">
+
+        // Sort: failed first, then ready
+        const sorted = [...ks].sort((a: any, b: any) => {
+          if (!a.ready && b.ready) return -1;
+          if (a.ready && !b.ready) return 1;
+          return 0;
+        });
+
+        const total = f.total || 1;
+        const readyPct  = Math.round((f.ready / total) * 100);
+        const failedPct = 100 - readyPct;
+        const failedCount = total - f.ready;
+
+        const summary = `
+          <div class="flux-summary">
             <span class="badge ${f.status}">${f.ready}/${f.total} synced</span>
-            <span class="mono" style="color:var(--color-subtle)">last sync ${f.last_sync}</span>
-          </div>
-          ${ks.length ? `
+            <div class="flux-ratio-bar" title="${f.ready} ready · ${failedCount} failed">
+              <div class="flux-ratio-bar-ok"   style="width:${readyPct}%"></div>
+              <div class="flux-ratio-bar-crit" style="width:${failedPct}%"></div>
+            </div>
+            <span class="flux-ratio-label">${f.ready} ready · ${failedCount} failed</span>
+            <span class="mono" style="margin-left:auto;color:var(--color-subtle)">last sync ${f.last_sync}</span>
+          </div>`;
+
+        const tableRows = sorted.map((k: any) => `
+          <div class="flux-row${k.ready ? '' : ' crit-row'}">
+            <div class="flux-name-cell">
+              <span class="flux-name-icon ${k.ready ? 'ok' : 'crit'}">${k.ready ? '✓' : '✗'}</span>
+              <span class="flux-name-text">${k.name}</span>
+            </div>
+            <span style="font-family:var(--font-mono);font-size:0.75rem;color:var(--color-subtle)">${k.namespace}</span>
+            <span style="font-family:var(--font-mono);font-size:0.75rem;color:var(--color-subtle)">${k.age}</span>
+            <span class="badge ${k.ready ? 'ok' : 'crit'}">${k.ready ? '✓ Ready' : '✗ Failed'}</span>
+          </div>`).join('');
+
+        fluxSection.innerHTML = summary + (ks.length ? `
           <div class="flux-table">
             <div class="flux-row header">
               <span>Kustomization</span>
@@ -690,16 +858,8 @@ import Layout from '../layouts/Layout.astro';
               <span>Last Applied</span>
               <span>Status</span>
             </div>
-            ${ks.map((k: any) => `
-              <div class="flux-row">
-                <span style="font-family:var(--font-mono);font-size:0.875rem;color:var(--color-heading)">${k.name}</span>
-                <span style="font-family:var(--font-mono);font-size:0.75rem;color:var(--color-subtle)">${k.namespace}</span>
-                <span style="font-family:var(--font-mono);font-size:0.75rem;color:var(--color-subtle)">${k.age}</span>
-                <span class="badge ${k.ready ? 'ok' : 'crit'}">${k.ready ? '✓ Ready' : '✗ Failed'}</span>
-              </div>
-            `).join('')}
-          </div>` : `<div class="mono" style="color:var(--color-subtle);padding:1rem 0">No kustomization data yet — pipeline pending</div>`}
-        `;
+            ${tableRows}
+          </div>` : `<div class="mono" style="color:var(--color-subtle);padding:1rem 0">No kustomization data yet — pipeline pending</div>`);
       }
 
       // Backups

@@ -203,204 +203,38 @@ build_backup() {
   echo "{\"bronn\":${bronn_json},\"etcd\":${etcd_json},\"varys\":${varys_json}}"
 }
 
-# ── Rich backup data (size, duration, failures) ────────────────────────────────
-# Reads all backup textfile metrics in one SSH call per host; returns JSON array.
-build_backups_rich() {
-  # bronn — docker appdata textfile metrics
-  local bronn_raw
-  bronn_raw=$(ssh -o ConnectTimeout=5 -o BatchMode=yes 10.0.10.20 \
-    "cat /var/lib/node_exporter/textfile_collector/docker_backup.prom 2>/dev/null" 2>/dev/null || echo "")
-
-  # etcd snapshot timestamp from filename
-  local etcd_ts
-  etcd_ts=$(ssh -o ConnectTimeout=5 -o BatchMode=yes 10.0.10.11 \
-    "sudo ls /var/lib/rancher/k3s/server/db/snapshots/ 2>/dev/null | grep -oP '\d+$' | sort -n | tail -1" 2>/dev/null || echo "")
-
-  # varys textfile metrics
-  local varys_raw
-  varys_raw=$(ssh -o ConnectTimeout=5 -o BatchMode=yes 10.0.10.10 \
-    "cat /var/lib/node_exporter/textfile_collector/varys_backup.prom 2>/dev/null" 2>/dev/null || echo "")
-
-  # bran textfile metrics (rpi-keys job lives on bran now)
-  local bran_raw
-  bran_raw=$(ssh -o ConnectTimeout=5 -o BatchMode=yes 10.0.10.9 \
-    "cat /var/lib/node_exporter/textfile_collector/rpi_backup.prom 2>/dev/null" 2>/dev/null || echo "")
-
-  local TMP_BRONN TMP_VARYS TMP_BRAN
-  TMP_BRONN=$(mktemp); TMP_VARYS=$(mktemp); TMP_BRAN=$(mktemp)
-  printf '%s' "$bronn_raw" > "$TMP_BRONN"
-  printf '%s' "$varys_raw" > "$TMP_VARYS"
-  printf '%s' "$bran_raw"  > "$TMP_BRAN"
-
-  python3 - "$TMP_BRONN" "$TMP_VARYS" "$TMP_BRAN" "$etcd_ts" <<PYEOF
-import time, json, re, sys
-
-now = time.time()
-
-with open(sys.argv[1]) as f: bronn_raw = f.read()
-with open(sys.argv[2]) as f: varys_raw = f.read()
-with open(sys.argv[3]) as f: bran_raw  = f.read()
-etcd_ts_s = sys.argv[4] if len(sys.argv) > 4 else ""
-
-def parse_prom(raw, job):
-    """Extract {ts, size_bytes, duration_s, failures} from textfile prom content for a job label."""
-    def get(metric):
-        pat = rf'{metric}{{job="{job}"}}\s+([\d.]+)'
-        m = re.search(pat, raw)
-        return float(m.group(1)) if m else None
-    return {
-        'ts':         get('backup_last_success_timestamp'),
-        'size_bytes': get('backup_size_bytes'),
-        'duration_s': get('backup_duration_seconds'),
-        'failures':   get('backup_failures_total'),
-    }
-
-def age_str(ts):
-    if ts is None: return '\u2014'
-    age = now - ts
-    h = int(age // 3600); m = int((age % 3600) // 60)
-    return f'{h}h {m}m ago' if h else f'{m}m ago'
-
-def status_from_ts(ts):
-    if ts is None: return 'unknown'
-    age_h = (now - ts) / 3600
-    if age_h > 48: return 'crit'
-    if age_h > 25: return 'warn'
-    return 'ok'
-
-def fmt_size(b):
-    if b is None: return '\u2014'
-    for unit in ('B','KB','MB','GB','TB'):
-        if b < 1024: return f'{b:.1f} {unit}'
-        b /= 1024
-    return f'{b:.1f} PB'
-
-def fmt_duration(s):
-    if s is None: return '\u2014'
-    s = int(s)
-    if s < 60: return f'{s}s'
-    return f'{s//60}m {s%60}s'
-
-etcd_ts_s = etcd_ts_s.strip()
-
-# bronn — docker appdata
-b = parse_prom(bronn_raw, 'docker-appdata')
-bronn = {
-    'id':        'docker-appdata',
-    'name':      'Docker Appdata',
-    'host':      'bronn',
-    'schedule':  'Daily 02:00',
-    'retention': '7 days',
-    'last_run':  age_str(b['ts']),
-    'size':      fmt_size(b['size_bytes']),
-    'duration':  fmt_duration(b['duration_s']),
-    'failures':  int(b['failures']) if b['failures'] is not None else 0,
-    'status':    status_from_ts(b['ts']),
-}
-
-# etcd
-etcd_ts = float(etcd_ts_s) if etcd_ts_s.isdigit() else None
-etcd = {
-    'id':        'etcd-snapshot',
-    'name':      'etcd Snapshot',
-    'host':      'tywin (k3s)',
-    'schedule':  'Every 6h',
-    'retention': '7 snapshots',
-    'last_run':  age_str(etcd_ts),
-    'size':      '—',
-    'duration':  '—',
-    'failures':  0,
-    'status':    status_from_ts(etcd_ts),
-}
-
-# varys keys
-v = parse_prom(varys_raw, 'varys-keys')
-varys = {
-    'id':        'varys-keys',
-    'name':      'varys Keys',
-    'host':      'varys',
-    'schedule':  'Daily 01:00',
-    'retention': '30 days',
-    'last_run':  age_str(v['ts']),
-    'size':      fmt_size(v['size_bytes']),
-    'duration':  fmt_duration(v['duration_s']),
-    'failures':  int(v['failures']) if v['failures'] is not None else 0,
-    'status':    status_from_ts(v['ts']),
-}
-
-# bran (rpi) keys
-r = parse_prom(bran_raw, 'rpi-keys')
-bran = {
-    'id':        'rpi-keys',
-    'name':      'RPi Keys',
-    'host':      'bran',
-    'schedule':  'Daily 01:00',
-    'retention': '30 days',
-    'last_run':  age_str(r['ts']),
-    'size':      fmt_size(r['size_bytes']),
-    'duration':  fmt_duration(r['duration_s']),
-    'failures':  int(r['failures']) if r['failures'] is not None else 0,
-    'status':    status_from_ts(r['ts']),
-}
-
-print(json.dumps([bronn, etcd, varys, bran]))
-PYEOF
-  local py_exit=$?
-  rm -f "$TMP_BRONN" "$TMP_VARYS" "$TMP_BRAN"
-  return $py_exit
-}
-
 # ── Velero last backup ─────────────────────────────────────────────────────────
 build_velero() {
-  local last_line name ts phase status age_str size_bytes
+  local last_line name ts phase status age_str
   last_line=$(kubectl get backups -n velero \
     --sort-by=.metadata.creationTimestamp \
-    -o custom-columns="NAME:.metadata.name,PHASE:.status.phase,TS:.metadata.creationTimestamp,SIZE:.status.progress.totalBytes" \
+    -o custom-columns="NAME:.metadata.name,PHASE:.status.phase,TS:.metadata.creationTimestamp" \
     --no-headers 2>/dev/null | tail -1 || echo "")
-  name=$(echo "$last_line"       | awk '{print $1}')
-  phase=$(echo "$last_line"      | awk '{print $2}')
-  ts=$(echo "$last_line"         | awk '{print $3}')
-  size_bytes=$(echo "$last_line" | awk '{print $4}')
+  name=$(echo "$last_line"  | awk '{print $1}')
+  phase=$(echo "$last_line" | awk '{print $2}')
+  ts=$(echo "$last_line"    | awk '{print $3}')
   status="unknown"
   [[ "$phase" == "Completed" ]]       && status="ok"
   [[ "$phase" == "Failed" ]]          && status="crit"
   [[ "$phase" == "PartiallyFailed" ]] && status="warn"
 
-  # Convert ISO timestamp to age string and compute size
-  python3 - <<INNERPY 2>/dev/null || echo '{"age":"—","status":"unknown","size":"—","name":"—"}'
-import time, json
+  # Convert ISO timestamp to age string
+  age_str="—"
+  if [[ -n "$ts" && "$ts" != "<none>" ]]; then
+    age_str=$(python3 -c "
+import time
 from datetime import datetime, timezone
+try:
+  t = datetime.fromisoformat('${ts}'.replace('Z','+00:00')).timestamp()
+  age = time.time() - t
+  h = int(age//3600); m = int((age%3600)//60)
+  print(f'{h}h {m}m ago' if h else f'{m}m ago')
+except:
+  print('—')
+" 2>/dev/null || echo "—")
+  fi
 
-ts_raw   = "${ts}"
-size_raw = "${size_bytes}"
-phase    = "${phase}"
-name     = "${name}"
-status   = "${status}"
-
-age_str = "—"
-if ts_raw and ts_raw != "<none>":
-    try:
-        t = datetime.fromisoformat(ts_raw.replace('Z', '+00:00')).timestamp()
-        age = time.time() - t
-        h = int(age // 3600); m = int((age % 3600) // 60)
-        age_str = f"{h}h {m}m ago" if h else f"{m}m ago"
-        # Refine status by age too
-        if status == "ok":
-            if age / 3600 > 48: status = "crit"
-            elif age / 3600 > 25: status = "warn"
-    except:
-        pass
-
-def fmt_size(b):
-    try: b = int(b)
-    except: return "—"
-    for unit in ('B','KB','MB','GB','TB'):
-        if b < 1024: return f"{b:.1f} {unit}"
-        b /= 1024
-    return f"{b:.1f} PB"
-
-print(json.dumps({"age": age_str, "status": status, "size": fmt_size(size_raw), "name": name}))
-INNERPY
+  echo "{\"age\":\"${age_str}\",\"status\":\"${status}\"}"
 }
 
 # =============================================================================
@@ -1112,7 +946,6 @@ NODES=$(build_nodes)
 FLUX=$(build_flux)
 BACKUP=$(build_backup)
 VELERO=$(build_velero)
-BACKUPS_RICH=$(build_backups_rich)
 SERVICES=$(build_services)
 NETWORK=$(build_network)
 BRAN=$(build_bran)
@@ -1141,49 +974,29 @@ TOTAL_PODS=$(kubectl get pods -A --no-headers 2>/dev/null | wc -l | tr -d ' ' ||
 # Write JSON via temp files to avoid shell quoting issues
 TMP_NODES=$(mktemp); TMP_FLUX=$(mktemp); TMP_SVC_DATA=$(mktemp); TMP_NETWORK=$(mktemp)
 TMP_BRAN=$(mktemp); TMP_UPS=$(mktemp); TMP_DEPLOY=$(mktemp); TMP_STORAGE=$(mktemp)
-TMP_BACKUPS=$(mktemp); TMP_VELERO=$(mktemp)
-echo "$NODES"        > "$TMP_NODES"
-echo "$FLUX"         > "$TMP_FLUX"
-echo "$SERVICES"     > "$TMP_SVC_DATA"
-echo "$NETWORK"      > "$TMP_NETWORK"
-echo "$BRAN"         > "$TMP_BRAN"
-echo "$UPS"          > "$TMP_UPS"
-echo "$LAST_DEPLOY"  > "$TMP_DEPLOY"
-echo "$STORAGE"      > "$TMP_STORAGE"
-echo "$BACKUPS_RICH" > "$TMP_BACKUPS"
-echo "$VELERO"       > "$TMP_VELERO"
+echo "$NODES"       > "$TMP_NODES"
+echo "$FLUX"        > "$TMP_FLUX"
+echo "$SERVICES"    > "$TMP_SVC_DATA"
+echo "$NETWORK"     > "$TMP_NETWORK"
+echo "$BRAN"        > "$TMP_BRAN"
+echo "$UPS"         > "$TMP_UPS"
+echo "$LAST_DEPLOY" > "$TMP_DEPLOY"
+echo "$STORAGE"     > "$TMP_STORAGE"
 
-python3 - "$TMP_NODES" "$TMP_FLUX" "$TMP_SVC_DATA" "$TMP_NETWORK" "$TMP_BRAN" "$TMP_UPS" "$TMP_DEPLOY" "$TMP_STORAGE" "$TMP_BACKUPS" "$TMP_VELERO" <<PYEOF
+python3 - "$TMP_NODES" "$TMP_FLUX" "$TMP_SVC_DATA" "$TMP_NETWORK" "$TMP_BRAN" "$TMP_UPS" "$TMP_DEPLOY" "$TMP_STORAGE" <<PYEOF
 import json, sys
 
-with open(sys.argv[1]) as f: nodes        = json.load(f)
-with open(sys.argv[2]) as f: flux         = json.load(f)
-with open(sys.argv[3]) as f: svc_data     = json.load(f)
-with open(sys.argv[4]) as f: network      = json.load(f)
-with open(sys.argv[5]) as f: bran         = json.load(f)
-with open(sys.argv[6]) as f: ups          = json.load(f)
-with open(sys.argv[7]) as f: last_deploy  = json.load(f)
-with open(sys.argv[8]) as f: storage      = json.load(f)
-with open(sys.argv[9]) as f: backups_rich = json.load(f)
-with open(sys.argv[10]) as f: velero_data = json.load(f)
+with open(sys.argv[1]) as f: nodes       = json.load(f)
+with open(sys.argv[2]) as f: flux        = json.load(f)
+with open(sys.argv[3]) as f: svc_data    = json.load(f)
+with open(sys.argv[4]) as f: network     = json.load(f)
+with open(sys.argv[5]) as f: bran        = json.load(f)
+with open(sys.argv[6]) as f: ups         = json.load(f)
+with open(sys.argv[7]) as f: last_deploy = json.load(f)
+with open(sys.argv[8]) as f: storage     = json.load(f)
 
 running = int('${RUNNING_PODS}')
 total   = int('${TOTAL_PODS}')
-
-# Append Velero as a rich backup entry
-velero_entry = {
-    'id':        'velero-k8s',
-    'name':      'Velero (k8s)',
-    'host':      'cluster',
-    'schedule':  'Daily 03:00 + 6h DB',
-    'retention': '7 days (48h DB)',
-    'last_run':  velero_data.get('age', '—'),
-    'size':      velero_data.get('size', '—'),
-    'duration':  '—',
-    'failures':  0,
-    'status':    velero_data.get('status', 'unknown'),
-}
-backups_rich.append(velero_entry)
 
 data = {
   'updated':    '${NOW}',
@@ -1205,9 +1018,8 @@ data = {
   'ups':         ups,
   'last_deploy': last_deploy,
   'storage':     storage,
-  'backups':     backups_rich,
 }
 print(json.dumps(data, indent=2))
 PYEOF
 
-rm -f "$TMP_NODES" "$TMP_FLUX" "$TMP_SVC_DATA" "$TMP_NETWORK" "$TMP_BRAN" "$TMP_UPS" "$TMP_DEPLOY" "$TMP_STORAGE" "$TMP_BACKUPS" "$TMP_VELERO"
+rm -f "$TMP_NODES" "$TMP_FLUX" "$TMP_SVC_DATA" "$TMP_NETWORK" "$TMP_BRAN" "$TMP_UPS" "$TMP_DEPLOY" "$TMP_STORAGE"

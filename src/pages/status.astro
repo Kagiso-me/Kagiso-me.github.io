@@ -232,13 +232,13 @@ import Layout from '../layouts/Layout.astro';
   .metric {
     background: var(--color-overlay);
     border-radius: 8px;
-    padding: 0.625rem 0.5rem 0.5rem;
+    padding: 0.6rem 0.5rem 0.5rem;
     overflow: hidden;
   }
 
   .metric-value {
     font-family: var(--font-mono);
-    font-size: 0.95rem;
+    font-size: 0.88rem;
     font-weight: 600;
     color: var(--color-peach);
     display: block;
@@ -247,12 +247,12 @@ import Layout from '../layouts/Layout.astro';
 
   .metric-label {
     font-family: var(--font-mono);
-    font-size: 0.65rem;
+    font-size: 0.62rem;
     color: var(--color-subtle);
     display: block;
     text-align: center;
     margin-top: 0.2rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
   }
 
   .metric-bar-track {
@@ -260,7 +260,7 @@ import Layout from '../layouts/Layout.astro';
     background: color-mix(in srgb, var(--color-muted) 60%, transparent);
     border-radius: 2px;
     overflow: hidden;
-    margin-top: 0.4rem;
+    margin-top: 0.35rem;
   }
 
   .metric-bar-fill {
@@ -585,22 +585,20 @@ import Layout from '../layouts/Layout.astro';
         };
 
         const uptimeRing = (status: string) => {
-          const r = 20, cx = 26, cy = 26, stroke = 4;
-          const circ = 2 * Math.PI * r;
-          const fillPct = status === 'ok' ? 100 : status === 'warn' ? 75 : 25;
-          const used = (fillPct / 100) * circ;
           const color = status === 'ok' ? 'var(--color-ok)' : status === 'warn' ? 'var(--color-warn)' : 'var(--color-crit)';
           const glyph = status === 'ok' ? '✓' : status === 'warn' ? '!' : '✗';
           const label = status === 'ok' ? 'Ready' : status === 'warn' ? 'Degraded' : 'Not Ready';
+          // Exact values from mockup: r=20, circ=125.66
+          // ok: full ring (125.7 0), warn: ~75% (94.3 31.4), crit: ~25% (31.4 94.3)
+          const dash = status === 'ok' ? '125.7 0' : status === 'warn' ? '94.3 31.4' : '31.4 94.3';
           return `<div class="node-status-badge">
             <svg class="node-status-ring" viewBox="0 0 52 52" fill="none">
-              <circle cx="${cx}" cy="${cy}" r="${r}" stroke="var(--color-overlay)" stroke-width="${stroke}"/>
-              <circle cx="${cx}" cy="${cy}" r="${r}" stroke="${color}" stroke-width="${stroke}"
-                stroke-dasharray="${used.toFixed(1)} ${(circ - used).toFixed(1)}"
-                stroke-dashoffset="${(circ * 0.25).toFixed(1)}"
-                stroke-linecap="round" style="transition:stroke-dasharray 0.6s ease"/>
-              <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="middle"
-                font-family="var(--font-mono)" font-size="11" font-weight="700"
+              <circle cx="26" cy="26" r="20" stroke="var(--color-overlay)" stroke-width="4"/>
+              <circle cx="26" cy="26" r="20" stroke="${color}" stroke-width="4"
+                stroke-dasharray="${dash}" stroke-dashoffset="31.4"
+                stroke-linecap="round"/>
+              <text x="26" y="26" text-anchor="middle" dominant-baseline="middle"
+                font-family="JetBrains Mono,monospace" font-size="11" font-weight="700"
                 fill="${color}">${glyph}</text>
             </svg>
             <div class="node-ring-label">${label}</div>

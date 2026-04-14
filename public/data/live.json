@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-14T13:15:54Z",
-  "fetched_at": "2026-04-14T13:15:54Z",
+  "updated": "2026-04-14T14:59:46Z",
+  "fetched_at": "2026-04-14T14:59:46Z",
   "cards": [
     {
       "label": "Workloads",
@@ -11,30 +11,30 @@
     {
       "label": "Flux",
       "value": "19/19 synced",
-      "sub": "5d23h",
+      "sub": "6d1h",
       "status": "ok"
     },
     {
       "label": "Docker Appdata",
-      "value": "11h 14m ago",
+      "value": "12h 58m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "1h 16m ago",
+      "value": "2h 59m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "16m ago",
+      "value": "1h 59m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "12h 16m ago",
+      "value": "13h 59m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     }
@@ -71,121 +71,121 @@
   "flux": {
     "ready": 19,
     "total": 19,
-    "last_sync": "5d23h",
+    "last_sync": "6d1h",
     "status": "ok",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
-        "age": "5d23h",
+        "age": "6d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "6d2h",
+        "age": "6d3h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-authentik",
-        "age": "5d23h",
+        "age": "6d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
-        "age": "5d23h",
+        "age": "6d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
-        "age": "5d23h",
+        "age": "6d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
-        "age": "5d23h",
+        "age": "6d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
-        "age": "5d23h",
+        "age": "6d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-namespaces",
-        "age": "5d23h",
+        "age": "6d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking",
-        "age": "5d23h",
+        "age": "6d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-config",
-        "age": "5d23h",
+        "age": "6d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-tls",
-        "age": "5d23h",
+        "age": "6d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability",
-        "age": "5d23h",
+        "age": "6d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
-        "age": "5d23h",
+        "age": "6d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
-        "age": "5d23h",
+        "age": "6d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security",
-        "age": "5d23h",
+        "age": "6d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security-issuers",
-        "age": "5d23h",
+        "age": "6d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-storage",
-        "age": "5d23h",
+        "age": "6d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade",
-        "age": "5d23h",
+        "age": "6d1h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade-plans",
-        "age": "5d23h",
+        "age": "6d1h",
         "ready": true
       }
     ]
@@ -193,17 +193,17 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 0 photos \u00b7 0 videos",
+      "tag": "Immich: 9 photos \u00b7 0 videos",
       "status": "ok"
     },
     {
       "name": "Nextcloud",
-      "tag": "Nextcloud: 60.9 MB used",
-      "status": "ok"
+      "tag": "Nextcloud: offline",
+      "status": "crit"
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 948.5 GB left",
+      "tag": "SABnzbd: idle",
       "status": "ok"
     },
     {
@@ -225,10 +225,10 @@
   "media": [
     {
       "name": "Plex",
-      "label": "1 stream \u00b7 Chloramphenicol",
+      "label": "1 stream \u00b7 The Rat",
       "status": "ok",
       "playing": true,
-      "title": "Chloramphenicol",
+      "title": "The Rat",
       "album": "Season 4",
       "artist": "The Americans (2013)"
     },
@@ -240,8 +240,8 @@
     }
   ],
   "network": {
-    "fw_hits": 49407,
-    "latency_ms": 7.6,
+    "fw_hits": 51689,
+    "latency_ms": 5.0,
     "offenders": [],
     "pihole": {
       "total": 0,
@@ -252,8 +252,8 @@
   "bran": {
     "temp_c": 52.6,
     "temp_status": "ok",
-    "load": 0.73,
-    "mem_pct": 45.8
+    "load": 0.69,
+    "mem_pct": 46.0
   },
   "ups": {
     "charge": 100,
@@ -266,16 +266,16 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "1h ago",
+    "age": "3h ago",
     "message": "fix(observability): replace speculative dashboards with upstream, fix broken scr",
     "sha": "ed50d9a"
   },
   "storage": [
     {
       "name": "tera",
-      "used": "5.4 TB",
+      "used": "5.5 TB",
       "total": "7.9 TB",
-      "pct": 69.3,
+      "pct": 69.5,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -291,7 +291,7 @@
     },
     {
       "name": "core",
-      "used": "11.3 GB",
+      "used": "11.5 GB",
       "total": "476.7 GB",
       "pct": 2.4,
       "status": "ok",

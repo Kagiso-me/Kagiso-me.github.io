@@ -86,15 +86,11 @@ import Layout from '../layouts/Layout.astro';
     <!-- ── Backups ── -->
     <section class="section fade-up" style="animation-delay:0.23s">
       <h2 class="section-label">Backups</h2>
-      <!-- Summary stats row -->
-      <div id="backup-summary" style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1.25rem">
-        <div class="skeleton" style="height:52px;width:180px;border-radius:8px"></div>
-        <div class="skeleton" style="height:52px;width:180px;border-radius:8px"></div>
-        <div class="skeleton" style="height:52px;width:180px;border-radius:8px"></div>
-      </div>
-      <!-- Job table -->
-      <div id="backup-table">
-        <div class="skeleton" style="height:240px;border-radius:12px"></div>
+      <div class="cards-grid" id="backup-cards">
+        <div class="card skeleton" style="height:100px"></div>
+        <div class="card skeleton" style="height:100px"></div>
+        <div class="card skeleton" style="height:100px"></div>
+        <div class="card skeleton" style="height:100px"></div>
       </div>
     </section>
 
@@ -442,103 +438,6 @@ import Layout from '../layouts/Layout.astro';
     .flux-row > *:nth-child(2),
     .flux-row > *:nth-child(3) { display: none; }
   }
-
-  /* ── Backup table ── */
-  .backup-summary-pill {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    background: var(--color-surface);
-    border: 1px solid var(--color-muted);
-    border-radius: 8px;
-    padding: 0.6rem 1rem;
-    font-family: var(--font-mono);
-  }
-
-  .backup-summary-pill .pill-value {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--color-heading);
-  }
-
-  .backup-summary-pill .pill-label {
-    font-size: 0.72rem;
-    color: var(--color-subtle);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-
-  .backup-table {
-    background: var(--color-surface);
-    border: 1px solid var(--color-muted);
-    border-radius: 12px;
-    overflow: hidden;
-  }
-
-  .backup-row {
-    display: grid;
-    grid-template-columns: 2fr 110px 130px 90px 110px 100px;
-    padding: 0.75rem 1.25rem;
-    border-bottom: 1px solid var(--color-muted);
-    align-items: center;
-    gap: 0.75rem;
-    transition: background 0.15s;
-  }
-
-  .backup-row:last-child { border-bottom: none; }
-  .backup-row:not(.header):hover { background: var(--color-overlay); }
-
-  .backup-row.header {
-    background: var(--color-overlay);
-    font-family: var(--font-mono);
-    font-size: 0.68rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--color-subtle);
-  }
-
-  .backup-job-name {
-    font-family: var(--font-mono);
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--color-heading);
-  }
-
-  .backup-job-host {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    color: var(--color-subtle);
-    margin-top: 0.15rem;
-  }
-
-  .backup-cell {
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    color: var(--color-subtle);
-  }
-
-  .backup-cell.highlight {
-    color: var(--color-heading);
-    font-weight: 500;
-  }
-
-  @media (max-width: 900px) {
-    .backup-row {
-      grid-template-columns: 2fr 110px 110px 100px;
-    }
-    .backup-row > *:nth-child(4),
-    .backup-row > *:nth-child(5) { display: none; }
-  }
-
-  @media (max-width: 600px) {
-    .backup-row {
-      grid-template-columns: 1fr 100px;
-    }
-    .backup-row > *:nth-child(2),
-    .backup-row > *:nth-child(3),
-    .backup-row > *:nth-child(4),
-    .backup-row > *:nth-child(5) { display: none; }
-  }
 </style>
 
 <script>
@@ -803,85 +702,9 @@ import Layout from '../layouts/Layout.astro';
         `;
       }
 
-      // Backups — rich table
-      const backupSummary = document.getElementById('backup-summary');
-      const backupTable   = document.getElementById('backup-table');
-      const jobs: any[] = data.backups ?? [];
-
-      if (jobs.length > 0) {
-        const total     = jobs.length;
-        const healthy   = jobs.filter((j: any) => j.status === 'ok').length;
-        const failing   = jobs.filter((j: any) => j.status === 'crit').length;
-        const stale     = jobs.filter((j: any) => j.status === 'warn').length;
-        const overallDot = failing > 0 ? 'crit' : stale > 0 ? 'warn' : 'ok';
-
-        if (backupSummary) {
-          backupSummary.innerHTML = `
-            <div class="backup-summary-pill">
-              <span class="status-dot ${overallDot}"></span>
-              <div>
-                <div class="pill-value">${healthy}/${total}</div>
-                <div class="pill-label">Healthy</div>
-              </div>
-            </div>
-            ${failing > 0 ? `
-            <div class="backup-summary-pill" style="border-color:color-mix(in srgb,var(--color-crit) 40%,transparent)">
-              <span class="status-dot crit"></span>
-              <div>
-                <div class="pill-value" style="color:var(--color-crit)">${failing}</div>
-                <div class="pill-label">Failed</div>
-              </div>
-            </div>` : ''}
-            ${stale > 0 ? `
-            <div class="backup-summary-pill" style="border-color:color-mix(in srgb,var(--color-warn) 40%,transparent)">
-              <span class="status-dot warn"></span>
-              <div>
-                <div class="pill-value" style="color:var(--color-warn)">${stale}</div>
-                <div class="pill-label">Stale (&gt;25h)</div>
-              </div>
-            </div>` : ''}
-            <div class="backup-summary-pill" style="margin-left:auto">
-              <div>
-                <div class="pill-value">${jobs.filter((j: any) => j.schedule).length}</div>
-                <div class="pill-label">Schedules</div>
-              </div>
-            </div>
-          `;
-        }
-
-        if (backupTable) {
-          const statusIcon = (s: string) =>
-            s === 'ok'      ? '<span style="color:var(--color-ok)">✓</span>' :
-            s === 'crit'    ? '<span style="color:var(--color-crit)">✗</span>' :
-            s === 'warn'    ? '<span style="color:var(--color-warn)">⚠</span>' : '—';
-
-          backupTable.innerHTML = `
-            <div class="backup-table">
-              <div class="backup-row header">
-                <span>Job</span>
-                <span>Last run</span>
-                <span>Schedule</span>
-                <span>Size</span>
-                <span>Retention</span>
-                <span>Status</span>
-              </div>
-              ${jobs.map((j: any) => `
-              <div class="backup-row">
-                <div>
-                  <div class="backup-job-name">${j.name}</div>
-                  <div class="backup-job-host">${j.host}</div>
-                </div>
-                <div class="backup-cell highlight">${j.last_run ?? '—'}</div>
-                <div class="backup-cell">${j.schedule ?? '—'}</div>
-                <div class="backup-cell">${j.size ?? '—'}</div>
-                <div class="backup-cell">${j.retention ?? '—'}</div>
-                <span class="badge ${j.status}">${statusIcon(j.status)} ${j.status === 'ok' ? 'OK' : j.status === 'crit' ? 'Failed' : j.status === 'warn' ? 'Stale' : 'Unknown'}</span>
-              </div>`).join('')}
-            </div>
-          `;
-        }
-      } else if (data.cards) {
-        // Fallback to cards if backups key not yet in data
+      // Backups
+      const backupCards = document.getElementById('backup-cards');
+      if (backupCards && data.cards) {
         const find = (label: string) => data.cards.find((c: any) => c.label === label);
         const da = find('Docker Appdata');
         const et = find('etcd Snapshot');
@@ -889,22 +712,20 @@ import Layout from '../layouts/Layout.astro';
         const vy = find('varys Keys');
         const items = [
           { label: 'Docker Appdata', value: da?.value ?? '—', sub: 'bronn · daily 02:00',  status: da?.status ?? 'unknown' },
-          { label: 'etcd Snapshot',  value: et?.value ?? '—', sub: 'k3s · every 6h',       status: et?.status ?? 'unknown' },
-          { label: 'Velero (k8s)',   value: vc?.value ?? '—', sub: 'last cluster backup',   status: vc?.status ?? 'unknown' },
-          { label: 'varys Keys',     value: vy?.value ?? '—', sub: 'age keys · varys',      status: vy?.status ?? 'unknown' },
+          { label: 'etcd Snapshot',  value: et?.value ?? '—', sub: 'k3s · daily',           status: et?.status ?? 'unknown' },
+          { label: 'Velero (k8s)',   value: vc?.value ?? '—', sub: 'last cluster backup',    status: vc?.status ?? 'unknown' },
+          { label: 'varys Keys',     value: vy?.value ?? '—', sub: 'age keys · varys',       status: vy?.status ?? 'unknown' },
         ];
-        if (backupSummary) backupSummary.innerHTML = '';
-        if (backupTable) backupTable.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem">` +
-          items.map(c => `
-            <div class="card">
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
-                <span class="mono" style="color:var(--color-subtle);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em">${c.label}</span>
-                <span class="status-dot ${c.status}"></span>
-              </div>
-              <div style="font-size:1.25rem;font-weight:700;color:var(--color-heading);font-family:var(--font-mono);margin-bottom:0.25rem">${c.value}</div>
-              <div class="mono" style="font-size:0.85rem">${c.sub}</div>
+        backupCards.innerHTML = items.map(c => `
+          <div class="card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
+              <span class="mono" style="color:var(--color-subtle);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em">${c.label}</span>
+              <span class="status-dot ${c.status}"></span>
             </div>
-          `).join('') + `</div>`;
+            <div style="font-size:1.25rem;font-weight:700;color:var(--color-heading);font-family:var(--font-mono);margin-bottom:0.25rem">${c.value}</div>
+            <div class="mono" style="font-size:0.85rem">${c.sub}</div>
+          </div>
+        `).join('');
       }
 
       // Network

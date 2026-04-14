@@ -99,10 +99,26 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <style is:global>
+  body {
+    background-image: radial-gradient(circle, #3d466320 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 40% at 50% 0%, #0d1117 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
   .page-wrap {
     max-width: 1200px;
     margin: 0 auto;
     padding: 3rem 1.5rem 4rem;
+    position: relative;
+    z-index: 1;
   }
 
   .page-header {
@@ -134,6 +150,19 @@ import Layout from '../layouts/Layout.astro';
     margin: 0 0 1rem;
     font-family: var(--font-mono);
     font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 3px;
+    height: 0.85rem;
+    background: linear-gradient(to bottom, #fab387, #cba6f7);
+    border-radius: 2px;
+    flex-shrink: 0;
   }
 
   .cards-grid {
@@ -149,20 +178,49 @@ import Layout from '../layouts/Layout.astro';
   }
 
   .node-card {
-    background: var(--color-surface);
-    border: 1px solid var(--color-muted);
-    border-radius: 12px;
+    background: rgba(30, 37, 52, 0.5);
+    backdrop-filter: blur(16px) saturate(1.6);
+    -webkit-backdrop-filter: blur(16px) saturate(1.6);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
     padding: 1.25rem 1.5rem 1.5rem;
     border-left-width: 3px;
-    transition: box-shadow 0.2s;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06);
+    transition: box-shadow 0.25s, transform 0.25s;
+    position: relative;
+    overflow: hidden;
   }
 
-  .node-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.25); }
+  .node-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 60px;
+    border-radius: 16px 16px 0 0;
+    pointer-events: none;
+    opacity: 0.08;
+  }
+  .node-card.ok::after   { background: radial-gradient(ellipse at 50% 0%, var(--color-ok), transparent 70%); }
+  .node-card.warn::after { background: radial-gradient(ellipse at 50% 0%, var(--color-warn), transparent 70%); }
+  .node-card.crit::after { background: radial-gradient(ellipse at 50% 0%, var(--color-crit), transparent 70%); }
+
+  .node-card:hover {
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.09);
+    transform: translateY(-2px);
+  }
 
   .node-card.ok      { border-left-color: var(--color-ok); }
   .node-card.warn    { border-left-color: var(--color-warn); }
   .node-card.crit    { border-left-color: var(--color-crit); }
   .node-card.unknown { border-left-color: var(--color-muted); }
+
+  @keyframes ring-pulse {
+    0%, 100% { opacity: 1; filter: drop-shadow(0 0 3px var(--color-ok)); }
+    50%       { opacity: 0.7; filter: drop-shadow(0 0 8px var(--color-ok)); }
+  }
+  .node-card.ok .node-status-ring circle.arc {
+    animation: ring-pulse 2.4s ease-in-out infinite;
+  }
 
   .node-header {
     display: flex;
@@ -230,10 +288,12 @@ import Layout from '../layouts/Layout.astro';
   }
 
   .metric {
-    background: var(--color-overlay);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
     border-radius: 8px;
     padding: 0.6rem 0.5rem 0.5rem;
     overflow: hidden;
+    backdrop-filter: blur(4px);
   }
 
   .metric-value {
@@ -257,7 +317,7 @@ import Layout from '../layouts/Layout.astro';
 
   .metric-bar-track {
     height: 3px;
-    background: color-mix(in srgb, var(--color-muted) 60%, transparent);
+    background: rgba(255,255,255,0.07);
     border-radius: 2px;
     overflow: hidden;
     margin-top: 0.35rem;
@@ -274,27 +334,30 @@ import Layout from '../layouts/Layout.astro';
   .metric-bar-fill.crit { background: var(--color-crit); }
 
   .flux-table {
-    background: var(--color-surface);
-    border: 1px solid var(--color-muted);
-    border-radius: 12px;
+    background: rgba(30, 37, 52, 0.55);
+    backdrop-filter: blur(12px) saturate(1.4);
+    -webkit-backdrop-filter: blur(12px) saturate(1.4);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px;
     overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.05);
   }
 
   .flux-row {
     display: grid;
-    grid-template-columns: 1.5fr 120px 120px 100px;
+    grid-template-columns: 1.8fr 120px 110px 100px;
     padding: 0.75rem 1.25rem;
-    border-bottom: 1px solid var(--color-muted);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
     align-items: center;
     gap: 1rem;
     transition: background 0.15s;
   }
 
   .flux-row:last-child { border-bottom: none; }
-  .flux-row:not(.header):hover { background: var(--color-overlay); }
+  .flux-row:not(.header):hover { background: rgba(255,255,255,0.03); }
 
   .flux-row.header {
-    background: var(--color-overlay);
+    background: rgba(255,255,255,0.04);
     font-family: var(--font-mono);
     font-size: 0.68rem;
     text-transform: uppercase;
@@ -593,8 +656,8 @@ import Layout from '../layouts/Layout.astro';
           const dash = status === 'ok' ? '125.7 0' : status === 'warn' ? '94.3 31.4' : '31.4 94.3';
           return `<div class="node-status-badge">
             <svg class="node-status-ring" viewBox="0 0 52 52" fill="none">
-              <circle cx="26" cy="26" r="20" stroke="var(--color-overlay)" stroke-width="4"/>
-              <circle cx="26" cy="26" r="20" stroke="${color}" stroke-width="4"
+              <circle cx="26" cy="26" r="20" stroke="rgba(255,255,255,0.06)" stroke-width="4"/>
+              <circle class="arc" cx="26" cy="26" r="20" stroke="${color}" stroke-width="4"
                 stroke-dasharray="${dash}" stroke-dashoffset="31.4"
                 stroke-linecap="round"/>
               <text x="26" y="26" text-anchor="middle" dominant-baseline="middle"

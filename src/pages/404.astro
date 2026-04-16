@@ -1,0 +1,159 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="404" description="Page not found.">
+  <div class="not-found">
+    <div class="nf-inner fade-up">
+      <p class="mono nf-eyebrow">~/404</p>
+      <h1 class="nf-title">
+        <span class="gradient-text">Not Found</span>
+      </h1>
+
+      <div class="nf-terminal">
+        <div class="nf-bar">
+          <span class="nf-dot" style="background:#ff5f57"></span>
+          <span class="nf-dot" style="background:#ffbd2e"></span>
+          <span class="nf-dot" style="background:#28c840"></span>
+          <span class="nf-bar-title mono">kagiso@homelab — bash</span>
+        </div>
+        <div class="nf-body mono">
+          <div class="nf-line">
+            <span class="nf-prompt">kagiso@homelab:~$</span>
+            <span class="nf-cmd"> kubectl get page <span id="nf-slug" style="color:var(--color-peach)"></span></span>
+          </div>
+          <div class="nf-line nf-error">Error from server (NotFound): pages "<span id="nf-slug-2"></span>" not found</div>
+          <div class="nf-line nf-muted">exit code 1</div>
+          <div class="nf-line">&nbsp;</div>
+          <div class="nf-line">
+            <span class="nf-prompt">kagiso@homelab:~$</span>
+            <span class="nf-cmd" id="nf-suggest"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="nf-actions">
+        <a href="/" class="btn-primary">← Home</a>
+        <a href="/status" class="btn-ghost">Status</a>
+        <a href="/digest" class="btn-ghost">Digest</a>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .not-found {
+    min-height: calc(100vh - 120px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1.5rem;
+  }
+
+  .nf-inner {
+    max-width: 640px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .nf-eyebrow {
+    color: var(--color-crit);
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .nf-title {
+    font-size: clamp(3rem, 8vw, 5rem);
+    margin: 0 0 2rem;
+  }
+
+  .nf-terminal {
+    background: #0d0d0d;
+    border: 1px solid var(--color-muted);
+    border-radius: 12px;
+    overflow: hidden;
+    text-align: left;
+    margin-bottom: 2rem;
+  }
+
+  .nf-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1rem;
+    background: #1a1a1a;
+    border-bottom: 1px solid #2a2a2a;
+  }
+
+  .nf-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .nf-bar-title {
+    margin-left: 0.5rem;
+    font-size: 0.72rem;
+    color: #666;
+  }
+
+  .nf-body {
+    padding: 1.25rem 1.5rem;
+    font-size: 0.82rem;
+    line-height: 1.9;
+    color: #c9d1d9;
+  }
+
+  .nf-line { display: block; }
+
+  .nf-prompt { color: var(--color-peach); }
+  .nf-cmd    { color: #58a6ff; }
+  .nf-error  { color: var(--color-crit); }
+  .nf-muted  { color: #555; }
+
+  .nf-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    padding: 0.625rem 1.5rem;
+    background: var(--color-peach);
+    color: var(--color-base);
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .btn-primary:hover { opacity: 0.85; transform: translateY(-1px); color: var(--color-base); }
+
+  .btn-ghost {
+    padding: 0.625rem 1.5rem;
+    border: 1px solid var(--color-muted);
+    color: var(--color-text);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--color-mauve); color: var(--color-mauve); }
+</style>
+
+<script>
+  // Show the attempted path in the terminal output
+  const slug = window.location.pathname;
+  const s1 = document.getElementById('nf-slug');
+  const s2 = document.getElementById('nf-slug-2');
+  const suggest = document.getElementById('nf-suggest');
+  if (s1) s1.textContent = slug;
+  if (s2) s2.textContent = slug;
+
+  // Suggest the closest nav page
+  const pages = ['/', '/status', '/digest', '/decisions', '/projects'];
+  const best = pages.find(p => slug.startsWith(p) && p !== '/') ?? '/';
+  if (suggest) {
+    suggest.innerHTML = ` <span style="color:#555"># try:</span> <a href="${best}" style="color:var(--color-ok)">${best}</a>`;
+  }
+</script>

@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import ClusterTerminal from '../components/ClusterTerminal.astro';
 ---
 
 <Layout title="Command Center" description="Living Homelab — built in public by Kagiso.">
@@ -21,6 +22,9 @@ import Layout from '../layouts/Layout.astro';
         A real homelab, built and operated in public —
         from bare metal to production discipline.
       </p>
+      <p class="hero-typewriter mono" aria-live="polite">
+        <span id="typewriter-text"></span><span class="typewriter-cursor">|</span>
+      </p>
       <div class="hero-actions">
         <a href="/status" class="btn-primary">View Status</a>
         <a href="/decisions" class="btn-ghost">Architecture Decisions</a>
@@ -36,42 +40,7 @@ import Layout from '../layouts/Layout.astro';
         <span class="mono" style="color:var(--color-subtle);font-size:0.8rem">read-only · live data</span>
       </div>
 
-      <div class="term-wrap">
-        <!-- Title bar -->
-        <div class="term-bar">
-          <span class="term-dot term-dot-red"></span>
-          <span class="term-dot term-dot-yellow"></span>
-          <span class="term-dot term-dot-green"></span>
-          <span class="term-bar-title">kagiso@homelab — kubectl</span>
-        </div>
-
-        <!-- Output area -->
-        <div class="term-body" id="term-body" aria-live="polite"></div>
-
-        <!-- Input row -->
-        <div class="term-input-row">
-          <span class="term-prompt">kagiso@homelab:~$</span>
-          <input
-            id="term-input"
-            class="term-input"
-            type="text"
-            autocomplete="off"
-            autocorrect="off"
-            autocapitalize="off"
-            spellcheck="false"
-            placeholder="type a command or press Tab"
-            aria-label="terminal input"
-          />
-        </div>
-
-        <!-- Suggestions -->
-        <div class="term-suggestions">
-          <span class="term-hint">try:</span>
-          {['get nodes', 'get pods', 'top', 'uptime', 'whoami', 'help'].map(cmd => (
-            <button class="term-suggestion" data-cmd={cmd}>{cmd}</button>
-          ))}
-        </div>
-      </div>
+      <ClusterTerminal />
     </div>
   </section>
 
@@ -241,11 +210,12 @@ import Layout from '../layouts/Layout.astro';
           <div class="hw-label mono">Hardware</div>
           <div class="hw-list">
             {[
-              { icon: '▣', name: '3× Lenovo ThinkCentre M93p',   sub: 'k3s control-plane nodes' },
-              { icon: '▣', name: 'Synology / TrueNAS NAS',         sub: 'primary & archive storage' },
-              { icon: '◈', name: 'MikroTik hEX S',                 sub: 'router & firewall' },
-              { icon: '◈', name: 'RPi 4 (bran)',                   sub: 'automation runner & CI' },
-              { icon: '◉', name: 'APC UPS',                        sub: '390W · 1h 55m runtime' },
+              { icon: '▣', name: '3× Lenovo ThinkCentre M93p', sub: 'k3s control-plane nodes' },
+              { icon: '▣', name: 'Intel NUC',                   sub: 'Docker host' },
+              { icon: '▣', name: 'HP MicroServer Gen8',         sub: 'TrueNAS · primary & archive storage' },
+              { icon: '◈', name: 'MikroTik hEX S',              sub: 'router & firewall' },
+              { icon: '◈', name: 'RPi 4 (bran)',                sub: 'automation runner & CI' },
+              { icon: '◉', name: 'APC UPS',                     sub: '390W · 1h 55m runtime' },
             ].map(h => (
               <div class="hw-item">
                 <span class="hw-icon mono">{h.icon}</span>
@@ -290,8 +260,30 @@ import Layout from '../layouts/Layout.astro';
     font-size: 1.125rem;
     color: var(--color-subtle);
     max-width: 520px;
-    margin: 0 auto 2.5rem;
+    margin: 0 auto 1rem;
     line-height: 1.7;
+  }
+
+  .hero-typewriter {
+    font-size: 0.9rem;
+    color: var(--color-peach);
+    margin: 0 auto 2rem;
+    height: 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+  }
+
+  .typewriter-cursor {
+    animation: blink 1s step-end infinite;
+    color: var(--color-peach);
+    margin-left: 1px;
   }
 
   .hero-actions {
@@ -579,6 +571,15 @@ import Layout from '../layouts/Layout.astro';
   @media (max-width: 768px) {
     .two-col { grid-template-columns: 1fr; gap: 2rem; }
     .hero { padding: 4rem 1.5rem 3rem; }
+    .stack-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 0.5rem; }
+    .media-grid { grid-template-columns: 1fr; }
+    .contrib-grid { gap: 1.5px; }
+    .contrib-cell { width: 8px; height: 8px; }
+  }
+
+  @media (max-width: 480px) {
+    .stack-grid { grid-template-columns: repeat(2, 1fr); }
+    .hero-typewriter { font-size: 0.8rem; }
   }
 
   /* ── Stack grid ── */
@@ -660,149 +661,6 @@ import Layout from '../layouts/Layout.astro';
   @keyframes shimmer {
     0%   { background-position: 200% 0; }
     100% { background-position: -200% 0; }
-  }
-
-  /* ── Terminal ── */
-  .term-wrap {
-    background: #0d0d0d;
-    border: 1px solid var(--color-muted);
-    border-radius: 12px;
-    overflow: hidden;
-    font-family: var(--font-mono);
-  }
-
-  .term-bar {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.6rem 1rem;
-    background: #1a1a1a;
-    border-bottom: 1px solid #2a2a2a;
-  }
-
-  .term-bar-title {
-    margin-left: 0.5rem;
-    font-size: 0.72rem;
-    color: #666;
-  }
-
-  .term-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-  }
-  .term-dot-red    { background: #ff5f57; }
-  .term-dot-yellow { background: #ffbd2e; }
-  .term-dot-green  { background: #28c840; }
-
-  .term-body {
-    padding: 1.25rem 1.5rem;
-    min-height: 220px;
-    max-height: 420px;
-    overflow-y: auto;
-    font-size: 0.82rem;
-    line-height: 1.7;
-    color: #c9d1d9;
-    scrollbar-width: thin;
-    scrollbar-color: #333 transparent;
-  }
-
-  .term-body:empty::before {
-    content: "# Data loaded. Type a command or click a suggestion below.";
-    color: #444;
-  }
-
-  /* Output line types */
-  .term-line-cmd {
-    color: #58a6ff;
-    margin-top: 0.75rem;
-  }
-  .term-line-cmd::before {
-    content: "kagiso@homelab:~$ ";
-    color: var(--color-peach);
-  }
-  .term-line-header {
-    color: #666;
-    font-size: 0.75rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin-bottom: 0.25rem;
-    border-bottom: 1px solid #222;
-    padding-bottom: 0.25rem;
-    margin-top: 0.5rem;
-  }
-  .term-line-row {
-    display: grid;
-    gap: 0.5rem;
-    padding: 0.15rem 0;
-  }
-  .term-line-ok     { color: #3fb950; }
-  .term-line-warn   { color: #d29922; }
-  .term-line-crit   { color: #f85149; }
-  .term-line-muted  { color: #666; }
-  .term-line-text   { color: #c9d1d9; }
-  .term-line-peach  { color: var(--color-peach); }
-
-  .term-input-row {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    border-top: 1px solid #1e1e1e;
-    background: #111;
-  }
-
-  .term-prompt {
-    color: var(--color-peach);
-    font-size: 0.82rem;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  .term-input {
-    flex: 1;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: #58a6ff;
-    font-family: var(--font-mono);
-    font-size: 0.82rem;
-    caret-color: var(--color-peach);
-  }
-
-  .term-input::placeholder { color: #333; }
-
-  .term-suggestions {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.6rem 1.5rem;
-    background: #0d0d0d;
-    border-top: 1px solid #1a1a1a;
-    flex-wrap: wrap;
-  }
-
-  .term-hint {
-    font-size: 0.7rem;
-    color: #444;
-    font-family: var(--font-mono);
-  }
-
-  .term-suggestion {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    color: #555;
-    background: #1a1a1a;
-    border: 1px solid #2a2a2a;
-    border-radius: 4px;
-    padding: 0.2rem 0.6rem;
-    cursor: pointer;
-    transition: color 0.15s, border-color 0.15s;
-  }
-
-  .term-suggestion:hover {
-    color: var(--color-peach);
-    border-color: var(--color-peach);
   }
 
   /* ── Parallax hero ── */
@@ -1024,187 +882,6 @@ import Layout from '../layouts/Layout.astro';
 </style>
 
 <script>
-  // ── Terminal ────────────────────────────────────────────────────────────────
-  let termData: any = null;
-
-  function termPrint(lines: string[]) {
-    const body = document.getElementById('term-body');
-    if (!body) return;
-    body.innerHTML += lines.join('\n') + '\n';
-    body.scrollTop = body.scrollHeight;
-  }
-
-  function termClear() {
-    const body = document.getElementById('term-body');
-    if (body) body.innerHTML = '';
-  }
-
-  function statusColor(s: string) {
-    if (s === 'ok')   return 'term-line-ok';
-    if (s === 'warn') return 'term-line-warn';
-    if (s === 'crit') return 'term-line-crit';
-    return 'term-line-muted';
-  }
-
-  function dot(s: string) {
-    const c = s === 'ok' ? '#3fb950' : s === 'warn' ? '#d29922' : s === 'crit' ? '#f85149' : '#555';
-    return `<span style="color:${c}">●</span>`;
-  }
-
-  function pad(s: string, n: number) {
-    return s.length >= n ? s : s + ' '.repeat(n - s.length);
-  }
-
-  function runCommand(raw: string) {
-    const cmd = raw.trim().toLowerCase();
-    if (!cmd) return;
-
-    termPrint([`<span class="term-line-cmd">${raw.trim()}</span>`]);
-
-    if (cmd === 'clear') { termClear(); return; }
-
-    if (!termData) {
-      termPrint([`<span class="term-line-muted">data not loaded yet — try again in a moment</span>`]);
-      return;
-    }
-
-    switch (cmd) {
-
-      case 'help':
-        termPrint([
-          `<span class="term-line-header">available commands</span>`,
-          `<span class="term-line-peach">get nodes</span>   <span class="term-line-muted">— cluster node status and resource usage</span>`,
-          `<span class="term-line-peach">get pods</span>    <span class="term-line-muted">— running workload count</span>`,
-          `<span class="term-line-peach">top</span>         <span class="term-line-muted">— CPU and memory across all nodes</span>`,
-          `<span class="term-line-peach">uptime</span>      <span class="term-line-muted">— cluster data freshness</span>`,
-          `<span class="term-line-peach">whoami</span>      <span class="term-line-muted">— about this homelab</span>`,
-          `<span class="term-line-peach">clear</span>       <span class="term-line-muted">— clear the terminal</span>`,
-        ]);
-        break;
-
-      case 'whoami':
-        termPrint([
-          `<span class="term-line-text">Kagiso — software engineer, homelab operator.</span>`,
-          `<span class="term-line-text">This cluster runs on 3× Lenovo ThinkCentre M93 nodes</span>`,
-          `<span class="term-line-text">managed with k3s, Flux GitOps, and too much curiosity.</span>`,
-          `<span class="term-line-text">Built in public. Everything you see here is real.</span>`,
-        ]);
-        break;
-
-      case 'uptime': {
-        const updated = termData.updated ?? '';
-        if (updated) {
-          const age = Date.now() - new Date(updated).getTime();
-          const mins = Math.floor(age / 60000);
-          const h    = Math.floor(mins / 60);
-          const m    = mins % 60;
-          const ageStr = h > 0 ? `${h}h ${m}m ago` : `${m}m ago`;
-          termPrint([
-            `<span class="term-line-text">cluster data last refreshed: <span class="term-line-ok">${ageStr}</span></span>`,
-            `<span class="term-line-muted">updates every 30 minutes via GitHub Actions on bran</span>`,
-          ]);
-        } else {
-          termPrint([`<span class="term-line-muted">no timestamp available</span>`]);
-        }
-        break;
-      }
-
-      case 'get pods': {
-        const wl = termData.cards?.find((c: any) => c.label === 'Workloads');
-        if (wl) {
-          const [running, total] = (wl.value ?? '0/0').split('/');
-          const allRunning = running === total;
-          termPrint([
-            `<span class="term-line-header">${pad('WORKLOADS', 20)}  STATUS</span>`,
-            `<span class="${allRunning ? 'term-line-ok' : 'term-line-warn'}">${pad('pods', 20)}  ${wl.value} running</span>`,
-            `<span class="term-line-muted">${allRunning ? 'all pods healthy' : `${parseInt(total)-parseInt(running)} pod(s) not running`}</span>`,
-          ]);
-        } else {
-          termPrint([`<span class="term-line-muted">no pod data available</span>`]);
-        }
-        break;
-      }
-
-      case 'get nodes': {
-        const nodes = termData.nodes ?? [];
-        if (!nodes.length) { termPrint([`<span class="term-line-muted">no node data available</span>`]); break; }
-        termPrint([`<span class="term-line-header">${pad('NAME',12)} ${pad('ROLE',16)} ${pad('STATUS',10)} ${pad('CPU',8)} MEM</span>`]);
-        nodes.forEach((n: any) => {
-          const cls = statusColor(n.status);
-          const statusTxt = n.status === 'ok' ? 'Ready' : n.status === 'crit' ? 'NotReady' : 'Degraded';
-          termPrint([
-            `<span class="${cls}">${dot(n.status)} ${pad(n.name,10)} ${pad(n.role,16)} ${pad(statusTxt,10)} ${pad(n.cpu,8)} ${n.memory}</span>`
-          ]);
-        });
-        break;
-      }
-
-      case 'top': {
-        const nodes = termData.nodes ?? [];
-        if (!nodes.length) { termPrint([`<span class="term-line-muted">no resource data available</span>`]); break; }
-        termPrint([`<span class="term-line-header">${pad('NODE',14)} ${pad('CPU REQUESTS',16)} MEM REQUESTS</span>`]);
-        nodes.forEach((n: any) => {
-          const cls = statusColor(n.status);
-          termPrint([
-            `<span class="${cls}">${dot(n.status)} ${pad(n.name,12)} ${pad(n.cpu,16)} ${n.memory}</span>`
-          ]);
-        });
-        termPrint([`<span class="term-line-muted">values reflect scheduled pod resource requests</span>`]);
-        break;
-      }
-
-      default:
-        termPrint([
-          `<span class="term-line-crit">command not found: ${raw.trim()}</span>`,
-          `<span class="term-line-muted">type <span style="color:var(--color-peach)">help</span> for available commands</span>`,
-        ]);
-    }
-  }
-
-  function termInit() {
-    const input = document.getElementById('term-input') as HTMLInputElement;
-    const history: string[] = [];
-    let histIdx = -1;
-
-    // Run command on Enter
-    input?.addEventListener('keydown', (e: KeyboardEvent) => {
-      if (e.key === 'Enter') {
-        const val = input.value;
-        if (val.trim()) { history.unshift(val); histIdx = -1; }
-        runCommand(val);
-        input.value = '';
-      }
-      // History navigation
-      if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        if (histIdx < history.length - 1) { histIdx++; input.value = history[histIdx]; }
-      }
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        if (histIdx > 0) { histIdx--; input.value = history[histIdx]; }
-        else { histIdx = -1; input.value = ''; }
-      }
-      // Tab cycles through suggestions
-      if (e.key === 'Tab') {
-        e.preventDefault();
-        const cmds = ['get nodes', 'get pods', 'top', 'uptime', 'whoami', 'help', 'clear'];
-        const cur = input.value.toLowerCase();
-        const match = cmds.find(c => c.startsWith(cur) && c !== cur);
-        if (match) input.value = match;
-      }
-    });
-
-    // Suggestion chip clicks
-    document.querySelectorAll('.term-suggestion').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const cmd = (btn as HTMLElement).dataset.cmd ?? '';
-        runCommand(cmd);
-        input?.focus();
-      });
-    });
-
-  }
-
   // ── Fallback static list — shown immediately before live.json loads
   const STATIC_SERVICES = [
     { name: 'Immich',    tag: '—',    status: 'unknown' },
@@ -1322,7 +999,10 @@ import Layout from '../layouts/Layout.astro';
       const res = await fetch('/data/live.json');
       if (!res.ok) throw new Error('no data');
       const data = await res.json();
-      termData = data; // make available to terminal
+      // Push data to ClusterTerminal component
+      if (typeof (window as any).__termSetData === 'function') {
+        (window as any).__termSetData(data);
+      }
 
       const grid = document.getElementById('live-grid');
       if (grid && data.cards) {
@@ -1435,10 +1115,61 @@ import Layout from '../layouts/Layout.astro';
     } catch { /* no data yet */ }
   }
 
-  termInit();
   loadLiveData();
   loadDigest();
   loadProject();
+
+  // ── Typewriter ───────────────────────────────────────────────────────────
+  (function initTypewriter() {
+    const el = document.getElementById('typewriter-text')!;
+    if (!el) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      el.textContent = 'software engineer · homelab operator';
+      return;
+    }
+
+    const phrases = [
+      'software engineer',
+      'homelab operator',
+      'k3s cluster admin',
+      'built in public',
+      'from bare metal up',
+    ];
+
+    let phraseIdx = 0;
+    let charIdx   = 0;
+    let deleting  = false;
+    const TYPE_SPEED   = 65;
+    const DELETE_SPEED = 35;
+    const PAUSE_END    = 1800;
+    const PAUSE_START  = 300;
+
+    function tick() {
+      const phrase = phrases[phraseIdx];
+      if (!deleting) {
+        charIdx++;
+        el.textContent = phrase.slice(0, charIdx);
+        if (charIdx === phrase.length) {
+          deleting = true;
+          setTimeout(tick, PAUSE_END);
+          return;
+        }
+        setTimeout(tick, TYPE_SPEED);
+      } else {
+        charIdx--;
+        el.textContent = phrase.slice(0, charIdx);
+        if (charIdx === 0) {
+          deleting = false;
+          phraseIdx = (phraseIdx + 1) % phrases.length;
+          setTimeout(tick, PAUSE_START);
+          return;
+        }
+        setTimeout(tick, DELETE_SPEED);
+      }
+    }
+
+    setTimeout(tick, 800); // small initial delay after page load
+  })();
 
   // ── GitHub contribution graph ────────────────────────────────────────────
   async function loadContribGraph() {
@@ -1447,56 +1178,66 @@ import Layout from '../layouts/Layout.astro';
     if (!graphEl) return;
 
     try {
-      // Proxy via allorigins to avoid CORS on GitHub's HTML endpoint
-      const url = 'https://github.com/users/Kagiso-me/contributions';
-      const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
-      if (!res.ok) throw new Error('fetch failed');
-      const json = await res.json();
-      const html = json.contents as string;
+      // GitHub public events API — CORS-enabled, no token needed
+      // Fetch up to 300 events across 3 pages (GitHub max is 100/page, 10 pages)
+      const user = 'Kagiso-me';
+      const pages = [1, 2, 3];
+      const results = await Promise.all(
+        pages.map(p =>
+          fetch(`https://api.github.com/users/${user}/events/public?per_page=100&page=${p}`, {
+            headers: { Accept: 'application/vnd.github+json' }
+          }).then(r => r.ok ? r.json() : []).catch(() => [])
+        )
+      );
+      const events: any[] = results.flat();
 
-      // Parse data-date and data-level from the SVG rect / td elements
-      const matches = [...html.matchAll(/data-date="(\d{4}-\d{2}-\d{2})"[^>]*data-level="(\d)"/g)];
-      if (!matches.length) throw new Error('no data');
-
-      // Build a date→level map
-      const map: Record<string, number> = {};
-      let total = 0;
-      for (const [, date, level] of matches) {
-        const lvl = parseInt(level);
-        map[date] = lvl;
-        if (lvl > 0) total++;
+      // Count pushes per day (PushEvent = most common contribution)
+      const dayCounts: Record<string, number> = {};
+      for (const ev of events) {
+        const iso = ev.created_at?.slice(0, 10);
+        if (!iso) continue;
+        const commits = ev.type === 'PushEvent' ? (ev.payload?.commits?.length ?? 1) : 1;
+        dayCounts[iso] = (dayCounts[iso] ?? 0) + commits;
       }
 
-      // Generate last 52 weeks × 7 days grid (Sunday-anchored)
+      // Normalise to levels 0–4 based on max activity
+      const maxCount = Math.max(1, ...Object.values(dayCounts));
+      const toLevel = (n: number) => n === 0 ? 0 : Math.min(4, Math.ceil((n / maxCount) * 4));
+
+      // Generate last 52 weeks × 7 days grid (Sunday-anchored, ending today)
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-      // Roll back to the most recent Sunday
-      const dayOfWeek = today.getDay();
       const gridEnd = new Date(today);
-      gridEnd.setDate(gridEnd.getDate() - dayOfWeek + 6); // end on Saturday
+      // Pad to end of current week (Saturday)
+      gridEnd.setDate(gridEnd.getDate() + (6 - today.getDay()));
 
-      const cells: { date: string; level: number }[] = [];
+      const cells: { date: string; level: number; count: number }[] = [];
       for (let w = 51; w >= 0; w--) {
         for (let d = 0; d < 7; d++) {
           const dt = new Date(gridEnd);
           dt.setDate(dt.getDate() - w * 7 - (6 - d));
           const iso = dt.toISOString().slice(0, 10);
-          cells.push({ date: iso, level: map[iso] ?? 0 });
+          const count = dayCounts[iso] ?? 0;
+          cells.push({ date: iso, level: toLevel(count), count });
         }
       }
 
       const grid = document.createElement('div');
       grid.className = 'contrib-grid';
-      grid.innerHTML = cells.map(c =>
-        `<span class="contrib-cell" data-level="${c.level}" title="${c.date} · ${c.level > 0 ? c.level + ' contribution' + (c.level > 1 ? 's' : '') : 'no contributions'}"></span>`
-      ).join('');
+      grid.innerHTML = cells.map(c => {
+        const tip = c.count > 0
+          ? `${c.date} · ${c.count} contribution${c.count > 1 ? 's' : ''}`
+          : `${c.date} · no contributions`;
+        return `<span class="contrib-cell" data-level="${c.level}" title="${tip}"></span>`;
+      }).join('');
 
       graphEl.innerHTML = '';
       graphEl.appendChild(grid);
 
       if (totalEl) {
         const activeDays = cells.filter(c => c.level > 0).length;
-        totalEl.textContent = `${activeDays} active days in the last year`;
+        const totalContribs = Object.values(dayCounts).reduce((a, b) => a + b, 0);
+        totalEl.textContent = `${totalContribs} contributions · ${activeDays} active days (last 90 days)`;
       }
     } catch {
       if (graphEl) graphEl.innerHTML = '<div class="contrib-loading">graph unavailable</div>';

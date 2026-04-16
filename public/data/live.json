@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-16T19:43:41Z",
-  "fetched_at": "2026-04-16T19:43:41Z",
+  "updated": "2026-04-16T20:43:12Z",
+  "fetched_at": "2026-04-16T20:43:12Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "17h 41m ago",
+      "value": "18h 41m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "7h 43m ago",
+      "value": "8h 43m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "43m ago",
+      "value": "1h 43m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "18h 43m ago",
+      "value": "19h 43m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     }
@@ -44,7 +44,7 @@
       "name": "jaime",
       "role": "control-plane",
       "status": "ok",
-      "pods": "14/110",
+      "pods": "15/110",
       "cpu": "24%",
       "memory": "6%",
       "pressure": []
@@ -53,7 +53,7 @@
       "name": "tyrion",
       "role": "control-plane",
       "status": "ok",
-      "pods": "10/110",
+      "pods": "12/110",
       "cpu": "25%",
       "memory": "5%",
       "pressure": []
@@ -62,7 +62,7 @@
       "name": "tywin",
       "role": "control-plane",
       "status": "ok",
-      "pods": "37/110",
+      "pods": "34/110",
       "cpu": "43%",
       "memory": "9%",
       "pressure": []
@@ -193,7 +193,7 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 40 photos \u00b7 0 videos",
+      "tag": "Immich: 82 photos \u00b7 0 videos",
       "status": "ok"
     },
     {
@@ -203,7 +203,7 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 275.7 GB left",
+      "tag": "SABnzbd: downloading \u00b7 248.4 GB left",
       "status": "ok"
     },
     {
@@ -237,8 +237,8 @@
     }
   ],
   "network": {
-    "fw_hits": 108531,
-    "latency_ms": 6.1,
+    "fw_hits": 109609,
+    "latency_ms": 8.8,
     "offenders": [],
     "pihole": {
       "total": 0,
@@ -249,8 +249,8 @@
   "bran": {
     "temp_c": 52.6,
     "temp_status": "ok",
-    "load": 0.67,
-    "mem_pct": 51.0
+    "load": 0.88,
+    "mem_pct": 45.1
   },
   "ups": {
     "charge": 100,
@@ -263,16 +263,16 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "2d ago",
-    "message": "fix(observability): replace speculative dashboards with upstream, fix broken scr",
-    "sha": "ed50d9a"
+    "age": "33m ago",
+    "message": "chore(deps): update helm release cert-manager to v1.20.2 (#156)",
+    "sha": "abd0d87"
   },
   "storage": [
     {
       "name": "tera",
       "used": "6.0 TB",
       "total": "7.9 TB",
-      "pct": 76.6,
+      "pct": 76.8,
       "status": "warn",
       "pool_status": "ONLINE",
       "healthy": true
@@ -288,9 +288,9 @@
     },
     {
       "name": "core",
-      "used": "14.7 GB",
+      "used": "15.5 GB",
       "total": "476.7 GB",
-      "pct": 3.1,
+      "pct": 3.2,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true

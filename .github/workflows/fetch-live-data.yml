@@ -28,7 +28,6 @@ jobs:
           MIKROTIK_HOST:     ${{ secrets.MIKROTIK_HOST }}
           MIKROTIK_USER:     ${{ secrets.MIKROTIK_USER }}
           MIKROTIK_PASS:     ${{ secrets.MIKROTIK_PASS }}
-          PIHOLE_PASSWORD:   ${{ secrets.PIHOLE_PASSWORD }}
           TRUENAS_API_KEY:   ${{ secrets.TRUENAS_API_KEY }}
           IMMICH_API_KEY:    ${{ secrets.IMMICH_API_KEY }}
           NEXTCLOUD_USER:    ${{ secrets.NEXTCLOUD_USER }}

@@ -141,5 +141,16 @@ const current = Astro.url.pathname;
 <script>
   const toggle = document.getElementById('nav-toggle');
   const mobile = document.getElementById('nav-mobile');
+
   toggle?.addEventListener('click', () => mobile?.classList.toggle('open'));
+
+  // Close menu on nav link click (for view-transition navigations)
+  mobile?.querySelectorAll('a').forEach(a =>
+    a.addEventListener('click', () => mobile.classList.remove('open'))
+  );
+
+  // Close menu when a view-transition navigation starts
+  document.addEventListener('astro:before-preparation', () =>
+    mobile?.classList.remove('open')
+  );
 </script>

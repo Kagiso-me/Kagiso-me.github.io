@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1117"/>
+      <stop offset="100%" stop-color="#10141c"/>
+    </linearGradient>
+    <linearGradient id="grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#fab387"/>
+      <stop offset="100%" stop-color="#cba6f7"/>
+    </linearGradient>
+    <radialGradient id="orb1" cx="15%" cy="30%" r="40%">
+      <stop offset="0%" stop-color="#fab387" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#fab387" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="orb2" cx="85%" cy="70%" r="40%">
+      <stop offset="0%" stop-color="#cba6f7" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#cba6f7" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="1" fill="rgba(255,255,255,0.04)"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#dots)"/>
+  <rect width="1200" height="630" fill="url(#orb1)"/>
+  <rect width="1200" height="630" fill="url(#orb2)"/>
+
+  <!-- Border frame -->
+  <rect x="24" y="24" width="1152" height="582" rx="16" fill="none"
+        stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+
+  <!-- Eyebrow -->
+  <text x="80" y="200" font-family="'JetBrains Mono',monospace" font-size="22"
+        fill="#fab387" letter-spacing="2">~/homelab</text>
+
+  <!-- Main title -->
+  <text x="80" y="298" font-family="'Inter',system-ui,sans-serif" font-size="80"
+        font-weight="800" fill="url(#grad)">Living Homelab</text>
+
+  <!-- Subtitle -->
+  <text x="80" y="356" font-family="'Inter',system-ui,sans-serif" font-size="26"
+        fill="#6b7280">A real homelab, built and operated in public.</text>
+
+  <!-- Divider -->
+  <rect x="80" y="400" width="120" height="3" rx="2" fill="url(#grad)"/>
+
+  <!-- Stats row -->
+  <g font-family="'JetBrains Mono',monospace" font-size="18" fill="#bfbdb6">
+    <text x="80"  y="450">k3s · 3 nodes</text>
+    <text x="290" y="450" fill="rgba(255,255,255,0.15)">·</text>
+    <text x="310" y="450">Flux GitOps</text>
+    <text x="490" y="450" fill="rgba(255,255,255,0.15)">·</text>
+    <text x="510" y="450">built in public</text>
+  </g>
+
+  <!-- Domain badge -->
+  <rect x="80" y="510" width="220" height="44" rx="8"
+        fill="rgba(250,179,135,0.1)" stroke="rgba(250,179,135,0.25)" stroke-width="1"/>
+  <text x="190" y="538" font-family="'JetBrains Mono',monospace" font-size="18"
+        fill="#fab387" text-anchor="middle">kagiso.me</text>
+
+  <!-- Status dot -->
+  <circle cx="1090" cy="315" r="10" fill="#a6e3a1"/>
+  <circle cx="1090" cy="315" r="18" fill="#a6e3a1" opacity="0.15"/>
+  <text x="1090" y="350" font-family="'JetBrains Mono',monospace" font-size="14"
+        fill="#6b7280" text-anchor="middle">live</text>
+</svg>

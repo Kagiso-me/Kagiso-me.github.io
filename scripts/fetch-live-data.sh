@@ -621,7 +621,6 @@ build_network() {
   local mt_host="${MIKROTIK_HOST:-}"
   local mt_user="${MIKROTIK_USER:-}"
   local mt_pass="${MIKROTIK_PASS:-}"
-  local ph_pass="${PIHOLE_PASSWORD:-}"
 
   # ── MikroTik ────────────────────────────────────────────────────────────────
   local fw_json="[]" ping_json="[]" log_json="[]"
@@ -644,32 +643,20 @@ build_network() {
     rm -f "$mt_jar"
   fi
 
-  # ── Pi-hole v6 ──────────────────────────────────────────────────────────────
-  local ph_token="" ph_stats="{}"
-  if [[ -n "$ph_pass" ]]; then
-    ph_token=$(curl -sf --max-time 5 -X POST "http://localhost/api/auth" \
-      -H "Content-Type: application/json" \
-      -d "{\"password\":\"$ph_pass\"}" 2>/dev/null \
-      | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('session',{}).get('sid',''))" \
-      2>/dev/null || echo "")
-    if [[ -n "$ph_token" ]]; then
-      ph_stats=$(curl -sf --max-time 5 \
-        -H "X-FTL-SID: $ph_token" \
-        "http://localhost/api/stats/summary" 2>/dev/null || echo "{}")
-      curl -sf --max-time 3 -X DELETE \
-        -H "X-FTL-SID: $ph_token" \
-        "http://localhost/api/auth" >/dev/null 2>&1 || true
-    fi
-  fi
+  # ── CrowdSec ────────────────────────────────────────────────────────────────
+  local cs_bans=0
+  cs_bans=$(cscli decisions list -o json 2>/dev/null \
+    | python3 -c "import json,sys; d=json.load(sys.stdin); print(len(d) if isinstance(d,list) else 0)" \
+    2>/dev/null || echo "0")
 
-  local tmp_fw tmp_ping tmp_log tmp_ph
-  tmp_fw=$(mktemp); tmp_ping=$(mktemp); tmp_log=$(mktemp); tmp_ph=$(mktemp)
+  local tmp_fw tmp_ping tmp_log tmp_cs
+  tmp_fw=$(mktemp); tmp_ping=$(mktemp); tmp_log=$(mktemp); tmp_cs=$(mktemp)
   echo "$fw_json"   > "$tmp_fw"
   echo "$ping_json" > "$tmp_ping"
   echo "$log_json"  > "$tmp_log"
-  echo "$ph_stats"  > "$tmp_ph"
+  echo "$cs_bans"   > "$tmp_cs"
 
-  python3 - "$tmp_fw" "$tmp_ping" "$tmp_log" "$tmp_ph" <<'PYEOF'
+  python3 - "$tmp_fw" "$tmp_ping" "$tmp_log" "$tmp_cs" <<'PYEOF'
 import json, collections, re, sys
 
 def load(path):
@@ -680,7 +667,9 @@ def load(path):
 fw      = load(sys.argv[1]) or []
 pings   = load(sys.argv[2]) or []
 logs    = load(sys.argv[3]) or []
-ph_data = load(sys.argv[4]) or {}
+try:
+  with open(sys.argv[4]) as f: cs_bans = int(f.read().strip())
+except: cs_bans = 0
 
 # Firewall: sum packets on drop rules
 fw_hits = 0
@@ -733,21 +722,11 @@ try:
 except:
   pass
 
-# Pi-hole stats
-pihole = None
-try:
-  total   = ph_data.get('queries', {}).get('total', 0)
-  blocked = ph_data.get('queries', {}).get('blocked', 0)
-  pct     = round(blocked / total * 100, 1) if total > 0 else 0
-  pihole  = {'total': total, 'blocked': blocked, 'percent': pct}
-except:
-  pass
-
 print(json.dumps({
-  'fw_hits':    fw_hits,
-  'latency_ms': latency_ms,
-  'offenders':  offenders,
-  'pihole':     pihole,
+  'fw_hits':       fw_hits,
+  'latency_ms':    latency_ms,
+  'offenders':     offenders,
+  'crowdsec_bans': cs_bans,
 }))
 PYEOF
   rm -f "$tmp_fw" "$tmp_ping" "$tmp_log" "$tmp_ph"

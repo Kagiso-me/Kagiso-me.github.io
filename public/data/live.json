@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-16T15:12:08Z",
-  "fetched_at": "2026-04-16T15:12:08Z",
+  "updated": "2026-04-16T16:54:06Z",
+  "fetched_at": "2026-04-16T16:54:06Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "13h 10m ago",
+      "value": "14h 52m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "3h 12m ago",
+      "value": "4h 54m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "2h 12m ago",
+      "value": "3h 54m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "14h 12m ago",
+      "value": "15h 54m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     }
@@ -193,7 +193,7 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 39 photos \u00b7 0 videos",
+      "tag": "Immich: 40 photos \u00b7 0 videos",
       "status": "ok"
     },
     {
@@ -203,7 +203,7 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 71.1 GB left",
+      "tag": "SABnzbd: downloading \u00b7 125.7 GB left",
       "status": "ok"
     },
     {
@@ -237,8 +237,8 @@
     }
   ],
   "network": {
-    "fw_hits": 104063,
-    "latency_ms": 9.7,
+    "fw_hits": 105632,
+    "latency_ms": 9.3,
     "offenders": [],
     "pihole": {
       "total": 0,
@@ -249,8 +249,8 @@
   "bran": {
     "temp_c": 52.6,
     "temp_status": "ok",
-    "load": 1.15,
-    "mem_pct": 51.1
+    "load": 0.72,
+    "mem_pct": 50.4
   },
   "ups": {
     "charge": 100,
@@ -272,7 +272,7 @@
       "name": "tera",
       "used": "6.0 TB",
       "total": "7.9 TB",
-      "pct": 76.4,
+      "pct": 76.5,
       "status": "warn",
       "pool_status": "ONLINE",
       "healthy": true
@@ -288,7 +288,7 @@
     },
     {
       "name": "core",
-      "used": "14.6 GB",
+      "used": "14.8 GB",
       "total": "476.7 GB",
       "pct": 3.1,
       "status": "ok",

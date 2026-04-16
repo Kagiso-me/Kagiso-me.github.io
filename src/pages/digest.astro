@@ -31,8 +31,8 @@ import Layout from '../layouts/Layout.astro';
       <span class="mono" id="entry-count" style="color:var(--color-subtle);font-size:0.8rem"></span>
     </div>
 
-    <!-- ── Entries ── -->
-    <div id="digest-entries" class="fade-up" style="animation-delay:0.1s">
+    <!-- ── Timeline ── -->
+    <div id="digest-entries" class="fade-up timeline" style="animation-delay:0.1s">
       <!-- skeleton -->
       <div class="skeleton" style="height:80px;border-radius:12px;margin-bottom:0.75rem"></div>
       <div class="skeleton" style="height:80px;border-radius:12px;margin-bottom:0.75rem"></div>
@@ -102,6 +102,59 @@ import Layout from '../layouts/Layout.astro';
   .filter-btn:hover  { border-color: var(--color-peach); color: var(--color-peach); }
   .filter-btn.active { border-color: var(--color-peach); color: var(--color-peach); background: color-mix(in srgb, var(--color-peach) 10%, transparent); }
 
+  /* ── Timeline container ── */
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
+  }
+
+  /* The vertical line — drawn via a pseudo on the container */
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0.45rem;
+    top: 0.5rem;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(
+      to bottom,
+      var(--color-peach),
+      var(--color-mauve) 40%,
+      var(--color-muted) 80%,
+      transparent
+    );
+    border-radius: 1px;
+  }
+
+  /* ── Month divider ── */
+  .month-divider {
+    position: relative;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-subtle);
+    margin: 2.25rem 0 1rem -2rem;
+    padding: 0.2rem 0.75rem 0.2rem 1.75rem;
+    background: var(--color-base);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* Diamond on the timeline for each month */
+  .month-divider::before {
+    content: '◆';
+    position: absolute;
+    left: -1.6rem;
+    color: var(--color-peach);
+    font-size: 0.6rem;
+    background: var(--color-base);
+    padding: 2px 0;
+  }
+
+  .month-divider:first-child { margin-top: 0; }
+
   /* ── Entry card ── */
   .entry-card {
     display: block;
@@ -109,19 +162,51 @@ import Layout from '../layouts/Layout.astro';
     background: var(--color-surface);
     border: 1px solid var(--color-muted);
     border-radius: 12px;
-    padding: 1.25rem 1.5rem;
-    margin-bottom: 0.75rem;
-    transition: border-color 0.15s, transform 0.15s;
+    padding: 1.1rem 1.4rem;
+    margin-bottom: 0.65rem;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
     cursor: pointer;
+    position: relative;
+  }
+
+  /* Timeline dot */
+  .entry-card::before {
+    content: '';
+    position: absolute;
+    left: -1.8rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--color-muted);
+    border: 2px solid var(--color-base);
+    transition: background 0.2s, box-shadow 0.2s;
   }
 
   .entry-card:hover {
     border-color: var(--color-peach);
-    transform: translateY(-1px);
+    transform: translateX(3px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
   }
 
+  .entry-card:hover::before {
+    background: var(--color-peach);
+    box-shadow: 0 0 8px var(--color-peach);
+  }
+
+  /* Colour-coded dots by type */
+  .entry-card[data-type="DEPLOY"]::before   { background: var(--color-ok); }
+  .entry-card[data-type="FIX"]::before      { background: var(--color-peach); }
+  .entry-card[data-type="INCIDENT"]::before { background: var(--color-crit); }
+  .entry-card[data-type="HARDWARE"]::before { background: var(--color-gold); }
+  .entry-card[data-type="NETWORK"]::before  { background: var(--color-mauve); }
+  .entry-card[data-type="SECURITY"]::before { background: var(--color-warn); }
+  .entry-card[data-type="SCALE"]::before    { background: var(--color-ok); }
+
   .entry-card.no-detail { cursor: default; }
-  .entry-card.no-detail:hover { transform: none; border-color: var(--color-muted); }
+  .entry-card.no-detail:hover { transform: none; border-color: var(--color-muted); box-shadow: none; }
+  .entry-card.no-detail:hover::before { box-shadow: none; }
 
   .entry-row {
     display: flex;
@@ -156,13 +241,13 @@ import Layout from '../layouts/Layout.astro';
     white-space: nowrap;
   }
 
-  .type-DEPLOY   { background: color-mix(in srgb, var(--color-ok)   12%, transparent); color: var(--color-ok); }
-  .type-FIX      { background: color-mix(in srgb, var(--color-peach) 12%, transparent); color: var(--color-peach); }
-  .type-INCIDENT { background: color-mix(in srgb, var(--color-crit)  12%, transparent); color: var(--color-crit); }
-  .type-HARDWARE { background: color-mix(in srgb, var(--color-gold)  12%, transparent); color: var(--color-gold); }
-  .type-NETWORK  { background: color-mix(in srgb, var(--color-mauve) 12%, transparent); color: var(--color-mauve); }
-  .type-SECURITY { background: color-mix(in srgb, var(--color-warn)  12%, transparent); color: var(--color-warn); }
-  .type-SCALE    { background: color-mix(in srgb, var(--color-ok)    12%, transparent); color: var(--color-ok); }
+  .type-DEPLOY   { background: color-mix(in srgb, var(--color-ok)    12%, transparent); color: var(--color-ok); }
+  .type-FIX      { background: color-mix(in srgb, var(--color-peach)  12%, transparent); color: var(--color-peach); }
+  .type-INCIDENT { background: color-mix(in srgb, var(--color-crit)   12%, transparent); color: var(--color-crit); }
+  .type-HARDWARE { background: color-mix(in srgb, var(--color-gold)   12%, transparent); color: var(--color-gold); }
+  .type-NETWORK  { background: color-mix(in srgb, var(--color-mauve)  12%, transparent); color: var(--color-mauve); }
+  .type-SECURITY { background: color-mix(in srgb, var(--color-warn)   12%, transparent); color: var(--color-warn); }
+  .type-SCALE    { background: color-mix(in srgb, var(--color-ok)     12%, transparent); color: var(--color-ok); }
   .type-default  { background: color-mix(in srgb, var(--color-subtle) 12%, transparent); color: var(--color-subtle); }
 
   .entry-body { flex: 1; min-width: 0; }
@@ -196,20 +281,6 @@ import Layout from '../layouts/Layout.astro';
     align-items: center;
     gap: 0.25rem;
   }
-
-  /* ── Month divider ── */
-  .month-divider {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--color-subtle);
-    margin: 2rem 0 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--color-muted);
-  }
-
-  .month-divider:first-child { margin-top: 0; }
 
   .skeleton {
     background: linear-gradient(90deg, var(--color-surface) 25%, var(--color-overlay) 50%, var(--color-surface) 75%);
@@ -287,7 +358,7 @@ import Layout from '../layouts/Layout.astro';
         const noDetailClass = href ? '' : ' no-detail';
 
         html += `
-        <${tag} ${hrefAttr} class="entry-card${noDetailClass}">
+        <${tag} ${hrefAttr} class="entry-card${noDetailClass}" data-type="${e.type}">
           <div class="entry-row">
             <div class="entry-meta">
               <span class="entry-date">${formatDate(e.date)}</span>

@@ -132,12 +132,55 @@ code, pre {
   color: var(--color-subtle);
 }
 
-/* ── Section fade-in ── */
+/* ── Scroll-driven reveal ── */
 @keyframes fade-up {
-  from { opacity: 0; transform: translateY(16px); }
+  from { opacity: 0; transform: translateY(24px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* Elements start hidden; JS adds .is-visible when they enter the viewport */
 .fade-up {
-  animation: fade-up 0.6s ease-out forwards;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.fade-up.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger children inside a revealed container */
+.fade-up.is-visible > * { transition-delay: 0ms; }
+.fade-up.is-visible > *:nth-child(1) { transition-delay:  40ms; }
+.fade-up.is-visible > *:nth-child(2) { transition-delay:  90ms; }
+.fade-up.is-visible > *:nth-child(3) { transition-delay: 140ms; }
+.fade-up.is-visible > *:nth-child(4) { transition-delay: 190ms; }
+.fade-up.is-visible > *:nth-child(5) { transition-delay: 240ms; }
+.fade-up.is-visible > *:nth-child(6) { transition-delay: 290ms; }
+
+/* Honour prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .fade-up {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ── Cursor glow ── */
+#cursor-glow {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: radial-gradient(
+    600px circle at var(--cx, -9999px) var(--cy, -9999px),
+    rgba(250, 179, 135, 0.06) 0%,
+    rgba(203, 166, 247, 0.03) 40%,
+    transparent 70%
+  );
+  transition: background 0.1s ease;
 }

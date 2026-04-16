@@ -240,11 +240,7 @@
     "fw_hits": 109609,
     "latency_ms": 8.8,
     "offenders": [],
-    "pihole": {
-      "total": 0,
-      "blocked": 0,
-      "percent": 0
-    }
+    "crowdsec_bans": 12
   },
   "bran": {
     "temp_c": 52.6,
@@ -264,7 +260,7 @@
   },
   "last_deploy": {
     "age": "33m ago",
-    "message": "chore(deps): update helm release cert-manager to v1.20.2 (#156)",
+    "message": "fix(cert-manager)",
     "sha": "abd0d87"
   },
   "storage": [

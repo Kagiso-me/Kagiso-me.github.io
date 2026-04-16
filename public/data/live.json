@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-16T18:04:58Z",
-  "fetched_at": "2026-04-16T18:04:58Z",
+  "updated": "2026-04-16T19:43:41Z",
+  "fetched_at": "2026-04-16T19:43:41Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "16h 3m ago",
+      "value": "17h 41m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "6h 5m ago",
+      "value": "7h 43m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "5h 5m ago",
+      "value": "43m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "17h 5m ago",
+      "value": "18h 43m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     }
@@ -198,12 +198,12 @@
     },
     {
       "name": "Nextcloud",
-      "tag": "Nextcloud: online",
+      "tag": "Nextcloud: 60.9 MB used",
       "status": "ok"
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 180.1 GB left",
+      "tag": "SABnzbd: downloading \u00b7 275.7 GB left",
       "status": "ok"
     },
     {
@@ -237,8 +237,8 @@
     }
   ],
   "network": {
-    "fw_hits": 106815,
-    "latency_ms": 7.9,
+    "fw_hits": 108531,
+    "latency_ms": 6.1,
     "offenders": [],
     "pihole": {
       "total": 0,
@@ -249,8 +249,8 @@
   "bran": {
     "temp_c": 52.6,
     "temp_status": "ok",
-    "load": 0.49,
-    "mem_pct": 50.8
+    "load": 0.67,
+    "mem_pct": 51.0
   },
   "ups": {
     "charge": 100,
@@ -281,7 +281,7 @@
       "name": "archive",
       "used": "452.4 GB",
       "total": "4.0 TB",
-      "pct": 11.3,
+      "pct": 11.4,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true

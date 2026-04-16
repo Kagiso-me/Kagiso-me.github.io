@@ -1,5 +1,6 @@
 ---
 import Nav from '../components/Nav.astro';
+import ClientRouter from 'astro/components/ClientRouter.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -30,8 +31,10 @@ const { title, description = 'Living Homelab — built in public by Kagiso.' } =
 
     <title>{title} · kagiso.me</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <ClientRouter />
   </head>
   <body>
+    <div id="cursor-glow" aria-hidden="true"></div>
     <div id="maintenance-banner" style="display:none"></div>
     <Nav />
     <main>
@@ -78,6 +81,40 @@ const { title, description = 'Living Homelab — built in public by Kagiso.' } =
 </style>
 
 <script>
+  // ── Cursor glow ────────────────────────────────────────────────────────────
+  const glow = document.getElementById('cursor-glow');
+  if (glow && window.matchMedia('(pointer: fine)').matches) {
+    let rafId: number;
+    document.addEventListener('mousemove', (e) => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        glow.style.setProperty('--cx', e.clientX + 'px');
+        glow.style.setProperty('--cy', e.clientY + 'px');
+      });
+    });
+  }
+
+  // ── Scroll-driven reveal ────────────────────────────────────────────────────
+  function initReveal() {
+    const els = document.querySelectorAll('.fade-up');
+    if (!els.length) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+    els.forEach(el => observer.observe(el));
+  }
+
+  // Run on first load and after every view-transition navigation
+  initReveal();
+  document.addEventListener('astro:page-load', initReveal);
+
   fetch('/data/maintenance.json')
     .then(r => r.json())
     .then(data => {

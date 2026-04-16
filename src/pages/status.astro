@@ -620,16 +620,21 @@ import Layout from '../layouts/Layout.astro';
       const glance = document.getElementById('glance-cards');
       if (glance && data.cards) {
         const glanceLabels = ['workloads', 'flux'];
-        glance.innerHTML = data.cards.filter((c: any) => glanceLabels.includes(c.label.toLowerCase())).map((c: any) => `
+        glance.innerHTML = data.cards.filter((c: any) => glanceLabels.includes(c.label.toLowerCase())).map((c: any) => {
+          // Extract leading number for count-up (e.g. "61/64" → 61, "19/19 synced" → 19)
+          const numMatch = (c.value ?? '').match(/^(\d+)/);
+          const countAttr = numMatch ? `data-count-to="${numMatch[1]}" data-count-suffix="${c.value.slice(numMatch[1].length)}"` : '';
+          return `
           <div class="card">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
               <span class="mono" style="color:var(--color-subtle);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em">${c.label}</span>
               <span class="status-dot ${c.status}"></span>
             </div>
-            <div style="font-size:1.4rem;font-weight:700;color:var(--color-heading);font-family:var(--font-mono);margin-bottom:0.25rem">${c.value}</div>
+            <div style="font-size:1.4rem;font-weight:700;color:var(--color-heading);font-family:var(--font-mono);margin-bottom:0.25rem"
+                 ${countAttr}>0</div>
             <div class="mono" style="font-size:0.85rem">${c.sub ?? ''}</div>
-          </div>
-        `).join('');
+          </div>`;
+        }).join('');
       }
 
       // Nodes
@@ -743,7 +748,7 @@ import Layout from '../layouts/Layout.astro';
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem">
               <div>
                 <span class="mono" style="color:var(--color-subtle);font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em">bran</span>
-                <div style="font-size:0.78rem;color:var(--color-subtle);font-family:var(--font-mono);margin-top:0.1rem">RPi 4 · automation runner, DNS &amp; Pi-hole</div>
+                <div style="font-size:0.78rem;color:var(--color-subtle);font-family:var(--font-mono);margin-top:0.1rem">RPi 4 · automation runner &amp; site CI</div>
               </div>
               <span class="status-dot ${tempStatus}"></span>
             </div>
@@ -795,7 +800,8 @@ import Layout from '../layouts/Layout.astro';
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.4rem;margin-top:0.75rem">
               <div class="metric">
-                <span class="metric-value" style="font-size:0.85rem">${u.charge ?? '—'}%</span>
+                <span class="metric-value" style="font-size:0.85rem"
+                      data-count-to="${u.charge ?? 0}" data-count-suffix="%">0%</span>
                 <span class="metric-label">Charge</span>
               </div>
               <div class="metric">
@@ -831,7 +837,8 @@ import Layout from '../layouts/Layout.astro';
                 stroke-dasharray="${used} ${free}" stroke-dashoffset="${circ * 0.25}"
                 stroke-linecap="round" style="transition:stroke-dasharray 0.7s ease"/>
               <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="middle"
-                font-family="var(--font-mono)" font-size="13" font-weight="700" fill="${color}">${pct}%</text>
+                font-family="var(--font-mono)" font-size="13" font-weight="700" fill="${color}"
+                data-count-to="${pct}" data-count-suffix="%">0%</text>
             </svg>`;
           };
 
@@ -956,29 +963,31 @@ import Layout from '../layouts/Layout.astro';
           : net.latency_ms < 30 ? 'ok'
           : net.latency_ms < 80 ? 'warn' : 'crit';
 
-        const ph = net.pihole;
-        const piholeCard = ph ? `
-          <div class="card" style="border-left:3px solid var(--color-ok)">
-            <div style="margin-bottom:0.5rem">
-              <span class="mono" style="color:var(--color-subtle);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em">Privacy Shield</span>
+        const bans = net.crowdsec_bans;
+        const crowdsecCard = bans != null ? `
+          <div class="card" style="border-left:3px solid var(--color-crit)">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
+              <span class="mono" style="color:var(--color-subtle);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em">CrowdSec Bans</span>
+              <span class="status-dot ok"></span>
             </div>
-            <div style="font-size:1.25rem;font-weight:700;color:var(--color-ok);font-family:var(--font-mono);margin-bottom:0.25rem">${ph.percent}%</div>
-            <div class="mono" style="font-size:0.85rem">of your internet, blocked</div>
-            <div class="mono" style="color:var(--color-subtle);font-size:0.82rem;margin-top:0.25rem">${ph.blocked.toLocaleString()} trackers silenced today</div>
+            <div style="font-size:1.25rem;font-weight:700;color:var(--color-crit);font-family:var(--font-mono);margin-bottom:0.25rem"
+                 data-count-to="${bans}" data-count-suffix="">0</div>
+            <div class="mono" style="font-size:0.85rem">active IP bans · threat intelligence</div>
           </div>` : '';
 
         const netCards = document.getElementById('network-cards');
         if (netCards) {
-          netCards.innerHTML = piholeCard + [
-            { label: 'Firewall Blocks', value: net.fw_hits != null ? net.fw_hits.toLocaleString() : '—', sub: 'packets dropped at router', status: 'ok' },
-            { label: 'WAN Latency',     value: net.latency_ms != null ? net.latency_ms + ' ms' : '—',    sub: 'avg RTT to 8.8.8.8',       status: latencyStatus },
+          netCards.innerHTML = crowdsecCard + [
+            { label: 'Firewall Blocks', raw: net.fw_hits,    suffix: '',    display: net.fw_hits != null ? net.fw_hits.toLocaleString() : '—', sub: 'packets dropped at router', status: 'ok' },
+            { label: 'WAN Latency',     raw: net.latency_ms, suffix: ' ms', display: net.latency_ms != null ? net.latency_ms + ' ms' : '—',    sub: 'avg RTT to 8.8.8.8',       status: latencyStatus },
           ].map(c => `
             <div class="card">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
                 <span class="mono" style="color:var(--color-subtle);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em">${c.label}</span>
                 <span class="status-dot ${c.status}"></span>
               </div>
-              <div style="font-size:1.25rem;font-weight:700;color:var(--color-heading);font-family:var(--font-mono);margin-bottom:0.25rem">${c.value}</div>
+              <div style="font-size:1.25rem;font-weight:700;color:var(--color-heading);font-family:var(--font-mono);margin-bottom:0.25rem"
+                   ${c.raw != null ? `data-count-to="${c.raw}" data-count-suffix="${c.suffix}"` : ''}>0</div>
               <div class="mono" style="font-size:0.85rem">${c.sub}</div>
             </div>
           `).join('');
@@ -1011,6 +1020,51 @@ import Layout from '../layouts/Layout.astro';
     } catch { /* skeletons remain */ }
   }
 
-  loadStatus();
-  setInterval(loadStatus, 30000);
+  loadStatus().then(() => setTimeout(initCounters, 80));
+  setInterval(() => loadStatus().then(() => setTimeout(initCounters, 80)), 30000);
+
+  // ── Number counters ───────────────────────────────────────────────────────
+  // Animates any element with [data-count-to] from 0 to its target value
+  // when it first enters the viewport. Call after DOM is populated.
+  function countUp(el: Element, target: number, suffix: string, duration = 900) {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      el.textContent = target + suffix;
+      return;
+    }
+    const start = performance.now();
+    const step = (now: number) => {
+      const progress = Math.min((now - start) / duration, 1);
+      // Ease out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(eased * target) + suffix;
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  function initCounters() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target as HTMLElement;
+        const target = parseFloat(el.dataset.countTo ?? '0');
+        const suffix = el.dataset.countSuffix ?? '';
+        countUp(el, target, suffix);
+        observer.unobserve(el);
+      });
+    }, { threshold: 0.3 });
+
+    document.querySelectorAll('[data-count-to]').forEach(el => observer.observe(el));
+  }
+
+  // Re-run after each data load so newly injected elements get observed
+  const _origLoad = loadStatus;
+  async function loadStatusWithCounters() {
+    await _origLoad();
+    // Small delay so DOM is painted before observing
+    setTimeout(initCounters, 80);
+  }
+
+  // Patch: re-observe after every refresh cycle too
+  document.addEventListener('astro:page-load', initCounters);
 </script>

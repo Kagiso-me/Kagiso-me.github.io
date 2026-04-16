@@ -6,6 +6,12 @@ import Layout from '../layouts/Layout.astro';
 
   <!-- ── Hero ── -->
   <section class="hero fade-up">
+    <!-- Parallax background layers -->
+    <div class="parallax-orb orb-1" data-speed="0.15" aria-hidden="true"></div>
+    <div class="parallax-orb orb-2" data-speed="0.08" aria-hidden="true"></div>
+    <div class="parallax-orb orb-3" data-speed="0.22" aria-hidden="true"></div>
+    <div class="parallax-grid"      data-speed="0.05" aria-hidden="true"></div>
+
     <div class="hero-inner">
       <p class="mono hero-eyebrow">~/homelab</p>
       <h1>
@@ -121,6 +127,37 @@ import Layout from '../layouts/Layout.astro';
     </div>
   </section>
 
+  <!-- ── Stack ── -->
+  <section class="section fade-up" style="animation-delay: 0.25s">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2 class="section-title">Stack</h2>
+        <a href="/decisions" class="mono link-subtle">ADRs →</a>
+      </div>
+      <div class="stack-grid">
+        {[
+          { name: 'k3s',         role: 'Kubernetes distro',     accent: 'peach'    },
+          { name: 'Flux',        role: 'GitOps operator',        accent: 'mauve'    },
+          { name: 'Traefik',     role: 'Ingress / proxy',        accent: 'sapphire' },
+          { name: 'Authentik',   role: 'Identity provider',      accent: 'gold'     },
+          { name: 'Prometheus',  role: 'Metrics & alerting',     accent: 'peach'    },
+          { name: 'Grafana',     role: 'Observability',          accent: 'gold'     },
+          { name: 'Loki',        role: 'Log aggregation',        accent: 'mauve'    },
+          { name: 'Velero',      role: 'Cluster backups',        accent: 'sapphire' },
+          { name: 'CrowdSec',    role: 'Threat intelligence',    accent: 'crit'     },
+          { name: 'SOPS',        role: 'Secret encryption',      accent: 'mauve'    },
+          { name: 'MikroTik',    role: 'Router / firewall',      accent: 'peach'    },
+          { name: 'TrueNAS',     role: 'NAS / storage',          accent: 'gold'     },
+        ].map(t => (
+          <div class="stack-item" data-accent={t.accent}>
+            <span class="stack-name">{t.name}</span>
+            <span class="stack-role">{t.role}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
   <!-- ── Recent Digest + Active Project ── -->
   <section class="section fade-up" style="animation-delay: 0.3s">
     <div class="section-inner two-col">
@@ -147,6 +184,81 @@ import Layout from '../layouts/Layout.astro';
         </div>
       </div>
 
+    </div>
+  </section>
+
+  <!-- ── About ── -->
+  <section class="section about-section fade-up" style="animation-delay: 0.35s">
+    <div class="section-inner">
+      <div class="about-grid">
+
+        <div class="about-text">
+          <p class="mono" style="color:var(--color-peach);margin-bottom:0.75rem">~/whoami</p>
+          <h2 style="font-size:clamp(1.5rem,3vw,2rem);margin:0 0 1.25rem">Hey, I'm Kagiso.</h2>
+          <p style="color:var(--color-subtle);line-height:1.8;margin-bottom:1rem">
+            Software engineer by day, homelab operator by night. I built this cluster to run my own
+            infrastructure — storage, media, backups, identity — with the same discipline I bring
+            to production systems at work.
+          </p>
+          <p style="color:var(--color-subtle);line-height:1.8;margin-bottom:1.75rem">
+            Everything here is real: the data is live, the ops log is the actual changelog,
+            and the architecture decisions document real trade-offs I've made. No demos, no staging.
+          </p>
+          <div class="about-links">
+            <a href="https://github.com/Kagiso-me" target="_blank" rel="noopener" class="about-link">
+              <span class="about-link-icon">⌥</span> GitHub
+            </a>
+            <a href="/decisions" class="about-link">
+              <span class="about-link-icon">⎇</span> ADRs
+            </a>
+            <a href="/digest" class="about-link">
+              <span class="about-link-icon">◎</span> Ops Log
+            </a>
+          </div>
+
+          <!-- GitHub contribution graph -->
+          <div class="contrib-wrap">
+            <div class="contrib-header">
+              <span class="mono contrib-label">GitHub activity</span>
+              <span class="mono" id="contrib-total" style="color:var(--color-subtle);font-size:0.7rem"></span>
+            </div>
+            <div id="contrib-graph" class="contrib-graph">
+              <div class="contrib-loading">loading graph…</div>
+            </div>
+            <div class="contrib-legend">
+              <span class="mono" style="color:var(--color-subtle);font-size:0.65rem">less</span>
+              <span class="contrib-cell" data-level="0"></span>
+              <span class="contrib-cell" data-level="1"></span>
+              <span class="contrib-cell" data-level="2"></span>
+              <span class="contrib-cell" data-level="3"></span>
+              <span class="contrib-cell" data-level="4"></span>
+              <span class="mono" style="color:var(--color-subtle);font-size:0.65rem">more</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-hardware">
+          <div class="hw-label mono">Hardware</div>
+          <div class="hw-list">
+            {[
+              { icon: '▣', name: '3× Lenovo ThinkCentre M93p',   sub: 'k3s control-plane nodes' },
+              { icon: '▣', name: 'Synology / TrueNAS NAS',         sub: 'primary & archive storage' },
+              { icon: '◈', name: 'MikroTik hEX S',                 sub: 'router & firewall' },
+              { icon: '◈', name: 'RPi 4 (bran)',                   sub: 'automation runner & CI' },
+              { icon: '◉', name: 'APC UPS',                        sub: '390W · 1h 55m runtime' },
+            ].map(h => (
+              <div class="hw-item">
+                <span class="hw-icon mono">{h.icon}</span>
+                <div>
+                  <div class="hw-name">{h.name}</div>
+                  <div class="hw-sub mono">{h.sub}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+      </div>
     </div>
   </section>
 
@@ -469,6 +581,71 @@ import Layout from '../layouts/Layout.astro';
     .hero { padding: 4rem 1.5rem 3rem; }
   }
 
+  /* ── Stack grid ── */
+  .stack-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .stack-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-muted);
+    border-radius: 10px;
+    padding: 0.875rem 1rem;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+  }
+
+  /* Accent glow on top edge */
+  .stack-item::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    border-radius: 10px 10px 0 0;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+
+  .stack-item[data-accent="peach"]::before    { background: var(--color-peach); }
+  .stack-item[data-accent="mauve"]::before    { background: var(--color-mauve); }
+  .stack-item[data-accent="gold"]::before     { background: var(--color-gold); }
+  .stack-item[data-accent="sapphire"]::before { background: var(--color-sapphire); }
+  .stack-item[data-accent="crit"]::before     { background: var(--color-crit); }
+
+  .stack-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+  }
+
+  .stack-item[data-accent="peach"]:hover    { border-color: var(--color-peach); }
+  .stack-item[data-accent="mauve"]:hover    { border-color: var(--color-mauve); }
+  .stack-item[data-accent="gold"]:hover     { border-color: var(--color-gold); }
+  .stack-item[data-accent="sapphire"]:hover { border-color: var(--color-sapphire); }
+  .stack-item[data-accent="crit"]:hover     { border-color: var(--color-crit); }
+
+  .stack-item:hover::before { opacity: 1; }
+
+  .stack-name {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--color-heading);
+  }
+
+  .stack-role {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--color-subtle);
+    line-height: 1.4;
+  }
+
   .skeleton {
     background: linear-gradient(
       90deg,
@@ -627,6 +804,223 @@ import Layout from '../layouts/Layout.astro';
     color: var(--color-peach);
     border-color: var(--color-peach);
   }
+
+  /* ── Parallax hero ── */
+  .hero {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .parallax-orb {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    will-change: transform;
+    filter: blur(80px);
+    opacity: 0.18;
+  }
+
+  .orb-1 {
+    width: 520px; height: 520px;
+    background: radial-gradient(circle, var(--color-peach), transparent 70%);
+    top: -140px; left: -100px;
+  }
+
+  .orb-2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, var(--color-mauve), transparent 70%);
+    top: -60px; right: -80px;
+    opacity: 0.14;
+  }
+
+  .orb-3 {
+    width: 280px; height: 280px;
+    background: radial-gradient(circle, var(--color-sapphire), transparent 70%);
+    bottom: -60px; left: 40%;
+    opacity: 0.1;
+  }
+
+  .parallax-grid {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
+    background-size: 32px 32px;
+    pointer-events: none;
+    will-change: transform;
+    mask-image: radial-gradient(ellipse 80% 100% at 50% 0%, black, transparent);
+    -webkit-mask-image: radial-gradient(ellipse 80% 100% at 50% 0%, black, transparent);
+  }
+
+  /* ── About section ── */
+  .about-section {
+    border-top: 1px solid var(--color-muted);
+    background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--color-mantle) 60%, transparent));
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  @media (max-width: 768px) {
+    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  }
+
+  .about-links {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .about-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--color-subtle);
+    border: 1px solid var(--color-muted);
+    border-radius: 6px;
+    padding: 0.35rem 0.8rem;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+  }
+
+  .about-link:hover {
+    color: var(--color-peach);
+    border-color: var(--color-peach);
+    background: color-mix(in srgb, var(--color-peach) 8%, transparent);
+  }
+
+  .about-link-icon {
+    font-size: 0.75rem;
+    opacity: 0.7;
+  }
+
+  .hw-label {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-subtle);
+    margin-bottom: 1rem;
+  }
+
+  .hw-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .hw-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-muted);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .hw-item:hover {
+    border-color: var(--color-mauve);
+    transform: translateX(3px);
+  }
+
+  .hw-icon {
+    color: var(--color-mauve);
+    font-size: 1rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  .hw-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-heading);
+    line-height: 1.3;
+  }
+
+  .hw-sub {
+    font-size: 0.72rem;
+    color: var(--color-subtle);
+    margin-top: 0.15rem;
+  }
+
+  /* ── GitHub contribution graph ── */
+  .contrib-wrap {
+    margin-top: 2rem;
+    border-top: 1px solid var(--color-muted);
+    padding-top: 1.25rem;
+  }
+
+  .contrib-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+  }
+
+  .contrib-label {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-subtle);
+  }
+
+  .contrib-graph {
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+  }
+
+  .contrib-grid {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(7, 10px);
+    gap: 2px;
+    width: max-content;
+  }
+
+  .contrib-cell {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    background: var(--color-overlay);
+    transition: transform 0.15s;
+    cursor: default;
+    flex-shrink: 0;
+  }
+
+  .contrib-cell:hover { transform: scale(1.4); }
+
+  .contrib-cell[data-level="0"] { background: var(--color-overlay); }
+  .contrib-cell[data-level="1"] { background: color-mix(in srgb, var(--color-peach) 25%, var(--color-overlay)); }
+  .contrib-cell[data-level="2"] { background: color-mix(in srgb, var(--color-peach) 50%, var(--color-overlay)); }
+  .contrib-cell[data-level="3"] { background: color-mix(in srgb, var(--color-peach) 75%, var(--color-overlay)); }
+  .contrib-cell[data-level="4"] { background: var(--color-peach); }
+
+  .contrib-loading {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-subtle);
+    padding: 1rem 0;
+  }
+
+  .contrib-legend {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    margin-top: 0.5rem;
+    justify-content: flex-end;
+  }
+
+  .contrib-legend .contrib-cell {
+    width: 10px;
+    height: 10px;
+    cursor: default;
+  }
+  .contrib-legend .contrib-cell:hover { transform: none; }
 </style>
 
 <script>
@@ -1045,4 +1439,92 @@ import Layout from '../layouts/Layout.astro';
   loadLiveData();
   loadDigest();
   loadProject();
+
+  // ── GitHub contribution graph ────────────────────────────────────────────
+  async function loadContribGraph() {
+    const graphEl = document.getElementById('contrib-graph');
+    const totalEl = document.getElementById('contrib-total');
+    if (!graphEl) return;
+
+    try {
+      // Proxy via allorigins to avoid CORS on GitHub's HTML endpoint
+      const url = 'https://github.com/users/Kagiso-me/contributions';
+      const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
+      if (!res.ok) throw new Error('fetch failed');
+      const json = await res.json();
+      const html = json.contents as string;
+
+      // Parse data-date and data-level from the SVG rect / td elements
+      const matches = [...html.matchAll(/data-date="(\d{4}-\d{2}-\d{2})"[^>]*data-level="(\d)"/g)];
+      if (!matches.length) throw new Error('no data');
+
+      // Build a date→level map
+      const map: Record<string, number> = {};
+      let total = 0;
+      for (const [, date, level] of matches) {
+        const lvl = parseInt(level);
+        map[date] = lvl;
+        if (lvl > 0) total++;
+      }
+
+      // Generate last 52 weeks × 7 days grid (Sunday-anchored)
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      // Roll back to the most recent Sunday
+      const dayOfWeek = today.getDay();
+      const gridEnd = new Date(today);
+      gridEnd.setDate(gridEnd.getDate() - dayOfWeek + 6); // end on Saturday
+
+      const cells: { date: string; level: number }[] = [];
+      for (let w = 51; w >= 0; w--) {
+        for (let d = 0; d < 7; d++) {
+          const dt = new Date(gridEnd);
+          dt.setDate(dt.getDate() - w * 7 - (6 - d));
+          const iso = dt.toISOString().slice(0, 10);
+          cells.push({ date: iso, level: map[iso] ?? 0 });
+        }
+      }
+
+      const grid = document.createElement('div');
+      grid.className = 'contrib-grid';
+      grid.innerHTML = cells.map(c =>
+        `<span class="contrib-cell" data-level="${c.level}" title="${c.date} · ${c.level > 0 ? c.level + ' contribution' + (c.level > 1 ? 's' : '') : 'no contributions'}"></span>`
+      ).join('');
+
+      graphEl.innerHTML = '';
+      graphEl.appendChild(grid);
+
+      if (totalEl) {
+        const activeDays = cells.filter(c => c.level > 0).length;
+        totalEl.textContent = `${activeDays} active days in the last year`;
+      }
+    } catch {
+      if (graphEl) graphEl.innerHTML = '<div class="contrib-loading">graph unavailable</div>';
+    }
+  }
+
+  loadContribGraph();
+
+  // ── Parallax ─────────────────────────────────────────────────────────────
+  (function initParallax() {
+    const layers = document.querySelectorAll<HTMLElement>('[data-speed]');
+    if (!layers.length) return;
+
+    // Respect reduced-motion
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        layers.forEach(el => {
+          const speed = parseFloat(el.dataset.speed ?? '0');
+          el.style.transform = `translateY(${y * speed}px)`;
+        });
+        ticking = false;
+      });
+    }, { passive: true });
+  })();
 </script>

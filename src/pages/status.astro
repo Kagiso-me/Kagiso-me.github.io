@@ -1010,12 +1010,7 @@ import Layout from '../layouts/Layout.astro';
     } catch { /* skeletons remain */ }
   }
 
-  loadStatus().then(() => setTimeout(initCounters, 80));
-  setInterval(() => loadStatus().then(() => setTimeout(initCounters, 80)), 30000);
-
   // ── Number counters ───────────────────────────────────────────────────────
-  // Animates any element with [data-count-to] from 0 to its target value
-  // when it first enters the viewport. Call after DOM is populated.
   function countUp(el: Element, target: number, suffix: string, duration = 900) {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       el.textContent = target + suffix;
@@ -1024,7 +1019,6 @@ import Layout from '../layouts/Layout.astro';
     const start = performance.now();
     const step = (now: number) => {
       const progress = Math.min((now - start) / duration, 1);
-      // Ease out cubic
       const eased = 1 - Math.pow(1 - progress, 3);
       el.textContent = Math.round(eased * target) + suffix;
       if (progress < 1) requestAnimationFrame(step);
@@ -1047,14 +1041,19 @@ import Layout from '../layouts/Layout.astro';
     document.querySelectorAll('[data-count-to]').forEach(el => observer.observe(el));
   }
 
-  // Re-run after each data load so newly injected elements get observed
-  const _origLoad = loadStatus;
-  async function loadStatusWithCounters() {
-    await _origLoad();
-    // Small delay so DOM is painted before observing
-    setTimeout(initCounters, 80);
+  // ── Polling lifecycle ─────────────────────────────────────────────────────
+  let pollInterval: ReturnType<typeof setInterval> | null = null;
+
+  function startPolling() {
+    if (pollInterval) clearInterval(pollInterval);
+    loadStatus().then(() => setTimeout(initCounters, 80));
+    pollInterval = setInterval(() => loadStatus().then(() => setTimeout(initCounters, 80)), 30000);
   }
 
-  // Patch: re-observe after every refresh cycle too
-  document.addEventListener('astro:page-load', initCounters);
+  function stopPolling() {
+    if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
+  }
+
+  document.addEventListener('astro:page-load', startPolling);
+  document.addEventListener('astro:before-swap', stopPolling);
 </script>

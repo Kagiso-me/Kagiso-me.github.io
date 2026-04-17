@@ -22,11 +22,13 @@ import Layout from '../layouts/Layout.astro';
     <div class="filter-bar fade-up" style="animation-delay:0.05s">
       <button class="filter-btn active" data-type="all">All</button>
       <button class="filter-btn" data-type="DEPLOY">Deploy</button>
+      <button class="filter-btn" data-type="CONFIG">Config</button>
+      <button class="filter-btn" data-type="OPS">Ops</button>
       <button class="filter-btn" data-type="FIX">Fix</button>
-      <button class="filter-btn" data-type="HARDWARE">Hardware</button>
-      <button class="filter-btn" data-type="INCIDENT">Incident</button>
-      <button class="filter-btn" data-type="NETWORK">Network</button>
       <button class="filter-btn" data-type="SECURITY">Security</button>
+      <button class="filter-btn" data-type="NETWORK">Network</button>
+      <button class="filter-btn" data-type="INCIDENT">Incident</button>
+      <button class="filter-btn" data-type="DECISION">Decision</button>
       <div class="filter-spacer"></div>
       <span class="mono" id="entry-count" style="color:var(--color-subtle);font-size:0.8rem"></span>
     </div>
@@ -197,12 +199,13 @@ import Layout from '../layouts/Layout.astro';
 
   /* Colour-coded dots by type */
   .entry-card[data-type="DEPLOY"]::before   { background: var(--color-ok); }
+  .entry-card[data-type="CONFIG"]::before   { background: var(--color-sapphire); }
+  .entry-card[data-type="OPS"]::before      { background: var(--color-mauve); }
   .entry-card[data-type="FIX"]::before      { background: var(--color-peach); }
-  .entry-card[data-type="INCIDENT"]::before { background: var(--color-crit); }
-  .entry-card[data-type="HARDWARE"]::before { background: var(--color-gold); }
-  .entry-card[data-type="NETWORK"]::before  { background: var(--color-mauve); }
   .entry-card[data-type="SECURITY"]::before { background: var(--color-warn); }
-  .entry-card[data-type="SCALE"]::before    { background: var(--color-ok); }
+  .entry-card[data-type="NETWORK"]::before  { background: var(--color-gold); }
+  .entry-card[data-type="INCIDENT"]::before { background: var(--color-crit); }
+  .entry-card[data-type="DECISION"]::before { background: #a6e3a1; }
 
   .entry-card.no-detail { cursor: default; }
   .entry-card.no-detail:hover { transform: none; border-color: var(--color-muted); box-shadow: none; }
@@ -241,14 +244,15 @@ import Layout from '../layouts/Layout.astro';
     white-space: nowrap;
   }
 
-  .type-DEPLOY   { background: color-mix(in srgb, var(--color-ok)    12%, transparent); color: var(--color-ok); }
-  .type-FIX      { background: color-mix(in srgb, var(--color-peach)  12%, transparent); color: var(--color-peach); }
-  .type-INCIDENT { background: color-mix(in srgb, var(--color-crit)   12%, transparent); color: var(--color-crit); }
-  .type-HARDWARE { background: color-mix(in srgb, var(--color-gold)   12%, transparent); color: var(--color-gold); }
-  .type-NETWORK  { background: color-mix(in srgb, var(--color-mauve)  12%, transparent); color: var(--color-mauve); }
-  .type-SECURITY { background: color-mix(in srgb, var(--color-warn)   12%, transparent); color: var(--color-warn); }
-  .type-SCALE    { background: color-mix(in srgb, var(--color-ok)     12%, transparent); color: var(--color-ok); }
-  .type-default  { background: color-mix(in srgb, var(--color-subtle) 12%, transparent); color: var(--color-subtle); }
+  .type-DEPLOY   { background: color-mix(in srgb, var(--color-ok)       12%, transparent); color: var(--color-ok); }
+  .type-CONFIG   { background: color-mix(in srgb, var(--color-sapphire) 12%, transparent); color: var(--color-sapphire); }
+  .type-OPS      { background: color-mix(in srgb, var(--color-mauve)    12%, transparent); color: var(--color-mauve); }
+  .type-FIX      { background: color-mix(in srgb, var(--color-peach)    12%, transparent); color: var(--color-peach); }
+  .type-SECURITY { background: color-mix(in srgb, var(--color-warn)     12%, transparent); color: var(--color-warn); }
+  .type-NETWORK  { background: color-mix(in srgb, var(--color-gold)     12%, transparent); color: var(--color-gold); }
+  .type-INCIDENT { background: color-mix(in srgb, var(--color-crit)     12%, transparent); color: var(--color-crit); }
+  .type-DECISION { background: color-mix(in srgb, #a6e3a1               12%, transparent); color: #a6e3a1; }
+  .type-default  { background: color-mix(in srgb, var(--color-subtle)   12%, transparent); color: var(--color-subtle); }
 
   .entry-body { flex: 1; min-width: 0; }
 
@@ -304,9 +308,9 @@ import Layout from '../layouts/Layout.astro';
   let activeType = 'all';
 
   const TYPE_COLORS: Record<string, string> = {
-    DEPLOY: 'type-DEPLOY', FIX: 'type-FIX', INCIDENT: 'type-INCIDENT',
-    HARDWARE: 'type-HARDWARE', NETWORK: 'type-NETWORK', SECURITY: 'type-SECURITY',
-    SCALE: 'type-SCALE',
+    DEPLOY: 'type-DEPLOY', CONFIG: 'type-CONFIG', OPS: 'type-OPS',
+    FIX: 'type-FIX', SECURITY: 'type-SECURITY', NETWORK: 'type-NETWORK',
+    INCIDENT: 'type-INCIDENT', DECISION: 'type-DECISION',
   };
 
   function formatDate(d: string) {

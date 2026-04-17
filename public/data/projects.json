@@ -3,14 +3,68 @@
     "title": "kagiso.me — Living Homelab Site",
     "status": "active",
     "timeline": "Apr 2026",
-    "description": "Building a public-facing site for the homelab — status dashboard, ops digest, ADR log, project tracker, and live terminal.",
+    "description": "Public-facing site for the homelab — status dashboard, ops digest, ADR log, project tracker, and live data pipeline.",
     "milestones": [
-      { "label": "Astro scaffold",     "done": true  },
-      { "label": "Design system",      "done": true  },
-      { "label": "Deploy pipeline",    "done": false },
-      { "label": "Status dashboard",   "done": false },
-      { "label": "Live data pipeline", "done": false },
-      { "label": "Live terminal",      "done": false }
+      { "label": "Astro scaffold",      "done": true  },
+      { "label": "Design system",       "done": true  },
+      { "label": "Deploy pipeline",     "done": true  },
+      { "label": "Status dashboard",    "done": true  },
+      { "label": "Live data pipeline",  "done": true  },
+      { "label": "Live terminal",       "done": true  },
+      { "label": "Umami analytics",     "done": true  },
+      { "label": "Frosted glass UI",    "done": true  },
+      { "label": "Blog (ADR-based)",    "done": false }
+    ]
+  },
+  {
+    "title": "Beesly",
+    "status": "active",
+    "timeline": "Apr 2026",
+    "description": "Discord-native AI assistant with full infra awareness, persistent memory, and a skill system. Ask about pod health, disk usage, or your calendar — no SSH, no dashboards.",
+    "milestones": [
+      { "label": "OpenClaw scaffold",             "done": true  },
+      { "label": "Claude API integration",        "done": true  },
+      { "label": "Infra awareness (k8s skills)",  "done": false },
+      { "label": "Memory / persistence",          "done": false },
+      { "label": "Deploy to k3s",                 "done": false }
+    ]
+  },
+  {
+    "title": "PiKVM",
+    "status": "upcoming",
+    "timeline": "Apr 2026",
+    "description": "Out-of-band KVM-over-IP for every node. Browser-based recovery regardless of OS state — full BIOS access, virtual media, remote OS reinstall. Built with a Pi Zero 2W and a USB HDMI capture card.",
+    "milestones": [
+      { "label": "Hardware sourced (Pi Zero 2W + capture card)", "done": true  },
+      { "label": "PiKVM OS flashed and configured",             "done": false },
+      { "label": "Network isolated on management VLAN",         "done": false },
+      { "label": "Connected to first node (tywin)",             "done": false },
+      { "label": "Verified remote recovery workflow",           "done": false }
+    ]
+  },
+  {
+    "title": "Canvas",
+    "status": "planned",
+    "timeline": "Late May 2026",
+    "description": "Self-hosted freeform project board. Notes, tasks, images, links, and checklists on a spatial canvas — built for planning that doesn't fit neatly into a list.",
+    "milestones": [
+      { "label": "Design spec",          "done": false },
+      { "label": "SvelteKit scaffold",   "done": false },
+      { "label": "Canvas drag & drop",   "done": false },
+      { "label": "Fastify + SQLite API", "done": false },
+      { "label": "Deploy to k3s",        "done": false }
+    ]
+  },
+  {
+    "title": "FitLog",
+    "status": "planned",
+    "timeline": "Jul 2026",
+    "description": "Self-hosted fitness and calorie tracker. Full data ownership, built to actually fit the way I train and eat — not a generic clone of MyFitnessPal.",
+    "milestones": [
+      { "label": "Feature scoping",       "done": false },
+      { "label": "Data model design",     "done": false },
+      { "label": "API + frontend build",  "done": false },
+      { "label": "Deploy to k3s",         "done": false }
     ]
   }
 ]

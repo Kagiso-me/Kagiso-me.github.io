@@ -203,6 +203,82 @@ build_backup() {
   echo "{\"bronn\":${bronn_json},\"etcd\":${etcd_json},\"varys\":${varys_json}}"
 }
 
+# ── Backblaze B2 cloud sync (TrueNAS cloudsync.query via WebSocket) ───────────
+build_b2() {
+  local api_key="${TRUENAS_API_KEY:-}"
+  if [[ -z "$api_key" ]]; then
+    echo '{"age":"—","status":"unknown"}'
+    return
+  fi
+
+  python3 - "$api_key" <<'PYEOF' 2>/dev/null || echo '{"age":"—","status":"unknown"}'
+import json, sys, ssl, time
+
+api_key = sys.argv[1].strip()
+
+try:
+    import websocket
+except ImportError:
+    print('{"age":"—","status":"unknown"}'); sys.exit(0)
+
+try:
+    ssl_ctx = ssl.create_default_context()
+    ssl_ctx.check_hostname = False
+    ssl_ctx.verify_mode = ssl.CERT_NONE
+
+    ws = websocket.create_connection(
+        'wss://10.0.10.80/api/current',
+        sslopt={'context': ssl_ctx},
+        timeout=10
+    )
+
+    ws.send(json.dumps({'jsonrpc': '2.0', 'id': 1,
+        'method': 'auth.login_with_api_key', 'params': [api_key]}))
+    if not json.loads(ws.recv()).get('result'):
+        ws.close(); print('{"age":"—","status":"unknown"}'); sys.exit(0)
+
+    ws.send(json.dumps({'jsonrpc': '2.0', 'id': 2,
+        'method': 'cloudsync.query', 'params': []}))
+    tasks = json.loads(ws.recv()).get('result', [])
+    ws.close()
+
+    if not tasks:
+        print('{"age":"—","status":"unknown"}'); sys.exit(0)
+
+    task = tasks[0]
+    state     = task.get('state', {})
+    job_state = state.get('state', '')  # SUCCESS / FAILED / RUNNING
+    dt_str    = state.get('datetime')   # ISO8601 e.g. "2026-04-17T02:00:01"
+
+    if not dt_str:
+        print('{"age":"—","status":"unknown"}'); sys.exit(0)
+
+    # Parse ISO timestamp — TrueNAS returns UTC with or without Z
+    from datetime import datetime, timezone
+    dt_str = dt_str.rstrip('Z').split('.')[0]
+    dt = datetime.fromisoformat(dt_str).replace(tzinfo=timezone.utc)
+    ts = dt.timestamp()
+    age_secs = time.time() - ts
+    h = int(age_secs // 3600)
+    m = int((age_secs % 3600) // 60)
+    age = f'{h}h {m}m ago' if h else f'{m}m ago'
+
+    if job_state == 'FAILED':
+        status = 'crit'
+    elif age_secs > 48 * 3600:
+        status = 'crit'
+    elif age_secs > 25 * 3600:
+        status = 'warn'
+    else:
+        status = 'ok'
+
+    print(json.dumps({'age': age, 'status': status}))
+
+except Exception:
+    print('{"age":"—","status":"unknown"}')
+PYEOF
+}
+
 # ── Velero last backup ─────────────────────────────────────────────────────────
 build_velero() {
   local last_line name ts phase status age_str
@@ -925,6 +1001,7 @@ NODES=$(build_nodes)
 FLUX=$(build_flux)
 BACKUP=$(build_backup)
 VELERO=$(build_velero)
+B2=$(build_b2)
 SERVICES=$(build_services)
 NETWORK=$(build_network)
 BRAN=$(build_bran)
@@ -943,6 +1020,9 @@ ETCD_BACKUP_STATUS=$(echo  "$BACKUP" | python3 -c "import sys,json; d=json.load(
 VARYS_BACKUP_AGE=$(echo    "$BACKUP" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['varys']['age'])")
 VARYS_BACKUP_STATUS=$(echo "$BACKUP" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['varys']['status'])")
 
+B2_AGE=$(echo    "$B2" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['age'])")
+B2_STATUS=$(echo "$B2" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['status'])")
+
 VELERO_AGE=$(echo    "$VELERO" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['age'])")
 VELERO_STATUS=$(echo "$VELERO" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['status'])")
 
@@ -950,9 +1030,47 @@ VELERO_STATUS=$(echo "$VELERO" | python3 -c "import sys,json; d=json.load(sys.st
 RUNNING_PODS=$(kubectl get pods -A --no-headers 2>/dev/null | grep -c "Running" || echo "0")
 TOTAL_PODS=$(kubectl get pods -A --no-headers 2>/dev/null | wc -l | tr -d ' ' || echo "0")
 
+# ── GitHub contribution graph (server-side, cached every 30 min) ──────────────
+CONTRIBS=$(python3 - <<'PYEOF'
+import json, urllib.request, urllib.error
+from collections import defaultdict
+
+user = "Kagiso-me"
+headers = {"Accept": "application/vnd.github+json", "User-Agent": "homelab-fetch/1.0"}
+events = []
+
+for page in range(1, 4):
+    url = f"https://api.github.com/users/{user}/events/public?per_page=100&page={page}"
+    try:
+        req = urllib.request.Request(url, headers=headers)
+        with urllib.request.urlopen(req, timeout=10) as r:
+            events.extend(json.load(r))
+    except Exception:
+        break
+
+day_counts: dict = defaultdict(int)
+for ev in events:
+    iso = (ev.get("created_at") or "")[:10]
+    if not iso:
+        continue
+    count = len(ev.get("payload", {}).get("commits", [])) if ev.get("type") == "PushEvent" else 1
+    day_counts[iso] += count
+
+total = sum(day_counts.values())
+active_days = len(day_counts)
+print(json.dumps({"days": dict(day_counts), "total": total, "active_days": active_days}))
+PYEOF
+)
+
+# Fallback if contribs fetch failed
+if ! echo "$CONTRIBS" | python3 -c "import sys,json; json.load(sys.stdin)" 2>/dev/null; then
+  CONTRIBS='{"days":{},"total":0,"active_days":0}'
+fi
+
 # Write JSON via temp files to avoid shell quoting issues
 TMP_NODES=$(mktemp); TMP_FLUX=$(mktemp); TMP_SVC_DATA=$(mktemp); TMP_NETWORK=$(mktemp)
 TMP_BRAN=$(mktemp); TMP_UPS=$(mktemp); TMP_DEPLOY=$(mktemp); TMP_STORAGE=$(mktemp)
+TMP_CONTRIBS=$(mktemp)
 echo "$NODES"       > "$TMP_NODES"
 echo "$FLUX"        > "$TMP_FLUX"
 echo "$SERVICES"    > "$TMP_SVC_DATA"
@@ -961,8 +1079,9 @@ echo "$BRAN"        > "$TMP_BRAN"
 echo "$UPS"         > "$TMP_UPS"
 echo "$LAST_DEPLOY" > "$TMP_DEPLOY"
 echo "$STORAGE"     > "$TMP_STORAGE"
+echo "$CONTRIBS"    > "$TMP_CONTRIBS"
 
-python3 - "$TMP_NODES" "$TMP_FLUX" "$TMP_SVC_DATA" "$TMP_NETWORK" "$TMP_BRAN" "$TMP_UPS" "$TMP_DEPLOY" "$TMP_STORAGE" <<PYEOF
+python3 - "$TMP_NODES" "$TMP_FLUX" "$TMP_SVC_DATA" "$TMP_NETWORK" "$TMP_BRAN" "$TMP_UPS" "$TMP_DEPLOY" "$TMP_STORAGE" "$TMP_CONTRIBS" <<PYEOF
 import json, sys
 
 with open(sys.argv[1]) as f: nodes       = json.load(f)
@@ -973,6 +1092,7 @@ with open(sys.argv[5]) as f: bran        = json.load(f)
 with open(sys.argv[6]) as f: ups         = json.load(f)
 with open(sys.argv[7]) as f: last_deploy = json.load(f)
 with open(sys.argv[8]) as f: storage     = json.load(f)
+with open(sys.argv[9]) as f: contribs    = json.load(f)
 
 running = int('${RUNNING_PODS}')
 total   = int('${TOTAL_PODS}')
@@ -987,6 +1107,7 @@ data = {
     {'label': 'etcd Snapshot',  'value': '${ETCD_BACKUP_AGE}',   'sub': 'last snapshot',      'status': '${ETCD_BACKUP_STATUS}'},
     {'label': 'Velero',         'value': '${VELERO_AGE}',        'sub': 'last cluster backup','status': '${VELERO_STATUS}'},
     {'label': 'varys Keys',     'value': '${VARYS_BACKUP_AGE}',  'sub': 'age keys · varys',   'status': '${VARYS_BACKUP_STATUS}'},
+    {'label': 'Backblaze B2',   'value': '${B2_AGE}',            'sub': 'offsite · TrueNAS',  'status': '${B2_STATUS}'},
   ],
   'nodes':       nodes,
   'flux':        flux,
@@ -997,8 +1118,9 @@ data = {
   'ups':         ups,
   'last_deploy': last_deploy,
   'storage':     storage,
+  'contribs':    contribs,
 }
 print(json.dumps(data, indent=2))
 PYEOF
 
-rm -f "$TMP_NODES" "$TMP_FLUX" "$TMP_SVC_DATA" "$TMP_NETWORK" "$TMP_BRAN" "$TMP_UPS" "$TMP_DEPLOY" "$TMP_STORAGE"
+rm -f "$TMP_NODES" "$TMP_FLUX" "$TMP_SVC_DATA" "$TMP_NETWORK" "$TMP_BRAN" "$TMP_UPS" "$TMP_DEPLOY" "$TMP_STORAGE" "$TMP_CONTRIBS"

@@ -29,7 +29,7 @@ const posts = (await getCollection('blog'))
     {posts.length > 0 && (
       <div class="post-list fade-up" style="animation-delay:0.1s">
         {posts.map(post => (
-          <a href={`/blog/${post.slug}`} class="post-card">
+          <a href={`/blog/${post.id}`} class="post-card">
             <div class="post-meta">
               <span class="post-date mono">{new Date(post.data.date).toLocaleDateString('en-ZA', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
               {post.data.adr && <span class="post-adr mono">{post.data.adr}</span>}

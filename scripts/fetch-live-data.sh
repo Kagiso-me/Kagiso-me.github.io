@@ -729,7 +729,7 @@ print(json.dumps({
   'crowdsec_bans': cs_bans,
 }))
 PYEOF
-  rm -f "$tmp_fw" "$tmp_ping" "$tmp_log" "$tmp_ph"
+  rm -f "$tmp_fw" "$tmp_ping" "$tmp_log" "$tmp_cs"
 }
 
 # ── bran health (runs locally — bran IS the runner) ───────────────────────────

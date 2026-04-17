@@ -99,20 +99,6 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <style is:global>
-  body {
-    background-image: radial-gradient(circle, #3d466320 1px, transparent 1px);
-    background-size: 28px 28px;
-  }
-
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: radial-gradient(ellipse 80% 40% at 50% 0%, #0d1117 0%, transparent 100%);
-    pointer-events: none;
-    z-index: 0;
-  }
-
   .page-wrap {
     max-width: 1200px;
     margin: 0 auto;

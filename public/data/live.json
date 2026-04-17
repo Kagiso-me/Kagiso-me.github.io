@@ -1,10 +1,10 @@
 {
-  "updated": "2026-04-17T18:53:37Z",
-  "fetched_at": "2026-04-17T18:53:37Z",
+  "updated": "2026-04-17T19:55:59Z",
+  "fetched_at": "2026-04-17T19:55:59Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "59/66",
+      "value": "60/64",
       "sub": "pods running",
       "status": "warn"
     },
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "16h 51m ago",
+      "value": "17h 54m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "6h 53m ago",
+      "value": "7h 56m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "5h 53m ago",
+      "value": "55m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "17h 53m ago",
+      "value": "18h 56m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -50,18 +50,18 @@
       "name": "jaime",
       "role": "control-plane",
       "status": "ok",
-      "pods": "16/110",
-      "cpu": "25%",
-      "memory": "7%",
+      "pods": "23/110",
+      "cpu": "43%",
+      "memory": "9%",
       "pressure": []
     },
     {
       "name": "tyrion",
       "role": "control-plane",
       "status": "ok",
-      "pods": "13/110",
-      "cpu": "28%",
-      "memory": "5%",
+      "pods": "6/110",
+      "cpu": "13%",
+      "memory": "1%",
       "pressure": []
     },
     {
@@ -69,8 +69,8 @@
       "role": "control-plane",
       "status": "ok",
       "pods": "34/110",
-      "cpu": "43%",
-      "memory": "9%",
+      "cpu": "40%",
+      "memory": "11%",
       "pressure": []
     }
   ],
@@ -199,7 +199,7 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 364 photos \u00b7 1 videos",
+      "tag": "Immich: 365 photos \u00b7 1 videos",
       "status": "ok"
     },
     {
@@ -231,12 +231,9 @@
   "media": [
     {
       "name": "Plex",
-      "label": "1 stream \u00b7 Munchkins",
+      "label": "idle",
       "status": "ok",
-      "playing": true,
-      "title": "Munchkins",
-      "album": "Season 4",
-      "artist": "The Americans (2013)"
+      "playing": false
     },
     {
       "name": "AzuraCast",
@@ -246,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 133361,
-    "latency_ms": 5.2,
+    "fw_hits": 134871,
+    "latency_ms": 5.0,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 52.1,
+    "temp_c": 51.5,
     "temp_status": "ok",
-    "load": 1.07,
-    "mem_pct": 40.7
+    "load": 0.74,
+    "mem_pct": 42.7
   },
   "ups": {
     "charge": 100,
@@ -268,9 +265,9 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "1h ago",
-    "message": "chore(deps): update helm release umami to >=1.0.11 (#174)",
-    "sha": "e28c548"
+    "age": "37m ago",
+    "message": "chore(ansible): upgrade k3s to v1.34.6, remove ned from inventory",
+    "sha": "e8c3f03"
   },
   "storage": [
     {
@@ -284,7 +281,7 @@
     },
     {
       "name": "archive",
-      "used": "454.3 GB",
+      "used": "454.5 GB",
       "total": "4.0 TB",
       "pct": 11.4,
       "status": "ok",
@@ -303,13 +300,13 @@
   ],
   "contribs": {
     "days": {
-      "2026-04-17": 54,
+      "2026-04-17": 66,
       "2026-04-16": 9,
       "2026-04-15": 0,
       "2026-04-14": 26,
-      "2026-04-13": 68
+      "2026-04-13": 61
     },
-    "total": 157,
+    "total": 162,
     "active_days": 5
   }
 }

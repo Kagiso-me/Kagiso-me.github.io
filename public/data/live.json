@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-17T15:32:24Z",
-  "fetched_at": "2026-04-17T15:32:24Z",
+  "updated": "2026-04-17T15:35:42Z",
+  "fetched_at": "2026-04-17T15:35:42Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "13h 30m ago",
+      "value": "13h 33m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "3h 32m ago",
+      "value": "3h 35m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "2h 32m ago",
+      "value": "2h 35m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "14h 32m ago",
+      "value": "14h 35m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -199,17 +199,17 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 266 photos \u00b7 1 videos",
+      "tag": "Immich: 275 photos \u00b7 1 videos",
       "status": "ok"
     },
     {
       "name": "Nextcloud",
-      "tag": "Nextcloud: online",
+      "tag": "Nextcloud: 60.9 MB used",
       "status": "ok"
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 26.0 GB left",
+      "tag": "SABnzbd: downloading \u00b7 21.9 GB left",
       "status": "ok"
     },
     {
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 129798,
-    "latency_ms": 6.0,
+    "fw_hits": 129873,
+    "latency_ms": 4.8,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 51.5,
+    "temp_c": 53.2,
     "temp_status": "ok",
-    "load": 0.6,
-    "mem_pct": 47.2
+    "load": 0.99,
+    "mem_pct": 47.1
   },
   "ups": {
     "charge": 100,
@@ -265,7 +265,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "55m ago",
+    "age": "58m ago",
     "message": "security(ingress): add rate limiting to all Authentik-protected routes",
     "sha": "3f913a3"
   },
@@ -290,7 +290,7 @@
     },
     {
       "name": "core",
-      "used": "24.2 GB",
+      "used": "24.5 GB",
       "total": "476.7 GB",
       "pct": 5.1,
       "status": "ok",
@@ -300,13 +300,13 @@
   ],
   "contribs": {
     "days": {
-      "2026-04-17": 39,
+      "2026-04-17": 41,
       "2026-04-16": 9,
       "2026-04-15": 0,
       "2026-04-14": 26,
-      "2026-04-13": 76
+      "2026-04-13": 75
     },
-    "total": 150,
+    "total": 151,
     "active_days": 5
   }
 }

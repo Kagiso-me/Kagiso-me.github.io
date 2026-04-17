@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-17T22:33:38Z",
-  "fetched_at": "2026-04-17T22:33:38Z",
+  "updated": "2026-04-17T23:34:46Z",
+  "fetched_at": "2026-04-17T23:34:46Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "20h 31m ago",
+      "value": "21h 32m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "10h 33m ago",
+      "value": "11h 34m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 33m ago",
+      "value": "4h 34m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "21h 33m ago",
+      "value": "22h 34m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -209,7 +209,7 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 17.6 GB left",
+      "tag": "SABnzbd: downloading \u00b7 12.6 GB left",
       "status": "ok"
     },
     {
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 137932,
+    "fw_hits": 139423,
     "latency_ms": 5.1,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 51.5,
+    "temp_c": 52.1,
     "temp_status": "ok",
-    "load": 0.66,
-    "mem_pct": 43.8
+    "load": 0.74,
+    "mem_pct": 44.6
   },
   "ups": {
     "charge": 100,
@@ -265,7 +265,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "2h ago",
+    "age": "3h ago",
     "message": "chore(deps): update helm release umami to >=1.21.0",
     "sha": "2da701d"
   },
@@ -281,7 +281,7 @@
     },
     {
       "name": "archive",
-      "used": "454.5 GB",
+      "used": "454.6 GB",
       "total": "4.0 TB",
       "pct": 11.4,
       "status": "ok",
@@ -290,9 +290,9 @@
     },
     {
       "name": "core",
-      "used": "27.5 GB",
+      "used": "27.4 GB",
       "total": "476.7 GB",
-      "pct": 5.8,
+      "pct": 5.7,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -304,9 +304,9 @@
       "2026-04-16": 9,
       "2026-04-15": 0,
       "2026-04-14": 26,
-      "2026-04-13": 52
+      "2026-04-13": 51
     },
-    "total": 164,
+    "total": 163,
     "active_days": 5
   }
 }

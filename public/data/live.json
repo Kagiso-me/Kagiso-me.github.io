@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-16T20:43:12Z",
-  "fetched_at": "2026-04-16T20:43:12Z",
+  "updated": "2026-04-17T10:19:43Z",
+  "fetched_at": "2026-04-17T10:19:43Z",
   "cards": [
     {
       "label": "Workloads",
@@ -10,31 +10,31 @@
     },
     {
       "label": "Flux",
-      "value": "19/19 synced",
+      "value": "10/19 synced",
       "sub": "8d",
-      "status": "ok"
+      "status": "warn"
     },
     {
       "label": "Docker Appdata",
-      "value": "18h 41m ago",
+      "value": "8h 17m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "8h 43m ago",
+      "value": "10h 19m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "1h 43m ago",
+      "value": "3h 19m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "19h 43m ago",
+      "value": "9h 19m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     }
@@ -69,16 +69,16 @@
     }
   ],
   "flux": {
-    "ready": 19,
+    "ready": 10,
     "total": 19,
     "last_sync": "8d",
-    "status": "ok",
+    "status": "warn",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
         "age": "8d",
-        "ready": true
+        "ready": false
       },
       {
         "namespace": "flux-system",
@@ -90,31 +90,31 @@
         "namespace": "flux-system",
         "name": "platform-authentik",
         "age": "8d",
-        "ready": true
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
         "age": "8d",
-        "ready": true
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
         "age": "8d",
-        "ready": true
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
         "age": "8d",
-        "ready": true
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
         "age": "8d",
-        "ready": true
+        "ready": false
       },
       {
         "namespace": "flux-system",
@@ -144,19 +144,19 @@
         "namespace": "flux-system",
         "name": "platform-observability",
         "age": "8d",
-        "ready": true
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
         "age": "8d",
-        "ready": true
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
         "age": "8d",
-        "ready": true
+        "ready": false
       },
       {
         "namespace": "flux-system",
@@ -193,7 +193,7 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 82 photos \u00b7 0 videos",
+      "tag": "Immich: 157 photos \u00b7 0 videos",
       "status": "ok"
     },
     {
@@ -203,7 +203,7 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 248.4 GB left",
+      "tag": "SABnzbd: downloading \u00b7 46.3 GB left",
       "status": "ok"
     },
     {
@@ -237,16 +237,16 @@
     }
   ],
   "network": {
-    "fw_hits": 109609,
-    "latency_ms": 8.8,
+    "fw_hits": 123293,
+    "latency_ms": 13.8,
     "offenders": [],
-    "crowdsec_bans": 12
+    "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 52.6,
+    "temp_c": 51.5,
     "temp_status": "ok",
-    "load": 0.88,
-    "mem_pct": 45.1
+    "load": 0.9,
+    "mem_pct": 44.8
   },
   "ups": {
     "charge": 100,
@@ -259,23 +259,23 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "33m ago",
-    "message": "fix(cert-manager)",
-    "sha": "abd0d87"
+    "age": "37m ago",
+    "message": "chore(deps): update helm release kube-prometheus-stack to v83.5.1",
+    "sha": "a34a093"
   },
   "storage": [
     {
       "name": "tera",
-      "used": "6.0 TB",
+      "used": "6.2 TB",
       "total": "7.9 TB",
-      "pct": 76.8,
+      "pct": 78.6,
       "status": "warn",
       "pool_status": "ONLINE",
       "healthy": true
     },
     {
       "name": "archive",
-      "used": "452.4 GB",
+      "used": "454.2 GB",
       "total": "4.0 TB",
       "pct": 11.4,
       "status": "ok",
@@ -284,9 +284,9 @@
     },
     {
       "name": "core",
-      "used": "15.5 GB",
+      "used": "18.7 GB",
       "total": "476.7 GB",
-      "pct": 3.2,
+      "pct": 3.9,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true

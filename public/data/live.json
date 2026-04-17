@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-17T14:43:58Z",
-  "fetched_at": "2026-04-17T14:43:58Z",
+  "updated": "2026-04-17T15:32:24Z",
+  "fetched_at": "2026-04-17T15:32:24Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,27 +16,33 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "12h 42m ago",
+      "value": "13h 30m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "2h 44m ago",
+      "value": "3h 32m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "1h 44m ago",
+      "value": "2h 32m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "13h 44m ago",
+      "value": "14h 32m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
+    },
+    {
+      "label": "Backblaze B2",
+      "value": "\u2014",
+      "sub": "offsite \u00b7 TrueNAS",
+      "status": "unknown"
     }
   ],
   "nodes": [
@@ -193,17 +199,17 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 243 photos \u00b7 1 videos",
+      "tag": "Immich: 266 photos \u00b7 1 videos",
       "status": "ok"
     },
     {
       "name": "Nextcloud",
-      "tag": "Nextcloud: 60.9 MB used",
+      "tag": "Nextcloud: online",
       "status": "ok"
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 52.5 GB left",
+      "tag": "SABnzbd: downloading \u00b7 26.0 GB left",
       "status": "ok"
     },
     {
@@ -237,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 128661,
-    "latency_ms": 9.4,
+    "fw_hits": 129798,
+    "latency_ms": 6.0,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 52.6,
+    "temp_c": 51.5,
     "temp_status": "ok",
-    "load": 0.74,
-    "mem_pct": 48.3
+    "load": 0.6,
+    "mem_pct": 47.2
   },
   "ups": {
     "charge": 100,
@@ -259,7 +265,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "7m ago",
+    "age": "55m ago",
     "message": "security(ingress): add rate limiting to all Authentik-protected routes",
     "sha": "3f913a3"
   },
@@ -284,12 +290,23 @@
     },
     {
       "name": "core",
-      "used": "23.0 GB",
+      "used": "24.2 GB",
       "total": "476.7 GB",
-      "pct": 4.8,
+      "pct": 5.1,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
     }
-  ]
+  ],
+  "contribs": {
+    "days": {
+      "2026-04-17": 39,
+      "2026-04-16": 9,
+      "2026-04-15": 0,
+      "2026-04-14": 26,
+      "2026-04-13": 76
+    },
+    "total": 150,
+    "active_days": 5
+  }
 }

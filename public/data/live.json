@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-17T16:51:15Z",
-  "fetched_at": "2026-04-17T16:51:15Z",
+  "updated": "2026-04-17T17:44:41Z",
+  "fetched_at": "2026-04-17T17:44:41Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "14h 49m ago",
+      "value": "15h 42m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "4h 51m ago",
+      "value": "5h 44m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 51m ago",
+      "value": "4h 44m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "15h 51m ago",
+      "value": "16h 44m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -204,12 +204,12 @@
     },
     {
       "name": "Nextcloud",
-      "tag": "Nextcloud: online",
+      "tag": "Nextcloud: 60.9 MB used",
       "status": "ok"
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 59.0 GB left",
+      "tag": "SABnzbd: downloading \u00b7 37.3 GB left",
       "status": "ok"
     },
     {
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 131593,
-    "latency_ms": 5.1,
+    "fw_hits": 132462,
+    "latency_ms": 5.0,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 51.5,
+    "temp_c": 52.6,
     "temp_status": "ok",
-    "load": 0.75,
-    "mem_pct": 45.8
+    "load": 0.71,
+    "mem_pct": 37.8
   },
   "ups": {
     "charge": 100,
@@ -265,16 +265,16 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "1h ago",
-    "message": "fix(immich): remove upload size limit via Traefik buffering middleware",
-    "sha": "82fa18e"
+    "age": "15m ago",
+    "message": "chore(deps): update helm release umami to >=1.0.11 (#174)",
+    "sha": "e28c548"
   },
   "storage": [
     {
       "name": "tera",
       "used": "6.2 TB",
       "total": "7.9 TB",
-      "pct": 78.9,
+      "pct": 79.0,
       "status": "warn",
       "pool_status": "ONLINE",
       "healthy": true
@@ -290,7 +290,7 @@
     },
     {
       "name": "core",
-      "used": "26.1 GB",
+      "used": "26.0 GB",
       "total": "476.7 GB",
       "pct": 5.5,
       "status": "ok",
@@ -300,13 +300,13 @@
   ],
   "contribs": {
     "days": {
-      "2026-04-17": 52,
+      "2026-04-17": 54,
       "2026-04-16": 9,
       "2026-04-15": 0,
       "2026-04-14": 26,
-      "2026-04-13": 69
+      "2026-04-13": 68
     },
-    "total": 156,
+    "total": 157,
     "active_days": 5
   }
 }

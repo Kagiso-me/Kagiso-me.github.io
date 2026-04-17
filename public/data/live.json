@@ -1,10 +1,10 @@
 {
-  "updated": "2026-04-17T15:35:42Z",
-  "fetched_at": "2026-04-17T15:35:42Z",
+  "updated": "2026-04-17T16:51:15Z",
+  "fetched_at": "2026-04-17T16:51:15Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "62/66",
+      "value": "59/66",
       "sub": "pods running",
       "status": "warn"
     },
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "13h 33m ago",
+      "value": "14h 49m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "3h 35m ago",
+      "value": "4h 51m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "2h 35m ago",
+      "value": "3h 51m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "14h 35m ago",
+      "value": "15h 51m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -199,17 +199,17 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 275 photos \u00b7 1 videos",
+      "tag": "Immich: 364 photos \u00b7 1 videos",
       "status": "ok"
     },
     {
       "name": "Nextcloud",
-      "tag": "Nextcloud: 60.9 MB used",
+      "tag": "Nextcloud: online",
       "status": "ok"
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 21.9 GB left",
+      "tag": "SABnzbd: downloading \u00b7 59.0 GB left",
       "status": "ok"
     },
     {
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 129873,
-    "latency_ms": 4.8,
+    "fw_hits": 131593,
+    "latency_ms": 5.1,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 53.2,
+    "temp_c": 51.5,
     "temp_status": "ok",
-    "load": 0.99,
-    "mem_pct": 47.1
+    "load": 0.75,
+    "mem_pct": 45.8
   },
   "ups": {
     "charge": 100,
@@ -265,16 +265,16 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "58m ago",
-    "message": "security(ingress): add rate limiting to all Authentik-protected routes",
-    "sha": "3f913a3"
+    "age": "1h ago",
+    "message": "fix(immich): remove upload size limit via Traefik buffering middleware",
+    "sha": "82fa18e"
   },
   "storage": [
     {
       "name": "tera",
       "used": "6.2 TB",
       "total": "7.9 TB",
-      "pct": 78.8,
+      "pct": 78.9,
       "status": "warn",
       "pool_status": "ONLINE",
       "healthy": true
@@ -290,9 +290,9 @@
     },
     {
       "name": "core",
-      "used": "24.5 GB",
+      "used": "26.1 GB",
       "total": "476.7 GB",
-      "pct": 5.1,
+      "pct": 5.5,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -300,13 +300,13 @@
   ],
   "contribs": {
     "days": {
-      "2026-04-17": 41,
+      "2026-04-17": 52,
       "2026-04-16": 9,
       "2026-04-15": 0,
       "2026-04-14": 26,
-      "2026-04-13": 75
+      "2026-04-13": 69
     },
-    "total": 151,
+    "total": 156,
     "active_days": 5
   }
 }

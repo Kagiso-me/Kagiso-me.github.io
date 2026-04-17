@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-17T14:02:20Z",
-  "fetched_at": "2026-04-17T14:02:20Z",
+  "updated": "2026-04-17T14:43:58Z",
+  "fetched_at": "2026-04-17T14:43:58Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "12h 0m ago",
+      "value": "12h 42m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "2h 2m ago",
+      "value": "2h 44m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "1h 2m ago",
+      "value": "1h 44m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "13h 2m ago",
+      "value": "13h 44m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     }
@@ -203,7 +203,7 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 67.0 GB left",
+      "tag": "SABnzbd: downloading \u00b7 52.5 GB left",
       "status": "ok"
     },
     {
@@ -237,16 +237,16 @@
     }
   ],
   "network": {
-    "fw_hits": 127966,
-    "latency_ms": 17.7,
+    "fw_hits": 128661,
+    "latency_ms": 9.4,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
     "temp_c": 52.6,
     "temp_status": "ok",
-    "load": 0.81,
-    "mem_pct": 47.3
+    "load": 0.74,
+    "mem_pct": 48.3
   },
   "ups": {
     "charge": 100,
@@ -259,9 +259,9 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "10m ago",
-    "message": "fix(umami): use christianhuth chart, fix values schema (#168)",
-    "sha": "90d7e10"
+    "age": "7m ago",
+    "message": "security(ingress): add rate limiting to all Authentik-protected routes",
+    "sha": "3f913a3"
   },
   "storage": [
     {
@@ -284,7 +284,7 @@
     },
     {
       "name": "core",
-      "used": "22.9 GB",
+      "used": "23.0 GB",
       "total": "476.7 GB",
       "pct": 4.8,
       "status": "ok",

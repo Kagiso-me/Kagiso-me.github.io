@@ -1,10 +1,10 @@
 {
-  "updated": "2026-04-17T20:40:53Z",
-  "fetched_at": "2026-04-17T20:40:53Z",
+  "updated": "2026-04-17T21:37:38Z",
+  "fetched_at": "2026-04-17T21:37:38Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "59/65",
+      "value": "59/66",
       "sub": "pods running",
       "status": "warn"
     },
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "18h 39m ago",
+      "value": "19h 35m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "8h 41m ago",
+      "value": "9h 37m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "1h 40m ago",
+      "value": "2h 37m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "19h 41m ago",
+      "value": "20h 37m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -199,7 +199,7 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 365 photos \u00b7 1 videos",
+      "tag": "Immich: 380 photos \u00b7 1 videos",
       "status": "ok"
     },
     {
@@ -231,12 +231,9 @@
   "media": [
     {
       "name": "Plex",
-      "label": "1 stream \u00b7 Munchkins",
+      "label": "idle",
       "status": "ok",
-      "playing": true,
-      "title": "Munchkins",
-      "album": "Season 4",
-      "artist": "The Americans (2013)"
+      "playing": false
     },
     {
       "name": "AzuraCast",
@@ -246,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 135745,
-    "latency_ms": 4.9,
+    "fw_hits": 136905,
+    "latency_ms": 5.1,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 52.1,
+    "temp_c": 52.6,
     "temp_status": "ok",
-    "load": 0.76,
-    "mem_pct": 43.4
+    "load": 0.44,
+    "mem_pct": 44.0
   },
   "ups": {
     "charge": 100,
@@ -268,7 +265,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "32m ago",
+    "age": "1h ago",
     "message": "chore(deps): update helm release umami to >=1.21.0",
     "sha": "2da701d"
   },
@@ -293,9 +290,9 @@
     },
     {
       "name": "core",
-      "used": "26.2 GB",
+      "used": "27.4 GB",
       "total": "476.7 GB",
-      "pct": 5.5,
+      "pct": 5.7,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -307,9 +304,9 @@
       "2026-04-16": 9,
       "2026-04-15": 0,
       "2026-04-14": 26,
-      "2026-04-13": 53
+      "2026-04-13": 52
     },
-    "total": 165,
+    "total": 164,
     "active_days": 5
   }
 }

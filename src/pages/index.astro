@@ -343,6 +343,9 @@ import ClusterTerminal from '../components/ClusterTerminal.astro';
   .section-title {
     font-size: 1.125rem;
     margin: 0;
+    padding-left: 0.75rem;
+    border-left: 2px solid transparent;
+    border-image: linear-gradient(to bottom, var(--color-peach), transparent) 1;
   }
 
   .link-subtle {
@@ -366,11 +369,19 @@ import ClusterTerminal from '../components/ClusterTerminal.astro';
   }
 
   .live-card {
-    background: var(--color-surface);
-    border: 1px solid var(--color-muted);
+    background: rgba(30, 37, 52, 0.55);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.07);
     border-radius: 12px;
     padding: 1.25rem;
     min-height: 100px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .live-card:hover {
+    border-color: rgba(255, 255, 255, 0.14);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
   }
 
   .status-strip {
@@ -384,8 +395,10 @@ import ClusterTerminal from '../components/ClusterTerminal.astro';
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    background: var(--color-mantle);
-    border: 1px solid var(--color-muted);
+    background: rgba(16, 20, 28, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.07);
     border-radius: 12px;
     padding: 1rem 1.5rem;
     margin-top: 1.25rem;
@@ -430,8 +443,10 @@ import ClusterTerminal from '../components/ClusterTerminal.astro';
   }
 
   .media-card {
-    background: var(--color-surface);
-    border: 1px solid var(--color-muted);
+    background: rgba(30, 37, 52, 0.55);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.07);
     border-radius: 14px;
     overflow: hidden;
     transition: border-color 0.2s, box-shadow 0.2s;
@@ -444,8 +459,9 @@ import ClusterTerminal from '../components/ClusterTerminal.astro';
   }
 
   .media-card.placeholder {
+    border-color: color-mix(in srgb, var(--color-mauve) 30%, transparent);
     border-style: dashed;
-    opacity: 0.65;
+    opacity: 0.85;
   }
 
   /* Blurred art backdrop */
@@ -593,8 +609,10 @@ import ClusterTerminal from '../components/ClusterTerminal.astro';
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
-    background: var(--color-surface);
-    border: 1px solid var(--color-muted);
+    background: rgba(30, 37, 52, 0.55);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.07);
     border-radius: 10px;
     padding: 0.875rem 1rem;
     transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
@@ -774,8 +792,10 @@ import ClusterTerminal from '../components/ClusterTerminal.astro';
     display: flex;
     align-items: flex-start;
     gap: 0.75rem;
-    background: var(--color-surface);
-    border: 1px solid var(--color-muted);
+    background: rgba(30, 37, 52, 0.55);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.07);
     border-radius: 10px;
     padding: 0.75rem 1rem;
     transition: border-color 0.2s, transform 0.2s;
@@ -939,8 +959,11 @@ import ClusterTerminal from '../components/ClusterTerminal.astro';
 
       if (isPlaceholder) {
         textHtml = `
-          <div class="media-title" style="color:var(--color-subtle);font-weight:400">Coming soon</div>
-          <div class="media-sub">Deploy AzuraCast to see your radio station here</div>`;
+          <div class="media-title" style="color:var(--color-mauve);font-weight:600;letter-spacing:0.01em">Self-hosted radio</div>
+          <div class="media-sub" style="color:var(--color-subtle);margin-top:0.35rem">AzuraCast · coming soon</div>
+          <div style="margin-top:0.6rem;display:flex;align-items:center;gap:0.4rem">
+            <span style="font-family:var(--font-mono);font-size:0.68rem;padding:0.15rem 0.5rem;border-radius:4px;background:color-mix(in srgb,var(--color-mauve) 12%,transparent);color:var(--color-mauve);border:1px solid color-mix(in srgb,var(--color-mauve) 25%,transparent)">in progress</span>
+          </div>`;
       } else if (m.name === 'AzuraCast') {
         if (playing) {
           textHtml = `
@@ -1172,18 +1195,62 @@ import ClusterTerminal from '../components/ClusterTerminal.astro';
   })();
 
   // ── GitHub contribution graph ────────────────────────────────────────────
+  function renderContribGraph(dayCounts: Record<string, number>, graphEl: HTMLElement, totalEl: HTMLElement | null) {
+    const maxCount = Math.max(1, ...Object.values(dayCounts));
+    const toLevel = (n: number) => n === 0 ? 0 : Math.min(4, Math.ceil((n / maxCount) * 4));
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const gridEnd = new Date(today);
+    gridEnd.setDate(gridEnd.getDate() + (6 - today.getDay()));
+
+    const cells: { date: string; level: number; count: number }[] = [];
+    for (let w = 51; w >= 0; w--) {
+      for (let d = 0; d < 7; d++) {
+        const dt = new Date(gridEnd);
+        dt.setDate(dt.getDate() - w * 7 - (6 - d));
+        const iso = dt.toISOString().slice(0, 10);
+        const count = dayCounts[iso] ?? 0;
+        cells.push({ date: iso, level: toLevel(count), count });
+      }
+    }
+
+    const grid = document.createElement('div');
+    grid.className = 'contrib-grid';
+    grid.innerHTML = cells.map(c => {
+      const tip = c.count > 0
+        ? `${c.date} · ${c.count} contribution${c.count > 1 ? 's' : ''}`
+        : `${c.date} · no contributions`;
+      return `<span class="contrib-cell" data-level="${c.level}" title="${tip}"></span>`;
+    }).join('');
+
+    graphEl.innerHTML = '';
+    graphEl.appendChild(grid);
+
+    if (totalEl) {
+      const activeDays = cells.filter(c => c.level > 0).length;
+      const totalContribs = Object.values(dayCounts).reduce((a, b) => a + b, 0);
+      totalEl.textContent = `${totalContribs} contributions · ${activeDays} active days (last 90 days)`;
+    }
+  }
+
   async function loadContribGraph() {
     const graphEl = document.getElementById('contrib-graph');
     const totalEl = document.getElementById('contrib-total');
     if (!graphEl) return;
 
     try {
-      // GitHub public events API — CORS-enabled, no token needed
-      // Fetch up to 300 events across 3 pages (GitHub max is 100/page, 10 pages)
+      // Prefer pre-fetched data from live.json (updated every 30 min, no rate-limit risk)
+      const liveRes = await fetch('/data/live.json').then(r => r.ok ? r.json() : null).catch(() => null);
+      if (liveRes?.contribs?.days && Object.keys(liveRes.contribs.days).length > 0) {
+        renderContribGraph(liveRes.contribs.days, graphEl, totalEl);
+        return;
+      }
+
+      // Fallback: fetch directly from GitHub API
       const user = 'Kagiso-me';
-      const pages = [1, 2, 3];
       const results = await Promise.all(
-        pages.map(p =>
+        [1, 2, 3].map(p =>
           fetch(`https://api.github.com/users/${user}/events/public?per_page=100&page=${p}`, {
             headers: { Accept: 'application/vnd.github+json' }
           }).then(r => r.ok ? r.json() : []).catch(() => [])
@@ -1191,7 +1258,6 @@ import ClusterTerminal from '../components/ClusterTerminal.astro';
       );
       const events: any[] = results.flat();
 
-      // Count pushes per day (PushEvent = most common contribution)
       const dayCounts: Record<string, number> = {};
       for (const ev of events) {
         const iso = ev.created_at?.slice(0, 10);
@@ -1200,45 +1266,7 @@ import ClusterTerminal from '../components/ClusterTerminal.astro';
         dayCounts[iso] = (dayCounts[iso] ?? 0) + commits;
       }
 
-      // Normalise to levels 0–4 based on max activity
-      const maxCount = Math.max(1, ...Object.values(dayCounts));
-      const toLevel = (n: number) => n === 0 ? 0 : Math.min(4, Math.ceil((n / maxCount) * 4));
-
-      // Generate last 52 weeks × 7 days grid (Sunday-anchored, ending today)
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      const gridEnd = new Date(today);
-      // Pad to end of current week (Saturday)
-      gridEnd.setDate(gridEnd.getDate() + (6 - today.getDay()));
-
-      const cells: { date: string; level: number; count: number }[] = [];
-      for (let w = 51; w >= 0; w--) {
-        for (let d = 0; d < 7; d++) {
-          const dt = new Date(gridEnd);
-          dt.setDate(dt.getDate() - w * 7 - (6 - d));
-          const iso = dt.toISOString().slice(0, 10);
-          const count = dayCounts[iso] ?? 0;
-          cells.push({ date: iso, level: toLevel(count), count });
-        }
-      }
-
-      const grid = document.createElement('div');
-      grid.className = 'contrib-grid';
-      grid.innerHTML = cells.map(c => {
-        const tip = c.count > 0
-          ? `${c.date} · ${c.count} contribution${c.count > 1 ? 's' : ''}`
-          : `${c.date} · no contributions`;
-        return `<span class="contrib-cell" data-level="${c.level}" title="${tip}"></span>`;
-      }).join('');
-
-      graphEl.innerHTML = '';
-      graphEl.appendChild(grid);
-
-      if (totalEl) {
-        const activeDays = cells.filter(c => c.level > 0).length;
-        const totalContribs = Object.values(dayCounts).reduce((a, b) => a + b, 0);
-        totalEl.textContent = `${totalContribs} contributions · ${activeDays} active days (last 90 days)`;
-      }
+      renderContribGraph(dayCounts, graphEl, totalEl);
     } catch {
       if (graphEl) graphEl.innerHTML = '<div class="contrib-loading">graph unavailable</div>';
     }

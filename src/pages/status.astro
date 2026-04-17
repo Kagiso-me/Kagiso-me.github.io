@@ -459,8 +459,10 @@ import Layout from '../layouts/Layout.astro';
     display: flex;
     align-items: center;
     gap: 1rem;
-    background: var(--color-surface);
-    border: 1px solid var(--color-muted);
+    background: rgba(30, 37, 52, 0.55);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.07);
     border-radius: 10px;
     padding: 0.875rem 1.25rem;
     font-family: var(--font-mono);
@@ -506,8 +508,10 @@ import Layout from '../layouts/Layout.astro';
   }
 
   .storage-card {
-    background: var(--color-surface);
-    border: 1px solid var(--color-muted);
+    background: rgba(30, 37, 52, 0.55);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.07);
     border-radius: 14px;
     padding: 1.5rem;
     position: relative;

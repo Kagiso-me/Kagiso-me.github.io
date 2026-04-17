@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-17T17:44:41Z",
-  "fetched_at": "2026-04-17T17:44:41Z",
+  "updated": "2026-04-17T18:53:37Z",
+  "fetched_at": "2026-04-17T18:53:37Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "15h 42m ago",
+      "value": "16h 51m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "5h 44m ago",
+      "value": "6h 53m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "4h 44m ago",
+      "value": "5h 53m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "16h 44m ago",
+      "value": "17h 53m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -209,7 +209,7 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 37.3 GB left",
+      "tag": "SABnzbd: idle",
       "status": "ok"
     },
     {
@@ -231,9 +231,12 @@
   "media": [
     {
       "name": "Plex",
-      "label": "idle",
+      "label": "1 stream \u00b7 Munchkins",
       "status": "ok",
-      "playing": false
+      "playing": true,
+      "title": "Munchkins",
+      "album": "Season 4",
+      "artist": "The Americans (2013)"
     },
     {
       "name": "AzuraCast",
@@ -243,16 +246,16 @@
     }
   ],
   "network": {
-    "fw_hits": 132462,
-    "latency_ms": 5.0,
+    "fw_hits": 133361,
+    "latency_ms": 5.2,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 52.6,
+    "temp_c": 52.1,
     "temp_status": "ok",
-    "load": 0.71,
-    "mem_pct": 37.8
+    "load": 1.07,
+    "mem_pct": 40.7
   },
   "ups": {
     "charge": 100,
@@ -265,7 +268,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "15m ago",
+    "age": "1h ago",
     "message": "chore(deps): update helm release umami to >=1.0.11 (#174)",
     "sha": "e28c548"
   },
@@ -290,7 +293,7 @@
     },
     {
       "name": "core",
-      "used": "26.0 GB",
+      "used": "26.1 GB",
       "total": "476.7 GB",
       "pct": 5.5,
       "status": "ok",

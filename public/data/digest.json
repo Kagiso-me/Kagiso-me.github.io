@@ -2,22 +2,26 @@
   {
     "slug": "2026-04-apply-secure-headers-compress-and-crowdsec-bouncer-middlewar",
     "date": "2026-04",
-    "type": "SECURITY",
+    "type": "DEPLOY",
     "title": "apply secure-headers, compress, and crowdsec-bouncer middlewares globally",
     "summary": "apply secure-headers, compress, and crowdsec-bouncer middlewares globally",
     "commit": "a6fc69c",
     "hasDetail": false,
-    "tags": ["SECURITY"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-04-wire-resend-smtp-into-nextcloud-vaultwarden-and-authentik",
     "date": "2026-04",
-    "type": "CONFIG",
+    "type": "DEPLOY",
     "title": "wire Resend SMTP into Nextcloud, Vaultwarden, and Authentik",
     "summary": "wire Resend SMTP into Nextcloud, Vaultwarden, and Authentik",
     "commit": "43b9cee",
     "hasDetail": false,
-    "tags": ["CONFIG"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-04-add-seerr-and-cluster-maintenance-playbooks",
@@ -27,77 +31,93 @@
     "summary": "add Seerr and cluster maintenance playbooks",
     "commit": "efb4a1b",
     "hasDetail": false,
-    "tags": ["DEPLOY"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-04-migrate-all-ci-runners-from-varys-to-bran",
     "date": "2026-04",
-    "type": "OPS",
+    "type": "DEPLOY",
     "title": "migrate all CI runners from varys to bran",
     "summary": "migrate all CI runners from varys to bran",
     "commit": "9cf344f",
     "hasDetail": false,
-    "tags": ["OPS"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-04-add-node-exporter-to-all-non-k3s-hosts",
     "date": "2026-04",
-    "type": "OPS",
+    "type": "DEPLOY",
     "title": "add node-exporter to all non-k3s hosts",
     "summary": "add node-exporter to all non-k3s hosts",
     "commit": "7c89416",
     "hasDetail": false,
-    "tags": ["OPS"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-04-add-local-kagiso-me-wildcard-dns-for-internal-traefik",
     "date": "2026-04",
-    "type": "NETWORK",
+    "type": "DEPLOY",
     "title": "add *.local.kagiso.me wildcard DNS for internal Traefik",
     "summary": "add *.local.kagiso.me wildcard DNS for internal Traefik",
     "commit": "b9410ba",
     "hasDetail": false,
-    "tags": ["NETWORK"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-04-pin-image-tags-and-configure-renovate-for-compose-files",
     "date": "2026-04",
-    "type": "OPS",
+    "type": "DEPLOY",
     "title": "pin image tags and configure Renovate for compose files",
     "summary": "pin image tags and configure Renovate for compose files",
     "commit": "dde2b50",
     "hasDetail": false,
-    "tags": ["OPS"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-04-block-admin-paths-on-external-ingress-for-vaultwarden-and-au",
     "date": "2026-04",
-    "type": "SECURITY",
+    "type": "DEPLOY",
     "title": "block admin paths on external ingress for Vaultwarden and Authentik",
     "summary": "block admin paths on external ingress for Vaultwarden and Authentik",
     "commit": "2a9b467",
     "hasDetail": false,
-    "tags": ["SECURITY"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-04-wire-internal-ingressroutes-into-kustomizations",
     "date": "2026-04",
-    "type": "CONFIG",
+    "type": "DEPLOY",
     "title": "wire internal IngressRoutes into kustomizations",
     "summary": "wire internal IngressRoutes into kustomizations",
     "commit": "6220128",
     "hasDetail": false,
-    "tags": ["CONFIG"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-04-add-traefik-internal-for-lan-only-ingress-tier",
     "date": "2026-04",
-    "type": "NETWORK",
+    "type": "DEPLOY",
     "title": "add traefik-internal for LAN-only ingress tier",
     "summary": "add traefik-internal for LAN-only ingress tier",
     "commit": "76ea486",
     "hasDetail": false,
-    "tags": ["NETWORK"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-04-deploy-vaultwarden-roadmap-cleanup",
@@ -107,17 +127,21 @@
     "summary": "deploy Vaultwarden + roadmap cleanup",
     "commit": "d4f0b05",
     "hasDetail": false,
-    "tags": ["DEPLOY"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-04-move-freshrss-to-media-stack",
     "date": "2026-04",
-    "type": "CONFIG",
+    "type": "DEPLOY",
     "title": "move freshrss to media-stack",
     "summary": "move freshrss to media-stack",
     "commit": "deab6b4",
     "hasDetail": false,
-    "tags": ["CONFIG"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-04-add-freshrss-to-platform-stack",
@@ -127,7 +151,9 @@
     "summary": "add freshrss to platform-stack",
     "commit": "008c5c7",
     "hasDetail": false,
-    "tags": ["DEPLOY"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-04-add-platform-stack-with-glance-and-uptime-kuma",
@@ -137,111 +163,133 @@
     "summary": "add platform-stack with glance and uptime-kuma",
     "commit": "70ddc88",
     "hasDetail": false,
-    "tags": ["DEPLOY"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-04-add-nfs-postgresql-performance-alerts",
     "date": "2026-04",
-    "type": "OPS",
+    "type": "DEPLOY",
     "title": "add NFS PostgreSQL performance alerts",
     "summary": "add NFS PostgreSQL performance alerts",
     "commit": "a31b26a",
     "hasDetail": false,
-    "tags": ["OPS"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-04-add-glance-dashboard-on-port-8800",
     "date": "2026-04",
-    "type": "OPS",
+    "type": "DEPLOY",
     "title": "add glance dashboard on port 8800",
     "summary": "add glance dashboard on port 8800",
     "commit": "f381373",
     "hasDetail": false,
-    "tags": ["OPS"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-04-add-nfs-databases-storageclass-for-database-workloads",
     "date": "2026-04",
-    "type": "CONFIG",
+    "type": "DEPLOY",
     "title": "add nfs-databases StorageClass for database workloads",
     "summary": "add nfs-databases StorageClass for database workloads",
     "commit": "312fbd8",
     "hasDetail": false,
-    "tags": ["CONFIG"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-04-re-enable-alertmanagerconfig-and-secret-for-in-cluster-alert",
     "date": "2026-04",
-    "type": "OPS",
+    "type": "DEPLOY",
     "title": "re-enable AlertmanagerConfig and secret for in-cluster alertmanager",
     "summary": "re-enable AlertmanagerConfig and secret for in-cluster alertmanager",
     "commit": "b8493b9",
     "hasDetail": false,
-    "tags": ["OPS"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-04-enable-grafana-and-alertmanager-in-cluster-with-discord-9",
     "date": "2026-04",
-    "type": "OPS",
+    "type": "DEPLOY",
     "title": "enable Grafana and Alertmanager in-cluster with Discord (#9)",
     "summary": "enable Grafana and Alertmanager in-cluster with Discord (#9)",
     "commit": "eb0d10b",
     "hasDetail": false,
-    "tags": ["OPS"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-04-switch-to-official-upstream-chart-8",
     "date": "2026-04",
-    "type": "CONFIG",
+    "type": "DEPLOY",
     "title": "switch to official upstream chart (#8)",
     "summary": "switch to official upstream chart (#8)",
     "commit": "852fa2d",
     "hasDetail": false,
-    "tags": ["CONFIG"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-03-22-promotion-pipeline-and-prod-grafana",
     "date": "2026-03-22",
-    "type": "OPS",
-    "title": "Promotion pipeline commissioned end-to-end; prod Grafana live at `https://grafana.kagiso.me` with trusted TLS — fixes spanned NFS `nfs-common` missing on staging node, Grafana `initChownData` NFS root squash, Loki `RetriesExceeded`, MetalLB IP pool missing on prod, Cloudflare secret missing on prod, and three CI pipeline bugs (SHA mismatch, sync timeout, missing trigger paths)",
+    "type": "DEPLOY",
+    "title": "Promotion pipeline commissioned end-to-end; prod Grafana live at `https://grafana.kagiso.me` with trusted TLS \u2014 fixes spanned NFS `nfs-common` missing on staging node, Grafana `initChownData` NFS root squash, Loki `RetriesExceeded`, MetalLB IP pool missing on prod, Cloudflare secret missing on prod, and three CI pipeline bugs (SHA mismatch, sync timeout, missing trigger paths)",
     "summary": "Promotion pipeline commissioned end-to-end; prod Grafana live at `https://grafana.kagiso.me` with trusted TLS",
     "commit": "",
     "hasDetail": true,
-    "tags": ["OPS"],
-    "body": "# 2026-03-22 — OPS: Promotion Pipeline Commissioning and Prod Grafana Bring-up\n\n**Operator:** Kagiso\n**Type:** `OPS`\n**Components:** GitHub Actions · Flux · MetalLB · cert-manager · Grafana · Loki · NFS\n**Commit:** 64c24cb\n**Downtime:** None\n\n---\n\n## What Changed\n\nThe full staging → prod promotion pipeline was commissioned end-to-end for the first time.\nThis session covered: bringing up the monitoring stack on staging, fixing the pipeline itself,\nand resolving all blockers that prevented Grafana from being accessible on prod via\n`https://grafana.kagiso.me` with a trusted TLS certificate.\n\n---\n\n## Why\n\nThe staging cluster was freshly deployed and the monitoring stack had not been validated.\nThe promotion pipeline existed in code but had never successfully completed a full run.\nProd had no MetalLB IP pool, no Cloudflare secret, and no working TLS cert.\n\n---\n\n## Details\n\n### Monitoring stack bring-up on staging\n\n**NFS mount failure — `nfs-common` missing on staging node**\n- All PVCs in `monitoring` namespace stuck `Pending`\n- NFS provisioner pod stuck `ContainerCreating` with `mount: bad option; need helper program`\n- Root cause: `nfs-common` not installed on the staging VM (ThinkCentre running staging-k3s)\n- Fix: `sudo apt-get install -y nfs-common` on the staging node\n- All PVCs bound immediately after; monitoring pods came up within minutes\n\n**Grafana init container failure — NFS root squash**\n- `kube-prometheus-stack-grafana` stuck in `Init:Error`\n- `init-chown-data` container runs `chown /var/lib/grafana` which NFS root squash rejects\n- Fix: added `grafana.initChownData.enabled: false` to `platform/observability/kube-prometheus-stack/helmrelease.yaml`\n\n**Loki HelmRelease stuck in `RetriesExceeded`**\n- Loki pods were running (NFS fix resolved the underlying issue) but the HelmRelease had\n  exhausted its 4 install retries during the period when NFS was broken\n- Fix: `flux suspend helmrelease loki-stack -n monitoring && flux resume helmrelease loki-stack -n monitoring`\n- HelmRelease recovered to `Ready: True`\n\n---\n\n### Promotion pipeline commissioning\n\n**Self-hosted runner installed on bran**\n- GitHub Actions runner installed at `/opt/github-runner` on bran (10.0.10.10)\n- Runs as a systemd service via `./svc.sh install && ./svc.sh start`\n- Labels: `[self-hosted, linux, homelab]`\n- Required tools pre-installed: `kubectl`, `flux`, `kubeconform`, `kustomize`\n- GitHub secrets added: `STAGING_KUBECONFIG`, `PROD_KUBECONFIG`\n\n**Pipeline fix 1 — Flux sync wait timed out (120s too short)**\n- `staging-health` job timed out waiting for Flux to sync the triggering commit\n- Root cause: 120s window too tight — Flux polls every 1 minute and the runner had overhead\n- Fix: added `flux reconcile source git flux-system` before the wait loop to force an\n  immediate pull; increased timeout to 180s\n\n**Pipeline fix 2 — SHA mismatch due to bot commits**\n- Automated workflows (Ops Log Reminder, Auto-append Changelog) push commits to `main`\n  after the triggering commit, advancing HEAD\n- `actions/checkout@v4` in `staging-health` was checking out the new HEAD, not the\n  triggering commit — causing the SHA to never match what Flux had synced\n- Fix: pinned the checkout to `ref: ${{ github.sha }}` to always use the triggering commit\n\n**Pipeline fix 3 — `clusters/prod/**` not in trigger paths**\n- Changes to `clusters/prod/infrastructure.yaml` never triggered the promotion workflow\n- Only `apps/**`, `platform/**`, and `clusters/staging/**` were watched\n- Fix: added `clusters/prod/**` to the `on.push.paths` list in `promote-to-prod.yml`\n\n---\n\n### Prod Grafana bring-up\n\n**MetalLB had no IP pool on prod**\n- `kubectl get svc traefik -n ingress` showed `EXTERNAL-IP: <pending>`\n- Root cause: `platform-networking-config` Flux Kustomization (which deploys the\n  `IPAddressPool` and `L2Advertisement`) only existed in `clusters/staging/infrastructure.yaml`\n  — it was never added to `clusters/prod/infrastructure.yaml`\n- Fix: added `platform-networking-config` Kustomization to prod infrastructure manifest\n- Traefik assigned `10.0.10.110` after reconciliation\n\n**Cloudflare API token secret missing on prod**\n- `wildcard-kagiso-me` certificate stuck `Ready: False` for 50+ minutes\n- cert-manager challenge controller logging: `error getting cloudflare secret: secrets \"cloudflare-api-token\" not found`\n- Root cause: the secret is created manually post-bootstrap and was only documented for\n  staging — the prod bootstrap section in Guide 04 made no mention of this step\n- Fix: `kubectl create secret generic cloudflare-api-token --namespace cert-manager --from-literal=api-token=<token>`\n- Guide 04 updated to include this step explicitly after prod bootstrap\n- After deleting the stale challenge, cert-manager re-presented the DNS-01 challenge,\n  Cloudflare API created the TXT record, and both challenges became `valid`\n\n---\n\n## Outcome\n\n- [x] Full monitoring stack running on staging (Prometheus, Grafana, Alertmanager, Loki, Promtail)\n- [x] Promotion pipeline completes end-to-end (validate → staging-health → promote → prod-health)\n- [x] `main` → `prod` promotion is fully automated and gated on staging health\n- [x] Traefik on prod assigned `10.0.10.110` via MetalLB\n- [x] Wildcard cert `*.kagiso.me` issued by Let's Encrypt prod (`READY: True`)\n- [x] Grafana accessible at `https://grafana.kagiso.me` with trusted TLS — no browser warnings\n\n---\n\n## Related\n\n- `platform/observability/kube-prometheus-stack/helmrelease.yaml` — `initChownData` fix\n- `clusters/prod/infrastructure.yaml` — added `platform-networking-config` Kustomization\n- `.github/workflows/promote-to-prod.yml` — SHA pinning, flux reconcile, trigger paths\n- `docs/guides/04-Flux-GitOps.md` — added Cloudflare secret step for prod bootstrap\n- `docs/adr/ADR-007-self-hosted-runners.md` — self-hosted runner rationale and setup\n- `docs/guides/00.5-Infrastructure-Prerequisites.md` — runner prerequisite reference\n"
+    "tags": [
+      "DEPLOY"
+    ],
+    "body": "# 2026-03-22 \u2014 DEPLOY: Promotion Pipeline Commissioning and Prod Grafana Bring-up\n\n**Operator:** Kagiso\n**Type:** `DEPLOY`\n**Components:** GitHub Actions \u00b7 Flux \u00b7 MetalLB \u00b7 cert-manager \u00b7 Grafana \u00b7 Loki \u00b7 NFS\n**Commit:** 64c24cb\n**Downtime:** None\n\n---\n\n## What Changed\n\nThe full staging \u2192 prod promotion pipeline was commissioned end-to-end for the first time.\nThis session covered: bringing up the monitoring stack on staging, fixing the pipeline itself,\nand resolving all blockers that prevented Grafana from being accessible on prod via\n`https://grafana.kagiso.me` with a trusted TLS certificate.\n\n---\n\n## Why\n\nThe staging cluster was freshly deployed and the monitoring stack had not been validated.\nThe promotion pipeline existed in code but had never successfully completed a full run.\nProd had no MetalLB IP pool, no Cloudflare secret, and no working TLS cert.\n\n---\n\n## Details\n\n### Monitoring stack bring-up on staging\n\n**NFS mount failure \u2014 `nfs-common` missing on staging node**\n- All PVCs in `monitoring` namespace stuck `Pending`\n- NFS provisioner pod stuck `ContainerCreating` with `mount: bad option; need helper program`\n- Root cause: `nfs-common` not installed on the staging VM (ThinkCentre running staging-k3s)\n- Fix: `sudo apt-get install -y nfs-common` on the staging node\n- All PVCs bound immediately after; monitoring pods came up within minutes\n\n**Grafana init container failure \u2014 NFS root squash**\n- `kube-prometheus-stack-grafana` stuck in `Init:Error`\n- `init-chown-data` container runs `chown /var/lib/grafana` which NFS root squash rejects\n- Fix: added `grafana.initChownData.enabled: false` to `platform/observability/kube-prometheus-stack/helmrelease.yaml`\n\n**Loki HelmRelease stuck in `RetriesExceeded`**\n- Loki pods were running (NFS fix resolved the underlying issue) but the HelmRelease had\n  exhausted its 4 install retries during the period when NFS was broken\n- Fix: `flux suspend helmrelease loki-stack -n monitoring && flux resume helmrelease loki-stack -n monitoring`\n- HelmRelease recovered to `Ready: True`\n\n---\n\n### Promotion pipeline commissioning\n\n**Self-hosted runner installed on bran**\n- GitHub Actions runner installed at `/opt/github-runner` on bran (10.0.10.10)\n- Runs as a systemd service via `./svc.sh install && ./svc.sh start`\n- Labels: `[self-hosted, linux, homelab]`\n- Required tools pre-installed: `kubectl`, `flux`, `kubeconform`, `kustomize`\n- GitHub secrets added: `STAGING_KUBECONFIG`, `PROD_KUBECONFIG`\n\n**Pipeline fix 1 \u2014 Flux sync wait timed out (120s too short)**\n- `staging-health` job timed out waiting for Flux to sync the triggering commit\n- Root cause: 120s window too tight \u2014 Flux polls every 1 minute and the runner had overhead\n- Fix: added `flux reconcile source git flux-system` before the wait loop to force an\n  immediate pull; increased timeout to 180s\n\n**Pipeline fix 2 \u2014 SHA mismatch due to bot commits**\n- Automated workflows (Ops Log Reminder, Auto-append Changelog) push commits to `main`\n  after the triggering commit, advancing HEAD\n- `actions/checkout@v4` in `staging-health` was checking out the new HEAD, not the\n  triggering commit \u2014 causing the SHA to never match what Flux had synced\n- Fix: pinned the checkout to `ref: ${{ github.sha }}` to always use the triggering commit\n\n**Pipeline fix 3 \u2014 `clusters/prod/**` not in trigger paths**\n- Changes to `clusters/prod/infrastructure.yaml` never triggered the promotion workflow\n- Only `apps/**`, `platform/**`, and `clusters/staging/**` were watched\n- Fix: added `clusters/prod/**` to the `on.push.paths` list in `promote-to-prod.yml`\n\n---\n\n### Prod Grafana bring-up\n\n**MetalLB had no IP pool on prod**\n- `kubectl get svc traefik -n ingress` showed `EXTERNAL-IP: <pending>`\n- Root cause: `platform-networking-config` Flux Kustomization (which deploys the\n  `IPAddressPool` and `L2Advertisement`) only existed in `clusters/staging/infrastructure.yaml`\n  \u2014 it was never added to `clusters/prod/infrastructure.yaml`\n- Fix: added `platform-networking-config` Kustomization to prod infrastructure manifest\n- Traefik assigned `10.0.10.110` after reconciliation\n\n**Cloudflare API token secret missing on prod**\n- `wildcard-kagiso-me` certificate stuck `Ready: False` for 50+ minutes\n- cert-manager challenge controller logging: `error getting cloudflare secret: secrets \"cloudflare-api-token\" not found`\n- Root cause: the secret is created manually post-bootstrap and was only documented for\n  staging \u2014 the prod bootstrap section in Guide 04 made no mention of this step\n- Fix: `kubectl create secret generic cloudflare-api-token --namespace cert-manager --from-literal=api-token=<token>`\n- Guide 04 updated to include this step explicitly after prod bootstrap\n- After deleting the stale challenge, cert-manager re-presented the DNS-01 challenge,\n  Cloudflare API created the TXT record, and both challenges became `valid`\n\n---\n\n## Outcome\n\n- [x] Full monitoring stack running on staging (Prometheus, Grafana, Alertmanager, Loki, Promtail)\n- [x] Promotion pipeline completes end-to-end (validate \u2192 staging-health \u2192 promote \u2192 prod-health)\n- [x] `main` \u2192 `prod` promotion is fully automated and gated on staging health\n- [x] Traefik on prod assigned `10.0.10.110` via MetalLB\n- [x] Wildcard cert `*.kagiso.me` issued by Let's Encrypt prod (`READY: True`)\n- [x] Grafana accessible at `https://grafana.kagiso.me` with trusted TLS \u2014 no browser warnings\n\n---\n\n## Related\n\n- `platform/observability/kube-prometheus-stack/helmrelease.yaml` \u2014 `initChownData` fix\n- `clusters/prod/infrastructure.yaml` \u2014 added `platform-networking-config` Kustomization\n- `.github/workflows/promote-to-prod.yml` \u2014 SHA pinning, flux reconcile, trigger paths\n- `docs/guides/04-Flux-GitOps.md` \u2014 added Cloudflare secret step for prod bootstrap\n- `docs/adr/ADR-007-self-hosted-runners.md` \u2014 self-hosted runner rationale and setup\n- `docs/guides/00.5-Infrastructure-Prerequisites.md` \u2014 runner prerequisite reference\n"
   },
   {
     "slug": "2026-03-22-grafana-ingress-staging-fixes",
     "date": "2026-03-22",
-    "type": "FIX",
-    "title": "Staging environment fixes — Flux healthCheck wrong Deployment name, Traefik IP outside staging MetalLB pool, staging/prod access pattern established",
+    "type": "CONFIG",
+    "title": "Staging environment fixes \u2014 Flux healthCheck wrong Deployment name, Traefik IP outside staging MetalLB pool, staging/prod access pattern established",
     "summary": "Staging environment fixes",
     "commit": "",
     "hasDetail": true,
-    "tags": ["FIX"],
-    "body": "# 2026-03-22 — FIX: Grafana Ingress Debugging and Staging Environment Fixes\n\n**Operator:** Kagiso\n**Type:** `FIX`\n**Components:** Traefik · MetalLB · cert-manager · Flux · Grafana\n**Commit:** e84df0b\n**Downtime:** None\n\n---\n\n## What Changed\n\nThree bugs in the staging cluster configuration were identified and fixed while bringing up\nGrafana access for the first time. An environment access pattern was also established:\nstaging services are accessed directly by IP, prod services are accessed via domain name\nwith a trusted certificate.\n\n---\n\n## Why\n\nGrafana was deployed and its IngressRoute was being reconciled by Flux, but the service\nwas unreachable. The root cause was a chain of three independent misconfigurations in the\nstaging cluster setup.\n\n---\n\n## Details\n\n**Bug 1 — Flux healthCheck referenced wrong Deployment name**\n- `clusters/staging/apps.yaml` had `healthChecks` pointing to a Deployment named `grafana`\n- The actual Deployment created by kube-prometheus-stack is `kube-prometheus-stack-grafana`\n- Flux was stuck in `Reconciliation in progress` for 2+ hours waiting for a Deployment that doesn't exist\n- Fix: updated the healthCheck name to `kube-prometheus-stack-grafana`\n\n**Bug 2 — Traefik LoadBalancer IP outside staging MetalLB pool**\n- `platform/networking/traefik/helmrelease.yaml` pins Traefik to `10.0.10.110` (the prod IP)\n- Staging MetalLB pool is `10.0.10.190–10.0.10.199` — `.110` is not in range\n- MetalLB left Traefik with `EXTERNAL-IP: <pending>`, making all services unreachable\n- Fix: added a patch in `clusters/staging/infrastructure.yaml` to override the Traefik annotation to `10.0.10.190` for staging\n\n**Bug 3 — Flux apps Kustomization depended on wrong platform state (pre-existing)**\n- `DependencyNotReady` events showed apps Kustomization blocked for 118 minutes before\n  finally making progress — likely a timing issue during initial cluster bootstrap\n\n**Environment access pattern established:**\n- **Staging** — access services directly by IP (e.g. `https://10.0.10.190`)\n  - Uses `letsencrypt-staging` issuer; browser cert warnings are expected and accepted\n  - No Pi-hole DNS records needed for staging\n- **Prod** — access services by domain name (e.g. `https://grafana.kagiso.me`)\n  - Uses `letsencrypt-prod` issuer; trusted cert, no browser warnings\n  - Pi-hole DNS records point to `10.0.10.110` (Traefik prod IP)\n\n---\n\n## Outcome\n\n- [x] Flux `apps` Kustomization reconciles successfully (`Ready: True`)\n- [x] Grafana IngressRoute applied in `monitoring` namespace\n- [x] Traefik assigned `10.0.10.190` from MetalLB staging pool\n- [x] Grafana reachable at `https://10.0.10.190` (expected cert warning on staging)\n- [x] Staging/prod access pattern documented and understood\n\n---\n\n## Related\n\n- `clusters/staging/infrastructure.yaml` — all staging-specific patches\n- `clusters/staging/apps.yaml` — Flux apps Kustomization with healthChecks\n- `platform/networking/traefik/helmrelease.yaml` — Traefik prod IP annotation\n- `platform/networking/metallb-config/ip-pool.yaml` — prod MetalLB pool definition\n- Guide: `docs/guides/05-Networking-MetalLB-Traefik.md`\n"
+    "tags": [
+      "CONFIG"
+    ],
+    "body": "# 2026-03-22 \u2014 CONFIG: Grafana Ingress Debugging and Staging Environment Fixes\n\n**Operator:** Kagiso\n**Type:** `CONFIG`\n**Components:** Traefik \u00b7 MetalLB \u00b7 cert-manager \u00b7 Flux \u00b7 Grafana\n**Commit:** e84df0b\n**Downtime:** None\n\n---\n\n## What Changed\n\nThree bugs in the staging cluster configuration were identified and fixed while bringing up\nGrafana access for the first time. An environment access pattern was also established:\nstaging services are accessed directly by IP, prod services are accessed via domain name\nwith a trusted certificate.\n\n---\n\n## Why\n\nGrafana was deployed and its IngressRoute was being reconciled by Flux, but the service\nwas unreachable. The root cause was a chain of three independent misconfigurations in the\nstaging cluster setup.\n\n---\n\n## Details\n\n**Bug 1 \u2014 Flux healthCheck referenced wrong Deployment name**\n- `clusters/staging/apps.yaml` had `healthChecks` pointing to a Deployment named `grafana`\n- The actual Deployment created by kube-prometheus-stack is `kube-prometheus-stack-grafana`\n- Flux was stuck in `Reconciliation in progress` for 2+ hours waiting for a Deployment that doesn't exist\n- Fix: updated the healthCheck name to `kube-prometheus-stack-grafana`\n\n**Bug 2 \u2014 Traefik LoadBalancer IP outside staging MetalLB pool**\n- `platform/networking/traefik/helmrelease.yaml` pins Traefik to `10.0.10.110` (the prod IP)\n- Staging MetalLB pool is `10.0.10.190\u201310.0.10.199` \u2014 `.110` is not in range\n- MetalLB left Traefik with `EXTERNAL-IP: <pending>`, making all services unreachable\n- Fix: added a patch in `clusters/staging/infrastructure.yaml` to override the Traefik annotation to `10.0.10.190` for staging\n\n**Bug 3 \u2014 Flux apps Kustomization depended on wrong platform state (pre-existing)**\n- `DependencyNotReady` events showed apps Kustomization blocked for 118 minutes before\n  finally making progress \u2014 likely a timing issue during initial cluster bootstrap\n\n**Environment access pattern established:**\n- **Staging** \u2014 access services directly by IP (e.g. `https://10.0.10.190`)\n  - Uses `letsencrypt-staging` issuer; browser cert warnings are expected and accepted\n  - No Pi-hole DNS records needed for staging\n- **Prod** \u2014 access services by domain name (e.g. `https://grafana.kagiso.me`)\n  - Uses `letsencrypt-prod` issuer; trusted cert, no browser warnings\n  - Pi-hole DNS records point to `10.0.10.110` (Traefik prod IP)\n\n**Staging-specific patches in `clusters/staging/infrastructure.yaml`:**\n- MetalLB `IPAddressPool`: `10.0.10.110\u201310.0.10.125` \u2192 `10.0.10.190\u201310.0.10.199`\n- Traefik LoadBalancer annotation: `10.0.10.110` \u2192 `10.0.10.190`\n- Wildcard Certificate issuer: `letsencrypt-prod` \u2192 `letsencrypt-staging`\n\n---\n\n## Outcome\n\n- [x] Flux `apps` Kustomization reconciles successfully (`Ready: True`)\n- [x] Grafana IngressRoute applied in `monitoring` namespace\n- [x] Traefik assigned `10.0.10.190` from MetalLB staging pool\n- [x] Grafana reachable at `https://10.0.10.190` (expected cert warning on staging)\n- [x] Staging/prod access pattern documented and understood\n\n---\n\n## Rollback\n\nTo undo the Traefik IP patch (revert staging to broken state):\n```bash\n# Remove the patches block from platform-networking Kustomization in clusters/staging/infrastructure.yaml\nflux reconcile kustomization platform-networking --with-source\n```\n\nTo undo the healthCheck fix:\n```bash\n# Revert clusters/staging/apps.yaml healthCheck name back to \"grafana\"\n# (this will break reconciliation again)\n```\n\n---\n\n## Related\n\n- `clusters/staging/infrastructure.yaml` \u2014 all staging-specific patches\n- `clusters/staging/apps.yaml` \u2014 Flux apps Kustomization with healthChecks\n- `platform/networking/traefik/helmrelease.yaml` \u2014 Traefik prod IP annotation\n- `platform/networking/metallb-config/ip-pool.yaml` \u2014 prod MetalLB pool definition\n- Guide: `docs/guides/05-Networking-MetalLB-Traefik.md`\n"
   },
   {
     "slug": "2026-03-16-pivot-nuc-to-proxmox",
     "date": "2026-03-16",
-    "type": "DECISION",
-    "title": "Decision: pivot Intel NUC from bare Docker host to Proxmox VE hypervisor (docker-vm + staging-k3s VM) — pending RAM upgrade",
+    "type": "HARDWARE",
+    "title": "Decision: pivot Intel NUC from bare Docker host to Proxmox VE hypervisor (docker-vm + staging-k3s VM) \u2014 pending RAM upgrade",
     "summary": "Decision: pivot Intel NUC from bare Docker host to Proxmox VE hypervisor (docker-vm + staging-k3s VM)",
     "commit": "",
     "hasDetail": true,
-    "tags": ["DECISION"],
-    "body": "# 2026-03-16 — DECISION: Pivot Intel NUC to Proxmox\n\n**Operator:** Kagiso\n**Type:** `DECISION`\n**Components:** Intel NUC NUC7i3BNH · Proxmox VE · Docker VM · Staging k3s\n**Status:** 🔄 In Progress — executing 2026-03-16\n**Downtime:** Full Docker host downtime during migration (~2–4 hours)\n\n---\n\n## What Changed\n\nThe Intel NUC is being converted from a bare Docker host to a Proxmox VE hypervisor.\nTwo VMs will replace the bare OS: one for Docker workloads, one for the staging k3s cluster.\n\nThis is a deliberate architectural pivot — not a fix for something broken, but a step up\nin infrastructure maturity. The bare Docker model served its purpose during the initial\nbuild. This change unlocks the staging environment needed for the GitOps promotion pipeline\nand gives each workload clean isolation.\n\n---\n\n## Why\n\nTwo things pushed this decision:\n\n**1. Staging environment needed.**\nThe GitOps promotion pipeline (main → staging → prod) is built and waiting. Without a\nstaging cluster, every change goes directly to production. The NUC has the headroom to\nrun a single-node k3s staging cluster — Proxmox is the cleanest way to host it alongside\nthe existing Docker workloads.\n\n**2. Workload isolation.**\nRunning k3s and Docker side-by-side on a bare OS is messy — shared kernel, port conflicts,\nnetwork complexity. VMs solve this properly.\n\n---\n\n## Before → After\n\n### Before\n\n```\nNUC (bare Ubuntu 22.04) — 10.0.10.20\n└── Docker Compose\n    ├── Prometheus + Grafana + Loki + Alertmanager\n    └── Sonarr, Radarr, Plex (+ arr stack)\n```\n\n### After\n\n```\nNUC (Proxmox VE) — 10.0.10.30\n├── ubuntu-2204-cloud (VM 9000) — template, never runs\n├── docker-vm       — 10.0.10.32 (2 vCPU, 8GB RAM, 80GB)\n│   └── Docker Compose\n│       └── Sonarr, Radarr, Plex (+ arr stack)\n└── staging-k3s     — 10.0.10.31 (2 vCPU, 6GB RAM, 60GB)\n    └── k3s single-node\n        └── Flux → clusters/staging/ → apps/staging/\n```\n\n---\n\n## Related\n\n- ADR: `docs/adr/ADR-006-proxmox-pivot.md`\n- Staging cluster config: `clusters/staging/`\n- Promotion pipeline: `.github/workflows/promote-to-prod.yml`\n"
+    "tags": [
+      "HARDWARE"
+    ],
+    "body": "# 2026-03-16 \u2014 HARDWARE: Pivot Intel NUC to Proxmox\n\n**Operator:** Kagiso\n**Type:** `HARDWARE`\n**Components:** Intel NUC NUC7i3BNH \u00b7 Proxmox VE \u00b7 Docker VM \u00b7 Staging k3s\n**Status:** \ud83d\udd04 In Progress \u2014 executing 2026-03-16\n**Downtime:** Full Docker host downtime during migration (~2\u20134 hours)\n\n---\n\n## What Changed\n\nThe Intel NUC is being converted from a bare Docker host to a Proxmox VE hypervisor.\nTwo VMs will replace the bare OS: one for Docker workloads, one for the staging k3s cluster.\n\nThis is a deliberate architectural pivot \u2014 not a fix for something broken, but a step up\nin infrastructure maturity. The bare Docker model served its purpose during the initial\nbuild. This change unlocks the staging environment needed for the GitOps promotion pipeline\nand gives each workload clean isolation.\n\n---\n\n## Why\n\nTwo things pushed this decision:\n\n**1. Staging environment needed.**\nThe GitOps promotion pipeline (main \u2192 staging \u2192 prod) is built and waiting. Without a\nstaging cluster, every change goes directly to production. The NUC has the headroom to\nrun a single-node k3s staging cluster \u2014 Proxmox is the cleanest way to host it alongside\nthe existing Docker workloads.\n\n**2. Workload isolation.**\nRunning k3s and Docker side-by-side on a bare OS is messy \u2014 shared kernel, port conflicts,\nnetwork complexity. VMs solve this properly.\n\n---\n\n## Before \u2192 After\n\n### Before\n\n```\nNUC (bare Ubuntu 22.04) \u2014 10.0.10.20\n\u2514\u2500\u2500 Docker Compose\n    \u251c\u2500\u2500 Prometheus + Grafana + Loki + Alertmanager\n    \u2514\u2500\u2500 Sonarr, Radarr, Plex (+ arr stack)\n```\n\n### After\n\n```\nNUC (Proxmox VE) \u2014 10.0.10.30\n\u251c\u2500\u2500 ubuntu-2204-cloud (VM 9000) \u2014 template, never runs\n\u251c\u2500\u2500 docker-vm       \u2014 10.0.10.32 (2 vCPU, 8GB RAM, 80GB)\n\u2502   \u2514\u2500\u2500 Docker Compose\n\u2502       \u2514\u2500\u2500 Sonarr, Radarr, Plex (+ arr stack)\n\u2514\u2500\u2500 staging-k3s     \u2014 10.0.10.31 (2 vCPU, 6GB RAM, 60GB)\n    \u2514\u2500\u2500 k3s single-node\n        \u2514\u2500\u2500 Flux \u2192 clusters/staging/ \u2192 apps/staging/\n```\n\nMonitoring stack is **decommissioned from Docker** \u2014 kube-prometheus-stack on k3s\nscrapes all external targets via `additionalScrapeConfigs`. Frees ~2GB RAM on `docker-vm`.\n\nNFS mounts from TrueNAS are identical \u2014 `docker-vm` mounts `tera/media` the same way.\nNo data migration required.\n\n### VM Resource Allocation\n\n| | Proxmox host | docker-vm | staging-k3s | Total |\n|---|---|---|---|---|\n| **RAM (16GB now)** | ~2GB | 8GB | 6GB | 16GB |\n| **RAM (32GB after upgrade)** | ~2GB | 12GB | 10GB | ~24GB |\n| **vCPU** | \u2014 | 2 | 2 | 4 threads |\n| **Disk** | ~40GB | 80GB | 60GB | ~180GB |\n\n> **Interim resource note:** Migration proceeding with 16GB RAM. RAM upgrade to 32GB\n> expected ~2026-03-23, at which point docker-vm \u2192 12GB and staging-k3s \u2192 10GB.\n\nA spare ThinkCentre M93p is retained as a cold spare / future 4th k3s worker.\n\n---\n\n## Pre-Migration Checklist\n\nBefore touching the NUC:\n\n- [ ] Extend kube-prometheus-stack with `additionalScrapeConfigs` for TrueNAS, NUC, RPi\n- [ ] Add PrometheusRule resources for infrastructure + TrueNAS alert rules in k3s\n- [ ] Verify all external targets healthy in k3s Prometheus before proceeding\n- [ ] TrueNAS `archive/docker-backups` dataset accessible and has free space\n- [ ] Docker compose files committed in this repo (under `docker/`)\n- [ ] Note any volumes with state that aren't in TrueNAS (Grafana dashboards, Prometheus data)\n- [ ] Proxmox VE ISO downloaded and flashed to USB (8GB+)\n- [ ] SSH access to RPi (`10.0.10.10`) confirmed \u2014 control hub during outage\n\n---\n\n## Step 1 \u2014 Backup Docker Host\n\nFrom the NUC (`ssh kagiso@10.0.10.20`):\n\n```bash\n# Mount the TrueNAS backup share\nsudo mkdir -p /mnt/archive\nsudo mount -t nfs 10.0.10.80:/mnt/archive /mnt/archive\n\n# Create a timestamped backup directory\nBACKUP_DIR=\"/mnt/archive/docker-backups/pre-proxmox-$(date +%Y%m%d)\"\nsudo mkdir -p \"$BACKUP_DIR\"\n\n# Backup compose files and configs\nsudo tar czf \"$BACKUP_DIR/docker-compose-backup.tar.gz\" \\\n  ~/docker/ \\\n  /etc/docker/ \\\n  2>/dev/null\n\n# Export named volumes (includes Grafana dashboards, Prometheus TSDB, app state)\nsudo tar czf \"$BACKUP_DIR/docker-volumes.tar.gz\" /var/lib/docker/volumes/\n\n# Verify\nls -lah \"$BACKUP_DIR\"\n```\n\n---\n\n## Step 2 \u2014 Install Proxmox VE\n\n1. Flash Proxmox VE ISO to USB (Rufus on Windows or `dd` on Linux)\n2. Boot NUC from USB \u2014 press **F10** at boot for boot menu\n3. Installer settings:\n   - Target disk: 256GB NVMe\n   - Hostname: `nuc.homelab`\n   - IP: `10.0.10.30` (new dedicated Proxmox host IP)\n   - Gateway: `10.0.10.1`\n   - DNS: `10.0.10.1`\n4. First login \u2014 Proxmox web UI at `https://10.0.10.30:8006`\n\n### Post-Install Host Config\n\n```bash\nssh root@10.0.10.30\n\n# Switch to community (no-subscription) repo\necho \"deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription\" \\\n  > /etc/apt/sources.list.d/pve-community.list\nsed -i 's/^deb/#deb/' /etc/apt/sources.list.d/pve-enterprise.list\napt update && apt dist-upgrade -y\n\n# Install useful tools\napt install -y vim htop iotop ncdu curl wget\n\n# Add SSH key (replace with your actual public key)\nmkdir -p ~/.ssh\necho \"ssh-rsa AAAA...\" >> ~/.ssh/authorized_keys\nchmod 600 ~/.ssh/authorized_keys\n\n# Disable the enterprise subscription nag popup in the web UI\nsed -i.bak \"s/res === null/false/\" /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js\nsystemctl restart pveproxy\n```\n\n### Automated VM Backups (vzdump)\n\nBackups are stored on a TrueNAS NFS share, not local NVMe.\n\n**TrueNAS NFS share setup:**\n- Dataset owned by `kagiso` \u2014 set **Mapall User: kagiso** on the NFS share\n- Enable **NFSv3** (System Settings \u2192 Services \u2192 NFS \u2192 Configure) \u2014 required for Proxmox to enumerate exports via `showmount`\n- Add Proxmox host IP to Authorized Hosts on the share\n\n**Add NFS storage in Proxmox:**\n- Datacenter \u2192 Storage \u2192 Add \u2192 NFS\n- Server: TrueNAS IP, export path, Content: `VZDump backup file`\n\n**Backup job:**\n- Datacenter \u2192 Backup \u2192 Add\n- Schedule: Sunday 02:00, all VMs, storage: `truenas-backup`, mode: snapshot, compress: zstd\n- This gives weekly rollback points before any risky change\n\n---\n\n## Step 3 \u2014 Create Cloud-Init Template\n\nVMs are provisioned from a cloud-init template rather than the Ubuntu installer.\nThis makes new VMs take ~30 seconds instead of 10+ minutes and eliminates manual\ninstaller interaction.\n\n```bash\nssh root@10.0.10.30\n\n# Download Ubuntu 22.04 cloud image (no GUI, cloud-ready, ~600MB)\nwget https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64.img\n\n# Create base VM \u2014 ID 9000 is the template convention\nqm create 9000 \\\n  --name ubuntu-2204-cloud \\\n  --memory 2048 \\\n  --cores 2 \\\n  --cpu host \\\n  --net0 virtio,bridge=vmbr0 \\\n  --ostype l26 \\\n  --agent enabled=1 \\\n  --serial0 socket \\\n  --vga serial0\n\n# Import the cloud image as the disk\nqm importdisk 9000 jammy-server-cloudimg-amd64.img local-lvm\n\n# Attach disk, add cloud-init drive, set boot order\nqm set 9000 \\\n  --scsi0 local-lvm:vm-9000-disk-0,discard=on,ssd=1 \\\n  --ide2 local-lvm:cloudinit \\\n  --boot order=scsi0 \\\n  --scsihw virtio-scsi-pci\n\n# Set cloud-init defaults \u2014 SSH key is injected at clone time\nqm set 9000 \\\n  --ciuser kagiso \\\n  --sshkeys ~/.ssh/authorized_keys \\\n  --ipconfig0 ip=dhcp\n\n# Convert to template (one-way \u2014 clones inherit all settings)\nqm template 9000\n\n# Clean up the downloaded image\nrm jammy-server-cloudimg-amd64.img\n```\n\n> **Note:** Template VM 9000 never runs. It is only cloned.\n\n---\n\n## Step 4 \u2014 Create docker-vm\n\n```bash\nssh root@10.0.10.30\n\n# Clone template and configure\nqm clone 9000 3032 --name bronn --full\nqm set 100 \\\n  --memory 8192 \\\n  --cores 2 \\\n  --cpu host \\\n  --ipconfig0 ip=10.0.10.32/24,gw=10.0.10.1 \\\n  --nameserver 10.0.10.10\n\n# Expand disk to 80GB before first boot\nqm resize 3032 scsi0 80G\n\nqm start 3032\n```\n\nCloud-init configures hostname, injects SSH key, sets static IP, and expands the\nroot filesystem \u2014 all on first boot. No installer interaction needed.\n\n### First Boot \u2014 docker-vm\n\n```bash\n# SSH available immediately after boot (key injected by cloud-init)\nssh kagiso@10.0.10.32\n\n# Install QEMU guest agent \u2014 enables graceful shutdown and IP visibility in Proxmox UI\nsudo apt install -y qemu-guest-agent\nsudo systemctl enable --now qemu-guest-agent\n\n# Install Docker\ncurl -fsSL https://get.docker.com | sudo bash\nsudo usermod -aG docker kagiso\n```\n\n---\n\n## Step 5 \u2014 Restore Docker Stack\n\n```bash\nssh kagiso@10.0.10.32\n\n# Mount TrueNAS NFS shares\nsudo mkdir -p /mnt/media /mnt/downloads /mnt/archive\necho \"10.0.10.80:/mnt/tera/media    /mnt/media     nfs  defaults,_netdev  0 0\" | sudo tee -a /etc/fstab\necho \"10.0.10.80:/mnt/tera          /mnt/downloads  nfs  defaults,_netdev  0 0\" | sudo tee -a /etc/fstab\necho \"10.0.10.80:/mnt/archive       /mnt/archive    nfs  defaults,_netdev  0 0\" | sudo tee -a /etc/fstab\nsudo mount -a\n\n# Restore compose files and volumes from backup\nBACKUP_DIR=\"/mnt/archive/docker-backups/pre-proxmox-$(date +%Y%m%d)\"\nsudo tar xzf \"$BACKUP_DIR/docker-compose-backup.tar.gz\" -C /\nsudo tar xzf \"$BACKUP_DIR/docker-volumes.tar.gz\" -C /\n\n# Start services\ncd ~/docker && docker compose up -d\n\n# Verify\ndocker ps\n```\n\n---\n\n## Step 6 \u2014 Create staging-k3s VM\n\n```bash\nssh root@10.0.10.30\n\n# Clone template and configure\nqm clone 9000 3031 --name staging-k3s --full\nqm set 101 \\\n  --memory 4096 \\\n  --cores 2 \\\n  --cpu host \\\n  --ipconfig0 ip=10.0.10.31/24,gw=10.0.10.1 \\\n  --nameserver 10.0.10.10\n\n# Expand disk to 60GB before first boot\nqm resize 3031 scsi0 60G\n\nqm start 3031\n```\n\n### First Boot \u2014 staging-k3s\n\n```bash\nssh kagiso@10.0.10.31\n\n# Install QEMU guest agent\nsudo apt install -y qemu-guest-agent\nsudo systemctl enable --now qemu-guest-agent\n\n# Install k3s (single-node)\ncurl -sfL https://get.k3s.io | sh -s - \\\n  --disable traefik \\\n  --write-kubeconfig-mode 644\n\nkubectl get nodes\n```\n\n---\n\n## Step 7 \u2014 Bootstrap Flux on Staging\n\nFrom the RPi (`ssh kagiso@10.0.10.10`):\n\n```bash\n# Copy and fix kubeconfig\nscp kagiso@10.0.10.31:/etc/rancher/k3s/k3s.yaml ~/.kube/staging-config\nsed -i 's/127.0.0.1/10.0.10.31/' ~/.kube/staging-config\nexport KUBECONFIG=~/.kube/staging-config\n\n# Bootstrap Flux against the staging path\nflux bootstrap github \\\n  --owner=Kagiso-me \\\n  --repository=homelab-infrastructure \\\n  --branch=main \\\n  --path=clusters/staging \\\n  --personal\n\n# Verify\nflux get kustomizations\nflux get helmreleases -A\n```\n\n---\n\n## Step 8 \u2014 Enable Staging Promotion Gate\n\nOnce staging is healthy, add the `STAGING_KUBECONFIG` GitHub Actions secret:\n\n```bash\n# From RPi \u2014 encode staging kubeconfig\ncat ~/.kube/staging-config | base64 | tr -d '\\n'\n```\n\nAdd as a GitHub Actions secret named `STAGING_KUBECONFIG`, then uncomment the\n`staging-health` job in [`.github/workflows/promote-to-prod.yml`](../../.github/workflows/promote-to-prod.yml).\n\n---\n\n## Post-Migration \u2014 Consolidate Monitoring\n\nExtend kube-prometheus-stack to scrape all external targets, then decommission the\nDocker monitoring stack:\n\n- Proxmox host node exporter: `10.0.10.30:9100`\n- docker-vm node exporter: `10.0.10.32:9100`\n- TrueNAS SNMP / node exporter: `10.0.10.80`\n- RPi node exporter: `10.0.10.10:9100`\n\n---\n\n## Post-RAM Upgrade \u2014 Expand VM Resources (~2026-03-23)\n\n```bash\nqm shutdown 100 && qm set 100 --memory 12288 && qm start 100\nqm shutdown 101 && qm set 101 --memory 10240 && qm start 101\n```\n\n---\n\n## Rollback\n\nIf Proxmox install fails:\n\n1. Reinstall Ubuntu 22.04 on the NUC (same IP `10.0.10.20`)\n2. Install Docker, mount TrueNAS NFS shares\n3. Restore from `archive/docker-backups/pre-proxmox-YYYYMMDD/`\n4. `docker compose up -d`\n\nTrueNAS and the k3s cluster are completely unaffected throughout.\n\n---\n\n## Related\n\n- ADR: `docs/adr/ADR-006-proxmox-pivot.md`\n- Staging cluster config: `clusters/staging/`\n- Promotion pipeline: `.github/workflows/promote-to-prod.yml`\n"
   },
   {
     "slug": "2026-03-16-deploy-platform-stack",
     "date": "2026-03-16",
     "type": "DEPLOY",
-    "title": "Networking platform stack: MetalLB (10.0.10.110–125) + cert-manager + Traefik v3 pinned to 10.0.10.110",
-    "summary": "Networking platform stack: MetalLB (10.0.10.110–125) + cert-manager + Traefik v3 pinned to 10.0.10.110",
+    "title": "Networking platform stack: MetalLB (10.0.10.110\u2013125) + cert-manager + Traefik v3 pinned to 10.0.10.110",
+    "summary": "Networking platform stack: MetalLB (10.0.10.110\u2013125) + cert-manager + Traefik v3 pinned to 10.0.10.110",
     "commit": "",
     "hasDetail": true,
-    "tags": ["DEPLOY"],
-    "body": "# 2026-03-16 — DEPLOY: Networking Platform Stack\n\n**Operator:** Kagiso\n**Type:** `DEPLOY`\n**Components:** MetalLB v0.14 · cert-manager v1.14 · Traefik v3 (chart 28.3.0)\n**Commit:** aa3486f\n**Downtime:** None (initial install)\n\n---\n\n## What Changed\n\nDeployed the full networking platform stack to the k3s cluster — MetalLB for load balancing,\ncert-manager for TLS certificate management, and Traefik v3 as the ingress controller.\nAll three components installed via a single Ansible playbook in strict dependency order.\n\n---\n\n## Why\n\nThe cluster was running bare after initial provisioning. Without a load balancer, ingress\ncontroller, and TLS automation, no applications could be securely exposed. This stack is\nthe prerequisite for all application deployments.\n\n---\n\n## Details\n\n**MetalLB:**\n- Mode: Layer-2 ARP\n- IP pool: `10.0.10.110–10.0.10.125`\n- Applied `IPAddressPool` and `L2Advertisement` CRDs after controller rollout\n\n**cert-manager:**\n- CRDs applied before Helm install\n- Two `ClusterIssuers` created:\n  - `letsencrypt-staging` — for testing, avoids rate limits\n  - `letsencrypt` — production, used for live certificates\n- Webhook readiness verified before issuer creation\n\n**Traefik v3:**\n- Helm chart version 28.3.0\n- LoadBalancer IP pinned to `10.0.10.110`\n- HTTP → HTTPS redirect enabled globally\n- Prometheus metrics endpoint enabled (`/metrics` on port 9100)\n- Resource limits: 100m CPU request / 300m limit, 128Mi memory request / 256Mi limit\n- Dashboard disabled in production\n\n---\n\n## Outcome\n\n- MetalLB controller and speaker pods healthy ✓\n- cert-manager webhook ready ✓\n- Traefik assigned `10.0.10.110` ✓\n- Staging certificate issued successfully ✓\n- HTTP → HTTPS redirect confirmed ✓\n\n---\n\n## Related\n\n- Playbook: `ansible/playbooks/lifecycle/install-platform.yml`\n- Guide: `docs/guides/05-Networking-MetalLB-Traefik.md`\n"
+    "tags": [
+      "DEPLOY"
+    ],
+    "body": "# 2026-03-16 \u2014 DEPLOY: Networking Platform Stack\n\n**Operator:** Kagiso\n**Type:** `DEPLOY`\n**Components:** MetalLB v0.14 \u00b7 cert-manager v1.14 \u00b7 Traefik v3 (chart 28.3.0)\n**Commit:** aa3486f\n**Downtime:** None (initial install)\n\n---\n\n## What Changed\n\nDeployed the full networking platform stack to the k3s cluster \u2014 MetalLB for load balancing,\ncert-manager for TLS certificate management, and Traefik v3 as the ingress controller.\nAll three components installed via a single Ansible playbook in strict dependency order.\n\n---\n\n## Why\n\nThe cluster was running bare after initial provisioning. Without a load balancer, ingress\ncontroller, and TLS automation, no applications could be securely exposed. This stack is\nthe prerequisite for all application deployments.\n\n---\n\n## Details\n\n**MetalLB:**\n- Mode: Layer-2 ARP\n- IP pool: `10.0.10.110\u201310.0.10.125`\n- Applied `IPAddressPool` and `L2Advertisement` CRDs after controller rollout\n\n**cert-manager:**\n- CRDs applied before Helm install\n- Two `ClusterIssuers` created:\n  - `letsencrypt-staging` \u2014 for testing, avoids rate limits\n  - `letsencrypt` \u2014 production, used for live certificates\n- Webhook readiness verified before issuer creation\n\n**Traefik v3:**\n- Helm chart version 28.3.0\n- LoadBalancer IP pinned to `10.0.10.110`\n- HTTP \u2192 HTTPS redirect enabled globally\n- Prometheus metrics endpoint enabled (`/metrics` on port 9100)\n- Resource limits: 100m CPU request / 300m limit, 128Mi memory request / 256Mi limit\n- Dashboard disabled in production\n\n**Issue encountered:**\nTraefik install failed on first run. The Helm chart v28+ changed the `expose` field under\n`ports` from a plain boolean to a structured object (`{default: true}`). The playbook values\nfile used the old boolean format, causing a template rendering error.\n\nFixed by updating the `ports` expose fields in the playbook to use the new object format.\nSee commit `aa3486f`.\n\n**Playbook:**\n- `ansible/playbooks/lifecycle/install-platform.yml`\n- Tags allow selective reinstall: `--tags metallb`, `--tags cert-manager`, `--tags traefik`\n- Includes post-install assertions: Traefik IP verification, pod status summary\n\n---\n\n## Outcome\n\n- MetalLB controller and speaker pods healthy \u2713\n- cert-manager webhook ready \u2713\n- Traefik assigned `10.0.10.110` \u2713\n- Staging certificate issued successfully \u2713\n- HTTP \u2192 HTTPS redirect confirmed \u2713\n\n---\n\n## Rollback\n\n```bash\nhelm uninstall traefik -n traefik\nhelm uninstall cert-manager -n cert-manager\nkubectl delete -f https://raw.githubusercontent.com/metallb/metallb/v0.14.0/config/manifests/metallb-native.yaml\nkubectl delete ns traefik cert-manager metallb-system\n```\n\n---\n\n## Related\n\n- Playbook: `ansible/playbooks/lifecycle/install-platform.yml`\n- Guide: `docs/guides/05-Networking-MetalLB-Traefik.md`\n- Traefik chart breaking change: `expose` field type changed in v28\n"
   },
   {
     "slug": "2026-03-16-initial-infrastructure-setup",
@@ -251,18 +299,22 @@
     "summary": "Initial infrastructure: 3-node k3s cluster, FluxCD v2 GitOps, SOPS/age secrets, Prometheus + Grafana + Loki monitoring stack",
     "commit": "",
     "hasDetail": true,
-    "tags": ["DEPLOY"],
-    "body": "# 2026-03-16 — DEPLOY: Initial Infrastructure Setup\n\n**Operator:** Kagiso\n**Type:** `DEPLOY`\n**Components:** k3s · FluxCD v2 · SOPS/age · Prometheus · Grafana · Loki · Ansible\n**Commit:** d8a66aa\n**Downtime:** N/A (new build)\n\n---\n\n## What Changed\n\nStood up the entire homelab infrastructure from scratch. Three Lenovo ThinkCentre M93p nodes\nprovisioned as a k3s cluster, a bran 3B+ configured as the Ansible control hub, and\na full GitOps pipeline established using FluxCD v2 with SOPS-encrypted secrets.\n\n---\n\n## Why\n\nReplacing an ad-hoc Docker-only setup with a proper Kubernetes-based homelab. Goals:\n- GitOps-driven deployments — no more manual `docker run` commands\n- Proper secret management via SOPS + age encryption\n- Full observability stack from day one\n- All infrastructure documented and reproducible\n\n---\n\n## Related\n\n- Cluster install playbook: `ansible/playbooks/lifecycle/install-cluster.yml`\n- Guide: `docs/guides/01-Home-Network-Setup.md`\n- Guide: `docs/guides/02-TrueNAS-Storage.md`\n- Architecture: `docs/architecture/cluster-architecture.md`\n"
+    "tags": [
+      "DEPLOY"
+    ],
+    "body": "# 2026-03-16 \u2014 DEPLOY: Initial Infrastructure Setup\n\n**Operator:** Kagiso\n**Type:** `DEPLOY`\n**Components:** k3s \u00b7 FluxCD v2 \u00b7 SOPS/age \u00b7 Prometheus \u00b7 Grafana \u00b7 Loki \u00b7 Ansible\n**Commit:** d8a66aa\n**Downtime:** N/A (new build)\n\n---\n\n## What Changed\n\nStood up the entire homelab infrastructure from scratch. Three Lenovo ThinkCentre M93p nodes\nprovisioned as a k3s cluster, a bran 3B+ configured as the Ansible control hub, and\na full GitOps pipeline established using FluxCD v2 with SOPS-encrypted secrets.\n\n---\n\n## Why\n\nReplacing an ad-hoc Docker-only setup with a proper Kubernetes-based homelab. Goals:\n- GitOps-driven deployments \u2014 no more manual `docker run` commands\n- Proper secret management via SOPS + age encryption\n- Full observability stack from day one\n- All infrastructure documented and reproducible\n\n---\n\n## Details\n\n**Hardware provisioned:**\n- `tywin` (10.0.10.11) \u2014 k3s control plane, ThinkCentre M93p, i5-4570T, 16GB DDR3, 256GB SSD\n- `jaime` (10.0.10.12) \u2014 k3s worker, ThinkCentre M93p, i5-4570T, 16GB DDR3, 256GB SSD\n- `tyrion` (10.0.10.13) \u2014 k3s worker, ThinkCentre M93p, i5-4570T, 16GB DDR3, 256GB SSD\n- `rpi` (10.0.10.10) \u2014 bran 3B+, Ansible control hub\n- `docker` (10.0.10.20) \u2014 Intel NUC NUC7i3BNH, Docker host (Prometheus, Grafana, Loki)\n- `truenas` (10.0.10.80) \u2014 HP MicroServer Gen8, Xeon E31260L, 16GB ECC DDR3, NFS/S3 storage\n\n**TrueNAS pool layout:**\n- `core` \u2014 2\u00d7480GB SSD mirror \u2192 k8s PVCs (NFS provisioner)\n- `archive` \u2014 2\u00d74TB SAS mirror \u2192 backups (k3s, Docker, RPi, personal)\n- `tera` \u2014 1\u00d78TB SAS single \u2192 media (movies, series, music)\n\n**k3s cluster:**\n- Provisioned via `ansible/playbooks/lifecycle/install-cluster.yml`\n- k3s installed without default Traefik (replaced by standalone Traefik v3)\n- Flannel CNI, etcd datastore (embedded)\n- etcd snapshots directed to `archive/k8s-backups/etcd` via NFS\n\n**FluxCD v2:**\n- Bootstrapped against this repository\n- SOPS + age encryption for all secrets\n- Kustomize overlays per environment\n\n**Monitoring stack (Docker host):**\n- Prometheus scraping k3s nodes + TrueNAS via node-exporter and smartctl-exporter\n- Grafana dashboards for cluster, node, and storage health\n- Loki + Promtail for log aggregation\n- Alertmanager with Slack webhook integration\n- 55 alert rules across 4 files: kubernetes, backups, infrastructure, TrueNAS/SMART\n\n**Documentation:**\n- Guides 01\u201312 written covering every component\n- Operational runbooks for all major failure scenarios\n- ADRs documenting key architectural decisions\n- Disaster recovery plan\n- Alert runbooks for all 55 alert rules\n\n---\n\n## Outcome\n\n- k3s cluster online with 1 control plane + 2 workers \u2713\n- FluxCD reconciling from GitHub \u2713\n- Monitoring stack collecting metrics and logs \u2713\n- All secrets encrypted at rest (SOPS/age) \u2713\n- Repository safe to push to public GitHub \u2713\n\n---\n\n## Related\n\n- Cluster install playbook: `ansible/playbooks/lifecycle/install-cluster.yml`\n- Guide: `docs/guides/01-Home-Network-Setup.md`\n- Guide: `docs/guides/02-TrueNAS-Storage.md`\n- Architecture: `docs/architecture/cluster-architecture.md`\n- Storage layout: `truenas/docs/dataset-layout.md`\n"
   },
   {
     "slug": "2026-03-encrypt-immich-and-n8n-secrets",
     "date": "2026-03",
-    "type": "SECURITY",
+    "type": "DEPLOY",
     "title": "encrypt Immich and n8n secrets",
     "summary": "encrypt Immich and n8n secrets",
     "commit": "4824ec6",
     "hasDetail": false,
-    "tags": ["SECURITY"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-03-add-immich-and-n8n-deployments",
@@ -272,87 +324,105 @@
     "summary": "add Immich and n8n deployments",
     "commit": "8ebede7",
     "hasDetail": false,
-    "tags": ["DEPLOY"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-03-add-full-monitoring-stack-overhaul",
     "date": "2026-03",
-    "type": "OPS",
+    "type": "DEPLOY",
     "title": "add full monitoring stack overhaul",
     "summary": "add full monitoring stack overhaul",
     "commit": "d3a8e13",
     "hasDetail": false,
-    "tags": ["OPS"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-03-add-daily-homelab-digest-cronjob",
     "date": "2026-03",
-    "type": "OPS",
+    "type": "DEPLOY",
     "title": "add daily homelab digest CronJob",
     "summary": "add daily homelab digest CronJob",
     "commit": "0d9a041",
     "hasDetail": false,
-    "tags": ["OPS"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-03-add-discord-webhook-urls-to-secret",
     "date": "2026-03",
-    "type": "CONFIG",
+    "type": "DEPLOY",
     "title": "add Discord webhook URLs to secret",
     "summary": "add Discord webhook URLs to secret",
     "commit": "b5d1c2b",
     "hasDetail": false,
-    "tags": ["CONFIG"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-03-add-coredns-split-horizon-for-kagiso-me",
     "date": "2026-03",
-    "type": "NETWORK",
+    "type": "DEPLOY",
     "title": "add CoreDNS split-horizon for kagiso.me",
     "summary": "add CoreDNS split-horizon for kagiso.me",
     "commit": "d98585c",
     "hasDetail": false,
-    "tags": ["NETWORK"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-03-add-oidc-client-credentials-to-secret",
     "date": "2026-03",
-    "type": "SECURITY",
+    "type": "DEPLOY",
     "title": "add OIDC client credentials to secret",
     "summary": "add OIDC client credentials to secret",
     "commit": "d20252b",
     "hasDetail": false,
-    "tags": ["SECURITY"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-03-add-authentik-oidc-login-via-oidc-login-app",
     "date": "2026-03",
-    "type": "SECURITY",
+    "type": "DEPLOY",
     "title": "add Authentik OIDC login via oidc_login app",
     "summary": "add Authentik OIDC login via oidc_login app",
     "commit": "4a55034",
     "hasDetail": false,
-    "tags": ["SECURITY"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-03-overhaul-grafana-dashboards-and-add-backblaze-b2-monitoring",
     "date": "2026-03",
-    "type": "OPS",
+    "type": "DEPLOY",
     "title": "overhaul Grafana dashboards and add Backblaze B2 monitoring",
     "summary": "overhaul Grafana dashboards and add Backblaze B2 monitoring",
     "commit": "a17479b",
     "hasDetail": false,
-    "tags": ["OPS"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-03-add-encrypted-nextcloud-secret",
     "date": "2026-03",
-    "type": "SECURITY",
+    "type": "DEPLOY",
     "title": "add encrypted Nextcloud secret",
     "summary": "add encrypted Nextcloud secret",
     "commit": "7cdd54d",
     "hasDetail": false,
-    "tags": ["SECURITY"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-03-add-nextcloud-deployment",
@@ -362,207 +432,249 @@
     "summary": "add Nextcloud deployment",
     "commit": "b5f450b",
     "hasDetail": false,
-    "tags": ["DEPLOY"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-03-configure-resend-smtp-for-transactional-email",
     "date": "2026-03",
-    "type": "CONFIG",
+    "type": "DEPLOY",
     "title": "configure Resend SMTP for transactional email",
     "summary": "configure Resend SMTP for transactional email",
     "commit": "c8ef514",
     "hasDetail": false,
-    "tags": ["CONFIG"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-03-add-crowdsec-security-dashboard-with-geo-threat-map",
     "date": "2026-03",
-    "type": "OPS",
+    "type": "DEPLOY",
     "title": "add CrowdSec security dashboard with geo threat map",
     "summary": "add CrowdSec security dashboard with geo threat map",
     "commit": "7098963",
     "hasDetail": false,
-    "tags": ["OPS"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-03-add-comprehensive-homelab-overview-grafana-dashboard",
     "date": "2026-03",
-    "type": "OPS",
+    "type": "DEPLOY",
     "title": "add comprehensive homelab overview Grafana dashboard",
     "summary": "add comprehensive homelab overview Grafana dashboard",
     "commit": "16537a1",
     "hasDetail": false,
-    "tags": ["OPS"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-03-deploy-crowdsec-with-traefik-forwardauth-bouncer",
     "date": "2026-03",
-    "type": "SECURITY",
+    "type": "DEPLOY",
     "title": "deploy CrowdSec with Traefik ForwardAuth bouncer",
     "summary": "deploy CrowdSec with Traefik ForwardAuth bouncer",
     "commit": "6b12cb5",
     "hasDetail": false,
-    "tags": ["SECURITY"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-03-add-app-health-rules-and-authentik-dashboard",
     "date": "2026-03",
-    "type": "OPS",
+    "type": "DEPLOY",
     "title": "add app-health rules and Authentik dashboard",
     "summary": "add app-health rules and Authentik dashboard",
     "commit": "f0a8c98",
     "hasDetail": false,
-    "tags": ["OPS"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-03-add-authentik-sso-identity-provider",
     "date": "2026-03",
-    "type": "SECURITY",
+    "type": "DEPLOY",
     "title": "add Authentik SSO identity provider",
     "summary": "add Authentik SSO identity provider",
     "commit": "4f279f5",
     "hasDetail": false,
-    "tags": ["SECURITY"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-03-add-6-hourly-databases-backup-schedule",
     "date": "2026-03",
-    "type": "OPS",
+    "type": "DEPLOY",
     "title": "add 6-hourly databases backup schedule",
     "summary": "add 6-hourly databases backup schedule",
     "commit": "250cba2",
     "hasDetail": false,
-    "tags": ["OPS"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-03-add-velero-metrics-section-to-backup-overview-dashboard",
     "date": "2026-03",
-    "type": "OPS",
+    "type": "DEPLOY",
     "title": "add Velero metrics section to backup overview dashboard",
     "summary": "add Velero metrics section to backup overview dashboard",
     "commit": "6753f7d",
     "hasDetail": false,
-    "tags": ["OPS"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-03-add-latency-and-resource-panels-to-database-dashboards",
     "date": "2026-03",
-    "type": "OPS",
+    "type": "DEPLOY",
     "title": "add latency and resource panels to database dashboards",
     "summary": "add latency and resource panels to database dashboards",
     "commit": "35c5178",
     "hasDetail": false,
-    "tags": ["OPS"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-03-metrics-dashboards-backup-and-etcd-snapshot-offloading",
     "date": "2026-03",
-    "type": "OPS",
+    "type": "DEPLOY",
     "title": "metrics, dashboards, backup, and etcd snapshot offloading",
     "summary": "metrics, dashboards, backup, and etcd snapshot offloading",
     "commit": "2434907",
     "hasDetail": false,
-    "tags": ["OPS"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-03-standardise-metrics-to-job-label-scheme-add-dashboard-and-do",
     "date": "2026-03",
-    "type": "OPS",
+    "type": "DEPLOY",
     "title": "standardise metrics to job-label scheme, add dashboard and Docker backup guide",
     "summary": "standardise metrics to job-label scheme, add dashboard and Docker backup guide",
     "commit": "6382b0c",
     "hasDetail": false,
-    "tags": ["OPS"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-03-add-central-postgresql-and-redis-to-platform-both-pinned-to",
     "date": "2026-03",
     "type": "DEPLOY",
-    "title": "add central PostgreSQL and Redis to platform — both pinned to control plane with local-path storage; shared across all apps (Nextcloud, Authentik, etc.); per-app databases provisioned via psql on deploy → [ADR-011](docs/adr/ADR-011-central-databases.md)",
+    "title": "add central PostgreSQL and Redis to platform \u2014 both pinned to control plane with local-path storage; shared across all apps (Nextcloud, Authentik, etc.); per-app databases provisioned via psql on deploy \u2192 [ADR-011](docs/adr/ADR-011-central-databases.md)",
     "summary": "add central PostgreSQL and Redis to platform",
     "commit": "",
     "hasDetail": false,
-    "tags": ["DEPLOY"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-03-move-prometheus-tsdb-from-nfs-truenas-to-local-path-storage",
     "date": "2026-03",
     "type": "FIX",
-    "title": "move Prometheus TSDB from `nfs-truenas` to `local-path` storage — NFS produces \"stale NFS file handle\" errors on any TrueNAS blip, silently dropping all metrics while targets appear healthy; local disk eliminates the root cause entirely. Removed `--storage.tsdb.no-lockfile` workaround (NFS-only). Grafana and Alertmanager remain on NFS (low write frequency, not affected). → [ADR-009](docs/adr/ADR-009-prometheus-local-storage.md)",
+    "title": "move Prometheus TSDB from `nfs-truenas` to `local-path` storage \u2014 NFS produces \"stale NFS file handle\" errors on any TrueNAS blip, silently dropping all metrics while targets appear healthy; local disk eliminates the root cause entirely. Removed `--storage.tsdb.no-lockfile` workaround (NFS-only). Grafana and Alertmanager remain on NFS (low write frequency, not affected). \u2192 [ADR-009](docs/adr/ADR-009-prometheus-local-storage.md)",
     "summary": "move Prometheus TSDB from `nfs-truenas` to `local-path` storage",
     "commit": "",
     "hasDetail": false,
-    "tags": ["FIX"]
+    "tags": [
+      "FIX"
+    ]
   },
   {
     "slug": "2026-03-scope-promotion-pipeline-pod-health-checks-to-flux-managed-n",
     "date": "2026-03",
     "type": "FIX",
-    "title": "scope promotion pipeline pod health checks to Flux-managed namespaces only — cluster-wide check was blocking promotion on unrelated crashing pods (e.g. `system-upgrade-controller`)",
+    "title": "scope promotion pipeline pod health checks to Flux-managed namespaces only \u2014 cluster-wide check was blocking promotion on unrelated crashing pods (e.g. `system-upgrade-controller`)",
     "summary": "scope promotion pipeline pod health checks to Flux-managed namespaces only",
     "commit": "",
     "hasDetail": false,
-    "tags": ["FIX"]
+    "tags": [
+      "FIX"
+    ]
   },
   {
     "slug": "2026-03-switch-velero-kubectl-init-container-from-bitnami-kubectl-to",
     "date": "2026-03",
     "type": "FIX",
-    "title": "switch Velero kubectl init container from `bitnami/kubectl` to `registry.k8s.io/kubectl:v1.32.0` — Bitnami stopped publishing images to Docker Hub (now behind authentication); all pulls were failing with `not found` errors, blocking Velero CRD upgrade job on bootstrap",
+    "title": "switch Velero kubectl init container from `bitnami/kubectl` to `registry.k8s.io/kubectl:v1.32.0` \u2014 Bitnami stopped publishing images to Docker Hub (now behind authentication); all pulls were failing with `not found` errors, blocking Velero CRD upgrade job on bootstrap",
     "summary": "switch Velero kubectl init container from `bitnami/kubectl` to `registry.k8s.io/kubectl:v1.32.0`",
     "commit": "",
     "hasDetail": false,
-    "tags": ["FIX"]
+    "tags": [
+      "FIX"
+    ]
   },
   {
     "slug": "2026-03-add-ansible-vault-with-flux-github-ssh-credentials",
     "date": "2026-03",
-    "type": "SECURITY",
+    "type": "DEPLOY",
     "title": "add ansible vault with Flux GitHub SSH credentials",
     "summary": "add ansible vault with Flux GitHub SSH credentials",
     "commit": "219c65f",
     "hasDetail": false,
-    "tags": ["SECURITY"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-03-add-configuration-steps-for-rpi-as-tailscale-exit-node-fix-a",
     "date": "2026-03",
-    "type": "NETWORK",
-    "title": "add configuration steps for RPi as Tailscale exit node; fix Pi-hole DNS restart method and add readiness check",
-    "summary": "add configuration steps for RPi as Tailscale exit node",
+    "type": "DEPLOY",
+    "title": "add configuration steps for RPi as Tailscale exit node fix(ansible): update Pi-hole DNS restart method and add readiness check",
+    "summary": "add configuration steps for RPi as Tailscale exit node fix(ansible): update Pi-hole DNS restart method and add readiness check",
     "commit": "bb04425",
     "hasDetail": false,
-    "tags": ["NETWORK"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-03-add-initial-ansible-cfg-configuration-file",
     "date": "2026-03",
-    "type": "CONFIG",
+    "type": "DEPLOY",
     "title": "add initial ansible.cfg configuration file",
     "summary": "add initial ansible.cfg configuration file",
     "commit": "4d48f94",
     "hasDetail": false,
-    "tags": ["CONFIG"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-03-pre-create-cert-manager-namespace-and-cloudflare-api-token-s",
     "date": "2026-03",
-    "type": "CONFIG",
+    "type": "DEPLOY",
     "title": "pre-create cert-manager namespace and Cloudflare API token secret for DNS-01 validation",
     "summary": "pre-create cert-manager namespace and Cloudflare API token secret for DNS-01 validation",
     "commit": "a4e518d",
     "hasDetail": false,
-    "tags": ["CONFIG"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-03-add-cloudflare-api-token-secret-management-and-update-ansibl",
     "date": "2026-03",
-    "type": "SECURITY",
+    "type": "DEPLOY",
     "title": "add cloudflare_api_token secret management and update ansible configuration",
     "summary": "add cloudflare_api_token secret management and update ansible configuration",
     "commit": "5c1b261",
     "hasDetail": false,
-    "tags": ["SECURITY"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-03-add-pi-hole-ansible-playbook-and-inventory-rpi-group",
@@ -572,26 +684,32 @@
     "summary": "add Pi-hole Ansible playbook and inventory rpi group",
     "commit": "613cb4e",
     "hasDetail": false,
-    "tags": ["DEPLOY"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-03-consolidate-monitoring-to-k3s-decommission-docker-monitoring",
     "date": "2026-03",
-    "type": "OPS",
+    "type": "DEPLOY",
     "title": "consolidate monitoring to k3s, decommission Docker monitoring stack",
     "summary": "consolidate monitoring to k3s, decommission Docker monitoring stack",
     "commit": "6599c0b",
     "hasDetail": false,
-    "tags": ["OPS"]
+    "tags": [
+      "DEPLOY"
+    ]
   },
   {
     "slug": "2026-03-add-ops-log-staging-environment-and-gitops-promotion-pipelin",
     "date": "2026-03",
-    "type": "OPS",
+    "type": "DEPLOY",
     "title": "add ops-log, staging environment, and GitOps promotion pipeline",
     "summary": "add ops-log, staging environment, and GitOps promotion pipeline",
     "commit": "c2cb80c",
     "hasDetail": false,
-    "tags": ["OPS"]
+    "tags": [
+      "DEPLOY"
+    ]
   }
 ]

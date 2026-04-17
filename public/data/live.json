@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-17T21:37:38Z",
-  "fetched_at": "2026-04-17T21:37:38Z",
+  "updated": "2026-04-17T22:33:38Z",
+  "fetched_at": "2026-04-17T22:33:38Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "19h 35m ago",
+      "value": "20h 31m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "9h 37m ago",
+      "value": "10h 33m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "2h 37m ago",
+      "value": "3h 33m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "20h 37m ago",
+      "value": "21h 33m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -209,7 +209,7 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: idle",
+      "tag": "SABnzbd: downloading \u00b7 17.6 GB left",
       "status": "ok"
     },
     {
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 136905,
+    "fw_hits": 137932,
     "latency_ms": 5.1,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 52.6,
+    "temp_c": 51.5,
     "temp_status": "ok",
-    "load": 0.44,
-    "mem_pct": 44.0
+    "load": 0.66,
+    "mem_pct": 43.8
   },
   "ups": {
     "charge": 100,
@@ -265,7 +265,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "1h ago",
+    "age": "2h ago",
     "message": "chore(deps): update helm release umami to >=1.21.0",
     "sha": "2da701d"
   },
@@ -290,9 +290,9 @@
     },
     {
       "name": "core",
-      "used": "27.4 GB",
+      "used": "27.5 GB",
       "total": "476.7 GB",
-      "pct": 5.7,
+      "pct": 5.8,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true

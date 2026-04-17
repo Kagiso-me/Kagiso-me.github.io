@@ -1,0 +1,166 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, getEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map(post => ({ params: { slug: post.slug } }));
+}
+
+const { slug } = Astro.params;
+const post = await getEntry('blog', slug);
+if (!post) return Astro.redirect('/blog');
+
+const { Content } = await post.render();
+const date = new Date(post.data.date).toLocaleDateString('en-ZA', {
+  year: 'numeric', month: 'long', day: 'numeric'
+});
+---
+
+<Layout title={post.data.title} description={post.data.summary}>
+
+  <div class="post-wrap">
+
+    <div class="post-nav fade-up">
+      <a href="/blog" class="back-link mono">← blog</a>
+    </div>
+
+    <header class="post-header fade-up" style="animation-delay:0.04s">
+      <div class="post-meta">
+        <span class="post-date mono">{date}</span>
+        {post.data.adr && <span class="post-adr mono">{post.data.adr}</span>}
+      </div>
+      <h1>{post.data.title}</h1>
+      <p class="post-summary">{post.data.summary}</p>
+    </header>
+
+    <article class="post-body fade-up" style="animation-delay:0.08s">
+      <Content />
+    </article>
+
+  </div>
+
+</Layout>
+
+<style is:global>
+  .post-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 6rem;
+  }
+
+  .post-nav {
+    margin-bottom: 2rem;
+  }
+
+  .back-link {
+    font-size: 0.8rem;
+    color: var(--color-subtle);
+    transition: color 0.2s;
+  }
+
+  .back-link:hover { color: var(--color-peach); }
+
+  .post-header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--color-muted);
+  }
+
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .post-date {
+    font-size: 0.75rem;
+    color: var(--color-subtle);
+  }
+
+  .post-adr {
+    font-size: 0.72rem;
+    color: var(--color-mauve);
+    background: color-mix(in srgb, var(--color-mauve) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-mauve) 25%, transparent);
+    border-radius: 4px;
+    padding: 0.1rem 0.45rem;
+  }
+
+  .post-header h1 {
+    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+    line-height: 1.2;
+    margin: 0 0 0.75rem;
+  }
+
+  .post-summary {
+    color: var(--color-subtle);
+    font-size: 1rem;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  /* ── Prose ── */
+  .post-body {
+    color: var(--color-text);
+    line-height: 1.8;
+    font-size: 1rem;
+  }
+
+  .post-body h2 {
+    font-size: 1.25rem;
+    margin: 2.5rem 0 0.75rem;
+    color: var(--color-heading);
+    padding-left: 0.75rem;
+    border-left: 2px solid transparent;
+    border-image: linear-gradient(to bottom, var(--color-peach), transparent) 1;
+  }
+
+  .post-body p { margin: 0 0 1.25rem; }
+
+  .post-body strong { color: var(--color-heading); }
+
+  .post-body a {
+    color: var(--color-peach);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .post-body hr {
+    border: none;
+    border-top: 1px solid var(--color-muted);
+    margin: 2.5rem 0;
+  }
+
+  .post-body em {
+    color: var(--color-subtle);
+    font-style: italic;
+  }
+
+  .post-body code {
+    background: var(--color-overlay);
+    border: 1px solid var(--color-muted);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+    font-size: 0.875em;
+    color: var(--color-peach);
+  }
+
+  .post-body pre {
+    background: var(--color-mantle);
+    border: 1px solid var(--color-muted);
+    border-radius: 10px;
+    padding: 1.25rem;
+    overflow-x: auto;
+    margin: 0 0 1.25rem;
+  }
+
+  .post-body pre code {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 0.85rem;
+    color: var(--color-text);
+  }
+</style>

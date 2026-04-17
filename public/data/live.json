@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-17T10:49:32Z",
-  "fetched_at": "2026-04-17T10:49:32Z",
+  "updated": "2026-04-17T11:29:16Z",
+  "fetched_at": "2026-04-17T11:29:16Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "8h 47m ago",
+      "value": "9h 27m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "10h 49m ago",
+      "value": "11h 29m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 49m ago",
+      "value": "4h 29m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "9h 49m ago",
+      "value": "10h 29m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     }
@@ -83,7 +83,7 @@
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "8d",
+        "age": "9d",
         "ready": true
       },
       {
@@ -193,7 +193,7 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 157 photos \u00b7 0 videos",
+      "tag": "Immich: 182 photos \u00b7 0 videos",
       "status": "ok"
     },
     {
@@ -203,7 +203,7 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 41.5 GB left",
+      "tag": "SABnzbd: downloading \u00b7 48.3 GB left",
       "status": "ok"
     },
     {
@@ -237,16 +237,16 @@
     }
   ],
   "network": {
-    "fw_hits": 123979,
-    "latency_ms": 4.8,
+    "fw_hits": 124640,
+    "latency_ms": 10.6,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 50.5,
+    "temp_c": 53.7,
     "temp_status": "ok",
-    "load": 0.8,
-    "mem_pct": 45.0
+    "load": 1.16,
+    "mem_pct": 48.1
   },
   "ups": {
     "charge": 100,
@@ -259,9 +259,9 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "1h ago",
-    "message": "chore(deps): update helm release kube-prometheus-stack to v83.5.1",
-    "sha": "a34a093"
+    "age": "12m ago",
+    "message": "fix(observability): revert kube-prometheus-stack to 83.4.0 (83.5.1 does not exis",
+    "sha": "516df50"
   },
   "storage": [
     {
@@ -284,9 +284,9 @@
     },
     {
       "name": "core",
-      "used": "18.8 GB",
+      "used": "20.2 GB",
       "total": "476.7 GB",
-      "pct": 3.9,
+      "pct": 4.2,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true

@@ -120,9 +120,12 @@ def load_previous_ids() -> set:
 
 
 def send_discord_alert(new_vulns: list, total_counts: dict) -> None:
+    print(f"Discord: webhook set={bool(DISCORD_WEBHOOK)}, vulns={len(new_vulns)}", file=sys.stderr)
     if not DISCORD_WEBHOOK:
+        print("Discord: no webhook URL, skipping.", file=sys.stderr)
         return
     if not new_vulns:
+        print("Discord: no vulns, skipping.", file=sys.stderr)
         return
 
     crit = [v for v in new_vulns if v["severity"] == "CRITICAL"]

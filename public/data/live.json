@@ -1,10 +1,10 @@
 {
-  "updated": "2026-04-18T11:56:42Z",
-  "fetched_at": "2026-04-18T11:56:42Z",
+  "updated": "2026-04-18T12:59:39Z",
+  "fetched_at": "2026-04-18T12:59:39Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "60/66",
+      "value": "59/66",
       "sub": "pods running",
       "status": "warn"
     },
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "9h 54m ago",
+      "value": "10h 57m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "11h 56m ago",
+      "value": "59m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "4h 56m ago",
+      "value": "5h 59m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "10h 56m ago",
+      "value": "11h 59m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -209,7 +209,7 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 4.2 GB left",
+      "tag": "SABnzbd: downloading \u00b7 29.9 GB left",
       "status": "ok"
     },
     {
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 148739,
-    "latency_ms": 5.0,
+    "fw_hits": 149389,
+    "latency_ms": 7.3,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 51.5,
+    "temp_c": 50.5,
     "temp_status": "ok",
-    "load": 1.02,
-    "mem_pct": 47.1
+    "load": 0.78,
+    "mem_pct": 46.8
   },
   "ups": {
     "charge": 100,
@@ -265,7 +265,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "5h ago",
+    "age": "6h ago",
     "message": "chore(deps): update helm release n8n to >=1.16.36 (#185)",
     "sha": "4b06f9b"
   },
@@ -290,9 +290,9 @@
     },
     {
       "name": "core",
-      "used": "30.7 GB",
+      "used": "30.9 GB",
       "total": "476.7 GB",
-      "pct": 6.4,
+      "pct": 6.5,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -305,9 +305,9 @@
       "2026-04-16": 9,
       "2026-04-15": 0,
       "2026-04-14": 26,
-      "2026-04-13": 46
+      "2026-04-13": 45
     },
-    "total": 160,
+    "total": 159,
     "active_days": 6
   }
 }

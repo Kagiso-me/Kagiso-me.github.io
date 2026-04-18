@@ -1,0 +1,32 @@
+name: Fetch CVE Data
+
+on:
+  schedule:
+    - cron: '0 6 * * *'    # 08:00 SAST daily
+  workflow_dispatch:
+
+jobs:
+  fetch:
+    name: Fetch CVEs from OSV.dev
+    runs-on: [self-hosted, linux, homelab, bran-site]
+
+    steps:
+      - name: Checkout site repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.SITE_DEPLOY_TOKEN }}
+
+      - name: Fetch CVE data
+        env:
+          DISCORD_CVE_WEBHOOK: ${{ secrets.DISCORD_CVE_WEBHOOK }}
+        run: python3 scripts/fetch-cves.py 2>/dev/null > public/data/cve.json
+
+      - name: Commit if changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/cve.json
+          git diff --staged --quiet && exit 0
+          git commit -m "chore(data): update CVE feed"
+          git pull --rebase
+          git push

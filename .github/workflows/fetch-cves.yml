@@ -16,6 +16,13 @@ jobs:
         with:
           token: ${{ secrets.SITE_DEPLOY_TOKEN }}
 
+      - name: Test Discord connectivity
+        run: |
+          curl -s -o /dev/null -w "Discord curl status: %{http_code}\n" \
+            -X POST "https://discord.com/api/webhooks/1495109691393577131/oqu26VRzLkNSIMop7VwoodHyI81WxqzF_GhkL01I0UIRYC8ioXcGn0mCcWO3b7n7J1bO" \
+            -H "Content-Type: application/json" \
+            -d '{"content":"🧪 test from bran runner","username":"homelab-cve-bot"}'
+
       - name: Fetch CVE data
         env:
           DISCORD_CVE_WEBHOOK: "https://discord.com/api/webhooks/1495109691393577131/oqu26VRzLkNSIMop7VwoodHyI81WxqzF_GhkL01I0UIRYC8ioXcGn0mCcWO3b7n7J1bO"

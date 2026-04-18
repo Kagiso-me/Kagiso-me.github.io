@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-17T23:34:46Z",
-  "fetched_at": "2026-04-17T23:34:46Z",
+  "updated": "2026-04-18T01:55:13Z",
+  "fetched_at": "2026-04-18T01:55:13Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "21h 32m ago",
+      "value": "23h 53m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "11h 34m ago",
+      "value": "1h 55m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "4h 34m ago",
+      "value": "54m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "22h 34m ago",
+      "value": "55m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -209,7 +209,7 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 12.6 GB left",
+      "tag": "SABnzbd: idle",
       "status": "ok"
     },
     {
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 139423,
-    "latency_ms": 5.1,
+    "fw_hits": 141289,
+    "latency_ms": 6.5,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 52.1,
+    "temp_c": 51.5,
     "temp_status": "ok",
-    "load": 0.74,
-    "mem_pct": 44.6
+    "load": 0.94,
+    "mem_pct": 46.1
   },
   "ups": {
     "charge": 100,
@@ -265,7 +265,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "3h ago",
+    "age": "5h ago",
     "message": "chore(deps): update helm release umami to >=1.21.0",
     "sha": "2da701d"
   },
@@ -274,14 +274,14 @@
       "name": "tera",
       "used": "6.1 TB",
       "total": "7.9 TB",
-      "pct": 77.7,
+      "pct": 77.9,
       "status": "warn",
       "pool_status": "ONLINE",
       "healthy": true
     },
     {
       "name": "archive",
-      "used": "454.6 GB",
+      "used": "454.7 GB",
       "total": "4.0 TB",
       "pct": 11.4,
       "status": "ok",
@@ -290,9 +290,9 @@
     },
     {
       "name": "core",
-      "used": "27.4 GB",
+      "used": "27.5 GB",
       "total": "476.7 GB",
-      "pct": 5.7,
+      "pct": 5.8,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true

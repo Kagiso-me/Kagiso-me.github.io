@@ -1,40 +1,40 @@
 {
-  "updated": "2026-04-18T12:59:39Z",
-  "fetched_at": "2026-04-18T12:59:39Z",
+  "updated": "2026-04-18T14:03:34Z",
+  "fetched_at": "2026-04-18T14:03:34Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "59/66",
+      "value": "58/80",
       "sub": "pods running",
       "status": "warn"
     },
     {
       "label": "Flux",
       "value": "19/19 synced",
-      "sub": "9d",
+      "sub": "10d",
       "status": "ok"
     },
     {
       "label": "Docker Appdata",
-      "value": "10h 57m ago",
+      "value": "12h 1m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "59m ago",
+      "value": "2h 3m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "5h 59m ago",
+      "value": "1h 3m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "11h 59m ago",
+      "value": "13h 3m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -49,8 +49,8 @@
     {
       "name": "jaime",
       "role": "control-plane",
-      "status": "ok",
-      "pods": "23/110",
+      "status": "crit",
+      "pods": "22/110",
       "cpu": "43%",
       "memory": "9%",
       "pressure": []
@@ -59,9 +59,9 @@
       "name": "tyrion",
       "role": "control-plane",
       "status": "ok",
-      "pods": "6/110",
-      "cpu": "13%",
-      "memory": "1%",
+      "pods": "21/110",
+      "cpu": "40%",
+      "memory": "8%",
       "pressure": []
     },
     {
@@ -77,13 +77,13 @@
   "flux": {
     "ready": 19,
     "total": 19,
-    "last_sync": "9d",
+    "last_sync": "10d",
     "status": "ok",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
-        "age": "9d",
+        "age": "10d",
         "ready": true
       },
       {
@@ -95,103 +95,103 @@
       {
         "namespace": "flux-system",
         "name": "platform-authentik",
-        "age": "9d",
+        "age": "10d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
-        "age": "9d",
+        "age": "10d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
-        "age": "9d",
+        "age": "10d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
-        "age": "9d",
+        "age": "10d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
-        "age": "9d",
+        "age": "10d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-namespaces",
-        "age": "9d",
+        "age": "10d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking",
-        "age": "9d",
+        "age": "10d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-config",
-        "age": "9d",
+        "age": "10d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-tls",
-        "age": "9d",
+        "age": "10d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability",
-        "age": "9d",
+        "age": "10d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
-        "age": "9d",
+        "age": "10d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
-        "age": "9d",
+        "age": "10d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security",
-        "age": "9d",
+        "age": "10d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security-issuers",
-        "age": "9d",
+        "age": "10d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-storage",
-        "age": "9d",
+        "age": "10d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade",
-        "age": "9d",
+        "age": "10d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade-plans",
-        "age": "9d",
+        "age": "10d",
         "ready": true
       }
     ]
@@ -199,17 +199,17 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 414 photos \u00b7 7 videos",
+      "tag": "Immich: 415 photos \u00b7 7 videos",
       "status": "ok"
     },
     {
       "name": "Nextcloud",
-      "tag": "Nextcloud: 60.9 MB used",
+      "tag": "Nextcloud: online",
       "status": "ok"
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 29.9 GB left",
+      "tag": "SABnzbd: downloading \u00b7 20.8 GB left",
       "status": "ok"
     },
     {
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 149389,
-    "latency_ms": 7.3,
+    "fw_hits": 151817,
+    "latency_ms": 5.1,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 50.5,
+    "temp_c": 51.5,
     "temp_status": "ok",
-    "load": 0.78,
-    "mem_pct": 46.8
+    "load": 1.34,
+    "mem_pct": 45.4
   },
   "ups": {
     "charge": 100,
@@ -265,7 +265,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "6h ago",
+    "age": "7h ago",
     "message": "chore(deps): update helm release n8n to >=1.16.36 (#185)",
     "sha": "4b06f9b"
   },
@@ -281,16 +281,16 @@
     },
     {
       "name": "archive",
-      "used": "456.3 GB",
+      "used": "456.5 GB",
       "total": "4.0 TB",
-      "pct": 11.4,
+      "pct": 11.5,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
     },
     {
       "name": "core",
-      "used": "30.9 GB",
+      "used": "30.8 GB",
       "total": "476.7 GB",
       "pct": 6.5,
       "status": "ok",
@@ -305,9 +305,9 @@
       "2026-04-16": 9,
       "2026-04-15": 0,
       "2026-04-14": 26,
-      "2026-04-13": 45
+      "2026-04-13": 44
     },
-    "total": 159,
+    "total": 158,
     "active_days": 6
   }
 }

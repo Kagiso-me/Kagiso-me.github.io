@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-18T15:04:32Z",
-  "fetched_at": "2026-04-18T15:04:32Z",
+  "updated": "2026-04-18T15:59:35Z",
+  "fetched_at": "2026-04-18T15:59:35Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,27 +16,27 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "13h 2m ago",
+      "value": "\u2014",
       "sub": "last backup",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "etcd Snapshot",
-      "value": "3h 4m ago",
+      "value": "3h 59m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "2h 4m ago",
+      "value": "2h 59m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "14h 4m ago",
+      "value": "\u2014",
       "sub": "age keys \u00b7 varys",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "Backblaze B2",
@@ -199,7 +199,7 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 415 photos \u00b7 7 videos",
+      "tag": "Immich: 429 photos \u00b7 8 videos",
       "status": "ok"
     },
     {
@@ -209,23 +209,23 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 33.8 GB left",
-      "status": "ok"
+      "tag": "SABnzbd: idle",
+      "status": "unknown"
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: 69 series",
+      "tag": "Sonarr: \u2014 series",
       "status": "ok"
     },
     {
       "name": "Radarr",
-      "tag": "Radarr: 13 movies",
-      "status": "ok"
+      "tag": "Radarr: \u2014 movies",
+      "status": "unknown"
     },
     {
       "name": "Lidarr",
-      "tag": "Lidarr: 36 artists",
-      "status": "ok"
+      "tag": "Lidarr: \u2014 artists",
+      "status": "unknown"
     }
   ],
   "media": [
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 152712,
-    "latency_ms": 4.9,
+    "fw_hits": 153875,
+    "latency_ms": 7.3,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
     "temp_c": 52.1,
     "temp_status": "ok",
-    "load": 1.22,
-    "mem_pct": 46.3
+    "load": 0.36,
+    "mem_pct": 46.9
   },
   "ups": {
     "charge": 100,
@@ -265,7 +265,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "8h ago",
+    "age": "9h ago",
     "message": "chore(deps): update helm release n8n to >=1.16.36 (#185)",
     "sha": "4b06f9b"
   },
@@ -290,9 +290,9 @@
     },
     {
       "name": "core",
-      "used": "30.7 GB",
+      "used": "31.0 GB",
       "total": "476.7 GB",
-      "pct": 6.4,
+      "pct": 6.5,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -305,9 +305,9 @@
       "2026-04-16": 9,
       "2026-04-15": 0,
       "2026-04-14": 26,
-      "2026-04-13": 44
+      "2026-04-13": 43
     },
-    "total": 158,
+    "total": 157,
     "active_days": 6
   }
 }

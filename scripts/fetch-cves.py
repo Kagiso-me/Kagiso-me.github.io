@@ -119,20 +119,18 @@ def load_previous_ids() -> set:
         return set()
 
 
-def send_discord_alert(new_vulns: list, total_counts: dict) -> None:
+def send_discord_alert(all_vulns: list, total_counts: dict) -> None:
     if not DISCORD_WEBHOOK:
         return
-    if not new_vulns:
-        return
 
-    crit = [v for v in new_vulns if v["severity"] == "CRITICAL"]
-    high = [v for v in new_vulns if v["severity"] == "HIGH"]
+    crit = [v for v in all_vulns if v["severity"] == "CRITICAL"]
+    high = [v for v in all_vulns if v["severity"] == "HIGH"]
 
     if not crit and not high:
         return
 
     lines = []
-    lines.append("🚨 **New CVEs detected in homelab stack**\n")
+    lines.append(f"🚨 **Homelab CVE digest — {len(crit)} CRITICAL, {len(high)} HIGH**\n")
 
     if crit:
         lines.append(f"**CRITICAL ({len(crit)})**")
@@ -154,8 +152,7 @@ def send_discord_alert(new_vulns: list, total_counts: dict) -> None:
             if ref:
                 lines.append(f"  <{ref}>")
 
-    total_new = len(crit) + len(high)
-    lines.append(f"\n[View all CVEs on kagiso.me/security](https://kagiso.me/security)")
+    lines.append(f"\n[View all CVEs → kagiso.me/security](https://kagiso.me/security)")
 
     content = "\n".join(lines)
     if len(content) > 1900:
@@ -170,7 +167,7 @@ def send_discord_alert(new_vulns: list, total_counts: dict) -> None:
     )
     try:
         urllib.request.urlopen(req, timeout=10)
-        print(f"Discord alert sent for {total_new} new CRITICAL/HIGH CVEs.", file=sys.stderr)
+        print(f"Discord digest sent: {len(crit)} CRITICAL, {len(high)} HIGH.", file=sys.stderr)
     except Exception as e:
         print(f"Discord alert failed: {e}", file=sys.stderr)
 
@@ -283,10 +280,8 @@ def main():
 
     print(json.dumps(output, indent=2))
 
-    # Discord alerts for new CRITICAL/HIGH only
-    prev_ids    = load_previous_ids()
-    new_vulns   = [v for v in all_vulns if v["id"] not in prev_ids]
-    send_discord_alert(new_vulns, counts)
+    # Daily digest: alert whenever CRITICAL/HIGH CVEs exist
+    send_discord_alert(all_vulns, counts)
 
 
 if __name__ == "__main__":

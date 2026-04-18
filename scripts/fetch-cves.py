@@ -112,12 +112,9 @@ def parse_vuln(v: dict) -> dict:
 
 
 def send_discord_alert(all_vulns: list, total_counts: dict) -> None:
-    print(f"Discord: webhook set={bool(DISCORD_WEBHOOK)}, vulns={len(all_vulns)}", file=sys.stderr)
     if not DISCORD_WEBHOOK:
-        print("Discord: no webhook URL, skipping.", file=sys.stderr)
         return
     if not all_vulns:
-        print("Discord: no vulns, skipping.", file=sys.stderr)
         return
 
     crit = [v for v in all_vulns if v["severity"] == "CRITICAL"]
@@ -149,7 +146,6 @@ def send_discord_alert(all_vulns: list, total_counts: dict) -> None:
             if ref:
                 lines.append(f"  <{ref}>")
 
-    total_new = len(crit) + len(high)
     lines.append(f"\n[View all CVEs on kagiso.me/security](https://kagiso.me/security)")
 
     content = "\n".join(lines)
@@ -160,7 +156,10 @@ def send_discord_alert(all_vulns: list, total_counts: dict) -> None:
     req = urllib.request.Request(
         DISCORD_WEBHOOK,
         data=payload,
-        headers={"Content-Type": "application/json"},
+        headers={
+            "Content-Type": "application/json",
+            "User-Agent": "curl/7.88.1",
+        },
         method="POST",
     )
     try:

@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-18T21:29:45Z",
-  "fetched_at": "2026-04-18T21:29:45Z",
+  "updated": "2026-04-18T22:00:29Z",
+  "fetched_at": "2026-04-18T22:00:29Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "19h 27m ago",
+      "value": "19h 58m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "9h 29m ago",
+      "value": "10h 0m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "2h 29m ago",
+      "value": "3h 0m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "20h 29m ago",
+      "value": "21h 0m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 160704,
-    "latency_ms": 4.9,
+    "fw_hits": 164067,
+    "latency_ms": 6.7,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 52.6,
+    "temp_c": 52.1,
     "temp_status": "ok",
-    "load": 1.04,
-    "mem_pct": 46.4
+    "load": 0.92,
+    "mem_pct": 46.2
   },
   "ups": {
     "charge": 100,

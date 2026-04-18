@@ -21,6 +21,14 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </div>
 
+    <!-- ── Security ── -->
+    <section class="section fade-up" style="animation-delay:0.02s">
+      <h2 class="section-label">Security</h2>
+      <div id="cve-banner">
+        <div class="skeleton" style="height:56px; border-radius:10px"></div>
+      </div>
+    </section>
+
     <!-- ── Network ── -->
     <section class="section fade-up" style="animation-delay:0.05s">
       <h2 class="section-label">Network</h2>
@@ -1041,6 +1049,42 @@ import Layout from '../layouts/Layout.astro';
     document.querySelectorAll('[data-count-to]').forEach(el => observer.observe(el));
   }
 
+  // ── CVE banner (fetched once, not on 30s poll) ───────────────────────────
+  async function loadCVEBanner() {
+    const banner = document.getElementById('cve-banner');
+    if (!banner) return;
+    try {
+      const res = await fetch('/data/cve.json?t=' + Date.now());
+      if (!res.ok) throw new Error('no data');
+      const d = await res.json();
+
+      const statusDotClass = d.status === 'clean' || d.status === 'ok' ? 'ok'
+                           : d.status === 'crit'                        ? 'crit'
+                           : 'warn';
+
+      let label = '';
+      if (d.status === 'clean') {
+        label = `No known CVEs &middot; ${d.tracked ?? '?'} components tracked`;
+      } else {
+        const parts: string[] = [];
+        if (d.counts?.CRITICAL) parts.push(`${d.counts.CRITICAL} CRITICAL`);
+        if (d.counts?.HIGH)     parts.push(`${d.counts.HIGH} HIGH`);
+        if (d.counts?.MEDIUM)   parts.push(`${d.counts.MEDIUM} MEDIUM`);
+        if (d.counts?.LOW)      parts.push(`${d.counts.LOW} LOW`);
+        label = parts.join(', ') || `${d.total} CVEs`;
+      }
+
+      banner.innerHTML = `
+        <a href="/security" class="deploy-banner" style="text-decoration:none; display:flex; align-items:center; gap:1rem">
+          <span class="status-dot ${statusDotClass}"></span>
+          <span class="deploy-msg">${label}</span>
+          <span class="deploy-age">view details →</span>
+        </a>`;
+    } catch {
+      banner.innerHTML = '';
+    }
+  }
+
   // ── Polling lifecycle ─────────────────────────────────────────────────────
   let pollInterval: ReturnType<typeof setInterval> | null = null;
 
@@ -1054,6 +1098,6 @@ import Layout from '../layouts/Layout.astro';
     if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
   }
 
-  document.addEventListener('astro:page-load', startPolling);
+  document.addEventListener('astro:page-load', () => { startPolling(); loadCVEBanner(); });
   document.addEventListener('astro:before-swap', stopPolling);
 </script>

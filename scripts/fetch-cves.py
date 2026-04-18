@@ -110,32 +110,24 @@ def parse_vuln(v: dict) -> dict:
     }
 
 
-def load_previous_ids() -> set:
-    try:
-        with open(PREV_CVE_FILE) as f:
-            prev = json.load(f)
-        return {v["id"] for v in prev.get("vulnerabilities", [])}
-    except Exception:
-        return set()
 
-
-def send_discord_alert(new_vulns: list, total_counts: dict) -> None:
-    print(f"Discord: webhook set={bool(DISCORD_WEBHOOK)}, vulns={len(new_vulns)}", file=sys.stderr)
+def send_discord_alert(all_vulns: list, total_counts: dict) -> None:
+    print(f"Discord: webhook set={bool(DISCORD_WEBHOOK)}, vulns={len(all_vulns)}", file=sys.stderr)
     if not DISCORD_WEBHOOK:
         print("Discord: no webhook URL, skipping.", file=sys.stderr)
         return
-    if not new_vulns:
+    if not all_vulns:
         print("Discord: no vulns, skipping.", file=sys.stderr)
         return
 
-    crit = [v for v in new_vulns if v["severity"] == "CRITICAL"]
-    high = [v for v in new_vulns if v["severity"] == "HIGH"]
+    crit = [v for v in all_vulns if v["severity"] == "CRITICAL"]
+    high = [v for v in all_vulns if v["severity"] == "HIGH"]
 
     if not crit and not high:
         return
 
     lines = []
-    lines.append("🚨 **New CVEs detected in homelab stack**\n")
+    lines.append(f"🚨 **Homelab CVE digest — {len(crit)} CRITICAL, {len(high)} HIGH**\n")
 
     if crit:
         lines.append(f"**CRITICAL ({len(crit)})**")
@@ -286,10 +278,8 @@ def main():
 
     print(json.dumps(output, indent=2))
 
-    # Discord alerts for new CRITICAL/HIGH only
-    prev_ids    = load_previous_ids()
-    new_vulns   = [v for v in all_vulns if v["id"] not in prev_ids]
-    send_discord_alert(new_vulns, counts)
+    # Daily digest: alert whenever CRITICAL/HIGH CVEs exist
+    send_discord_alert(all_vulns, counts)
 
 
 if __name__ == "__main__":

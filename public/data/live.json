@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-18T08:07:54Z",
-  "fetched_at": "2026-04-18T08:07:54Z",
+  "updated": "2026-04-18T09:10:42Z",
+  "fetched_at": "2026-04-18T09:10:42Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "6h 6m ago",
+      "value": "7h 8m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "8h 8m ago",
+      "value": "9h 10m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "1h 7m ago",
+      "value": "2h 10m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "7h 8m ago",
+      "value": "8h 10m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -231,9 +231,12 @@
   "media": [
     {
       "name": "Plex",
-      "label": "idle",
+      "label": "1 stream \u00b7 A Roy Rogers in Franconia",
       "status": "ok",
-      "playing": false
+      "playing": true,
+      "title": "A Roy Rogers in Franconia",
+      "album": "Season 4",
+      "artist": "The Americans (2013)"
     },
     {
       "name": "AzuraCast",
@@ -243,16 +246,16 @@
     }
   ],
   "network": {
-    "fw_hits": 145726,
-    "latency_ms": 4.9,
+    "fw_hits": 146687,
+    "latency_ms": 5.1,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 52.1,
+    "temp_c": 51.5,
     "temp_status": "ok",
-    "load": 0.6,
-    "mem_pct": 45.7
+    "load": 1.02,
+    "mem_pct": 46.1
   },
   "ups": {
     "charge": 100,
@@ -265,7 +268,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "2h ago",
+    "age": "3h ago",
     "message": "chore(deps): update helm release n8n to >=1.16.36 (#185)",
     "sha": "4b06f9b"
   },
@@ -290,9 +293,9 @@
     },
     {
       "name": "core",
-      "used": "30.1 GB",
+      "used": "30.3 GB",
       "total": "476.7 GB",
-      "pct": 6.3,
+      "pct": 6.4,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -305,9 +308,9 @@
       "2026-04-16": 9,
       "2026-04-15": 0,
       "2026-04-14": 26,
-      "2026-04-13": 48
+      "2026-04-13": 47
     },
-    "total": 162,
+    "total": 161,
     "active_days": 6
   }
 }

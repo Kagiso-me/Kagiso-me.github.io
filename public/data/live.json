@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-18T17:33:42Z",
-  "fetched_at": "2026-04-18T17:33:42Z",
+  "updated": "2026-04-18T18:39:57Z",
+  "fetched_at": "2026-04-18T18:39:57Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "15h 31m ago",
+      "value": "16h 38m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "5h 33m ago",
+      "value": "6h 40m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "4h 33m ago",
+      "value": "5h 39m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "16h 33m ago",
+      "value": "17h 40m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 155653,
-    "latency_ms": 5.0,
+    "fw_hits": 157051,
+    "latency_ms": 5.1,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
     "temp_c": 52.1,
     "temp_status": "ok",
-    "load": 1.19,
-    "mem_pct": 43.3
+    "load": 0.87,
+    "mem_pct": 44.3
   },
   "ups": {
     "charge": 100,
@@ -265,7 +265,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "11h ago",
+    "age": "12h ago",
     "message": "chore(deps): update helm release n8n to >=1.16.36 (#185)",
     "sha": "4b06f9b"
   },
@@ -290,7 +290,7 @@
     },
     {
       "name": "core",
-      "used": "30.9 GB",
+      "used": "31.0 GB",
       "total": "476.7 GB",
       "pct": 6.5,
       "status": "ok",
@@ -300,14 +300,14 @@
   ],
   "contribs": {
     "days": {
-      "2026-04-18": 5,
+      "2026-04-18": 6,
       "2026-04-17": 77,
       "2026-04-16": 9,
       "2026-04-15": 0,
       "2026-04-14": 26,
-      "2026-04-13": 32
+      "2026-04-13": 22
     },
-    "total": 149,
+    "total": 140,
     "active_days": 6
   }
 }

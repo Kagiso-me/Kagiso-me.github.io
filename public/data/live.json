@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-18T09:10:42Z",
-  "fetched_at": "2026-04-18T09:10:42Z",
+  "updated": "2026-04-18T10:06:35Z",
+  "fetched_at": "2026-04-18T10:06:35Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "7h 8m ago",
+      "value": "8h 4m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "9h 10m ago",
+      "value": "10h 6m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "2h 10m ago",
+      "value": "3h 6m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "8h 10m ago",
+      "value": "9h 6m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -209,12 +209,12 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: idle",
+      "tag": "SABnzbd: downloading \u00b7 20.0 GB left",
       "status": "ok"
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: 70 series",
+      "tag": "Sonarr: 69 series",
       "status": "ok"
     },
     {
@@ -231,10 +231,10 @@
   "media": [
     {
       "name": "Plex",
-      "label": "1 stream \u00b7 A Roy Rogers in Franconia",
+      "label": "1 stream \u00b7 Persona Non Grata",
       "status": "ok",
       "playing": true,
-      "title": "A Roy Rogers in Franconia",
+      "title": "Persona Non Grata",
       "album": "Season 4",
       "artist": "The Americans (2013)"
     },
@@ -246,16 +246,16 @@
     }
   ],
   "network": {
-    "fw_hits": 146687,
+    "fw_hits": 147613,
     "latency_ms": 5.1,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 51.5,
+    "temp_c": 52.1,
     "temp_status": "ok",
-    "load": 1.02,
-    "mem_pct": 46.1
+    "load": 0.66,
+    "mem_pct": 45.5
   },
   "ups": {
     "charge": 100,
@@ -275,9 +275,9 @@
   "storage": [
     {
       "name": "tera",
-      "used": "6.1 TB",
+      "used": "5.9 TB",
       "total": "7.9 TB",
-      "pct": 77.9,
+      "pct": 75.7,
       "status": "warn",
       "pool_status": "ONLINE",
       "healthy": true
@@ -293,7 +293,7 @@
     },
     {
       "name": "core",
-      "used": "30.3 GB",
+      "used": "30.4 GB",
       "total": "476.7 GB",
       "pct": 6.4,
       "status": "ok",

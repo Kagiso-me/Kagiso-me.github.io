@@ -19,7 +19,7 @@ jobs:
       - name: Fetch CVE data
         env:
           DISCORD_CVE_WEBHOOK: ${{ secrets.DISCORD_CVE_WEBHOOK }}
-        run: python3 scripts/fetch-cves.py 2>/dev/null > public/data/cve.json
+        run: python3 scripts/fetch-cves.py > public/data/cve.json
 
       - name: Commit if changed
         run: |

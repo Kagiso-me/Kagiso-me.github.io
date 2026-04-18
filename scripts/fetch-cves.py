@@ -164,7 +164,7 @@ def send_discord_alert(all_vulns: list, total_counts: dict) -> None:
     )
     try:
         urllib.request.urlopen(req, timeout=10)
-        print(f"Discord alert sent for {total_new} new CRITICAL/HIGH CVEs.", file=sys.stderr)
+        print(f"Discord digest sent: {len(crit)} CRITICAL, {len(high)} HIGH.", file=sys.stderr)
     except Exception as e:
         print(f"Discord alert failed: {e}", file=sys.stderr)
 

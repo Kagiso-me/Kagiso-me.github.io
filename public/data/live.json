@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-18T05:57:34Z",
-  "fetched_at": "2026-04-18T05:57:34Z",
+  "updated": "2026-04-18T07:09:55Z",
+  "fetched_at": "2026-04-18T07:09:55Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "3h 55m ago",
+      "value": "5h 8m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "5h 57m ago",
+      "value": "7h 10m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "2h 57m ago",
+      "value": "9m ago",
       "sub": "last cluster backup",
-      "status": "warn"
+      "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "4h 57m ago",
+      "value": "6h 10m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -199,7 +199,7 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 380 photos \u00b7 1 videos",
+      "tag": "Immich: 384 photos \u00b7 1 videos",
       "status": "ok"
     },
     {
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 144053,
-    "latency_ms": 4.8,
+    "fw_hits": 145004,
+    "latency_ms": 6.3,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
     "temp_c": 51.5,
     "temp_status": "ok",
-    "load": 0.89,
-    "mem_pct": 47.2
+    "load": 0.81,
+    "mem_pct": 47.3
   },
   "ups": {
     "charge": 100,
@@ -265,9 +265,9 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "9h ago",
-    "message": "chore(deps): update helm release umami to >=1.21.0",
-    "sha": "2da701d"
+    "age": "1h ago",
+    "message": "chore(deps): update helm release n8n to >=1.16.36 (#185)",
+    "sha": "4b06f9b"
   },
   "storage": [
     {
@@ -281,7 +281,7 @@
     },
     {
       "name": "archive",
-      "used": "456.2 GB",
+      "used": "456.3 GB",
       "total": "4.0 TB",
       "pct": 11.4,
       "status": "ok",
@@ -290,9 +290,9 @@
     },
     {
       "name": "core",
-      "used": "27.6 GB",
+      "used": "28.2 GB",
       "total": "476.7 GB",
-      "pct": 5.8,
+      "pct": 5.9,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -300,12 +300,12 @@
   ],
   "contribs": {
     "days": {
-      "2026-04-18": 0,
+      "2026-04-18": 2,
       "2026-04-17": 77,
       "2026-04-16": 9,
       "2026-04-15": 0,
       "2026-04-14": 26,
-      "2026-04-13": 50
+      "2026-04-13": 48
     },
     "total": 162,
     "active_days": 6

@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-18T15:59:35Z",
-  "fetched_at": "2026-04-18T15:59:35Z",
+  "updated": "2026-04-18T16:51:25Z",
+  "fetched_at": "2026-04-18T16:51:25Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,27 +16,27 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "\u2014",
+      "value": "14h 49m ago",
       "sub": "last backup",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "3h 59m ago",
+      "value": "4h 51m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "2h 59m ago",
+      "value": "3h 51m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "\u2014",
+      "value": "15h 51m ago",
       "sub": "age keys \u00b7 varys",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "Backblaze B2",
@@ -210,22 +210,22 @@
     {
       "name": "SABnzbd",
       "tag": "SABnzbd: idle",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: \u2014 series",
+      "tag": "Sonarr: 69 series",
       "status": "ok"
     },
     {
       "name": "Radarr",
-      "tag": "Radarr: \u2014 movies",
-      "status": "unknown"
+      "tag": "Radarr: 13 movies",
+      "status": "ok"
     },
     {
       "name": "Lidarr",
-      "tag": "Lidarr: \u2014 artists",
-      "status": "unknown"
+      "tag": "Lidarr: 36 artists",
+      "status": "ok"
     }
   ],
   "media": [
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 153875,
-    "latency_ms": 7.3,
+    "fw_hits": 154795,
+    "latency_ms": 6.5,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
     "temp_c": 52.1,
     "temp_status": "ok",
-    "load": 0.36,
-    "mem_pct": 46.9
+    "load": 1.05,
+    "mem_pct": 43.4
   },
   "ups": {
     "charge": 100,
@@ -265,7 +265,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "9h ago",
+    "age": "10h ago",
     "message": "chore(deps): update helm release n8n to >=1.16.36 (#185)",
     "sha": "4b06f9b"
   },
@@ -305,9 +305,9 @@
       "2026-04-16": 9,
       "2026-04-15": 0,
       "2026-04-14": 26,
-      "2026-04-13": 43
+      "2026-04-13": 42
     },
-    "total": 157,
+    "total": 156,
     "active_days": 6
   }
 }

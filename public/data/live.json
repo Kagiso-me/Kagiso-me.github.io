@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-19T14:41:50Z",
-  "fetched_at": "2026-04-19T14:41:50Z",
+  "updated": "2026-04-19T15:33:36Z",
+  "fetched_at": "2026-04-19T15:33:36Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "12h 39m ago",
+      "value": "13h 30m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "2h 41m ago",
+      "value": "3h 33m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "1h 41m ago",
+      "value": "2h 33m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "13h 42m ago",
+      "value": "14h 33m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -231,12 +231,9 @@
   "media": [
     {
       "name": "Plex",
-      "label": "1 stream \u00b7 Amber Waves",
+      "label": "idle",
       "status": "ok",
-      "playing": true,
-      "title": "Amber Waves",
-      "album": "Season 5",
-      "artist": "The Americans (2013)"
+      "playing": false
     },
     {
       "name": "AzuraCast",
@@ -246,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 176316,
-    "latency_ms": 4.8,
+    "fw_hits": 177328,
+    "latency_ms": 5.0,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 53.7,
+    "temp_c": 53.2,
     "temp_status": "ok",
-    "load": 1.24,
-    "mem_pct": 45.7
+    "load": 0.85,
+    "mem_pct": 44.1
   },
   "ups": {
     "charge": 100,
@@ -268,9 +265,9 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "5m ago",
-    "message": "fix(moodle): correct env var names for erseco image",
-    "sha": "febf2ed"
+    "age": "6m ago",
+    "message": "fix(moodle): remove space from site name \u2014 passed as CLI arg",
+    "sha": "f63b0a6"
   },
   "storage": [
     {
@@ -303,14 +300,13 @@
   ],
   "contribs": {
     "days": {
-      "2026-04-19": 43,
+      "2026-04-19": 55,
       "2026-04-18": 6,
       "2026-04-17": 77,
       "2026-04-16": 9,
-      "2026-04-15": 0,
-      "2026-04-14": 0
+      "2026-04-15": 0
     },
-    "total": 135,
-    "active_days": 6
+    "total": 147,
+    "active_days": 5
   }
 }

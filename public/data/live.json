@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-19T09:42:07Z",
-  "fetched_at": "2026-04-19T09:42:07Z",
+  "updated": "2026-04-19T10:34:49Z",
+  "fetched_at": "2026-04-19T10:34:49Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,27 +16,27 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "7h 39m ago",
+      "value": "\u2014",
       "sub": "last backup",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "etcd Snapshot",
-      "value": "9h 42m ago",
+      "value": "10h 37m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "2h 41m ago",
+      "value": "3h 37m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "8h 42m ago",
+      "value": "\u2014",
       "sub": "age keys \u00b7 varys",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "Backblaze B2",
@@ -45,35 +45,7 @@
       "status": "unknown"
     }
   ],
-  "nodes": [
-    {
-      "name": "jaime",
-      "role": "control-plane",
-      "status": "crit",
-      "pods": "22/110",
-      "cpu": "43%",
-      "memory": "9%",
-      "pressure": []
-    },
-    {
-      "name": "tyrion",
-      "role": "control-plane",
-      "status": "ok",
-      "pods": "21/110",
-      "cpu": "40%",
-      "memory": "8%",
-      "pressure": []
-    },
-    {
-      "name": "tywin",
-      "role": "control-plane",
-      "status": "ok",
-      "pods": "34/110",
-      "cpu": "40%",
-      "memory": "11%",
-      "pressure": []
-    }
-  ],
+  "nodes": [],
   "flux": {
     "ready": 19,
     "total": 19,
@@ -199,7 +171,7 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 429 photos \u00b7 8 videos",
+      "tag": "Immich: 447 photos \u00b7 8 videos",
       "status": "ok"
     },
     {
@@ -210,21 +182,21 @@
     {
       "name": "SABnzbd",
       "tag": "SABnzbd: idle",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: 69 series",
+      "tag": "Sonarr: \u2014 series",
       "status": "ok"
     },
     {
       "name": "Radarr",
-      "tag": "Radarr: 13 movies",
-      "status": "ok"
+      "tag": "Radarr: \u2014 movies",
+      "status": "unknown"
     },
     {
       "name": "Lidarr",
-      "tag": "Lidarr: 36 artists",
+      "tag": "Lidarr: \u2014 artists",
       "status": "ok"
     }
   ],
@@ -243,16 +215,16 @@
     }
   ],
   "network": {
-    "fw_hits": 170632,
-    "latency_ms": 4.9,
+    "fw_hits": 171328,
+    "latency_ms": 5.1,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 52.6,
+    "temp_c": 52.1,
     "temp_status": "ok",
-    "load": 0.74,
-    "mem_pct": 48.1
+    "load": 0.1,
+    "mem_pct": 47.3
   },
   "ups": {
     "charge": 100,
@@ -290,9 +262,9 @@
     },
     {
       "name": "core",
-      "used": "31.6 GB",
+      "used": "31.8 GB",
       "total": "476.7 GB",
-      "pct": 6.6,
+      "pct": 6.7,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -306,9 +278,9 @@
       "2026-04-16": 9,
       "2026-04-15": 0,
       "2026-04-14": 26,
-      "2026-04-13": 13
+      "2026-04-13": 12
     },
-    "total": 131,
+    "total": 130,
     "active_days": 7
   }
 }

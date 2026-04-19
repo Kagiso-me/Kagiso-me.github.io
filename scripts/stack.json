@@ -12,7 +12,7 @@
     {
       "name": "traefik",
       "display": "Traefik",
-      "version": "3.0.2",
+      "version": "3.4.0",
       "ecosystem": "Go",
       "package": "github.com/traefik/traefik/v3"
     },

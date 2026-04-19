@@ -211,19 +211,21 @@ import ClusterTerminal from '../components/ClusterTerminal.astro';
           <div class="hw-label mono">Hardware</div>
           <div class="hw-list">
             {[
-              { icon: '▣', name: '3× Lenovo ThinkCentre M93p', sub: 'k3s control-plane nodes' },
-              { icon: '▣', name: 'Intel NUC',                   sub: 'Docker host' },
-              { icon: '▣', name: 'HP MicroServer Gen8',         sub: 'TrueNAS · primary & archive storage' },
-              { icon: '◈', name: 'MikroTik hEX S',              sub: 'router & firewall' },
-              { icon: '◈', name: 'RPi 4 (bran)',                sub: 'automation runner & CI' },
-              { icon: '◉', name: 'APC UPS',                     sub: '390W · 1h 55m runtime' },
+              { icon: '▣', name: '3× Lenovo ThinkCentre M93p', sub: 'k3s control-plane nodes',              specs: 'Intel Core i5-4570T @ 3.20GHz · 16GB DDR3 · 256GB SSD (each)' },
+              { icon: '▣', name: 'Intel NUC',                   sub: 'Docker host',                          specs: 'Intel Core i3-7100U @ 2.40GHz · 32GB DDR4 · 256GB NVMe' },
+              { icon: '▣', name: 'Intel NUC',                   sub: 'Docker host',                          specs: 'Intel Core i3-5010U @ 2.10GHz · 16GB DDR4 · 256GB NVMe' },              
+              { icon: '▣', name: 'HP MicroServer Gen8',         sub: 'TrueNAS · primary & archive storage',  specs: 'Xeon E31260L @ 2.40GHz · 16GB ECC RAM · LSI 9207-8i HBA · 1×8TB SAS + 2×4TB SAS + 2×480GB SSD + 1×128GB SSD (OS)' },
+              { icon: '◈', name: 'MikroTik hEX S',              sub: 'router & firewall',                    specs: 'MT7621A MIPS @ 880MHz · 256MB RAM · 5× Gigabit + SFP' },
+              { icon: '◈', name: 'RPi 3B+ (bran)',              sub: 'automation runner & CI',               specs: 'BCM2837B0, Cortex-A53 64-bit SoC running @ 1.4GHz · 1GB LPDDR2 SDRAM · 32GB microSD' },
+              { icon: '◉', name: 'APC UPS',                     sub: '390W · 1h 55m runtime',               specs: 'APC Back-UPS Pro 650VA · 390W · USB monitoring' },
             ].map(h => (
-              <div class="hw-item">
+              <div class="hw-item" data-specs={h.specs}>
                 <span class="hw-icon mono">{h.icon}</span>
                 <div>
                   <div class="hw-name">{h.name}</div>
                   <div class="hw-sub mono">{h.sub}</div>
                 </div>
+                {h.specs && <div class="hw-specs mono">{h.specs}</div>}
               </div>
             ))}
           </div>
@@ -802,9 +804,36 @@ import ClusterTerminal from '../components/ClusterTerminal.astro';
     transition: border-color 0.2s, transform 0.2s;
   }
 
+  .hw-item {
+    position: relative;
+  }
+
   .hw-item:hover {
     border-color: var(--color-mauve);
     transform: translateX(3px);
+  }
+
+  .hw-specs {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: calc(100% + 6px);
+    z-index: 10;
+    background: rgba(18, 22, 33, 0.97);
+    border: 1px solid var(--color-mauve);
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.68rem;
+    color: var(--color-subtle);
+    line-height: 1.5;
+    white-space: normal;
+    width: 100%;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    pointer-events: none;
+  }
+
+  .hw-item:hover .hw-specs {
+    display: block;
   }
 
   .hw-icon {

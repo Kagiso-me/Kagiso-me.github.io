@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-19T16:34:21Z",
-  "fetched_at": "2026-04-19T16:34:21Z",
+  "updated": "2026-04-19T17:31:57Z",
+  "fetched_at": "2026-04-19T17:31:57Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,27 +16,27 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "14h 31m ago",
+      "value": "\u2014",
       "sub": "last backup",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "etcd Snapshot",
-      "value": "4h 34m ago",
+      "value": "5h 32m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 34m ago",
+      "value": "4h 31m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "15h 34m ago",
+      "value": "\u2014",
       "sub": "age keys \u00b7 varys",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "Backblaze B2",
@@ -210,33 +210,30 @@
     {
       "name": "SABnzbd",
       "tag": "SABnzbd: idle",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: 69 series",
-      "status": "ok"
+      "tag": "Sonarr: \u2014 series",
+      "status": "unknown"
     },
     {
       "name": "Radarr",
-      "tag": "Radarr: 13 movies",
-      "status": "ok"
+      "tag": "Radarr: \u2014 movies",
+      "status": "unknown"
     },
     {
       "name": "Lidarr",
-      "tag": "Lidarr: 36 artists",
-      "status": "ok"
+      "tag": "Lidarr: \u2014 artists",
+      "status": "unknown"
     }
   ],
   "media": [
     {
       "name": "Plex",
-      "label": "1 stream \u00b7 1:23:45",
-      "status": "ok",
-      "playing": true,
-      "title": "1:23:45",
-      "album": "Season 1",
-      "artist": "Chernobyl"
+      "label": "idle",
+      "status": "unknown",
+      "playing": false
     },
     {
       "name": "AzuraCast",
@@ -246,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 178047,
-    "latency_ms": 4.9,
+    "fw_hits": 178573,
+    "latency_ms": 5.1,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
     "temp_c": 52.6,
     "temp_status": "ok",
-    "load": 1.12,
-    "mem_pct": 45.0
+    "load": 0.27,
+    "mem_pct": 45.5
   },
   "ups": {
     "charge": 100,
@@ -268,39 +265,11 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "1h ago",
+    "age": "2h ago",
     "message": "fix(moodle): remove space from site name \u2014 passed as CLI arg",
     "sha": "f63b0a6"
   },
-  "storage": [
-    {
-      "name": "tera",
-      "used": "6.0 TB",
-      "total": "7.9 TB",
-      "pct": 75.8,
-      "status": "warn",
-      "pool_status": "ONLINE",
-      "healthy": true
-    },
-    {
-      "name": "archive",
-      "used": "458.8 GB",
-      "total": "4.0 TB",
-      "pct": 11.5,
-      "status": "ok",
-      "pool_status": "ONLINE",
-      "healthy": true
-    },
-    {
-      "name": "core",
-      "used": "32.1 GB",
-      "total": "476.7 GB",
-      "pct": 6.7,
-      "status": "ok",
-      "pool_status": "ONLINE",
-      "healthy": true
-    }
-  ],
+  "storage": [],
   "contribs": {
     "days": {
       "2026-04-19": 55,

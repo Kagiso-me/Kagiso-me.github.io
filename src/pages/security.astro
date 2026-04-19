@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="Security" description="CVE feed scoped to the homelab stack, sourced from OSV.dev.">
+<Layout title="Security" description="Live CVE feed scoped to exact component versions running in the homelab cluster, sourced from OSV.dev.">
 
   <div class="page-wrap">
 
@@ -11,8 +11,17 @@ import Layout from '../layouts/Layout.astro';
       <div>
         <p class="mono" style="color:var(--color-peach); margin-bottom:0.25rem">~/security</p>
         <h1 style="margin:0">CVE Feed</h1>
+        <p class="hero-sub">
+          Every service running in this homelab is tracked against
+          <a href="https://osv.dev" target="_blank" rel="noopener" style="color:var(--color-peach)">OSV.dev</a>
+          — the Open Source Vulnerability database — using the exact versions
+          deployed in the cluster. This isn't a generic advisory feed; it's scoped
+          to what's actually running. When a CVE lands that affects this stack,
+          it shows up here and triggers a Discord alert. Fixing it means upgrading
+          the component — closing the loop between awareness and action.
+        </p>
       </div>
-      <div style="text-align:right">
+      <div style="text-align:right; flex-shrink:0">
         <div class="mono" id="last-checked" style="color:var(--color-subtle)">—</div>
         <div class="mono" style="color:var(--color-subtle); font-size:0.78rem; margin-top:0.25rem">
           refreshed daily · sourced from OSV.dev
@@ -77,6 +86,14 @@ import Layout from '../layouts/Layout.astro';
   }
 
   h1 { font-size: clamp(1.75rem, 4vw, 2.5rem); }
+
+  .hero-sub {
+    color: var(--color-subtle);
+    font-size: 0.95rem;
+    line-height: 1.75;
+    max-width: 620px;
+    margin: 0.75rem 0 0;
+  }
 
   .section { margin-bottom: 3rem; }
 

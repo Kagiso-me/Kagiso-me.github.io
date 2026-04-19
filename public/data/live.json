@@ -1,10 +1,10 @@
 {
-  "updated": "2026-04-19T17:31:57Z",
-  "fetched_at": "2026-04-19T17:31:57Z",
+  "updated": "2026-04-19T18:40:53Z",
+  "fetched_at": "2026-04-19T18:40:53Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "60/67",
+      "value": "61/67",
       "sub": "pods running",
       "status": "warn"
     },
@@ -16,27 +16,27 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "\u2014",
+      "value": "16h 38m ago",
       "sub": "last backup",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "5h 32m ago",
+      "value": "6h 41m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "4h 31m ago",
+      "value": "5h 40m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "\u2014",
+      "value": "17h 41m ago",
       "sub": "age keys \u00b7 varys",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "Backblaze B2",
@@ -210,30 +210,33 @@
     {
       "name": "SABnzbd",
       "tag": "SABnzbd: idle",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: \u2014 series",
-      "status": "unknown"
+      "tag": "Sonarr: 69 series",
+      "status": "ok"
     },
     {
       "name": "Radarr",
-      "tag": "Radarr: \u2014 movies",
-      "status": "unknown"
+      "tag": "Radarr: 13 movies",
+      "status": "ok"
     },
     {
       "name": "Lidarr",
-      "tag": "Lidarr: \u2014 artists",
-      "status": "unknown"
+      "tag": "Lidarr: 36 artists",
+      "status": "ok"
     }
   ],
   "media": [
     {
       "name": "Plex",
-      "label": "idle",
-      "status": "unknown",
-      "playing": false
+      "label": "1 stream \u00b7 Red Moon",
+      "status": "ok",
+      "playing": true,
+      "title": "Red Moon",
+      "album": "Season 1",
+      "artist": "For All Mankind"
     },
     {
       "name": "AzuraCast",
@@ -243,16 +246,16 @@
     }
   ],
   "network": {
-    "fw_hits": 178573,
-    "latency_ms": 5.1,
+    "fw_hits": 179268,
+    "latency_ms": 4.9,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 52.6,
+    "temp_c": 53.7,
     "temp_status": "ok",
-    "load": 0.27,
-    "mem_pct": 45.5
+    "load": 0.97,
+    "mem_pct": 45.1
   },
   "ups": {
     "charge": 100,
@@ -265,11 +268,39 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "2h ago",
+    "age": "3h ago",
     "message": "fix(moodle): remove space from site name \u2014 passed as CLI arg",
     "sha": "f63b0a6"
   },
-  "storage": [],
+  "storage": [
+    {
+      "name": "tera",
+      "used": "6.0 TB",
+      "total": "7.9 TB",
+      "pct": 75.8,
+      "status": "warn",
+      "pool_status": "ONLINE",
+      "healthy": true
+    },
+    {
+      "name": "archive",
+      "used": "458.8 GB",
+      "total": "4.0 TB",
+      "pct": 11.5,
+      "status": "ok",
+      "pool_status": "ONLINE",
+      "healthy": true
+    },
+    {
+      "name": "core",
+      "used": "32.2 GB",
+      "total": "476.7 GB",
+      "pct": 6.8,
+      "status": "ok",
+      "pool_status": "ONLINE",
+      "healthy": true
+    }
+  ],
   "contribs": {
     "days": {
       "2026-04-19": 55,

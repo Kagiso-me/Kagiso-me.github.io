@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-19T11:31:40Z",
-  "fetched_at": "2026-04-19T11:31:40Z",
+  "updated": "2026-04-19T12:52:00Z",
+  "fetched_at": "2026-04-19T12:52:00Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "9h 29m ago",
+      "value": "10h 49m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "11h 31m ago",
+      "value": "52m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "4h 31m ago",
+      "value": "5h 51m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "10h 31m ago",
+      "value": "11h 52m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 172044,
+    "fw_hits": 173112,
     "latency_ms": 4.9,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 52.6,
+    "temp_c": 53.2,
     "temp_status": "ok",
-    "load": 0.5,
-    "mem_pct": 47.1
+    "load": 0.92,
+    "mem_pct": 46.1
   },
   "ups": {
     "charge": 100,
@@ -290,7 +290,7 @@
     },
     {
       "name": "core",
-      "used": "31.8 GB",
+      "used": "31.9 GB",
       "total": "476.7 GB",
       "pct": 6.7,
       "status": "ok",
@@ -300,15 +300,15 @@
   ],
   "contribs": {
     "days": {
-      "2026-04-19": 0,
+      "2026-04-19": 2,
       "2026-04-18": 6,
       "2026-04-17": 77,
       "2026-04-16": 9,
       "2026-04-15": 0,
       "2026-04-14": 26,
-      "2026-04-13": 11
+      "2026-04-13": 8
     },
-    "total": 129,
+    "total": 128,
     "active_days": 7
   }
 }

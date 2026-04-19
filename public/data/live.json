@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-19T20:31:54Z",
-  "fetched_at": "2026-04-19T20:31:54Z",
+  "updated": "2026-04-19T21:30:57Z",
+  "fetched_at": "2026-04-19T21:30:57Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,27 +16,27 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "18h 29m ago",
+      "value": "\u2014",
       "sub": "last backup",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "etcd Snapshot",
-      "value": "8h 32m ago",
+      "value": "9h 31m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "1h 31m ago",
+      "value": "2h 30m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "19h 32m ago",
+      "value": "\u2014",
       "sub": "age keys \u00b7 varys",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "Backblaze B2",
@@ -199,7 +199,7 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 452 photos \u00b7 9 videos",
+      "tag": "Immich: 468 photos \u00b7 10 videos",
       "status": "ok"
     },
     {
@@ -210,29 +210,29 @@
     {
       "name": "SABnzbd",
       "tag": "SABnzbd: idle",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: 69 series",
-      "status": "ok"
+      "tag": "Sonarr: \u2014 series",
+      "status": "unknown"
     },
     {
       "name": "Radarr",
-      "tag": "Radarr: 13 movies",
-      "status": "ok"
+      "tag": "Radarr: \u2014 movies",
+      "status": "unknown"
     },
     {
       "name": "Lidarr",
-      "tag": "Lidarr: 36 artists",
-      "status": "ok"
+      "tag": "Lidarr: \u2014 artists",
+      "status": "unknown"
     }
   ],
   "media": [
     {
       "name": "Plex",
       "label": "idle",
-      "status": "ok",
+      "status": "unknown",
       "playing": false
     },
     {
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 180478,
-    "latency_ms": 4.9,
+    "fw_hits": 181128,
+    "latency_ms": 5.3,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 54.2,
+    "temp_c": 52.6,
     "temp_status": "ok",
-    "load": 0.69,
-    "mem_pct": 47.2
+    "load": 0.59,
+    "mem_pct": 46.2
   },
   "ups": {
     "charge": 100,
@@ -265,7 +265,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "11m ago",
+    "age": "1h ago",
     "message": "fix(moodle): correct probe and containerPort to 8080",
     "sha": "4bfd5ef"
   },
@@ -290,9 +290,9 @@
     },
     {
       "name": "core",
-      "used": "32.3 GB",
+      "used": "33.0 GB",
       "total": "476.7 GB",
-      "pct": 6.8,
+      "pct": 6.9,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true

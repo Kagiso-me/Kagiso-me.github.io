@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Status Page — Glass Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-base:    #0d1117;
+    --color-surface: #1e2534;
+    --color-overlay: #242936;
+    --color-muted:   #3d4663;
+    --color-subtle:  #6b7280;
+    --color-text:    #bfbdb6;
+    --color-heading: #e6e1cf;
+    --color-peach:   #fab387;
+    --color-ok:      #a6e3a1;
+    --color-warn:    #f9e2af;
+    --color-crit:    #f38ba8;
+    --font-sans: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── Dot-grid background ── */
+  body {
+    background-color: var(--color-base);
+    background-image: radial-gradient(circle, #3d466320 1px, transparent 1px);
+    background-size: 28px 28px;
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    padding: 2rem 1.5rem 4rem;
+    min-height: 100vh;
+  }
+
+  /* Fade the dot grid at the very top so it doesn't compete with headers */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 40% at 50% 0%, var(--color-base) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  section { margin-bottom: 3rem; position: relative; z-index: 1; }
+
+  h2 {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-subtle);
+    margin: 0 0 1.25rem;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  /* Accent line beside section headers */
+  h2::before {
+    content: '';
+    display: block;
+    width: 3px;
+    height: 0.85rem;
+    background: linear-gradient(to bottom, var(--color-peach), var(--color-mauve, #cba6f7));
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .mono { font-family: var(--font-mono); font-size: 0.8rem; color: var(--color-subtle); }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .badge.ok      { background: color-mix(in srgb, var(--color-ok)   18%, transparent); color: var(--color-ok); }
+  .badge.crit    { background: color-mix(in srgb, var(--color-crit) 18%, transparent); color: var(--color-crit); }
+  .badge.warn    { background: color-mix(in srgb, var(--color-warn) 18%, transparent); color: var(--color-warn); }
+
+  /* ══════════════════════════════════════
+     FLUX
+  ══════════════════════════════════════ */
+  .flux-summary {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .flux-ratio-bar {
+    flex: 1;
+    min-width: 140px;
+    max-width: 300px;
+    height: 6px;
+    background: var(--color-overlay);
+    border-radius: 3px;
+    overflow: hidden;
+    display: flex;
+  }
+  .flux-ratio-bar-ok   { height: 100%; background: var(--color-ok); }
+  .flux-ratio-bar-crit { height: 100%; background: var(--color-crit); }
+
+  .flux-ratio-label {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--color-subtle);
+    white-space: nowrap;
+  }
+
+  /* Glass flux table */
+  .flux-table {
+    background: rgba(30, 37, 52, 0.55);
+    backdrop-filter: blur(12px) saturate(1.4);
+    -webkit-backdrop-filter: blur(12px) saturate(1.4);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+
+  .flux-row {
+    display: grid;
+    grid-template-columns: 1.8fr 120px 110px 100px;
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    align-items: center;
+    gap: 1rem;
+    transition: background 0.15s;
+  }
+  .flux-row:last-child { border-bottom: none; }
+  .flux-row:not(.header):hover { background: rgba(255,255,255,0.03); }
+
+  .flux-row.header {
+    background: rgba(255,255,255,0.04);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-subtle);
+  }
+
+  .flux-row.crit-row {
+    background: color-mix(in srgb, var(--color-crit) 7%, transparent);
+    border-left: 3px solid var(--color-crit);
+    padding-left: calc(1.25rem - 3px);
+  }
+  .flux-row.crit-row:hover { background: color-mix(in srgb, var(--color-crit) 12%, transparent); }
+
+  .flux-name-cell { display: flex; align-items: center; min-width: 0; overflow: hidden; }
+  .flux-name-icon {
+    display: inline-block;
+    width: 1rem;
+    text-align: center;
+    margin-right: 0.4rem;
+    flex-shrink: 0;
+    font-size: 0.85rem;
+  }
+  .flux-name-icon.ok   { color: var(--color-ok); }
+  .flux-name-icon.crit { color: var(--color-crit); }
+  .flux-name-text {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--color-heading);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ══════════════════════════════════════
+     NODES
+  ══════════════════════════════════════ */
+  .nodes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1rem;
+  }
+
+  /* Glass node card */
+  .node-card {
+    background: rgba(30, 37, 52, 0.5);
+    backdrop-filter: blur(16px) saturate(1.6);
+    -webkit-backdrop-filter: blur(16px) saturate(1.6);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 1.25rem 1.5rem 1.5rem;
+    border-left-width: 3px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06);
+    transition: box-shadow 0.25s, transform 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Subtle inner glow at top reflecting status colour */
+  .node-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 60px;
+    border-radius: 16px 16px 0 0;
+    pointer-events: none;
+    opacity: 0.08;
+  }
+  .node-card.ok::after   { background: radial-gradient(ellipse at 50% 0%, var(--color-ok), transparent 70%); }
+  .node-card.warn::after { background: radial-gradient(ellipse at 50% 0%, var(--color-warn), transparent 70%); }
+  .node-card.crit::after { background: radial-gradient(ellipse at 50% 0%, var(--color-crit), transparent 70%); }
+
+  .node-card:hover {
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.09);
+    transform: translateY(-2px);
+  }
+
+  .node-card.ok      { border-left-color: var(--color-ok); }
+  .node-card.warn    { border-left-color: var(--color-warn); }
+  .node-card.crit    { border-left-color: var(--color-crit); }
+  .node-card.unknown { border-left-color: var(--color-muted); }
+
+  .node-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .node-identity { display: flex; flex-direction: column; gap: 0.35rem; }
+  .node-identity-row { display: flex; align-items: baseline; gap: 0.5rem; }
+  .node-field-label {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-muted);
+    flex-shrink: 0;
+    min-width: 2.4rem;
+  }
+  .node-field-value {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--color-heading);
+  }
+  .node-field-value.role {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-subtle);
+  }
+
+  .node-status-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.1rem;
+    flex-shrink: 0;
+  }
+  .node-status-ring { width: 52px; height: 52px; }
+  .node-ring-label {
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    color: var(--color-subtle);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* Heartbeat pulse on the ok ring */
+  @keyframes ring-pulse {
+    0%, 100% { opacity: 1; filter: drop-shadow(0 0 3px var(--color-ok)); }
+    50%       { opacity: 0.7; filter: drop-shadow(0 0 8px var(--color-ok)); }
+  }
+  .node-card.ok .node-status-ring circle.arc {
+    animation: ring-pulse 2.4s ease-in-out infinite;
+  }
+
+  .node-metrics-4 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 0.4rem;
+  }
+
+  /* Glass metric boxes */
+  .metric {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    padding: 0.6rem 0.5rem 0.5rem;
+    overflow: hidden;
+    backdrop-filter: blur(4px);
+  }
+  .metric-value {
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--color-peach);
+    display: block;
+    text-align: center;
+  }
+  .metric-label {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    color: var(--color-subtle);
+    display: block;
+    text-align: center;
+    margin-top: 0.2rem;
+    margin-bottom: 0.4rem;
+  }
+  .metric-bar-track {
+    height: 3px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 0.35rem;
+  }
+  .metric-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--color-peach);
+  }
+  .metric-bar-fill.warn { background: var(--color-warn); }
+  .metric-bar-fill.crit { background: var(--color-crit); }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     SECTION 1: GitOps — Flux Kustomizations
+══════════════════════════════════════════ -->
+<section>
+  <h2>GitOps — Flux Kustomizations</h2>
+
+  <div class="flux-summary">
+    <span class="badge crit">10/19 synced</span>
+    <div class="flux-ratio-bar" title="10 ready · 9 failed">
+      <div class="flux-ratio-bar-ok"   style="width:52%"></div>
+      <div class="flux-ratio-bar-crit" style="width:48%"></div>
+    </div>
+    <span class="flux-ratio-label">10 ready · 9 failed</span>
+    <span class="mono" style="margin-left:auto">last sync 5d17h</span>
+  </div>
+
+  <div class="flux-table">
+    <div class="flux-row header">
+      <span>Kustomization</span><span>Namespace</span><span>Last Applied</span><span>Status</span>
+    </div>
+    <!-- Failed -->
+    <div class="flux-row crit-row"><div class="flux-name-cell"><span class="flux-name-icon crit">✗</span><span class="flux-name-text">apps</span></div><span class="mono">flux-system</span><span class="mono">5d17h</span><span class="badge crit">✗ Failed</span></div>
+    <div class="flux-row crit-row"><div class="flux-name-cell"><span class="flux-name-icon crit">✗</span><span class="flux-name-text">platform-authentik</span></div><span class="mono">flux-system</span><span class="mono">5d17h</span><span class="badge crit">✗ Failed</span></div>
+    <div class="flux-row crit-row"><div class="flux-name-cell"><span class="flux-name-icon crit">✗</span><span class="flux-name-text">platform-backup</span></div><span class="mono">flux-system</span><span class="mono">5d17h</span><span class="badge crit">✗ Failed</span></div>
+    <div class="flux-row crit-row"><div class="flux-name-cell"><span class="flux-name-icon crit">✗</span><span class="flux-name-text">platform-backup-config</span></div><span class="mono">flux-system</span><span class="mono">5d17h</span><span class="badge crit">✗ Failed</span></div>
+    <div class="flux-row crit-row"><div class="flux-name-cell"><span class="flux-name-icon crit">✗</span><span class="flux-name-text">platform-crowdsec</span></div><span class="mono">flux-system</span><span class="mono">5d17h</span><span class="badge crit">✗ Failed</span></div>
+    <div class="flux-row crit-row"><div class="flux-name-cell"><span class="flux-name-icon crit">✗</span><span class="flux-name-text">platform-databases</span></div><span class="mono">flux-system</span><span class="mono">5d17h</span><span class="badge crit">✗ Failed</span></div>
+    <div class="flux-row crit-row"><div class="flux-name-cell"><span class="flux-name-icon crit">✗</span><span class="flux-name-text">platform-observability</span></div><span class="mono">flux-system</span><span class="mono">5d17h</span><span class="badge crit">✗ Failed</span></div>
+    <div class="flux-row crit-row"><div class="flux-name-cell"><span class="flux-name-icon crit">✗</span><span class="flux-name-text">platform-observability-config</span></div><span class="mono">flux-system</span><span class="mono">5d17h</span><span class="badge crit">✗ Failed</span></div>
+    <div class="flux-row crit-row"><div class="flux-name-cell"><span class="flux-name-icon crit">✗</span><span class="flux-name-text">platform-observability-digest</span></div><span class="mono">flux-system</span><span class="mono">5d17h</span><span class="badge crit">✗ Failed</span></div>
+    <!-- Ready -->
+    <div class="flux-row"><div class="flux-name-cell"><span class="flux-name-icon ok">✓</span><span class="flux-name-text">flux-system</span></div><span class="mono">flux-system</span><span class="mono">5d19h</span><span class="badge ok">✓ Ready</span></div>
+    <div class="flux-row"><div class="flux-name-cell"><span class="flux-name-icon ok">✓</span><span class="flux-name-text">platform-namespaces</span></div><span class="mono">flux-system</span><span class="mono">5d17h</span><span class="badge ok">✓ Ready</span></div>
+    <div class="flux-row"><div class="flux-name-cell"><span class="flux-name-icon ok">✓</span><span class="flux-name-text">platform-networking</span></div><span class="mono">flux-system</span><span class="mono">5d17h</span><span class="badge ok">✓ Ready</span></div>
+    <div class="flux-row"><div class="flux-name-cell"><span class="flux-name-icon ok">✓</span><span class="flux-name-text">platform-networking-config</span></div><span class="mono">flux-system</span><span class="mono">5d17h</span><span class="badge ok">✓ Ready</span></div>
+    <div class="flux-row"><div class="flux-name-cell"><span class="flux-name-icon ok">✓</span><span class="flux-name-text">platform-networking-tls</span></div><span class="mono">flux-system</span><span class="mono">5d17h</span><span class="badge ok">✓ Ready</span></div>
+    <div class="flux-row"><div class="flux-name-cell"><span class="flux-name-icon ok">✓</span><span class="flux-name-text">platform-security</span></div><span class="mono">flux-system</span><span class="mono">5d17h</span><span class="badge ok">✓ Ready</span></div>
+    <div class="flux-row"><div class="flux-name-cell"><span class="flux-name-icon ok">✓</span><span class="flux-name-text">platform-security-issuers</span></div><span class="mono">flux-system</span><span class="mono">5d17h</span><span class="badge ok">✓ Ready</span></div>
+    <div class="flux-row"><div class="flux-name-cell"><span class="flux-name-icon ok">✓</span><span class="flux-name-text">platform-storage</span></div><span class="mono">flux-system</span><span class="mono">5d17h</span><span class="badge ok">✓ Ready</span></div>
+    <div class="flux-row"><div class="flux-name-cell"><span class="flux-name-icon ok">✓</span><span class="flux-name-text">platform-upgrade</span></div><span class="mono">flux-system</span><span class="mono">5d17h</span><span class="badge ok">✓ Ready</span></div>
+    <div class="flux-row"><div class="flux-name-cell"><span class="flux-name-icon ok">✓</span><span class="flux-name-text">platform-upgrade-plans</span></div><span class="mono">flux-system</span><span class="mono">5d17h</span><span class="badge ok">✓ Ready</span></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     SECTION 2: Nodes
+══════════════════════════════════════════ -->
+<section>
+  <h2>Nodes</h2>
+  <div class="nodes-grid">
+
+    <!-- jaime — Ready -->
+    <div class="node-card ok">
+      <div class="node-header">
+        <div class="node-identity">
+          <div class="node-identity-row">
+            <span class="node-field-label">Node</span>
+            <span class="node-field-value">jaime</span>
+          </div>
+          <div class="node-identity-row">
+            <span class="node-field-label">Role</span>
+            <span class="node-field-value role">control-plane</span>
+          </div>
+        </div>
+        <div class="node-status-badge">
+          <svg class="node-status-ring" viewBox="0 0 52 52" fill="none">
+            <circle cx="26" cy="26" r="20" stroke="rgba(255,255,255,0.06)" stroke-width="4"/>
+            <circle class="arc" cx="26" cy="26" r="20" stroke="var(--color-ok)" stroke-width="4"
+              stroke-dasharray="125.7 0" stroke-dashoffset="31.4" stroke-linecap="round"/>
+            <text x="26" y="26" text-anchor="middle" dominant-baseline="middle"
+              font-family="JetBrains Mono,monospace" font-size="11" font-weight="700"
+              fill="var(--color-ok)">✓</text>
+          </svg>
+          <div class="node-ring-label">Ready</div>
+        </div>
+      </div>
+      <div class="node-metrics-4">
+        <div class="metric"><span class="metric-value">16%</span><span class="metric-label">CPU</span><div class="metric-bar-track"><div class="metric-bar-fill" style="width:16%"></div></div></div>
+        <div class="metric"><span class="metric-value">4%</span><span class="metric-label">Memory</span><div class="metric-bar-track"><div class="metric-bar-fill" style="width:4%"></div></div></div>
+        <div class="metric"><span class="metric-value">13/110</span><span class="metric-label">Pods</span></div>
+        <div class="metric"><span class="metric-value" style="font-size:0.8rem">110</span><span class="metric-label">Pod Cap</span></div>
+      </div>
+    </div>
+
+    <!-- tyrion — Ready -->
+    <div class="node-card ok">
+      <div class="node-header">
+        <div class="node-identity">
+          <div class="node-identity-row">
+            <span class="node-field-label">Node</span>
+            <span class="node-field-value">tyrion</span>
+          </div>
+          <div class="node-identity-row">
+            <span class="node-field-label">Role</span>
+            <span class="node-field-value role">control-plane</span>
+          </div>
+        </div>
+        <div class="node-status-badge">
+          <svg class="node-status-ring" viewBox="0 0 52 52" fill="none">
+            <circle cx="26" cy="26" r="20" stroke="rgba(255,255,255,0.06)" stroke-width="4"/>
+            <circle class="arc" cx="26" cy="26" r="20" stroke="var(--color-ok)" stroke-width="4"
+              stroke-dasharray="125.7 0" stroke-dashoffset="31.4" stroke-linecap="round"/>
+            <text x="26" y="26" text-anchor="middle" dominant-baseline="middle"
+              font-family="JetBrains Mono,monospace" font-size="11" font-weight="700"
+              fill="var(--color-ok)">✓</text>
+          </svg>
+          <div class="node-ring-label">Ready</div>
+        </div>
+      </div>
+      <div class="node-metrics-4">
+        <div class="metric"><span class="metric-value">22%</span><span class="metric-label">CPU</span><div class="metric-bar-track"><div class="metric-bar-fill" style="width:22%"></div></div></div>
+        <div class="metric"><span class="metric-value">61%</span><span class="metric-label">Memory</span><div class="metric-bar-track"><div class="metric-bar-fill warn" style="width:61%"></div></div></div>
+        <div class="metric"><span class="metric-value">28/110</span><span class="metric-label">Pods</span></div>
+        <div class="metric"><span class="metric-value" style="font-size:0.8rem">110</span><span class="metric-label">Pod Cap</span></div>
+      </div>
+    </div>
+
+    <!-- cersei — Not Ready -->
+    <div class="node-card crit">
+      <div class="node-header">
+        <div class="node-identity">
+          <div class="node-identity-row">
+            <span class="node-field-label">Node</span>
+            <span class="node-field-value">cersei</span>
+          </div>
+          <div class="node-identity-row">
+            <span class="node-field-label">Role</span>
+            <span class="node-field-value role">worker</span>
+          </div>
+        </div>
+        <div class="node-status-badge">
+          <svg class="node-status-ring" viewBox="0 0 52 52" fill="none">
+            <circle cx="26" cy="26" r="20" stroke="rgba(255,255,255,0.06)" stroke-width="4"/>
+            <circle cx="26" cy="26" r="20" stroke="var(--color-crit)" stroke-width="4"
+              stroke-dasharray="31.4 94.3" stroke-dashoffset="31.4" stroke-linecap="round"/>
+            <text x="26" y="26" text-anchor="middle" dominant-baseline="middle"
+              font-family="JetBrains Mono,monospace" font-size="11" font-weight="700"
+              fill="var(--color-crit)">✗</text>
+          </svg>
+          <div class="node-ring-label">Not Ready</div>
+        </div>
+      </div>
+      <div class="node-metrics-4">
+        <div class="metric"><span class="metric-value">—</span><span class="metric-label">CPU</span></div>
+        <div class="metric"><span class="metric-value">—</span><span class="metric-label">Memory</span></div>
+        <div class="metric"><span class="metric-value">—</span><span class="metric-label">Pods</span></div>
+        <div class="metric" style="border:1px solid color-mix(in srgb,var(--color-crit) 40%,transparent)">
+          <span class="metric-value" style="color:var(--color-crit)">2</span>
+          <span class="metric-label" style="color:var(--color-crit)">Pressure</span>
+        </div>
+      </div>
+      <div style="margin-top:0.875rem;padding:0.4rem 0.75rem;background:color-mix(in srgb,var(--color-crit) 15%,transparent);border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--color-crit)">
+        ⚠ Node not ready — check kubelet
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</body>
+</html>

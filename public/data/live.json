@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-19T19:38:16Z",
-  "fetched_at": "2026-04-19T19:38:16Z",
+  "updated": "2026-04-19T20:31:54Z",
+  "fetched_at": "2026-04-19T20:31:54Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "17h 35m ago",
+      "value": "18h 29m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "7h 38m ago",
+      "value": "8h 32m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "37m ago",
+      "value": "1h 31m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "18h 38m ago",
+      "value": "19h 32m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -50,18 +50,18 @@
       "name": "jaime",
       "role": "control-plane",
       "status": "ok",
-      "pods": "8/110",
-      "cpu": "15%",
-      "memory": "2%",
+      "pods": "9/110",
+      "cpu": "20%",
+      "memory": "5%",
       "pressure": []
     },
     {
       "name": "tyrion",
       "role": "control-plane",
       "status": "ok",
-      "pods": "23/110",
-      "cpu": "45%",
-      "memory": "11%",
+      "pods": "22/110",
+      "cpu": "40%",
+      "memory": "8%",
       "pressure": []
     },
     {
@@ -231,12 +231,9 @@
   "media": [
     {
       "name": "Plex",
-      "label": "1 stream \u00b7 1:23:45",
+      "label": "idle",
       "status": "ok",
-      "playing": true,
-      "title": "1:23:45",
-      "album": "Season 1",
-      "artist": "Chernobyl"
+      "playing": false
     },
     {
       "name": "AzuraCast",
@@ -246,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 179782,
-    "latency_ms": 7.9,
+    "fw_hits": 180478,
+    "latency_ms": 4.9,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 53.7,
+    "temp_c": 54.2,
     "temp_status": "ok",
-    "load": 1.21,
-    "mem_pct": 45.8
+    "load": 0.69,
+    "mem_pct": 47.2
   },
   "ups": {
     "charge": 100,
@@ -268,9 +265,9 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "4h ago",
-    "message": "fix(moodle): remove space from site name \u2014 passed as CLI arg",
-    "sha": "f63b0a6"
+    "age": "11m ago",
+    "message": "fix(moodle): correct probe and containerPort to 8080",
+    "sha": "4bfd5ef"
   },
   "storage": [
     {
@@ -293,9 +290,9 @@
     },
     {
       "name": "core",
-      "used": "32.1 GB",
+      "used": "32.3 GB",
       "total": "476.7 GB",
-      "pct": 6.7,
+      "pct": 6.8,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -303,13 +300,12 @@
   ],
   "contribs": {
     "days": {
-      "2026-04-19": 55,
+      "2026-04-19": 61,
       "2026-04-18": 6,
       "2026-04-17": 77,
-      "2026-04-16": 9,
-      "2026-04-15": 0
+      "2026-04-16": 9
     },
-    "total": 147,
-    "active_days": 5
+    "total": 153,
+    "active_days": 4
   }
 }

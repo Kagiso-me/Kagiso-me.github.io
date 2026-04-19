@@ -1,10 +1,10 @@
 {
-  "updated": "2026-04-19T18:40:53Z",
-  "fetched_at": "2026-04-19T18:40:53Z",
+  "updated": "2026-04-19T19:38:16Z",
+  "fetched_at": "2026-04-19T19:38:16Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "61/67",
+      "value": "60/67",
       "sub": "pods running",
       "status": "warn"
     },
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "16h 38m ago",
+      "value": "17h 35m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "6h 41m ago",
+      "value": "7h 38m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "5h 40m ago",
+      "value": "37m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "17h 41m ago",
+      "value": "18h 38m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -231,12 +231,12 @@
   "media": [
     {
       "name": "Plex",
-      "label": "1 stream \u00b7 Red Moon",
+      "label": "1 stream \u00b7 1:23:45",
       "status": "ok",
       "playing": true,
-      "title": "Red Moon",
+      "title": "1:23:45",
       "album": "Season 1",
-      "artist": "For All Mankind"
+      "artist": "Chernobyl"
     },
     {
       "name": "AzuraCast",
@@ -246,16 +246,16 @@
     }
   ],
   "network": {
-    "fw_hits": 179268,
-    "latency_ms": 4.9,
+    "fw_hits": 179782,
+    "latency_ms": 7.9,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
     "temp_c": 53.7,
     "temp_status": "ok",
-    "load": 0.97,
-    "mem_pct": 45.1
+    "load": 1.21,
+    "mem_pct": 45.8
   },
   "ups": {
     "charge": 100,
@@ -268,7 +268,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "3h ago",
+    "age": "4h ago",
     "message": "fix(moodle): remove space from site name \u2014 passed as CLI arg",
     "sha": "f63b0a6"
   },
@@ -284,7 +284,7 @@
     },
     {
       "name": "archive",
-      "used": "458.8 GB",
+      "used": "458.9 GB",
       "total": "4.0 TB",
       "pct": 11.5,
       "status": "ok",
@@ -293,9 +293,9 @@
     },
     {
       "name": "core",
-      "used": "32.2 GB",
+      "used": "32.1 GB",
       "total": "476.7 GB",
-      "pct": 6.8,
+      "pct": 6.7,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true

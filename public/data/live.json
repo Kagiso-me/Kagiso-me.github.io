@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-19T22:30:07Z",
-  "fetched_at": "2026-04-19T22:30:07Z",
+  "updated": "2026-04-19T23:06:01Z",
+  "fetched_at": "2026-04-19T23:06:01Z",
   "cards": [
     {
       "label": "Workloads",
@@ -22,19 +22,19 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "10h 30m ago",
+      "value": "11h 6m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 29m ago",
+      "value": "4h 5m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "21h 30m ago",
+      "value": "22h 6m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 181566,
-    "latency_ms": 5.2,
+    "fw_hits": 181814,
+    "latency_ms": 5.0,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 52.1,
+    "temp_c": 52.6,
     "temp_status": "ok",
-    "load": 0.47,
-    "mem_pct": 47.3
+    "load": 0.39,
+    "mem_pct": 46.5
   },
   "ups": {
     "charge": 100,
@@ -290,9 +290,9 @@
     },
     {
       "name": "core",
-      "used": "33.2 GB",
+      "used": "33.0 GB",
       "total": "476.7 GB",
-      "pct": 7.0,
+      "pct": 6.9,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true

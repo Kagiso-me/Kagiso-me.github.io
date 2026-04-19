@@ -1,10 +1,10 @@
 {
-  "updated": "2026-04-19T13:57:55Z",
-  "fetched_at": "2026-04-19T13:57:55Z",
+  "updated": "2026-04-19T14:41:50Z",
+  "fetched_at": "2026-04-19T14:41:50Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "58/80",
+      "value": "59/81",
       "sub": "pods running",
       "status": "warn"
     },
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "11h 55m ago",
+      "value": "12h 39m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "1h 58m ago",
+      "value": "2h 41m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "57m ago",
+      "value": "1h 41m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "12h 58m ago",
+      "value": "13h 42m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -59,9 +59,9 @@
       "name": "tyrion",
       "role": "control-plane",
       "status": "ok",
-      "pods": "22/110",
-      "cpu": "40%",
-      "memory": "8%",
+      "pods": "23/110",
+      "cpu": "45%",
+      "memory": "11%",
       "pressure": []
     },
     {
@@ -199,7 +199,7 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 450 photos \u00b7 9 videos",
+      "tag": "Immich: 452 photos \u00b7 9 videos",
       "status": "ok"
     },
     {
@@ -231,9 +231,12 @@
   "media": [
     {
       "name": "Plex",
-      "label": "idle",
+      "label": "1 stream \u00b7 Amber Waves",
       "status": "ok",
-      "playing": false
+      "playing": true,
+      "title": "Amber Waves",
+      "album": "Season 5",
+      "artist": "The Americans (2013)"
     },
     {
       "name": "AzuraCast",
@@ -243,16 +246,16 @@
     }
   ],
   "network": {
-    "fw_hits": 174192,
-    "latency_ms": 5.0,
+    "fw_hits": 176316,
+    "latency_ms": 4.8,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 52.6,
+    "temp_c": 53.7,
     "temp_status": "ok",
-    "load": 1.04,
-    "mem_pct": 45.4
+    "load": 1.24,
+    "mem_pct": 45.7
   },
   "ups": {
     "charge": 100,
@@ -265,9 +268,9 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "17m ago",
-    "message": "fix(moodle): set allowInsecureImages + registry.bitnami.com",
-    "sha": "b15269c"
+    "age": "5m ago",
+    "message": "fix(moodle): correct env var names for erseco image",
+    "sha": "febf2ed"
   },
   "storage": [
     {
@@ -290,7 +293,7 @@
     },
     {
       "name": "core",
-      "used": "31.9 GB",
+      "used": "32.0 GB",
       "total": "476.7 GB",
       "pct": 6.7,
       "status": "ok",
@@ -300,14 +303,14 @@
   ],
   "contribs": {
     "days": {
-      "2026-04-19": 25,
+      "2026-04-19": 43,
       "2026-04-18": 6,
       "2026-04-17": 77,
       "2026-04-16": 9,
       "2026-04-15": 0,
-      "2026-04-14": 16
+      "2026-04-14": 0
     },
-    "total": 133,
+    "total": 135,
     "active_days": 6
   }
 }

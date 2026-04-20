@@ -1,10 +1,10 @@
 {
-  "updated": "2026-04-20T20:40:31Z",
-  "fetched_at": "2026-04-20T20:40:31Z",
+  "updated": "2026-04-20T21:41:56Z",
+  "fetched_at": "2026-04-20T21:41:56Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "60/67",
+      "value": "62/70",
       "sub": "pods running",
       "status": "warn"
     },
@@ -22,19 +22,19 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "8h 40m ago",
+      "value": "9h 42m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "1h 40m ago",
+      "value": "2h 41m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "19h 40m ago",
+      "value": "20h 42m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -50,7 +50,7 @@
       "name": "jaime",
       "role": "control-plane",
       "status": "ok",
-      "pods": "9/110",
+      "pods": "11/110",
       "cpu": "20%",
       "memory": "5%",
       "pressure": []
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 194720,
-    "latency_ms": 5.0,
+    "fw_hits": 195430,
+    "latency_ms": 5.4,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
     "temp_c": 53.7,
     "temp_status": "ok",
-    "load": 0.72,
-    "mem_pct": 47.2
+    "load": 0.31,
+    "mem_pct": 41.7
   },
   "ups": {
     "charge": 100,
@@ -265,9 +265,9 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "1d ago",
-    "message": "fix(moodle): correct probe and containerPort to 8080",
-    "sha": "4bfd5ef"
+    "age": "38m ago",
+    "message": "fix(erpnext): correct mariadb-subchart value paths and drop unused redis overrid",
+    "sha": "475ed4d"
   },
   "storage": [
     {
@@ -290,9 +290,9 @@
     },
     {
       "name": "core",
-      "used": "35.1 GB",
+      "used": "35.0 GB",
       "total": "476.7 GB",
-      "pct": 7.4,
+      "pct": 7.3,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -300,13 +300,12 @@
   ],
   "contribs": {
     "days": {
-      "2026-04-20": 2,
+      "2026-04-20": 20,
       "2026-04-19": 61,
       "2026-04-18": 6,
-      "2026-04-17": 77,
-      "2026-04-16": 1
+      "2026-04-17": 61
     },
-    "total": 147,
-    "active_days": 5
+    "total": 148,
+    "active_days": 4
   }
 }

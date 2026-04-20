@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-20T06:11:49Z",
-  "fetched_at": "2026-04-20T06:11:49Z",
+  "updated": "2026-04-20T08:32:31Z",
+  "fetched_at": "2026-04-20T08:32:31Z",
   "cards": [
     {
       "label": "Workloads",
@@ -22,19 +22,19 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "6h 11m ago",
+      "value": "8h 32m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 11m ago",
+      "value": "1h 32m ago",
       "sub": "last cluster backup",
-      "status": "warn"
+      "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "5h 12m ago",
+      "value": "7h 32m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 185277,
-    "latency_ms": 5.0,
+    "fw_hits": 186865,
+    "latency_ms": 5.1,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
     "temp_c": 51.5,
     "temp_status": "ok",
-    "load": 0.43,
-    "mem_pct": 48.4
+    "load": 0.44,
+    "mem_pct": 46.8
   },
   "ups": {
     "charge": 100,
@@ -265,7 +265,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "9h ago",
+    "age": "12h ago",
     "message": "fix(moodle): correct probe and containerPort to 8080",
     "sha": "4bfd5ef"
   },
@@ -281,7 +281,7 @@
     },
     {
       "name": "archive",
-      "used": "459.2 GB",
+      "used": "459.3 GB",
       "total": "4.0 TB",
       "pct": 11.5,
       "status": "ok",
@@ -290,9 +290,9 @@
     },
     {
       "name": "core",
-      "used": "33.5 GB",
+      "used": "33.9 GB",
       "total": "476.7 GB",
-      "pct": 7.0,
+      "pct": 7.1,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -304,9 +304,9 @@
       "2026-04-19": 61,
       "2026-04-18": 6,
       "2026-04-17": 77,
-      "2026-04-16": 8
+      "2026-04-16": 6
     },
-    "total": 152,
+    "total": 150,
     "active_days": 5
   }
 }

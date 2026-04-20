@@ -1,10 +1,10 @@
 {
-  "updated": "2026-04-19T23:06:01Z",
-  "fetched_at": "2026-04-19T23:06:01Z",
+  "updated": "2026-04-20T00:00:19Z",
+  "fetched_at": "2026-04-20T00:00:19Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "60/67",
+      "value": "61/67",
       "sub": "pods running",
       "status": "warn"
     },
@@ -22,19 +22,19 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "11h 6m ago",
+      "value": "0m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "4h 5m ago",
+      "value": "5h 0m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "22h 6m ago",
+      "value": "23h 0m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 181814,
-    "latency_ms": 5.0,
+    "fw_hits": 182109,
+    "latency_ms": 5.1,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
     "temp_c": 52.6,
     "temp_status": "ok",
-    "load": 0.39,
-    "mem_pct": 46.5
+    "load": 0.44,
+    "mem_pct": 47.7
   },
   "ups": {
     "charge": 100,
@@ -265,7 +265,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "2h ago",
+    "age": "3h ago",
     "message": "fix(moodle): correct probe and containerPort to 8080",
     "sha": "4bfd5ef"
   },
@@ -290,9 +290,9 @@
     },
     {
       "name": "core",
-      "used": "33.0 GB",
+      "used": "33.2 GB",
       "total": "476.7 GB",
-      "pct": 6.9,
+      "pct": 7.0,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true

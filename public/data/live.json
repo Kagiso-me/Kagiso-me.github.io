@@ -1,10 +1,10 @@
 {
-  "updated": "2026-04-20T00:00:19Z",
-  "fetched_at": "2026-04-20T00:00:19Z",
+  "updated": "2026-04-20T03:42:55Z",
+  "fetched_at": "2026-04-20T03:42:55Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "61/67",
+      "value": "60/67",
       "sub": "pods running",
       "status": "warn"
     },
@@ -22,19 +22,19 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "0m ago",
+      "value": "3h 43m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "5h 0m ago",
+      "value": "42m ago",
       "sub": "last cluster backup",
-      "status": "ok"
+      "status": "warn"
     },
     {
       "label": "varys Keys",
-      "value": "23h 0m ago",
+      "value": "2h 43m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -243,7 +243,7 @@
     }
   ],
   "network": {
-    "fw_hits": 182109,
+    "fw_hits": 183608,
     "latency_ms": 5.1,
     "offenders": [],
     "crowdsec_bans": 0
@@ -251,8 +251,8 @@
   "bran": {
     "temp_c": 52.6,
     "temp_status": "ok",
-    "load": 0.44,
-    "mem_pct": 47.7
+    "load": 0.39,
+    "mem_pct": 47.0
   },
   "ups": {
     "charge": 100,
@@ -265,14 +265,14 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "3h ago",
+    "age": "7h ago",
     "message": "fix(moodle): correct probe and containerPort to 8080",
     "sha": "4bfd5ef"
   },
   "storage": [
     {
       "name": "tera",
-      "used": "6.0 TB",
+      "used": "5.9 TB",
       "total": "7.9 TB",
       "pct": 75.8,
       "status": "warn",
@@ -281,7 +281,7 @@
     },
     {
       "name": "archive",
-      "used": "458.9 GB",
+      "used": "459.2 GB",
       "total": "4.0 TB",
       "pct": 11.5,
       "status": "ok",
@@ -300,12 +300,13 @@
   ],
   "contribs": {
     "days": {
+      "2026-04-20": 0,
       "2026-04-19": 61,
       "2026-04-18": 6,
       "2026-04-17": 77,
       "2026-04-16": 9
     },
     "total": 153,
-    "active_days": 4
+    "active_days": 5
   }
 }

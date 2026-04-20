@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-20T10:43:51Z",
-  "fetched_at": "2026-04-20T10:43:51Z",
+  "updated": "2026-04-20T12:00:22Z",
+  "fetched_at": "2026-04-20T12:00:22Z",
   "cards": [
     {
       "label": "Workloads",
@@ -22,19 +22,19 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "10h 43m ago",
+      "value": "0m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 43m ago",
+      "value": "5h 0m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "9h 44m ago",
+      "value": "11h 0m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -89,7 +89,7 @@
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "11d",
+        "age": "12d",
         "ready": true
       },
       {
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 188374,
-    "latency_ms": 4.8,
+    "fw_hits": 189062,
+    "latency_ms": 4.9,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
     "temp_c": 52.1,
     "temp_status": "ok",
-    "load": 0.28,
-    "mem_pct": 47.0
+    "load": 0.43,
+    "mem_pct": 47.9
   },
   "ups": {
     "charge": 100,
@@ -265,7 +265,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "14h ago",
+    "age": "15h ago",
     "message": "fix(moodle): correct probe and containerPort to 8080",
     "sha": "4bfd5ef"
   },

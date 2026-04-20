@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-20T18:03:06Z",
-  "fetched_at": "2026-04-20T18:03:06Z",
+  "updated": "2026-04-20T19:39:02Z",
+  "fetched_at": "2026-04-20T19:39:02Z",
   "cards": [
     {
       "label": "Workloads",
@@ -22,19 +22,19 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "6h 3m ago",
+      "value": "7h 39m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "5h 2m ago",
+      "value": "38m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "17h 3m ago",
+      "value": "18h 39m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -199,7 +199,7 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 474 photos \u00b7 10 videos",
+      "tag": "Immich: 482 photos \u00b7 9 videos",
       "status": "ok"
     },
     {
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 192536,
+    "fw_hits": 193659,
     "latency_ms": 5.1,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 51.5,
+    "temp_c": 53.7,
     "temp_status": "ok",
-    "load": 0.58,
-    "mem_pct": 48.8
+    "load": 0.39,
+    "mem_pct": 48.5
   },
   "ups": {
     "charge": 100,
@@ -265,7 +265,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "21h ago",
+    "age": "23h ago",
     "message": "fix(moodle): correct probe and containerPort to 8080",
     "sha": "4bfd5ef"
   },
@@ -281,7 +281,7 @@
     },
     {
       "name": "archive",
-      "used": "459.5 GB",
+      "used": "459.6 GB",
       "total": "4.0 TB",
       "pct": 11.5,
       "status": "ok",
@@ -290,9 +290,9 @@
     },
     {
       "name": "core",
-      "used": "34.6 GB",
+      "used": "34.9 GB",
       "total": "476.7 GB",
-      "pct": 7.2,
+      "pct": 7.3,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -304,9 +304,9 @@
       "2026-04-19": 61,
       "2026-04-18": 6,
       "2026-04-17": 77,
-      "2026-04-16": 3
+      "2026-04-16": 2
     },
-    "total": 147,
+    "total": 146,
     "active_days": 5
   }
 }

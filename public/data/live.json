@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-20T12:00:22Z",
-  "fetched_at": "2026-04-20T12:00:22Z",
+  "updated": "2026-04-20T14:04:37Z",
+  "fetched_at": "2026-04-20T14:04:37Z",
   "cards": [
     {
       "label": "Workloads",
@@ -11,7 +11,7 @@
     {
       "label": "Flux",
       "value": "19/19 synced",
-      "sub": "11d",
+      "sub": "12d",
       "status": "ok"
     },
     {
@@ -22,19 +22,19 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "0m ago",
+      "value": "2h 4m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "5h 0m ago",
+      "value": "1h 4m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "11h 0m ago",
+      "value": "13h 4m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -77,13 +77,13 @@
   "flux": {
     "ready": 19,
     "total": 19,
-    "last_sync": "11d",
+    "last_sync": "12d",
     "status": "ok",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
-        "age": "11d",
+        "age": "12d",
         "ready": true
       },
       {
@@ -95,103 +95,103 @@
       {
         "namespace": "flux-system",
         "name": "platform-authentik",
-        "age": "11d",
+        "age": "12d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
-        "age": "11d",
+        "age": "12d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
-        "age": "11d",
+        "age": "12d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
-        "age": "11d",
+        "age": "12d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
-        "age": "11d",
+        "age": "12d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-namespaces",
-        "age": "11d",
+        "age": "12d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking",
-        "age": "11d",
+        "age": "12d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-config",
-        "age": "11d",
+        "age": "12d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-tls",
-        "age": "11d",
+        "age": "12d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability",
-        "age": "11d",
+        "age": "12d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
-        "age": "11d",
+        "age": "12d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
-        "age": "11d",
+        "age": "12d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security",
-        "age": "11d",
+        "age": "12d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security-issuers",
-        "age": "11d",
+        "age": "12d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-storage",
-        "age": "11d",
+        "age": "12d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade",
-        "age": "11d",
+        "age": "12d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade-plans",
-        "age": "11d",
+        "age": "12d",
         "ready": true
       }
     ]
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 189062,
-    "latency_ms": 4.9,
+    "fw_hits": 190000,
+    "latency_ms": 5.1,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 52.1,
+    "temp_c": 52.6,
     "temp_status": "ok",
-    "load": 0.43,
-    "mem_pct": 47.9
+    "load": 0.55,
+    "mem_pct": 48.5
   },
   "ups": {
     "charge": 100,
@@ -265,7 +265,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "15h ago",
+    "age": "17h ago",
     "message": "fix(moodle): correct probe and containerPort to 8080",
     "sha": "4bfd5ef"
   },
@@ -281,7 +281,7 @@
     },
     {
       "name": "archive",
-      "used": "459.3 GB",
+      "used": "459.5 GB",
       "total": "4.0 TB",
       "pct": 11.5,
       "status": "ok",
@@ -290,7 +290,7 @@
     },
     {
       "name": "core",
-      "used": "34.2 GB",
+      "used": "34.3 GB",
       "total": "476.7 GB",
       "pct": 7.2,
       "status": "ok",

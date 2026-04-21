@@ -1,10 +1,10 @@
 {
-  "updated": "2026-04-21T05:13:24Z",
-  "fetched_at": "2026-04-21T05:13:24Z",
+  "updated": "2026-04-21T07:11:05Z",
+  "fetched_at": "2026-04-21T07:11:05Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "62/70",
+      "value": "60/67",
       "sub": "pods running",
       "status": "warn"
     },
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "\u2014",
+      "value": "53h 8m ago",
       "sub": "last backup",
-      "status": "unknown"
+      "status": "crit"
     },
     {
       "label": "etcd Snapshot",
-      "value": "5h 13m ago",
+      "value": "7h 11m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "2h 13m ago",
+      "value": "10m ago",
       "sub": "last cluster backup",
-      "status": "warn"
+      "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "4h 13m ago",
+      "value": "6h 11m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -50,7 +50,7 @@
       "name": "jaime",
       "role": "control-plane",
       "status": "ok",
-      "pods": "11/110",
+      "pods": "9/110",
       "cpu": "20%",
       "memory": "5%",
       "pressure": []
@@ -199,7 +199,7 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 482 photos \u00b7 9 videos",
+      "tag": "Immich: 487 photos \u00b7 9 videos",
       "status": "ok"
     },
     {
@@ -210,29 +210,29 @@
     {
       "name": "SABnzbd",
       "tag": "SABnzbd: idle",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: \u2014 series",
-      "status": "unknown"
+      "tag": "Sonarr: 69 series",
+      "status": "ok"
     },
     {
       "name": "Radarr",
-      "tag": "Radarr: \u2014 movies",
-      "status": "unknown"
+      "tag": "Radarr: 13 movies",
+      "status": "ok"
     },
     {
       "name": "Lidarr",
-      "tag": "Lidarr: \u2014 artists",
-      "status": "unknown"
+      "tag": "Lidarr: 36 artists",
+      "status": "ok"
     }
   ],
   "media": [
     {
       "name": "Plex",
       "label": "idle",
-      "status": "unknown",
+      "status": "ok",
       "playing": false
     },
     {
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 199748,
-    "latency_ms": 5.0,
+    "fw_hits": 201348,
+    "latency_ms": 5.1,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 50.5,
+    "temp_c": 54.2,
     "temp_status": "ok",
-    "load": 0.52,
-    "mem_pct": 44.1
+    "load": 0.48,
+    "mem_pct": 45.1
   },
   "ups": {
     "charge": 100,
@@ -265,9 +265,9 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "8h ago",
-    "message": "fix(erpnext): correct mariadb-subchart value paths and drop unused redis overrid",
-    "sha": "475ed4d"
+    "age": "11m ago",
+    "message": "chore: remove ERPNext \u2014 switching to Odoo",
+    "sha": "df704f7"
   },
   "storage": [
     {
@@ -281,7 +281,7 @@
     },
     {
       "name": "archive",
-      "used": "459.8 GB",
+      "used": "459.9 GB",
       "total": "4.0 TB",
       "pct": 11.5,
       "status": "ok",
@@ -290,7 +290,7 @@
     },
     {
       "name": "core",
-      "used": "35.2 GB",
+      "used": "35.5 GB",
       "total": "476.7 GB",
       "pct": 7.4,
       "status": "ok",
@@ -300,13 +300,13 @@
   ],
   "contribs": {
     "days": {
-      "2026-04-21": 0,
+      "2026-04-21": 4,
       "2026-04-20": 20,
       "2026-04-19": 61,
       "2026-04-18": 6,
-      "2026-04-17": 60
+      "2026-04-17": 55
     },
-    "total": 147,
+    "total": 146,
     "active_days": 5
   }
 }

@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-20T23:38:24Z",
-  "fetched_at": "2026-04-20T23:38:24Z",
+  "updated": "2026-04-21T02:05:18Z",
+  "fetched_at": "2026-04-21T02:05:18Z",
   "cards": [
     {
       "label": "Workloads",
@@ -22,19 +22,19 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "11h 38m ago",
+      "value": "2h 5m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "4h 38m ago",
+      "value": "1h 5m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "22h 38m ago",
+      "value": "1h 5m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 196439,
+    "fw_hits": 197841,
     "latency_ms": 4.9,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 53.2,
+    "temp_c": 51.0,
     "temp_status": "ok",
-    "load": 0.53,
-    "mem_pct": 44.3
+    "load": 1.03,
+    "mem_pct": 44.5
   },
   "ups": {
     "charge": 100,
@@ -265,7 +265,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "2h ago",
+    "age": "5h ago",
     "message": "fix(erpnext): correct mariadb-subchart value paths and drop unused redis overrid",
     "sha": "475ed4d"
   },
@@ -281,7 +281,7 @@
     },
     {
       "name": "archive",
-      "used": "459.6 GB",
+      "used": "459.8 GB",
       "total": "4.0 TB",
       "pct": 11.5,
       "status": "ok",
@@ -290,9 +290,9 @@
     },
     {
       "name": "core",
-      "used": "35.0 GB",
+      "used": "35.2 GB",
       "total": "476.7 GB",
-      "pct": 7.3,
+      "pct": 7.4,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -303,9 +303,9 @@
       "2026-04-20": 20,
       "2026-04-19": 61,
       "2026-04-18": 6,
-      "2026-04-17": 61
+      "2026-04-17": 60
     },
-    "total": 148,
+    "total": 147,
     "active_days": 4
   }
 }

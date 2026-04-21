@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-21T22:06:31Z",
-  "fetched_at": "2026-04-21T22:06:31Z",
+  "updated": "2026-04-21T23:05:02Z",
+  "fetched_at": "2026-04-21T23:05:02Z",
   "cards": [
     {
       "label": "Workloads",
@@ -22,21 +22,21 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "10h 6m ago",
+      "value": "11h 5m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 6m ago",
+      "value": "4h 4m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "\u2014",
+      "value": "22h 5m ago",
       "sub": "age keys \u00b7 varys",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "Backblaze B2",
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 214675,
+    "fw_hits": 215184,
     "latency_ms": 5.5,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 52.6,
+    "temp_c": 52.1,
     "temp_status": "ok",
-    "load": 0.35,
-    "mem_pct": 42.9
+    "load": 0.53,
+    "mem_pct": 43.0
   },
   "ups": {
     "charge": 100,
@@ -265,7 +265,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "15h ago",
+    "age": "16h ago",
     "message": "chore: remove ERPNext \u2014 switching to Odoo",
     "sha": "df704f7"
   },
@@ -290,7 +290,7 @@
     },
     {
       "name": "core",
-      "used": "37.2 GB",
+      "used": "37.0 GB",
       "total": "476.7 GB",
       "pct": 7.8,
       "status": "ok",
@@ -304,9 +304,9 @@
       "2026-04-20": 20,
       "2026-04-19": 61,
       "2026-04-18": 6,
-      "2026-04-17": 46
+      "2026-04-17": 45
     },
-    "total": 139,
+    "total": 138,
     "active_days": 5
   }
 }

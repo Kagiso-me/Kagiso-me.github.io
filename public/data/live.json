@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-21T07:11:05Z",
-  "fetched_at": "2026-04-21T07:11:05Z",
+  "updated": "2026-04-21T09:10:42Z",
+  "fetched_at": "2026-04-21T09:10:42Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "53h 8m ago",
+      "value": "55h 8m ago",
       "sub": "last backup",
       "status": "crit"
     },
     {
       "label": "etcd Snapshot",
-      "value": "7h 11m ago",
+      "value": "9h 10m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "10m ago",
+      "value": "2h 10m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "6h 11m ago",
+      "value": "8h 10m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -209,7 +209,7 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: idle",
+      "tag": "SABnzbd: downloading \u00b7 18.4 GB left",
       "status": "ok"
     },
     {
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 201348,
-    "latency_ms": 5.1,
+    "fw_hits": 202728,
+    "latency_ms": 11.3,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 54.2,
+    "temp_c": 53.7,
     "temp_status": "ok",
-    "load": 0.48,
-    "mem_pct": 45.1
+    "load": 0.92,
+    "mem_pct": 43.4
   },
   "ups": {
     "charge": 100,
@@ -265,16 +265,16 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "11m ago",
+    "age": "2h ago",
     "message": "chore: remove ERPNext \u2014 switching to Odoo",
     "sha": "df704f7"
   },
   "storage": [
     {
       "name": "tera",
-      "used": "5.9 TB",
+      "used": "6.0 TB",
       "total": "7.9 TB",
-      "pct": 75.8,
+      "pct": 75.9,
       "status": "warn",
       "pool_status": "ONLINE",
       "healthy": true
@@ -290,9 +290,9 @@
     },
     {
       "name": "core",
-      "used": "35.5 GB",
+      "used": "35.9 GB",
       "total": "476.7 GB",
-      "pct": 7.4,
+      "pct": 7.5,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -304,9 +304,9 @@
       "2026-04-20": 20,
       "2026-04-19": 61,
       "2026-04-18": 6,
-      "2026-04-17": 55
+      "2026-04-17": 54
     },
-    "total": 146,
+    "total": 145,
     "active_days": 5
   }
 }

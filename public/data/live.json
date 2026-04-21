@@ -1,10 +1,10 @@
 {
-  "updated": "2026-04-21T21:10:25Z",
-  "fetched_at": "2026-04-21T21:10:25Z",
+  "updated": "2026-04-21T22:06:31Z",
+  "fetched_at": "2026-04-21T22:06:31Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "61/67",
+      "value": "60/67",
       "sub": "pods running",
       "status": "warn"
     },
@@ -16,27 +16,27 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "67h 7m ago",
+      "value": "\u2014",
       "sub": "last backup",
-      "status": "crit"
+      "status": "unknown"
     },
     {
       "label": "etcd Snapshot",
-      "value": "9h 10m ago",
+      "value": "10h 6m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "2h 10m ago",
+      "value": "3h 6m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "20h 10m ago",
+      "value": "\u2014",
       "sub": "age keys \u00b7 varys",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "Backblaze B2",
@@ -210,29 +210,29 @@
     {
       "name": "SABnzbd",
       "tag": "SABnzbd: idle",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: 69 series",
-      "status": "ok"
+      "tag": "Sonarr: \u2014 series",
+      "status": "unknown"
     },
     {
       "name": "Radarr",
-      "tag": "Radarr: 13 movies",
-      "status": "ok"
+      "tag": "Radarr: \u2014 movies",
+      "status": "unknown"
     },
     {
       "name": "Lidarr",
-      "tag": "Lidarr: 36 artists",
-      "status": "ok"
+      "tag": "Lidarr: \u2014 artists",
+      "status": "unknown"
     }
   ],
   "media": [
     {
       "name": "Plex",
       "label": "idle",
-      "status": "ok",
+      "status": "unknown",
       "playing": false
     },
     {
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 212832,
-    "latency_ms": 4.9,
+    "fw_hits": 214675,
+    "latency_ms": 5.5,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 53.7,
+    "temp_c": 52.6,
     "temp_status": "ok",
-    "load": 0.61,
-    "mem_pct": 44.3
+    "load": 0.35,
+    "mem_pct": 42.9
   },
   "ups": {
     "charge": 100,
@@ -265,7 +265,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "14h ago",
+    "age": "15h ago",
     "message": "chore: remove ERPNext \u2014 switching to Odoo",
     "sha": "df704f7"
   },
@@ -290,7 +290,7 @@
     },
     {
       "name": "core",
-      "used": "37.0 GB",
+      "used": "37.2 GB",
       "total": "476.7 GB",
       "pct": 7.8,
       "status": "ok",

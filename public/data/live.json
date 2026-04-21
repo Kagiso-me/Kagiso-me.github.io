@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-21T02:05:18Z",
-  "fetched_at": "2026-04-21T02:05:18Z",
+  "updated": "2026-04-21T05:13:24Z",
+  "fetched_at": "2026-04-21T05:13:24Z",
   "cards": [
     {
       "label": "Workloads",
@@ -22,19 +22,19 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "2h 5m ago",
+      "value": "5h 13m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "1h 5m ago",
+      "value": "2h 13m ago",
       "sub": "last cluster backup",
-      "status": "ok"
+      "status": "warn"
     },
     {
       "label": "varys Keys",
-      "value": "1h 5m ago",
+      "value": "4h 13m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 197841,
-    "latency_ms": 4.9,
+    "fw_hits": 199748,
+    "latency_ms": 5.0,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 51.0,
+    "temp_c": 50.5,
     "temp_status": "ok",
-    "load": 1.03,
-    "mem_pct": 44.5
+    "load": 0.52,
+    "mem_pct": 44.1
   },
   "ups": {
     "charge": 100,
@@ -265,7 +265,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "5h ago",
+    "age": "8h ago",
     "message": "fix(erpnext): correct mariadb-subchart value paths and drop unused redis overrid",
     "sha": "475ed4d"
   },
@@ -300,12 +300,13 @@
   ],
   "contribs": {
     "days": {
+      "2026-04-21": 0,
       "2026-04-20": 20,
       "2026-04-19": 61,
       "2026-04-18": 6,
       "2026-04-17": 60
     },
     "total": 147,
-    "active_days": 4
+    "active_days": 5
   }
 }

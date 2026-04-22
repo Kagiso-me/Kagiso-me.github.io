@@ -22,8 +22,6 @@ jobs:
           RADARR_API_KEY:    ${{ secrets.RADARR_API_KEY }}
           SABNZBD_API_KEY:   ${{ secrets.SABNZBD_API_KEY }}
           LIDARR_API_KEY:    ${{ secrets.LIDARR_API_KEY }}
-          NAVIDROME_USER:    ${{ secrets.NAVIDROME_USER }}
-          NAVIDROME_PASS:    ${{ secrets.NAVIDROME_PASS }}
           PLEX_TOKEN:        ${{ secrets.PLEX_TOKEN }}
           MIKROTIK_HOST:     ${{ secrets.MIKROTIK_HOST }}
           MIKROTIK_USER:     ${{ secrets.MIKROTIK_USER }}

@@ -203,13 +203,13 @@ const recentPosts = (await getCollection('blog'))
           <p class="mono" style="color:var(--color-peach);margin-bottom:0.75rem">~/whoami</p>
           <h2 style="font-size:clamp(1.5rem,3vw,2rem);margin:0 0 1.25rem">Hey, I'm Kagiso.</h2>
           <p style="color:var(--color-subtle);line-height:1.8;margin-bottom:1rem">
-            Corporate exec by day, self-taught engineer by night. I'm studying software engineering part-time
-            as a hobby — and this cluster is where the theory meets practice. Storage, media, backups,
-            identity: all running for real, operated with production discipline.
+            Corporate exec by day, self-taught engineer by night. I built this cluster to close the gap
+            between knowing how systems work and actually operating them — storage, media, backups,
+            identity, observability, security: all running for real, with production discipline.
           </p>
           <p style="color:var(--color-subtle);line-height:1.8;margin-bottom:1.75rem">
-            Everything here is real: the data is live, the ops log is the actual changelog,
-            and the architecture decisions document real trade-offs I've made. No demos, no staging.
+            Everything here is real. The data is live, the ops log is the actual changelog,
+            the ADRs document decisions I've genuinely wrestled with. No demos, no staging, no hand-waving.
           </p>
           <div class="about-links">
             <a href="https://github.com/Kagiso-me" target="_blank" rel="noopener" class="about-link">
@@ -248,20 +248,23 @@ const recentPosts = (await getCollection('blog'))
           <div class="hw-label mono">Hardware</div>
           <div class="hw-list">
             {[
-              { icon: '▣', name: '3× Lenovo ThinkCentre M93p', sub: 'k3s control-plane nodes - Tywin, Jaime, Tyrion',              specs: 'Intel Core i5-4570T @ 3.20GHz · 16GB DDR3 · 256GB SSD (each)' },
-              { icon: '▣', name: 'Intel NUC',                   sub: 'Docker host - Bronn',                          specs: 'Intel Core i3-7100U @ 2.40GHz · 32GB DDR4 · 256GB NVMe' },
-              { icon: '▣', name: 'Intel NUC',                   sub: 'Central control node (infrastructure-wide) - Varys',                          specs: 'Intel Core i3-5010U @ 2.10GHz · 16GB DDR4 · 256GB NVMe' },              
-              { icon: '▣', name: 'HP MicroServer Gen8',         sub: 'TrueNAS · primary & archive storage - Ned',  specs: 'Xeon E3-1260L @ 2.40GHz · 16GB ECC RAM · LSI 9207-8i HBA · 1×8TB SAS + 2×4TB SAS (mirror) + 2×480GB SSD (mirror) + 1×128GB SSD (OS)' },
-              { icon: '◈', name: 'RPi 3B+ (bran)',              sub: 'automation runner & CI - Bran',               specs: 'BCM2837B0, Cortex-A53 64-bit SoC running @ 1.4GHz · 1GB LPDDR2 SDRAM · 32GB microSD' },
-              { icon: '◉', name: 'APC UPS',                     sub: '390W · 1h 55m runtime',               specs: 'APC Back-UPS Pro 650VA · 390W · USB monitoring' },
+              { icon: '▣', name: '3× Lenovo ThinkCentre M93p', sub: 'k3s control-plane — Tywin, Jaime, Tyrion', specs: 'Intel Core i5-4570T @ 3.20GHz · 16GB DDR3 · 256GB SSD (each)' },
+              { icon: '▣', name: 'Intel NUC',                   sub: 'Docker host — Bronn',                     specs: 'Intel Core i3-7100U @ 2.40GHz · 32GB DDR4 · 256GB NVMe' },
+              { icon: '▣', name: 'Intel NUC',                   sub: 'Control node — Varys',                    specs: 'Intel Core i3-5010U @ 2.10GHz · 16GB DDR4 · 256GB NVMe' },
+              { icon: '▣', name: 'HP MicroServer Gen8',         sub: 'TrueNAS storage — Ned',                   specs: 'Xeon E3-1260L · 16GB ECC · LSI 9207-8i HBA · 1×8TB + 2×4TB SAS mirror + 2×480GB SSD mirror' },
+              { icon: '◈', name: 'RPi 3B+',                     sub: 'CI runner — Bran',                        specs: 'BCM2837B0 Cortex-A53 @ 1.4GHz · 1GB LPDDR2 · 32GB microSD' },
+              { icon: '◉', name: 'APC Back-UPS Pro 650VA',      sub: 'UPS — 390W · ~2h runtime',               specs: 'USB monitoring via NUT · alerts via Prometheus Alertmanager' },
             ].map(h => (
-              <div class="hw-item" data-specs={h.specs}>
+              <div class="hw-item" role="button" tabindex="0" aria-expanded="false">
                 <span class="hw-icon mono">{h.icon}</span>
-                <div>
-                  <div class="hw-name">{h.name}</div>
+                <div class="hw-main">
+                  <div class="hw-name-row">
+                    <div class="hw-name">{h.name}</div>
+                    {h.specs && <span class="hw-chevron mono" aria-hidden="true">›</span>}
+                  </div>
                   <div class="hw-sub mono">{h.sub}</div>
+                  {h.specs && <div class="hw-specs mono">{h.specs}</div>}
                 </div>
-                {h.specs && <div class="hw-specs mono">{h.specs}</div>}
               </div>
             ))}
           </div>
@@ -844,40 +847,46 @@ const recentPosts = (await getCollection('blog'))
     border: 1px solid var(--color-muted);
     border-radius: 10px;
     padding: 0.75rem 1rem;
-    transition: border-color 0.2s, transform 0.2s;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    user-select: none;
   }
 
-  .hw-item {
-    position: relative;
+  .hw-item:hover { border-color: var(--color-mauve); }
+  .hw-item.open  { border-color: var(--color-mauve); }
+
+  .hw-main { flex: 1; min-width: 0; }
+
+  .hw-name-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
   }
 
-  .hw-item:hover {
-    border-color: var(--color-mauve);
-    transform: translateX(3px);
+  .hw-chevron {
+    font-size: 1rem;
+    color: var(--color-subtle);
+    transition: transform 0.2s, color 0.2s;
+    flex-shrink: 0;
+  }
+
+  .hw-item.open .hw-chevron {
+    transform: rotate(90deg);
+    color: var(--color-mauve);
   }
 
   .hw-specs {
     display: none;
-    position: absolute;
-    left: calc(100% + 12px);
-    top: 0;
-    z-index: 10;
-    background: rgba(18, 22, 33, 0.97);
-    border: 1px solid var(--color-mauve);
-    border-radius: 8px;
-    padding: 0.5rem 0.75rem;
-    font-size: 0.68rem;
+    font-size: 0.72rem;
     color: var(--color-subtle);
-    line-height: 1.5;
-    white-space: normal;
-    width: 240px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
-    pointer-events: none;
+    line-height: 1.6;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--color-muted);
   }
 
-  .hw-item:hover .hw-specs {
-    display: block;
-  }
+  .hw-item.open .hw-specs { display: block; }
 
   .hw-icon {
     color: var(--color-mauve);
@@ -1379,5 +1388,17 @@ const recentPosts = (await getCollection('blog'))
   }
 
   loadContribGraph();
+
+  // ── Hardware expand ──────────────────────────────────────────────────────────
+  document.querySelectorAll<HTMLElement>('.hw-item').forEach(item => {
+    const toggle = () => {
+      const open = item.classList.toggle('open');
+      item.setAttribute('aria-expanded', String(open));
+    };
+    item.addEventListener('click', toggle);
+    item.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+    });
+  });
 
 </script>

@@ -39,6 +39,7 @@ const umamiSiteId = import.meta.env.PUBLIC_UMAMI_SITE_ID;
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
     <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" /></noscript>
 
+    <link rel="preload" as="fetch" href="/data/live.json" crossorigin="anonymous" />
     <link rel="alternate" type="application/rss+xml" title="kagiso.me blog" href="/rss.xml" />
     <title>{title} · kagiso.me</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -56,8 +57,39 @@ const umamiSiteId = import.meta.env.PUBLIC_UMAMI_SITE_ID;
     </main>
     <footer class="site-footer">
       <div class="footer-inner">
-        <span class="mono">Built in public · <a href="https://github.com/Kagiso-me/homelab-infrastructure" target="_blank" rel="noopener">homelab-infrastructure</a></span>
-        <span class="mono" id="footer-time"></span>
+
+        <div class="footer-col">
+          <a href="/" class="footer-brand">
+            <span class="mono" style="color:var(--color-peach)">~/</span><span>kagiso.me</span>
+          </a>
+          <p class="footer-tagline">A real k3s cluster built and operated in public. All data is live.</p>
+          <a href="/rss.xml" class="footer-rss mono" target="_blank" rel="noopener">RSS feed →</a>
+        </div>
+
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <div class="footer-nav-col">
+            <a href="/status"   class="footer-link">Status</a>
+            <a href="/security" class="footer-link">Security</a>
+            <a href="/digest"   class="footer-link">Digest</a>
+          </div>
+          <div class="footer-nav-col">
+            <a href="/blog"      class="footer-link">Blog</a>
+            <a href="/decisions" class="footer-link">Decisions</a>
+            <a href="/projects"  class="footer-link">Roadmap</a>
+          </div>
+        </nav>
+
+        <div class="footer-col footer-col-right">
+          <span class="mono footer-time" id="footer-time"></span>
+          <a href="https://github.com/Kagiso-me/homelab-infrastructure"
+             class="footer-source mono" target="_blank" rel="noopener">
+            homelab-infrastructure ↗
+          </a>
+        </div>
+
+      </div>
+      <div class="footer-bottom">
+        <span class="mono">Built in public · no staging, no demos, no hand-waving.</span>
       </div>
     </footer>
   </body>
@@ -80,17 +112,110 @@ const umamiSiteId = import.meta.env.PUBLIC_UMAMI_SITE_ID;
 
   .site-footer {
     border-top: 1px solid var(--color-muted);
-    padding: 1rem 1.5rem;
+    background: var(--color-mantle);
+    margin-top: 4rem;
   }
 
   .footer-inner {
     max-width: 1200px;
     margin: 0 auto;
+    padding: 3rem 1.5rem 2rem;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .footer-col {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .footer-col-right {
+    align-items: flex-end;
+  }
+
+  .footer-brand {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-heading);
+    text-decoration: none;
+    display: flex;
     align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
+    gap: 0.1rem;
+  }
+
+  .footer-tagline {
+    font-size: 0.82rem;
+    color: var(--color-subtle);
+    line-height: 1.6;
+    margin: 0;
+    max-width: 240px;
+  }
+
+  .footer-rss {
+    font-size: 0.75rem;
+    color: var(--color-peach);
+    transition: color 0.2s;
+  }
+  .footer-rss:hover { color: var(--color-mauve); }
+
+  .footer-nav {
+    display: flex;
+    gap: 2.5rem;
+    padding-top: 0.25rem;
+  }
+
+  .footer-nav-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .footer-link {
+    font-size: 0.82rem;
+    color: var(--color-subtle);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-link:hover { color: var(--color-heading); }
+
+  .footer-time {
+    font-size: 0.88rem;
+    color: var(--color-heading);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .footer-source {
+    font-size: 0.75rem;
+    color: var(--color-subtle);
+    transition: color 0.2s;
+  }
+  .footer-source:hover { color: var(--color-peach); }
+
+  .footer-bottom {
+    border-top: 1px solid var(--color-muted);
+    padding: 1rem 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .footer-bottom .mono {
+    font-size: 0.72rem;
+    color: var(--color-muted);
+    letter-spacing: 0.04em;
+  }
+
+  @media (max-width: 768px) {
+    .footer-inner {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      padding-bottom: 1.5rem;
+    }
+    .footer-col-right { align-items: flex-start; }
+    .footer-nav { gap: 2rem; }
   }
 </style>
 

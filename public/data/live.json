@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-22T13:27:02Z",
-  "fetched_at": "2026-04-22T13:27:02Z",
+  "updated": "2026-04-22T14:56:50Z",
+  "fetched_at": "2026-04-22T14:56:50Z",
   "cards": [
     {
       "label": "Workloads",
@@ -11,7 +11,7 @@
     {
       "label": "Flux",
       "value": "19/19 synced",
-      "sub": "13d",
+      "sub": "14d",
       "status": "ok"
     },
     {
@@ -28,7 +28,7 @@
     },
     {
       "label": "Velero",
-      "value": "26m ago",
+      "value": "1h 56m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
@@ -77,13 +77,13 @@
   "flux": {
     "ready": 19,
     "total": 19,
-    "last_sync": "13d",
+    "last_sync": "14d",
     "status": "ok",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
-        "age": "13d",
+        "age": "14d",
         "ready": true
       },
       {
@@ -95,103 +95,103 @@
       {
         "namespace": "flux-system",
         "name": "platform-authentik",
-        "age": "13d",
+        "age": "14d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
-        "age": "13d",
+        "age": "14d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
-        "age": "13d",
+        "age": "14d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
-        "age": "13d",
+        "age": "14d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
-        "age": "13d",
+        "age": "14d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-namespaces",
-        "age": "13d",
+        "age": "14d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking",
-        "age": "13d",
+        "age": "14d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-config",
-        "age": "13d",
+        "age": "14d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-tls",
-        "age": "13d",
+        "age": "14d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability",
-        "age": "13d",
+        "age": "14d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
-        "age": "13d",
+        "age": "14d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
-        "age": "13d",
+        "age": "14d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security",
-        "age": "13d",
+        "age": "14d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security-issuers",
-        "age": "13d",
+        "age": "14d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-storage",
-        "age": "13d",
+        "age": "14d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade",
-        "age": "13d",
+        "age": "14d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade-plans",
-        "age": "13d",
+        "age": "14d",
         "ready": true
       }
     ]
@@ -210,7 +210,7 @@
     {
       "name": "SABnzbd",
       "tag": "SABnzbd: idle",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "name": "Sonarr",
@@ -220,11 +220,11 @@
     {
       "name": "Radarr",
       "tag": "Radarr: \u2014 movies",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "name": "Lidarr",
-      "tag": "Lidarr: \u2014 artists",
+      "tag": "Lidarr: 36 artists",
       "status": "ok"
     }
   ],
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 7915,
-    "latency_ms": 12.6,
+    "fw_hits": 8813,
+    "latency_ms": 4.5,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 52.6,
+    "temp_c": 53.7,
     "temp_status": "ok",
-    "load": 0.56,
-    "mem_pct": 42.0
+    "load": 0.9,
+    "mem_pct": 41.3
   },
   "ups": {
     "charge": 100,
@@ -265,7 +265,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "45m ago",
+    "age": "2h ago",
     "message": "fix(traefik): migrate ports config to new http.* schema for chart 39.x",
     "sha": "32c58d3"
   },
@@ -290,9 +290,9 @@
     },
     {
       "name": "core",
-      "used": "38.3 GB",
+      "used": "38.4 GB",
       "total": "476.7 GB",
-      "pct": 8.0,
+      "pct": 8.1,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -305,9 +305,9 @@
       "2026-04-20": 20,
       "2026-04-19": 61,
       "2026-04-18": 6,
-      "2026-04-17": 23
+      "2026-04-17": 22
     },
-    "total": 134,
+    "total": 133,
     "active_days": 6
   }
 }

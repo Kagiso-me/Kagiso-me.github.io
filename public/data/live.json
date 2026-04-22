@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-22T16:08:31Z",
-  "fetched_at": "2026-04-22T16:08:31Z",
+  "updated": "2026-04-22T17:31:56Z",
+  "fetched_at": "2026-04-22T17:31:56Z",
   "cards": [
     {
       "label": "Workloads",
@@ -22,21 +22,21 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "\u2014",
+      "value": "5h 32m ago",
       "sub": "last snapshot",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 8m ago",
+      "value": "4h 31m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "\u2014",
+      "value": "16h 32m ago",
       "sub": "age keys \u00b7 varys",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "Backblaze B2",
@@ -215,7 +215,7 @@
     {
       "name": "Sonarr",
       "tag": "Sonarr: \u2014 series",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "name": "Radarr",
@@ -225,14 +225,14 @@
     {
       "name": "Lidarr",
       "tag": "Lidarr: \u2014 artists",
-      "status": "ok"
+      "status": "unknown"
     }
   ],
   "media": [
     {
       "name": "Plex",
       "label": "idle",
-      "status": "ok",
+      "status": "unknown",
       "playing": false
     },
     {
@@ -243,7 +243,7 @@
     }
   ],
   "network": {
-    "fw_hits": 10205,
+    "fw_hits": 11823,
     "latency_ms": 4.8,
     "offenders": [],
     "crowdsec_bans": 0
@@ -251,8 +251,8 @@
   "bran": {
     "temp_c": 52.6,
     "temp_status": "ok",
-    "load": 0.46,
-    "mem_pct": 42.4
+    "load": 0.34,
+    "mem_pct": 43.0
   },
   "ups": {
     "charge": 100,
@@ -265,7 +265,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "3h ago",
+    "age": "4h ago",
     "message": "fix(traefik): migrate ports config to new http.* schema for chart 39.x",
     "sha": "32c58d3"
   },
@@ -290,7 +290,7 @@
     },
     {
       "name": "core",
-      "used": "38.5 GB",
+      "used": "38.4 GB",
       "total": "476.7 GB",
       "pct": 8.1,
       "status": "ok",
@@ -305,9 +305,9 @@
       "2026-04-20": 20,
       "2026-04-19": 61,
       "2026-04-18": 6,
-      "2026-04-17": 21
+      "2026-04-17": 19
     },
-    "total": 132,
+    "total": 130,
     "active_days": 6
   }
 }

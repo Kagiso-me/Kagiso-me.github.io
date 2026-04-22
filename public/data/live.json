@@ -1,10 +1,10 @@
 {
-  "updated": "2026-04-22T10:46:40Z",
-  "fetched_at": "2026-04-22T10:46:40Z",
+  "updated": "2026-04-22T11:57:10Z",
+  "fetched_at": "2026-04-22T11:57:10Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "61/67",
+      "value": "60/67",
       "sub": "pods running",
       "status": "warn"
     },
@@ -16,27 +16,27 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "80h 44m ago",
+      "value": "\u2014",
       "sub": "last backup",
-      "status": "crit"
+      "status": "unknown"
     },
     {
       "label": "etcd Snapshot",
-      "value": "10h 46m ago",
+      "value": "11h 59m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 46m ago",
+      "value": "4h 59m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "9h 46m ago",
+      "value": "\u2014",
       "sub": "age keys \u00b7 varys",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "Backblaze B2",
@@ -89,7 +89,7 @@
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "13d",
+        "age": "14d",
         "ready": true
       },
       {
@@ -210,22 +210,22 @@
     {
       "name": "SABnzbd",
       "tag": "SABnzbd: idle",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: 69 series",
+      "tag": "Sonarr: \u2014 series",
       "status": "ok"
     },
     {
       "name": "Radarr",
-      "tag": "Radarr: 13 movies",
-      "status": "ok"
+      "tag": "Radarr: \u2014 movies",
+      "status": "unknown"
     },
     {
       "name": "Lidarr",
-      "tag": "Lidarr: 36 artists",
-      "status": "ok"
+      "tag": "Lidarr: \u2014 artists",
+      "status": "unknown"
     }
   ],
   "media": [
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 5397,
-    "latency_ms": 4.6,
+    "fw_hits": 6313,
+    "latency_ms": 4.8,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 53.7,
+    "temp_c": 52.1,
     "temp_status": "ok",
-    "load": 0.68,
-    "mem_pct": 44.9
+    "load": 0.11,
+    "mem_pct": 45.7
   },
   "ups": {
     "charge": 100,
@@ -305,9 +305,9 @@
       "2026-04-20": 20,
       "2026-04-19": 61,
       "2026-04-18": 6,
-      "2026-04-17": 39
+      "2026-04-17": 38
     },
-    "total": 132,
+    "total": 131,
     "active_days": 6
   }
 }

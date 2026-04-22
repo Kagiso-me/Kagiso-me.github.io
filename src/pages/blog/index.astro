@@ -21,26 +21,19 @@ const posts = (await getCollection('blog'))
       </p>
     </div>
 
-    <div class="coming-soon-banner fade-up" style="animation-delay:0.05s">
-      <span class="mono" style="color:var(--color-peach)">coming soon</span>
-      <p>Posts are being drafted. First up: why a staging cluster in a homelab gives false confidence — and what we replaced it with.</p>
+    <div class="post-list fade-up" style="animation-delay:0.05s">
+      {posts.map(post => (
+        <a href={`/blog/${post.id}`} class="post-card">
+          <div class="post-meta">
+            <span class="post-date mono">{new Date(post.data.date).toLocaleDateString('en-ZA', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+            {post.data.adr && <span class="post-adr mono">{post.data.adr}</span>}
+          </div>
+          <h2 class="post-title">{post.data.title}</h2>
+          <p class="post-summary">{post.data.summary}</p>
+          <span class="post-read-more mono">read →</span>
+        </a>
+      ))}
     </div>
-
-    {posts.length > 0 && (
-      <div class="post-list fade-up" style="animation-delay:0.1s">
-        {posts.map(post => (
-          <a href={`/blog/${post.id}`} class="post-card">
-            <div class="post-meta">
-              <span class="post-date mono">{new Date(post.data.date).toLocaleDateString('en-ZA', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
-              {post.data.adr && <span class="post-adr mono">{post.data.adr}</span>}
-            </div>
-            <h2 class="post-title">{post.data.title}</h2>
-            <p class="post-summary">{post.data.summary}</p>
-            <span class="post-read-more mono">read →</span>
-          </a>
-        ))}
-      </div>
-    )}
 
   </div>
 

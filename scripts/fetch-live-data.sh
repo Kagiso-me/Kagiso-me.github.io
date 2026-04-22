@@ -324,7 +324,6 @@ RADARR_URL="http://${DOCKER_HOST}:7878"
 SABNZBD_URL="http://${DOCKER_HOST}:8085"
 PLEX_URL="http://${DOCKER_HOST}:32400"
 LIDARR_URL="http://${DOCKER_HOST}:8686"
-NAVIDROME_URL="http://${DOCKER_HOST}:4533"
 UPTIME_KUMA_URL="http://${DOCKER_HOST}:3001"
 VAULTWARDEN_URL="https://vault.local.kagiso.me"
 NEXTCLOUD_URL="https://cloud.kagiso.me"
@@ -462,68 +461,6 @@ build_lidarr() {
   echo "{\"label\":\"Lidarr: ${count} artists\",\"status\":\"${status}\"}"
 }
 
-# ── Navidrome: now playing via Subsonic API ───────────────────────────────────
-# Requires NAVIDROME_USER + NAVIDROME_PASS env vars for Subsonic auth.
-# Falls back to idle if creds not set or endpoint unreachable.
-build_navidrome() {
-  local user="${NAVIDROME_USER:-}" pass="${NAVIDROME_PASS:-}"
-
-  if [[ -n "$user" && -n "$pass" ]]; then
-    # Navidrome v0.50+ requires token auth: token=md5(password+salt), salt=random string
-    # Plain password auth (p=) is unreliable on modern Navidrome — use token mode.
-    local salt token raw
-    salt=$(python3 -c "import random,string; print(''.join(random.choices(string.ascii_lowercase+string.digits,k=6)))")
-    token=$(ND_PASS="$pass" ND_SALT="$salt" python3 -c "
-import hashlib, os
-print(hashlib.md5((os.environ['ND_PASS'] + os.environ['ND_SALT']).encode()).hexdigest())
-")
-    raw=$(curl -sf --max-time 5 \
-      "${NAVIDROME_URL}/rest/getNowPlaying.view?u=${user}&t=${token}&s=${salt}&v=1.16.1&c=homelab&f=json" \
-      2>/dev/null || echo "")
-    if [[ -n "$raw" ]]; then
-      echo "$raw" | ND_URL="${NAVIDROME_URL}" ND_USER="$user" ND_TOKEN="$token" ND_SALT="$salt" python3 -c "
-import sys, json, os
-nd_url   = os.environ['ND_URL']
-nd_user  = os.environ['ND_USER']
-nd_token = os.environ['ND_TOKEN']
-nd_salt  = os.environ['ND_SALT']
-try:
-  resp = json.load(sys.stdin).get('subsonic-response', {})
-  if resp.get('status') != 'ok':
-    print(json.dumps({'label': 'idle', 'status': 'ok', 'playing': False}))
-  else:
-    entries = resp.get('nowPlaying', {}).get('entry', [])
-    count = len(entries)
-    if count == 0:
-      print(json.dumps({'label': 'idle', 'status': 'ok', 'playing': False}))
-    else:
-      e = entries[0]
-      title    = e.get('title', '')
-      album    = e.get('album', '')
-      artist   = e.get('artist', '')
-      cover_id = e.get('coverArt', '')
-      cover_url = (f'{nd_url}/rest/getCoverArt.view'
-                   f'?u={nd_user}&t={nd_token}&s={nd_salt}'
-                   f'&v=1.16.1&c=homelab&id={cover_id}&size=500') if cover_id else ''
-      label = f'{count} playing · {title}' if title else f'{count} playing'
-      print(json.dumps({
-        'label': label, 'status': 'ok', 'playing': True,
-        'title': title, 'album': album, 'artist': artist,
-        'coverUrl': cover_url,
-      }))
-except:
-  print(json.dumps({'label': 'idle', 'status': 'ok', 'playing': False}))
-" 2>/dev/null || echo "{\"label\":\"idle\",\"status\":\"ok\",\"playing\":false}"
-      return
-    fi
-  fi
-  # No creds or unreachable — check if Navidrome is at least up
-  if curl -sf --max-time 5 "${NAVIDROME_URL}/ping" >/dev/null 2>&1; then
-    echo "{\"label\":\"idle\",\"status\":\"ok\",\"playing\":false}"
-  else
-    echo "{\"label\":\"offline\",\"status\":\"crit\",\"playing\":false}"
-  fi
-}
 
 # ── Vaultwarden: online check ─────────────────────────────────────────────────
 build_vaultwarden() {
@@ -599,13 +536,12 @@ build_services() {
     "${UPTIME_KUMA_URL}/api/status-page/heartbeat/homelab" 2>/dev/null || echo "")
 
   # Fetch enriched sub-labels from individual service APIs
-  local sonarr radarr sabnzbd plex lidarr navidrome nextcloud immich
+  local sonarr radarr sabnzbd plex lidarr nextcloud immich
   sonarr=$(build_sonarr)
   radarr=$(build_radarr)
   sabnzbd=$(build_sabnzbd)
   plex=$(build_plex)
   lidarr=$(build_lidarr)
-  navidrome=$(build_navidrome)
   nextcloud=$(build_nextcloud)
   immich=$(build_immich)
 
@@ -618,12 +554,11 @@ build_services() {
     'sabnzbd':   json.loads(sys.argv[4]),
     'plex':      json.loads(sys.argv[5]),
     'lidarr':    json.loads(sys.argv[6]),
-    'navidrome': json.loads(sys.argv[7]),
-    'nextcloud': json.loads(sys.argv[8]),
-    'immich':    json.loads(sys.argv[9]),
+    'nextcloud': json.loads(sys.argv[7]),
+    'immich':    json.loads(sys.argv[8]),
   }))" \
     "$uk_raw" "$sonarr" "$radarr" "$sabnzbd" "$plex" \
-    "$lidarr" "$navidrome" "$nextcloud" "$immich" > "$tmp_svc"
+    "$lidarr" "$nextcloud" "$immich" > "$tmp_svc"
 
   python3 - "$tmp_svc" <<'PYEOF'
 import json, sys
@@ -637,11 +572,10 @@ radarr    = d['radarr']
 sabnzbd   = d['sabnzbd']
 plex_d    = d['plex']
 lidarr    = d['lidarr']
-navidrome = d['navidrome']
 nextcloud = d['nextcloud']
 immich    = d['immich']
 
-# Ticker services — media/download stack only, no Plex/Navidrome (they get cards)
+# Ticker services — media/download stack only, no Plex (it gets a card)
 # All tags prefixed "Name: value" for readability
 def tag(name, label): return f'{name}: {label}'
 

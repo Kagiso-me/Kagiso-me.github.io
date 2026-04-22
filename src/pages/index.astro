@@ -1,6 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ClusterTerminal from '../components/ClusterTerminal.astro';
+import { getCollection } from 'astro:content';
+
+const recentPosts = (await getCollection('blog'))
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, 3);
 ---
 
 <Layout title="Command Center" description="Living Homelab — built in public by Kagiso.">
@@ -126,6 +131,29 @@ import ClusterTerminal from '../components/ClusterTerminal.astro';
             <span class="stack-name">{t.name}</span>
             <span class="stack-role">{t.role}</span>
           </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Recent Posts ── -->
+  <section class="section fade-up" style="animation-delay: 0.28s">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2 class="section-title">From the Blog</h2>
+        <a href="/blog" class="mono link-subtle">All posts →</a>
+      </div>
+      <div class="blog-grid">
+        {recentPosts.map(post => (
+          <a href={`/blog/${post.id}`} class="blog-card">
+            <div class="blog-card-meta">
+              <span class="mono blog-date">{new Date(post.data.date).toLocaleDateString('en-ZA', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+              {post.data.adr && <span class="mono blog-adr">{post.data.adr}</span>}
+            </div>
+            <div class="blog-card-title">{post.data.title}</div>
+            <div class="blog-card-summary">{post.data.summary}</div>
+            <span class="mono blog-read">read →</span>
+          </a>
         ))}
       </div>
     </div>
@@ -930,6 +958,75 @@ import ClusterTerminal from '../components/ClusterTerminal.astro';
     cursor: default;
   }
   .contrib-legend .contrib-cell:hover { transform: none; }
+
+  /* ── Blog grid ── */
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+
+  .blog-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background: rgba(30, 37, 52, 0.55);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 12px;
+    padding: 1.25rem;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  }
+
+  .blog-card:hover {
+    border-color: var(--color-mauve);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+    color: inherit;
+  }
+
+  .blog-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .blog-date {
+    font-size: 0.72rem;
+    color: var(--color-subtle);
+  }
+
+  .blog-adr {
+    font-size: 0.68rem;
+    color: var(--color-mauve);
+    background: color-mix(in srgb, var(--color-mauve) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-mauve) 25%, transparent);
+    border-radius: 4px;
+    padding: 0.1rem 0.4rem;
+  }
+
+  .blog-card-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-heading);
+    line-height: 1.35;
+  }
+
+  .blog-card-summary {
+    font-size: 0.82rem;
+    color: var(--color-subtle);
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  .blog-read {
+    font-size: 0.72rem;
+    color: var(--color-peach);
+    margin-top: 0.25rem;
+  }
 </style>
 
 <script>

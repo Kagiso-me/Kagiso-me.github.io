@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-21T23:59:13Z",
-  "fetched_at": "2026-04-21T23:59:13Z",
+  "updated": "2026-04-22T03:19:30Z",
+  "fetched_at": "2026-04-22T03:19:30Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "\u2014",
+      "value": "73h 16m ago",
       "sub": "last backup",
-      "status": "unknown"
+      "status": "crit"
     },
     {
       "label": "etcd Snapshot",
-      "value": "11h 59m ago",
+      "value": "3h 19m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "4h 58m ago",
+      "value": "19m ago",
       "sub": "last cluster backup",
-      "status": "ok"
+      "status": "warn"
     },
     {
       "label": "varys Keys",
-      "value": "22h 59m ago",
+      "value": "2h 19m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -204,35 +204,35 @@
     },
     {
       "name": "Nextcloud",
-      "tag": "Nextcloud: 60.9 MB used",
+      "tag": "Nextcloud: online",
       "status": "ok"
     },
     {
       "name": "SABnzbd",
       "tag": "SABnzbd: idle",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: \u2014 series",
-      "status": "unknown"
+      "tag": "Sonarr: 69 series",
+      "status": "ok"
     },
     {
       "name": "Radarr",
-      "tag": "Radarr: \u2014 movies",
-      "status": "unknown"
+      "tag": "Radarr: 13 movies",
+      "status": "ok"
     },
     {
       "name": "Lidarr",
-      "tag": "Lidarr: \u2014 artists",
-      "status": "unknown"
+      "tag": "Lidarr: 36 artists",
+      "status": "ok"
     }
   ],
   "media": [
     {
       "name": "Plex",
       "label": "idle",
-      "status": "unknown",
+      "status": "ok",
       "playing": false
     },
     {
@@ -243,29 +243,29 @@
     }
   ],
   "network": {
-    "fw_hits": 215740,
-    "latency_ms": 5.3,
+    "fw_hits": 376,
+    "latency_ms": 4.6,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 52.1,
+    "temp_c": 52.6,
     "temp_status": "ok",
-    "load": 0.54,
-    "mem_pct": 43.5
+    "load": 0.7,
+    "mem_pct": 42.5
   },
   "ups": {
-    "charge": 100,
-    "runtime_s": 6948,
-    "runtime_str": "1h 55m",
+    "charge": 95,
+    "runtime_s": 6600,
+    "runtime_str": "1h 50m",
     "load_pct": 0,
-    "status": "OL",
+    "status": "OL CHRG",
     "nominal_w": 390,
     "on_battery": false,
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "17h ago",
+    "age": "20h ago",
     "message": "chore: remove ERPNext \u2014 switching to Odoo",
     "sha": "df704f7"
   },
@@ -281,9 +281,9 @@
     },
     {
       "name": "archive",
-      "used": "460.2 GB",
+      "used": "460.5 GB",
       "total": "4.0 TB",
-      "pct": 11.5,
+      "pct": 11.6,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -300,13 +300,14 @@
   ],
   "contribs": {
     "days": {
+      "2026-04-22": 0,
       "2026-04-21": 6,
       "2026-04-20": 20,
       "2026-04-19": 61,
       "2026-04-18": 6,
-      "2026-04-17": 44
+      "2026-04-17": 43
     },
-    "total": 137,
-    "active_days": 5
+    "total": 136,
+    "active_days": 6
   }
 }

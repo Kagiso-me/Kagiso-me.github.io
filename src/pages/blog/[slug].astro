@@ -16,9 +16,12 @@ const { Content } = await render(post);
 const date = new Date(post.data.date).toLocaleDateString('en-ZA', {
   year: 'numeric', month: 'long', day: 'numeric'
 });
+const words = post.body.trim().split(/\s+/).length;
+const readingTime = Math.ceil(words / 200);
+const ogImage = `https://kagiso-me.github.io/og/${post.id}.svg`;
 ---
 
-<Layout title={post.data.title} description={post.data.summary}>
+<Layout title={post.data.title} description={post.data.summary} ogImage={ogImage}>
 
   <div class="post-wrap">
 
@@ -30,6 +33,7 @@ const date = new Date(post.data.date).toLocaleDateString('en-ZA', {
       <div class="post-meta">
         <span class="post-date mono">{date}</span>
         {post.data.adr && <span class="post-adr mono">{post.data.adr}</span>}
+        <span class="post-reading-time mono">{readingTime} min read</span>
       </div>
       <h1>{post.data.title}</h1>
       <p class="post-summary">{post.data.summary}</p>
@@ -87,6 +91,11 @@ const date = new Date(post.data.date).toLocaleDateString('en-ZA', {
     border: 1px solid color-mix(in srgb, var(--color-mauve) 25%, transparent);
     border-radius: 4px;
     padding: 0.1rem 0.45rem;
+  }
+
+  .post-reading-time {
+    font-size: 0.72rem;
+    color: var(--color-subtle);
   }
 
   .post-header h1 {

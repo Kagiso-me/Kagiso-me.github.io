@@ -3,7 +3,11 @@ import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('blog'))
-  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .map(post => ({
+    ...post,
+    readingTime: Math.ceil(post.body.trim().split(/\s+/).length / 200),
+  }));
 ---
 
 <Layout title="Blog" description="Architecture decisions, homelab learnings, and the honest retrospective.">
@@ -27,6 +31,7 @@ const posts = (await getCollection('blog'))
           <div class="post-meta">
             <span class="post-date mono">{new Date(post.data.date).toLocaleDateString('en-ZA', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
             {post.data.adr && <span class="post-adr mono">{post.data.adr}</span>}
+            <span class="post-reading-time mono">{post.readingTime} min read</span>
           </div>
           <h2 class="post-title">{post.data.title}</h2>
           <p class="post-summary">{post.data.summary}</p>
@@ -132,5 +137,10 @@ const posts = (await getCollection('blog'))
     font-size: 0.75rem;
     color: var(--color-peach);
     margin-top: 0.25rem;
+  }
+
+  .post-reading-time {
+    font-size: 0.72rem;
+    color: var(--color-subtle);
   }
 </style>

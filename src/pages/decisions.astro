@@ -2,23 +2,108 @@
 import Layout from '../layouts/Layout.astro';
 
 const adrs = [
-  { id: '001', title: 'k3s over kubeadm',                         slug: 'ADR-001-k3s-over-kubeadm' },
-  { id: '002', title: 'FluxCD over ArgoCD',                       slug: 'ADR-002-flux-over-argocd' },
-  { id: '003', title: 'Traefik over nginx-ingress',               slug: 'ADR-003-traefik-over-nginx-ingress' },
-  { id: '004', title: 'Staging cluster decommissioned',           slug: 'ADR-004-staging-to-pr-validation' },
-  { id: '005', title: 'Self-hosted GitHub Actions runners',       slug: 'ADR-005-self-hosted-runners' },
-  { id: '006', title: 'Prometheus TSDB on local storage',         slug: 'ADR-006-prometheus-local-storage' },
-  { id: '007', title: 'Discord over Slack for alerts',            slug: 'ADR-007-discord-over-slack' },
-  { id: '008', title: 'Central PostgreSQL and Redis',             slug: 'ADR-008-central-databases' },
-  { id: '009', title: 'PR-based validation pipeline',            slug: 'ADR-009-pr-validation-pipeline' },
-  { id: '010', title: 'Public site live data pipeline',           slug: 'ADR-010-site-data-pipeline' },
-  { id: '011', title: 'Pi-hole + Unbound DNS stack',              slug: 'ADR-011-pihole-unbound-dns' },
-  { id: '012', title: 'Automated upgrade strategy',               slug: 'ADR-012-upgrade-strategy' },
-  { id: '013', title: 'SOPS + age encryption',                     slug: 'ADR-013-sops-age-encryption' },
-  { id: '014', title: 'MetalLB in L2 mode',                       slug: 'ADR-014-metallb-l2' },
-  { id: '015', title: 'Velero backup strategy',                   slug: 'ADR-015-velero-backup-strategy' },
-  { id: '016', title: 'TrueNAS SCALE as NFS storage backend',    slug: 'ADR-016-truenas-nfs-storage' },
-  { id: '017', title: 'CrowdSec for threat detection',           slug: 'ADR-017-crowdsec' },
+  {
+    id: '001', slug: 'ADR-001-k3s-over-kubeadm',
+    title: 'k3s over kubeadm',
+    category: 'infra', categoryLabel: 'Infrastructure',
+    decision: 'Lightweight pre-bundled distribution over manual control-plane setup — less operational surface, faster iteration, without sacrificing production capability.',
+  },
+  {
+    id: '002', slug: 'ADR-002-flux-over-argocd',
+    title: 'FluxCD over ArgoCD',
+    category: 'gitops', categoryLabel: 'GitOps',
+    decision: 'Pull-based reconciliation with no UI dependency for core function. Simpler security model; Helm + Kustomize native without extra abstraction layers.',
+  },
+  {
+    id: '003', slug: 'ADR-003-traefik-over-nginx-ingress',
+    title: 'Traefik over nginx-ingress',
+    category: 'network', categoryLabel: 'Networking',
+    decision: 'Native Kubernetes integration with automatic HTTPS via cert-manager and dynamic routing — no reload required when routes change.',
+  },
+  {
+    id: '004', slug: 'ADR-004-staging-to-pr-validation',
+    title: 'Staging cluster decommissioned',
+    category: 'arch', categoryLabel: 'Architecture',
+    decision: 'A staging environment in a homelab gives false confidence. Replaced by PR-level dry-run validation and post-merge health checks. See: blog post.',
+  },
+  {
+    id: '005', slug: 'ADR-005-self-hosted-runners',
+    title: 'Self-hosted GitHub Actions runners',
+    category: 'gitops', categoryLabel: 'GitOps',
+    decision: 'Full control over runner environment, no usage limits, and direct access to internal network — required for cluster validation pipelines.',
+  },
+  {
+    id: '006', slug: 'ADR-006-prometheus-local-storage',
+    title: 'Prometheus TSDB on local storage',
+    category: 'observability', categoryLabel: 'Observability',
+    decision: 'NFS for time-series data causes I/O latency spikes on scrape intervals. Local SSD eliminates the problem entirely at the cost of portability.',
+  },
+  {
+    id: '007', slug: 'ADR-007-discord-over-slack',
+    title: 'Discord over Slack for alerts',
+    category: 'platform', categoryLabel: 'Platform',
+    decision: 'Webhook-native, free tier sufficient, faster mobile push delivery for a solo operator. Slack free tier 90-day history limit is a deal-breaker.',
+  },
+  {
+    id: '008', slug: 'ADR-008-central-databases',
+    title: 'Central PostgreSQL and Redis',
+    category: 'platform', categoryLabel: 'Platform',
+    decision: 'One database stack per cluster instead of per-service instances. Dramatically reduces operational surface — upgrades, backups, and monitoring in one place.',
+  },
+  {
+    id: '009', slug: 'ADR-009-pr-validation-pipeline',
+    title: 'PR-based validation pipeline',
+    category: 'gitops', categoryLabel: 'GitOps',
+    decision: 'Dry-run manifests on every PR; no change reaches the cluster without passing Kubernetes API validation. The cluster is the gatekeeper.',
+  },
+  {
+    id: '010', slug: 'ADR-010-site-data-pipeline',
+    title: 'Public site live data pipeline',
+    category: 'arch', categoryLabel: 'Architecture',
+    decision: 'GitHub Actions writes cluster state to static JSON on a schedule; the site reads it without exposing internal APIs or requiring a backend.',
+  },
+  {
+    id: '011', slug: 'ADR-011-pihole-unbound-dns',
+    title: 'Pi-hole + Unbound DNS stack',
+    category: 'network', categoryLabel: 'Networking',
+    decision: 'Local recursive DNS with no upstream resolver dependency. Gains: ad-blocking, internal hostname resolution, and latency reduction for repeated lookups.',
+  },
+  {
+    id: '012', slug: 'ADR-012-upgrade-strategy',
+    title: 'Automated upgrade strategy',
+    category: 'gitops', categoryLabel: 'GitOps',
+    decision: 'Flux image update policies handle patch-level bumps automatically. Minor version upgrades require manual PR approval — automation with a human gate.',
+  },
+  {
+    id: '013', slug: 'ADR-013-sops-age-encryption',
+    title: 'SOPS + age encryption',
+    category: 'security', categoryLabel: 'Security',
+    decision: 'Secrets encrypted at rest in Git using age keys (simpler than GPG). SOPS handles Kubernetes-native secret management without a secrets operator.',
+  },
+  {
+    id: '014', slug: 'ADR-014-metallb-l2',
+    title: 'MetalLB in L2 mode',
+    category: 'network', categoryLabel: 'Networking',
+    decision: 'Layer 2 ARP-based load balancer for bare-metal — no BGP infrastructure required on MikroTik. Sufficient for the current scale and topology.',
+  },
+  {
+    id: '015', slug: 'ADR-015-velero-backup-strategy',
+    title: 'Velero backup strategy',
+    category: 'storage', categoryLabel: 'Storage',
+    decision: 'Cluster-level backup with TrueNAS as the backend. Snapshots before major changes; weekly full schedule. Recovery tested, not assumed.',
+  },
+  {
+    id: '016', slug: 'ADR-016-truenas-nfs-storage',
+    title: 'TrueNAS SCALE as NFS storage backend',
+    category: 'storage', categoryLabel: 'Storage',
+    decision: 'ZFS-based storage with hardware ECC RAM and an LSI HBA for direct disk access. SCALE app management retired — NFS provisioning only.',
+  },
+  {
+    id: '017', slug: 'ADR-017-crowdsec',
+    title: 'CrowdSec for threat detection',
+    category: 'security', categoryLabel: 'Security',
+    decision: 'Collaborative threat intelligence with local decision-making. Blocks known bad actors across all ingress points using a shared community blocklist.',
+  },
 ];
 
 const REPO = 'https://github.com/Kagiso-me/homelab-infrastructure/blob/main/docs/adr';
@@ -52,7 +137,11 @@ const REPO = 'https://github.com/Kagiso-me/homelab-infrastructure/blob/main/docs
           rel="noopener noreferrer"
         >
           <span class="adr-id mono">ADR-{adr.id}</span>
-          <span class="adr-title">{adr.title}</span>
+          <div class="adr-body">
+            <span class="adr-title">{adr.title}</span>
+            <span class="adr-decision">{adr.decision}</span>
+          </div>
+          <span class={`adr-cat cat-${adr.category}`}>{adr.categoryLabel}</span>
           <span class="adr-arrow">↗</span>
         </a>
       ))}
@@ -97,7 +186,7 @@ const REPO = 'https://github.com/Kagiso-me/homelab-infrastructure/blob/main/docs
     display: flex;
     align-items: center;
     gap: 1.25rem;
-    padding: 1rem 1.25rem;
+    padding: 1.1rem 1.25rem;
     text-decoration: none;
     border-bottom: 1px solid var(--color-muted);
     transition: background 0.15s;
@@ -122,24 +211,68 @@ const REPO = 'https://github.com/Kagiso-me/homelab-infrastructure/blob/main/docs
     min-width: 4.5rem;
     flex-shrink: 0;
     letter-spacing: 0.04em;
+    align-self: flex-start;
+    padding-top: 0.1rem;
+  }
+
+  .adr-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    flex: 1;
+    min-width: 0;
   }
 
   .adr-title {
     font-size: 0.925rem;
     color: var(--color-heading);
-    flex: 1;
     line-height: 1.4;
   }
+
+  .adr-decision {
+    font-size: 0.8rem;
+    color: var(--color-subtle);
+    line-height: 1.5;
+  }
+
+  .adr-cat {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    flex-shrink: 0;
+    white-space: nowrap;
+    align-self: flex-start;
+  }
+
+  .cat-infra        { background: color-mix(in srgb, var(--color-peach) 12%, transparent);    color: var(--color-peach); }
+  .cat-gitops       { background: color-mix(in srgb, var(--color-mauve) 12%, transparent);    color: var(--color-mauve); }
+  .cat-network      { background: color-mix(in srgb, var(--color-sapphire) 12%, transparent); color: var(--color-sapphire); }
+  .cat-observability{ background: color-mix(in srgb, var(--color-gold) 12%, transparent);     color: var(--color-gold); }
+  .cat-platform     { background: color-mix(in srgb, var(--color-subtle) 20%, transparent);   color: var(--color-subtle); }
+  .cat-security     { background: color-mix(in srgb, var(--color-crit) 12%, transparent);     color: var(--color-crit); }
+  .cat-storage      { background: color-mix(in srgb, var(--color-green) 12%, transparent);    color: var(--color-green); }
+  .cat-arch         { background: color-mix(in srgb, var(--color-gold) 12%, transparent);     color: var(--color-gold); }
 
   .adr-arrow {
     font-size: 0.85rem;
     color: var(--color-muted);
     flex-shrink: 0;
+    align-self: flex-start;
+    padding-top: 0.1rem;
     transition: color 0.15s, transform 0.15s;
+  }
+
+  @media (max-width: 600px) {
+    .adr-cat { display: none; }
   }
 
   @media (max-width: 480px) {
     .adr-id { min-width: 3.5rem; }
     .adr-row { gap: 0.75rem; padding: 0.875rem 1rem; }
+    .adr-decision { display: none; }
   }
 </style>

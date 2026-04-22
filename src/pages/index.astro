@@ -14,16 +14,19 @@ import ClusterTerminal from '../components/ClusterTerminal.astro';
     <div class="parallax-grid"      data-speed="0.05" aria-hidden="true"></div>
 
     <div class="hero-inner">
-      <p class="mono hero-eyebrow">~/homelab</p>
+      <p class="mono hero-eyebrow">~/kagiso.me</p>
       <h1>
         <span class="gradient-text">Living Homelab</span>
       </h1>
+      <p class="hero-identity">Corporate exec by day. Self-taught engineer by night.</p>
       <p class="hero-sub">
-        A real homelab, built and operated in public —
-        from bare metal to production discipline.
+        A real k3s cluster built and operated in public — live metrics, honest decisions,
+        and an ops log that documents what actually happened.
       </p>
-      <p class="hero-typewriter mono" aria-live="polite">
-        <span id="typewriter-text"></span><span class="typewriter-cursor">|</span>
+      <p class="hero-status mono">
+        <span class="hero-prompt">$</span>
+        kubectl get nodes
+        <span class="hero-result" id="hero-status-result"># fetching…</span>
       </p>
       <div class="hero-actions">
         <a href="/status" class="btn-primary">View Status</a>
@@ -266,27 +269,26 @@ import ClusterTerminal from '../components/ClusterTerminal.astro';
     line-height: 1.7;
   }
 
-  .hero-typewriter {
-    font-size: 0.9rem;
-    color: var(--color-peach);
+  .hero-identity {
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    font-weight: 600;
+    color: var(--color-heading);
+    margin: 0 0 0.75rem;
+    letter-spacing: -0.01em;
+  }
+
+  .hero-status {
+    font-size: 0.85rem;
     margin: 0 auto 2rem;
-    height: 1.4rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0;
+    gap: 0.5rem;
+    flex-wrap: wrap;
   }
 
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50%       { opacity: 0; }
-  }
-
-  .typewriter-cursor {
-    animation: blink 1s step-end infinite;
-    color: var(--color-peach);
-    margin-left: 1px;
-  }
+  .hero-prompt { color: var(--color-ok); }
+  .hero-result { color: var(--color-peach); }
 
   .hero-actions {
     display: flex;
@@ -1056,6 +1058,15 @@ import ClusterTerminal from '../components/ClusterTerminal.astro';
         (window as any).__termSetData(data);
       }
 
+      // Update hero status line
+      const heroResult = document.getElementById('hero-status-result');
+      if (heroResult && data.nodes) {
+        const ready = data.nodes.filter((n: any) => n.status === 'ok').length;
+        const total = data.nodes.length;
+        const pods = data.nodes.reduce((sum: number, n: any) => sum + (parseInt(n.pods) || 0), 0);
+        heroResult.textContent = `# ${ready}/${total} Ready · ${pods} pods running`;
+      }
+
       const grid = document.getElementById('live-grid');
       if (grid && data.cards) {
         grid.innerHTML = data.cards.map((card: any) => `
@@ -1093,7 +1104,10 @@ import ClusterTerminal from '../components/ClusterTerminal.astro';
           </div>`;
         }).join('');
       }
-    } catch { /* skeletons stay, ticker already showing with static fallback */ }
+    } catch {
+      const heroResult = document.getElementById('hero-status-result');
+      if (heroResult) heroResult.textContent = '# 5 nodes · Ready';
+    }
   }
 
   async function loadDigest() {
@@ -1171,57 +1185,6 @@ import ClusterTerminal from '../components/ClusterTerminal.astro';
   loadDigest();
   loadProject();
 
-  // ── Typewriter ───────────────────────────────────────────────────────────
-  (function initTypewriter() {
-    const el = document.getElementById('typewriter-text')!;
-    if (!el) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      el.textContent = 'software engineer · homelab operator';
-      return;
-    }
-
-    const phrases = [
-      'software engineer',
-      'homelab operator',
-      'k3s cluster admin',
-      'built in public',
-      'from bare metal up',
-    ];
-
-    let phraseIdx = 0;
-    let charIdx   = 0;
-    let deleting  = false;
-    const TYPE_SPEED   = 65;
-    const DELETE_SPEED = 35;
-    const PAUSE_END    = 1800;
-    const PAUSE_START  = 300;
-
-    function tick() {
-      const phrase = phrases[phraseIdx];
-      if (!deleting) {
-        charIdx++;
-        el.textContent = phrase.slice(0, charIdx);
-        if (charIdx === phrase.length) {
-          deleting = true;
-          setTimeout(tick, PAUSE_END);
-          return;
-        }
-        setTimeout(tick, TYPE_SPEED);
-      } else {
-        charIdx--;
-        el.textContent = phrase.slice(0, charIdx);
-        if (charIdx === 0) {
-          deleting = false;
-          phraseIdx = (phraseIdx + 1) % phrases.length;
-          setTimeout(tick, PAUSE_START);
-          return;
-        }
-        setTimeout(tick, DELETE_SPEED);
-      }
-    }
-
-    setTimeout(tick, 800); // small initial delay after page load
-  })();
 
   // ── GitHub contribution graph ────────────────────────────────────────────
   function renderContribGraph(dayCounts: Record<string, number>, graphEl: HTMLElement, totalEl: HTMLElement | null) {

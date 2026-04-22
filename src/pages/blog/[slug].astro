@@ -139,7 +139,8 @@ const date = new Date(post.data.date).toLocaleDateString('en-ZA', {
     font-style: italic;
   }
 
-  .post-body code {
+  /* inline code */
+  .post-body :not(pre) > code {
     background: var(--color-overlay);
     border: 1px solid var(--color-muted);
     border-radius: 4px;
@@ -148,20 +149,22 @@ const date = new Date(post.data.date).toLocaleDateString('en-ZA', {
     color: var(--color-peach);
   }
 
-  .post-body pre {
-    background: var(--color-mantle);
+  /* Shiki highlighted block */
+  .post-body pre.astro-code {
     border: 1px solid var(--color-muted);
     border-radius: 10px;
-    padding: 1.25rem;
+    padding: 1.25rem 1.5rem;
     overflow-x: auto;
-    margin: 0 0 1.25rem;
+    margin: 0 0 1.5rem;
+    font-size: 0.85rem;
+    line-height: 1.65;
   }
 
-  .post-body pre code {
+  .post-body pre.astro-code code {
     background: none;
     border: none;
     padding: 0;
-    font-size: 0.85rem;
-    color: var(--color-text);
+    font-size: inherit;
+    color: inherit;
   }
 </style>

@@ -1,10 +1,10 @@
 {
-  "updated": "2026-04-22T07:25:32Z",
-  "fetched_at": "2026-04-22T07:25:32Z",
+  "updated": "2026-04-22T09:04:46Z",
+  "fetched_at": "2026-04-22T09:04:46Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "60/67",
+      "value": "61/67",
       "sub": "pods running",
       "status": "warn"
     },
@@ -22,13 +22,13 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "\u2014",
+      "value": "9h 6m ago",
       "sub": "last snapshot",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "25m ago",
+      "value": "2h 6m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
@@ -210,7 +210,7 @@
     {
       "name": "SABnzbd",
       "tag": "SABnzbd: idle",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "name": "Sonarr",
@@ -220,7 +220,7 @@
     {
       "name": "Radarr",
       "tag": "Radarr: \u2014 movies",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "name": "Lidarr",
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 3240,
+    "fw_hits": 4399,
     "latency_ms": 4.7,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 52.6,
+    "temp_c": 51.5,
     "temp_status": "ok",
-    "load": 0.12,
-    "mem_pct": 44.4
+    "load": 0.1,
+    "mem_pct": 47.4
   },
   "ups": {
     "charge": 100,
@@ -290,7 +290,7 @@
     },
     {
       "name": "core",
-      "used": "37.5 GB",
+      "used": "37.9 GB",
       "total": "476.7 GB",
       "pct": 7.9,
       "status": "ok",
@@ -305,9 +305,9 @@
       "2026-04-20": 20,
       "2026-04-19": 61,
       "2026-04-18": 6,
-      "2026-04-17": 41
+      "2026-04-17": 40
     },
-    "total": 134,
+    "total": 133,
     "active_days": 6
   }
 }

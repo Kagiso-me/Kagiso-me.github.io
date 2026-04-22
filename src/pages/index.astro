@@ -12,31 +12,37 @@ const recentPosts = (await getCollection('blog'))
 
   <!-- ── Hero ── -->
   <section class="hero fade-up">
-    <!-- Parallax background layers -->
-    <div class="parallax-orb orb-1" data-speed="0.15" aria-hidden="true"></div>
-    <div class="parallax-orb orb-2" data-speed="0.08" aria-hidden="true"></div>
-    <div class="parallax-orb orb-3" data-speed="0.22" aria-hidden="true"></div>
-    <div class="parallax-grid"      data-speed="0.05" aria-hidden="true"></div>
-
+    <div class="hero-grid" aria-hidden="true"></div>
     <div class="hero-inner">
-      <p class="mono hero-eyebrow">~/kagiso.me</p>
-      <h1>
-        <span class="gradient-text">Living Homelab</span>
-      </h1>
-      <p class="hero-identity">Corporate exec by day. Self-taught engineer by night.</p>
-      <p class="hero-sub">
-        A real k3s cluster built and operated in public — live metrics, honest decisions,
-        and an ops log that documents what actually happened.
-      </p>
-      <p class="hero-status mono">
-        <span class="hero-prompt">$</span>
-        kubectl get nodes
-        <span class="hero-result" id="hero-status-result"># fetching…</span>
-      </p>
-      <div class="hero-actions">
-        <a href="/status" class="btn-primary">View Status</a>
-        <a href="/decisions" class="btn-ghost">Architecture Decisions</a>
-        <a href="/blog" class="btn-ghost">Blog</a>
+      <div class="hero-accent" aria-hidden="true"></div>
+      <div class="hero-content">
+        <h1>Living<br>Homelab</h1>
+        <p class="hero-identity">Corporate exec by day. Self-taught engineer by night.</p>
+        <p class="hero-sub">
+          A real k3s cluster built and operated in public — live metrics, honest decisions,
+          and an ops log that documents what actually happened.
+        </p>
+        <div class="hero-stats" id="hero-stats">
+          <div class="hero-stat">
+            <span class="hero-stat-val mono" id="stat-nodes">—</span>
+            <span class="hero-stat-label">nodes ready</span>
+          </div>
+          <div class="hero-stat-div" aria-hidden="true"></div>
+          <div class="hero-stat">
+            <span class="hero-stat-val mono" id="stat-pods">—</span>
+            <span class="hero-stat-label">pods running</span>
+          </div>
+          <div class="hero-stat-div" aria-hidden="true"></div>
+          <div class="hero-stat">
+            <span class="hero-stat-val mono" id="stat-flux">—</span>
+            <span class="hero-stat-label">Flux releases</span>
+          </div>
+        </div>
+        <div class="hero-actions">
+          <a href="/status" class="btn-primary">Live Status</a>
+          <a href="/decisions" class="btn-ghost">Architecture Decisions</a>
+          <a href="/blog" class="btn-ghost">Blog</a>
+        </div>
       </div>
     </div>
   </section>
@@ -268,60 +274,119 @@ const recentPosts = (await getCollection('blog'))
 </Layout>
 
 <style>
+  /* ── Hero ── */
   .hero {
-    padding: 6rem 1.5rem 4rem;
-    text-align: center;
+    padding: 5rem 1.5rem 4rem;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--color-muted);
+  }
+
+  /* Static dot grid — gives ops-room texture without animation cost */
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.045) 1px, transparent 1px);
+    background-size: 28px 28px;
+    pointer-events: none;
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, transparent 100%);
   }
 
   .hero-inner {
-    max-width: 720px;
+    max-width: 1200px;
     margin: 0 auto;
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    position: relative;
   }
 
-  .hero-eyebrow {
-    color: var(--color-peach);
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
+  /* The vertical accent line — the visual signature */
+  .hero-accent {
+    width: 3px;
+    align-self: stretch;
+    background: linear-gradient(to bottom, var(--color-peach), var(--color-mauve) 60%, transparent);
+    border-radius: 3px;
+    flex-shrink: 0;
+    margin-right: 2.5rem;
+    min-height: 200px;
+  }
+
+  .hero-content {
+    flex: 1;
+    min-width: 0;
   }
 
   h1 {
-    font-size: clamp(3rem, 6vw, 5rem);
+    font-size: clamp(3.5rem, 7vw, 6rem);
+    letter-spacing: -0.04em;
+    line-height: 0.95;
     margin: 0 0 1.5rem;
-  }
-
-  .hero-sub {
-    font-size: 1.125rem;
-    color: var(--color-subtle);
-    max-width: 520px;
-    margin: 0 auto 1rem;
-    line-height: 1.7;
+    color: var(--color-heading);
   }
 
   .hero-identity {
-    font-size: clamp(1rem, 2vw, 1.15rem);
+    font-size: clamp(1rem, 2vw, 1.1rem);
     font-weight: 600;
-    color: var(--color-heading);
+    color: var(--color-peach);
     margin: 0 0 0.75rem;
     letter-spacing: -0.01em;
   }
 
-  .hero-status {
-    font-size: 0.85rem;
-    margin: 0 auto 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    flex-wrap: wrap;
+  .hero-sub {
+    font-size: 1rem;
+    color: var(--color-subtle);
+    max-width: 540px;
+    margin: 0 0 2rem;
+    line-height: 1.7;
   }
 
-  .hero-prompt { color: var(--color-ok); }
-  .hero-result { color: var(--color-peach); }
+  /* Live stat strip — three numbers rendered immediately from skeleton, filled by JS */
+  .hero-stats {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 2.25rem;
+    border: 1px solid var(--color-muted);
+    border-radius: 10px;
+    overflow: hidden;
+    width: fit-content;
+  }
+
+  .hero-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--color-surface);
+  }
+
+  .hero-stat-div {
+    width: 1px;
+    align-self: stretch;
+    background: var(--color-muted);
+  }
+
+  .hero-stat-val {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-heading);
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  .hero-stat-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--color-subtle);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
 
   .hero-actions {
     display: flex;
-    gap: 1rem;
-    justify-content: center;
+    gap: 0.75rem;
     flex-wrap: wrap;
   }
 
@@ -401,10 +466,8 @@ const recentPosts = (await getCollection('blog'))
   }
 
   .live-card {
-    background: rgba(30, 37, 52, 0.55);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: var(--color-surface);
+    border: 1px solid var(--color-muted);
     border-radius: 12px;
     padding: 1.25rem;
     min-height: 100px;
@@ -427,10 +490,8 @@ const recentPosts = (await getCollection('blog'))
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    background: rgba(16, 20, 28, 0.6);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: var(--color-mantle);
+    border: 1px solid var(--color-muted);
     border-radius: 12px;
     padding: 1rem 1.5rem;
     margin-top: 1.25rem;
@@ -475,10 +536,8 @@ const recentPosts = (await getCollection('blog'))
   }
 
   .media-card {
-    background: rgba(30, 37, 52, 0.55);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: var(--color-surface);
+    border: 1px solid var(--color-muted);
     border-radius: 14px;
     overflow: hidden;
     transition: border-color 0.2s, box-shadow 0.2s;
@@ -618,7 +677,10 @@ const recentPosts = (await getCollection('blog'))
 
   @media (max-width: 768px) {
     .two-col { grid-template-columns: 1fr; gap: 2rem; }
-    .hero { padding: 4rem 1.5rem 3rem; }
+    .hero { padding: 3.5rem 1.25rem 3rem; }
+    .hero-accent { margin-right: 1.5rem; min-height: 160px; }
+    .hero-stats { flex-wrap: wrap; width: 100%; }
+    .hero-stat { flex: 1; min-width: 80px; }
     .stack-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 0.5rem; }
     .media-grid { grid-template-columns: 1fr; }
     .contrib-grid { gap: 1.5px; }
@@ -627,7 +689,8 @@ const recentPosts = (await getCollection('blog'))
 
   @media (max-width: 480px) {
     .stack-grid { grid-template-columns: repeat(2, 1fr); }
-    .hero-typewriter { font-size: 0.8rem; }
+    .hero-accent { display: none; }
+    .hero-stat-val { font-size: 1.4rem; }
   }
 
   /* ── Stack grid ── */
@@ -641,10 +704,8 @@ const recentPosts = (await getCollection('blog'))
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
-    background: rgba(30, 37, 52, 0.55);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: var(--color-surface);
+    border: 1px solid var(--color-muted);
     border-radius: 10px;
     padding: 0.875rem 1rem;
     transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
@@ -713,51 +774,6 @@ const recentPosts = (await getCollection('blog'))
     100% { background-position: -200% 0; }
   }
 
-  /* ── Parallax hero ── */
-  .hero {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .parallax-orb {
-    position: absolute;
-    border-radius: 50%;
-    pointer-events: none;
-    will-change: transform;
-    filter: blur(80px);
-    opacity: 0.18;
-  }
-
-  .orb-1 {
-    width: 520px; height: 520px;
-    background: radial-gradient(circle, var(--color-peach), transparent 70%);
-    top: -140px; left: -100px;
-  }
-
-  .orb-2 {
-    width: 400px; height: 400px;
-    background: radial-gradient(circle, var(--color-mauve), transparent 70%);
-    top: -60px; right: -80px;
-    opacity: 0.14;
-  }
-
-  .orb-3 {
-    width: 280px; height: 280px;
-    background: radial-gradient(circle, var(--color-sapphire), transparent 70%);
-    bottom: -60px; left: 40%;
-    opacity: 0.1;
-  }
-
-  .parallax-grid {
-    position: absolute;
-    inset: 0;
-    background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
-    background-size: 32px 32px;
-    pointer-events: none;
-    will-change: transform;
-    mask-image: radial-gradient(ellipse 80% 100% at 50% 0%, black, transparent);
-    -webkit-mask-image: radial-gradient(ellipse 80% 100% at 50% 0%, black, transparent);
-  }
 
   /* ── About section ── */
   .about-section {
@@ -824,10 +840,8 @@ const recentPosts = (await getCollection('blog'))
     display: flex;
     align-items: flex-start;
     gap: 0.75rem;
-    background: rgba(30, 37, 52, 0.55);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: var(--color-surface);
+    border: 1px solid var(--color-muted);
     border-radius: 10px;
     padding: 0.75rem 1rem;
     transition: border-color 0.2s, transform 0.2s;
@@ -970,10 +984,8 @@ const recentPosts = (await getCollection('blog'))
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    background: rgba(30, 37, 52, 0.55);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: var(--color-surface);
+    border: 1px solid var(--color-muted);
     border-radius: 12px;
     padding: 1.25rem;
     text-decoration: none;
@@ -1155,13 +1167,19 @@ const recentPosts = (await getCollection('blog'))
         (window as any).__termSetData(data);
       }
 
-      // Update hero status line
-      const heroResult = document.getElementById('hero-status-result');
-      if (heroResult && data.nodes) {
+      // Populate hero stat strip from live data
+      if (data.nodes) {
         const ready = data.nodes.filter((n: any) => n.status === 'ok').length;
         const total = data.nodes.length;
         const pods = data.nodes.reduce((sum: number, n: any) => sum + (parseInt(n.pods) || 0), 0);
-        heroResult.textContent = `# ${ready}/${total} Ready · ${pods} pods running`;
+        const statNodes = document.getElementById('stat-nodes');
+        const statPods  = document.getElementById('stat-pods');
+        if (statNodes) statNodes.textContent = `${ready}/${total}`;
+        if (statPods)  statPods.textContent  = String(pods);
+      }
+      if (data.flux) {
+        const statFlux = document.getElementById('stat-flux');
+        if (statFlux) statFlux.textContent = String(data.flux.ready ?? data.flux.total ?? '—');
       }
 
       const grid = document.getElementById('live-grid');
@@ -1202,8 +1220,7 @@ const recentPosts = (await getCollection('blog'))
         }).join('');
       }
     } catch {
-      const heroResult = document.getElementById('hero-status-result');
-      if (heroResult) heroResult.textContent = '# 5 nodes · Ready';
+      // stat strip stays at em-dash placeholders on failure
     }
   }
 
@@ -1363,26 +1380,4 @@ const recentPosts = (await getCollection('blog'))
 
   loadContribGraph();
 
-  // ── Parallax ─────────────────────────────────────────────────────────────
-  (function initParallax() {
-    const layers = document.querySelectorAll<HTMLElement>('[data-speed]');
-    if (!layers.length) return;
-
-    // Respect reduced-motion
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    let ticking = false;
-    window.addEventListener('scroll', () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        const y = window.scrollY;
-        layers.forEach(el => {
-          const speed = parseFloat(el.dataset.speed ?? '0');
-          el.style.transform = `translateY(${y * speed}px)`;
-        });
-        ticking = false;
-      });
-    }, { passive: true });
-  })();
 </script>

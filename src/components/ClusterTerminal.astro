@@ -262,8 +262,32 @@ const cmds = ['get nodes', 'get pods', 'top', 'uptime', 'whoami', 'help'];
     }
   }
 
-  // Expose setter so index.astro can push live data in
-  (window as any).__termSetData = (data: any) => { termData = data; };
+  // Expose setter so index.astro can push live data in.
+  // Auto-runs `get nodes` on first data load so the terminal is never idle.
+  let autoRanOnce = false;
+  (window as any).__termSetData = (data: any) => {
+    termData = data;
+    if (!autoRanOnce) {
+      autoRanOnce = true;
+      // Simulate typing then run the command — makes it feel live, not scripted
+      const inp = document.getElementById('term-input') as HTMLInputElement;
+      const cmd = 'get nodes';
+      let i = 0;
+      const type = () => {
+        if (i <= cmd.length) {
+          if (inp) inp.value = cmd.slice(0, i);
+          i++;
+          setTimeout(type, 45);
+        } else {
+          setTimeout(() => {
+            if (inp) inp.value = '';
+            runCommand(cmd);
+          }, 180);
+        }
+      };
+      setTimeout(type, 400);
+    }
+  };
 
   const input = document.getElementById('term-input') as HTMLInputElement;
   const history: string[] = [];

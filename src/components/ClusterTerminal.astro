@@ -20,9 +20,10 @@ const cmds = ['get nodes', 'get pods', 'top', 'uptime', 'whoami', 'help'];
       autocorrect="off"
       autocapitalize="off"
       spellcheck="false"
-      placeholder="type a command or press Tab"
+      placeholder=""
       aria-label="terminal input"
     />
+    <span class="term-cursor" id="term-cursor" aria-hidden="true">▌</span>
   </div>
   <div class="term-suggestions">
     <span class="term-hint">try:</span>
@@ -115,6 +116,39 @@ const cmds = ['get nodes', 'get pods', 'top', 'uptime', 'whoami', 'help'];
     caret-color: var(--color-peach);
   }
   .term-input::placeholder { color: #333; }
+
+  /* Blinking block cursor — visible when input is empty and unfocused */
+  .term-cursor {
+    color: var(--color-peach);
+    font-size: 0.9rem;
+    line-height: 1;
+    animation: term-cur-blink 1s step-end infinite;
+    pointer-events: none;
+    flex-shrink: 0;
+  }
+  /* Hide cursor while user is typing (input has value) or input is focused */
+  .term-input:focus ~ .term-cursor,
+  .term-input.has-value ~ .term-cursor {
+    display: none;
+  }
+  @keyframes term-cur-blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+  }
+
+  /* Typing animation states */
+  .term-input.is-typing {
+    caret-color: var(--color-peach);
+    animation: cursor-blink 0.55s step-end infinite;
+  }
+  .term-input.is-submitting {
+    opacity: 0.5;
+    transition: opacity 0.1s;
+  }
+  @keyframes cursor-blink {
+    0%, 100% { caret-color: var(--color-peach); }
+    50%       { caret-color: transparent; }
+  }
 
   .term-suggestions {
     display: flex;
@@ -262,30 +296,107 @@ const cmds = ['get nodes', 'get pods', 'top', 'uptime', 'whoami', 'help'];
     }
   }
 
-  // Expose setter so index.astro can push live data in.
-  // Auto-runs `get nodes` on first data load so the terminal is never idle.
+  // ── Boot sequence + typing animation ────────────────────────────────────
+  const BOOT_LINES = [
+    { text: 'Linux homelab 6.8.0-110-generic #110-Ubuntu SMP PREEMPT_DYNAMIC', cls: 'term-line-muted', delay: 0 },
+    { text: 'k3s v1.31.4+k3s1 · Flux v2.4.0 · 3 nodes', cls: 'term-line-muted', delay: 80 },
+    { text: 'Last login: ' + new Date().toUTCString() + ' from 192.168.8.1', cls: 'term-line-muted', delay: 160 },
+  ];
+
   let autoRanOnce = false;
+  let liveDataReady = false;
+
+  function typeCommand(cmd: string, onDone: () => void) {
+    const inp = document.getElementById('term-input') as HTMLInputElement;
+    if (!inp) { onDone(); return; }
+    inp.value = '';
+    inp.disabled = true;
+    inp.classList.add('is-typing');
+
+    // Natural typing rhythm: slightly varied per character
+    let i = 0;
+
+    function tick() {
+      if (i < cmd.length) {
+        inp.value = cmd.slice(0, i + 1);
+        i++;
+        const delay = 48 + Math.random() * 55;
+        setTimeout(tick, delay);
+      } else {
+        // Pause — looks like the person is reading before pressing Enter
+        setTimeout(() => {
+          inp.classList.remove('is-typing');
+          inp.classList.add('is-submitting');
+          setTimeout(() => {
+            inp.classList.remove('is-submitting');
+            inp.disabled = false;
+            inp.value = '';
+            onDone();
+          }, 120);
+        }, 360);
+      }
+    }
+    // Small pause before starting — feels more human
+    setTimeout(tick, 200);
+  }
+
+  function runBoot() {
+    const body = document.getElementById('term-body');
+    if (!body) return;
+
+    let done = 0;
+    BOOT_LINES.forEach(({ text, cls, delay }) => {
+      setTimeout(() => {
+        body.innerHTML += `<span class="${cls}">${text}</span>\n`;
+        body.scrollTop = body.scrollHeight;
+        done++;
+        if (done === BOOT_LINES.length) {
+          // After boot lines, wait then auto-type the command
+          setTimeout(() => {
+            typeCommand('kubectl get nodes', () => {
+              if (liveDataReady) {
+                runCommand('get nodes');
+              } else {
+                // Show a waiting state — replace once data arrives
+                body.innerHTML += `<span class="term-line-muted">connecting to cluster api…</span>\n`;
+                body.scrollTop = body.scrollHeight;
+              }
+            });
+          }, 400);
+        }
+      }, delay);
+    });
+  }
+
+  // Start boot immediately — no data dependency
+  // Guard against double-fire on Astro view transition re-mounts
+  if (!(window as any).__termBooted) {
+    (window as any).__termBooted = true;
+    if (document.readyState === 'loading') {
+      window.addEventListener('DOMContentLoaded', () => runBoot(), { once: true });
+    } else {
+      runBoot();
+    }
+  }
+
+  // Expose setter so index.astro can push live data in.
   (window as any).__termSetData = (data: any) => {
     termData = data;
+    liveDataReady = true;
     if (!autoRanOnce) {
       autoRanOnce = true;
-      // Simulate typing then run the command — makes it feel live, not scripted
-      const inp = document.getElementById('term-input') as HTMLInputElement;
-      const cmd = 'get nodes';
-      let i = 0;
-      const type = () => {
-        if (i <= cmd.length) {
-          if (inp) inp.value = cmd.slice(0, i);
-          i++;
-          setTimeout(type, 45);
-        } else {
-          setTimeout(() => {
-            if (inp) inp.value = '';
-            runCommand(cmd);
-          }, 180);
+      const body = document.getElementById('term-body');
+      if (body) {
+        // Replace the "connecting…" line if it exists, else just run the command
+        const lines = body.innerHTML;
+        if (lines.includes('connecting to cluster api')) {
+          body.innerHTML = lines.replace(
+            /<span class="term-line-muted">connecting to cluster api…<\/span>\n/,
+            ''
+          );
         }
-      };
-      setTimeout(type, 400);
+      }
+      runCommand('get nodes');
     }
   };
 
@@ -293,12 +404,18 @@ const cmds = ['get nodes', 'get pods', 'top', 'uptime', 'whoami', 'help'];
   const history: string[] = [];
   let histIdx = -1;
 
+  // Keep has-value class in sync so the block cursor hides while typing
+  input?.addEventListener('input', () => {
+    input.classList.toggle('has-value', input.value.length > 0);
+  });
+
   input?.addEventListener('keydown', (e: KeyboardEvent) => {
     if (e.key === 'Enter') {
       const val = input.value;
       if (val.trim()) { history.unshift(val); histIdx = -1; }
       runCommand(val);
       input.value = '';
+      input.classList.remove('has-value');
     }
     if (e.key === 'ArrowUp') {
       e.preventDefault();

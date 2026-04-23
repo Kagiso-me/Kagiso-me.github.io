@@ -63,6 +63,7 @@ const recentPosts = (await getCollection('blog'))
         <span class="mono live-badge">
           <span class="status-dot ok"></span>
           Live
+          <span class="live-updated-label mono" id="live-updated"></span>
         </span>
       </div>
 
@@ -448,7 +449,7 @@ const recentPosts = (await getCollection('blog'))
   }
 
   .section-title {
-    font-size: 1.125rem;
+    font-size: 1.35rem;
     margin: 0;
     padding-left: 0.75rem;
     border-left: 2px solid transparent;
@@ -467,6 +468,11 @@ const recentPosts = (await getCollection('blog'))
     align-items: center;
     gap: 0.4rem;
     color: var(--color-ok);
+  }
+
+  .live-updated-label {
+    color: var(--color-subtle);
+    font-size: 0.68rem;
   }
 
   .live-grid {
@@ -1188,19 +1194,41 @@ const recentPosts = (await getCollection('blog'))
         (window as any).__termSetData(data);
       }
 
-      // Populate hero stat strip from live data
+      // Populate hero stat strip with counting animation
+      function countUp(el: HTMLElement, target: string, duration = 650) {
+        const num = parseInt(target);
+        if (isNaN(num)) { el.textContent = target; return; }
+        const start = performance.now();
+        const tick = (now: number) => {
+          const pct = Math.min((now - start) / duration, 1);
+          const ease = 1 - Math.pow(1 - pct, 3);
+          el.textContent = String(Math.round(ease * num));
+          if (pct < 1) requestAnimationFrame(tick);
+          else el.textContent = target;
+        };
+        requestAnimationFrame(tick);
+      }
+
       if (data.nodes) {
         const ready = data.nodes.filter((n: any) => n.status === 'ok').length;
         const total = data.nodes.length;
         const pods = data.nodes.reduce((sum: number, n: any) => sum + (parseInt(n.pods) || 0), 0);
         const statNodes = document.getElementById('stat-nodes');
         const statPods  = document.getElementById('stat-pods');
-        if (statNodes) statNodes.textContent = `${ready}/${total}`;
-        if (statPods)  statPods.textContent  = String(pods);
+        if (statNodes) countUp(statNodes, `${ready}/${total}`);
+        if (statPods)  countUp(statPods,  String(pods));
       }
       if (data.flux) {
         const statFlux = document.getElementById('stat-flux');
-        if (statFlux) statFlux.textContent = String(data.flux.ready ?? data.flux.total ?? '—');
+        const fluxVal = String(data.flux.ready ?? data.flux.total ?? '—');
+        if (statFlux) countUp(statFlux, fluxVal);
+      }
+
+      // "Updated X min ago" label
+      if (data.updated) {
+        const mins = Math.round((Date.now() - new Date(data.updated).getTime()) / 60000);
+        const badge = document.getElementById('live-updated');
+        if (badge) badge.textContent = `updated ${mins}m ago`;
       }
 
       const grid = document.getElementById('live-grid');

@@ -15,8 +15,8 @@ const recentPosts = (await getCollection('blog'))
     <canvas id="hero-grid" aria-hidden="true"></canvas>
     <div class="hero-inner">
 
-      <!-- Identity block -->
-      <div class="hero-top">
+      <!-- Left: identity + stats -->
+      <div class="hero-left">
         <div class="hero-accent" aria-hidden="true"></div>
         <div class="hero-content">
           <h1><span id="h1-line1"></span><br><span id="h1-line2"></span><span class="h1-cursor" aria-hidden="true">▌</span></h1>
@@ -25,6 +25,22 @@ const recentPosts = (await getCollection('blog'))
             A real k3s cluster built and operated in public — live metrics, honest decisions,
             and an ops log that documents what actually happened.
           </p>
+          <div class="hero-stats" id="hero-stats">
+            <div class="hero-stat">
+              <span class="hero-stat-val mono" id="stat-nodes">—</span>
+              <span class="hero-stat-label">nodes ready</span>
+            </div>
+            <div class="hero-stat-div" aria-hidden="true"></div>
+            <div class="hero-stat">
+              <span class="hero-stat-val mono" id="stat-pods">—</span>
+              <span class="hero-stat-label">pods running</span>
+            </div>
+            <div class="hero-stat-div" aria-hidden="true"></div>
+            <div class="hero-stat">
+              <span class="hero-stat-val mono" id="stat-flux">—</span>
+              <span class="hero-stat-label">Flux releases</span>
+            </div>
+          </div>
           <div class="hero-actions">
             <a href="/status" class="btn-primary">Live Status</a>
             <a href="/decisions" class="btn-ghost">Architecture Decisions</a>
@@ -33,31 +49,13 @@ const recentPosts = (await getCollection('blog'))
         </div>
       </div>
 
-      <!-- Terminal — full width centrepiece -->
-      <div class="hero-term-wrap">
+      <!-- Right: terminal -->
+      <div class="hero-right">
         <div class="hero-term-label">
           <span class="mono">cluster · read-only · live</span>
           <span class="status-dot ok"></span>
         </div>
         <ClusterTerminal />
-      </div>
-
-      <!-- Live stat strip — below terminal -->
-      <div class="hero-stats" id="hero-stats">
-        <div class="hero-stat">
-          <span class="hero-stat-val mono" id="stat-nodes">—</span>
-          <span class="hero-stat-label">nodes ready</span>
-        </div>
-        <div class="hero-stat-div" aria-hidden="true"></div>
-        <div class="hero-stat">
-          <span class="hero-stat-val mono" id="stat-pods">—</span>
-          <span class="hero-stat-label">pods running</span>
-        </div>
-        <div class="hero-stat-div" aria-hidden="true"></div>
-        <div class="hero-stat">
-          <span class="hero-stat-val mono" id="stat-flux">—</span>
-          <span class="hero-stat-label">Flux releases</span>
-        </div>
       </div>
 
     </div>
@@ -311,22 +309,25 @@ const recentPosts = (await getCollection('blog'))
   .hero-inner {
     max-width: 1200px;
     margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 2.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
     position: relative;
   }
 
-  .hero-top {
+  .hero-left {
     display: flex;
     align-items: flex-start;
     gap: 0;
+    padding-bottom: 3rem;
   }
 
-  .hero-term-wrap {
+  .hero-right {
     display: flex;
     flex-direction: column;
     gap: 0.6rem;
+    padding-top: 0.5rem;
   }
 
   .hero-term-label {
@@ -381,6 +382,7 @@ const recentPosts = (await getCollection('blog'))
     display: flex;
     align-items: center;
     gap: 0;
+    margin-bottom: 2.25rem;
     border: 1px solid var(--color-muted);
     border-radius: 10px;
     overflow: hidden;
@@ -627,6 +629,11 @@ const recentPosts = (await getCollection('blog'))
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 3rem;
+  }
+
+  @media (max-width: 900px) {
+    .hero-inner { grid-template-columns: 1fr; gap: 2rem; }
+    .hero-left { padding-bottom: 0; }
   }
 
   @media (max-width: 768px) {

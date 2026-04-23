@@ -626,12 +626,14 @@ const recentPosts = (await getCollection('blog'))
   /* ── Option C: Infinite marquee ── */
   .svc-marquee-wrap {
     position: relative;
-    margin-top: 1.25rem;
-    background: var(--color-surface);
-    border: 1px solid var(--color-muted);
-    border-radius: 14px;
+    margin-top: 1.5rem;
+    background: color-mix(in srgb, var(--color-surface) 80%, var(--color-mantle));
+    border: 1px solid color-mix(in srgb, var(--color-muted) 70%, transparent);
+    border-top: 1px solid color-mix(in srgb, var(--color-peach) 20%, var(--color-muted));
+    border-radius: 16px;
     overflow: hidden;
-    padding: 1.1rem 0;
+    padding: 1.4rem 0;
+    box-shadow: 0 1px 20px color-mix(in srgb, var(--color-crust) 60%, transparent);
   }
 
   /* Fade edges */
@@ -682,36 +684,39 @@ const recentPosts = (await getCollection('blog'))
   .svc-chip {
     display: inline-flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.5rem 1.5rem;
-    border-right: 1px solid var(--color-muted);
+    gap: 0.85rem;
+    padding: 0.65rem 2.75rem;
+    border-right: 1px solid color-mix(in srgb, var(--color-muted) 40%, transparent);
     white-space: nowrap;
     flex-shrink: 0;
     transition: background 0.15s;
     cursor: default;
   }
 
-  .svc-chip:hover { background: var(--color-overlay); }
+  .svc-chip:hover {
+    background: color-mix(in srgb, var(--svc-color, var(--color-ok)) 5%, transparent);
+  }
 
   .svc-chip-dot {
-    width: 7px; height: 7px;
+    width: 8px; height: 8px;
     border-radius: 50%;
     background: var(--svc-color, var(--color-ok));
-    box-shadow: 0 0 5px var(--svc-color, var(--color-ok));
+    box-shadow: 0 0 6px var(--svc-color, var(--color-ok));
     flex-shrink: 0;
     animation: chip-pulse 2.5s ease-in-out infinite;
   }
 
   @keyframes chip-pulse {
-    0%, 100% { box-shadow: 0 0 3px var(--svc-color, var(--color-ok)); }
-    50%       { box-shadow: 0 0 8px var(--svc-color, var(--color-ok)), 0 0 14px var(--svc-color, var(--color-ok)); }
+    0%, 100% { box-shadow: 0 0 3px var(--svc-color, var(--color-ok)); opacity: 0.85; }
+    50%       { box-shadow: 0 0 10px var(--svc-color, var(--color-ok)), 0 0 18px var(--svc-color, var(--color-ok)); opacity: 1; }
   }
 
   .svc-chip-name {
     font-family: var(--font-mono);
-    font-size: 0.8rem;
+    font-size: 0.82rem;
     font-weight: 700;
     color: var(--color-heading);
+    letter-spacing: 0.02em;
   }
 
   .svc-chip-sep {
@@ -729,13 +734,14 @@ const recentPosts = (await getCollection('blog'))
     font-family: var(--font-mono);
     font-size: 0.6rem;
     font-weight: 700;
-    letter-spacing: 0.07em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--svc-color, var(--color-ok));
     background: color-mix(in srgb, var(--svc-color, var(--color-ok)) 12%, transparent);
-    border: 1px solid color-mix(in srgb, var(--svc-color, var(--color-ok)) 30%, transparent);
+    border: 1px solid color-mix(in srgb, var(--svc-color, var(--color-ok)) 35%, transparent);
     border-radius: 4px;
-    padding: 0.1rem 0.45rem;
+    padding: 0.15rem 0.5rem;
+    margin-left: 0.2rem;
   }
 
 

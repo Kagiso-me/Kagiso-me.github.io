@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-23T08:17:24Z",
-  "fetched_at": "2026-04-23T08:17:24Z",
+  "updated": "2026-04-23T10:03:34Z",
+  "fetched_at": "2026-04-23T10:03:34Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,27 +16,27 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "6h 15m ago",
+      "value": "\u2014",
       "sub": "last backup",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "etcd Snapshot",
-      "value": "8h 17m ago",
+      "value": "10h 5m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "1h 16m ago",
+      "value": "3h 5m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "7h 17m ago",
+      "value": "\u2014",
       "sub": "age keys \u00b7 varys",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "Backblaze B2",
@@ -214,17 +214,17 @@
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: 69 series",
-      "status": "ok"
+      "tag": "Sonarr: \u2014 series",
+      "status": "unknown"
     },
     {
       "name": "Radarr",
-      "tag": "Radarr: 13 movies",
-      "status": "ok"
+      "tag": "Radarr: \u2014 movies",
+      "status": "unknown"
     },
     {
       "name": "Lidarr",
-      "tag": "Lidarr: 36 artists",
+      "tag": "Lidarr: \u2014 artists",
       "status": "ok"
     }
   ],
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 24502,
+    "fw_hits": 26113,
     "latency_ms": 4.6,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 51.5,
+    "temp_c": 52.1,
     "temp_status": "ok",
-    "load": 0.68,
-    "mem_pct": 45.3
+    "load": 0.16,
+    "mem_pct": 44.9
   },
   "ups": {
     "charge": 100,
@@ -265,39 +265,11 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "10h ago",
+    "age": "12h ago",
     "message": "chore(deps): update helm release kube-prometheus-stack to v83.4.3",
     "sha": "d393d6f"
   },
-  "storage": [
-    {
-      "name": "tera",
-      "used": "6.0 TB",
-      "total": "7.9 TB",
-      "pct": 76.8,
-      "status": "warn",
-      "pool_status": "ONLINE",
-      "healthy": true
-    },
-    {
-      "name": "archive",
-      "used": "463.1 GB",
-      "total": "4.0 TB",
-      "pct": 11.6,
-      "status": "ok",
-      "pool_status": "ONLINE",
-      "healthy": true
-    },
-    {
-      "name": "core",
-      "used": "39.2 GB",
-      "total": "476.7 GB",
-      "pct": 8.2,
-      "status": "ok",
-      "pool_status": "ONLINE",
-      "healthy": true
-    }
-  ],
+  "storage": [],
   "contribs": {
     "days": {
       "2026-04-23": 0,
@@ -306,9 +278,9 @@
       "2026-04-20": 20,
       "2026-04-19": 61,
       "2026-04-18": 6,
-      "2026-04-17": 4
+      "2026-04-17": 3
     },
-    "total": 120,
+    "total": 119,
     "active_days": 7
   }
 }

@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-23T10:03:34Z",
-  "fetched_at": "2026-04-23T10:03:34Z",
+  "updated": "2026-04-23T11:38:16Z",
+  "fetched_at": "2026-04-23T11:38:16Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,27 +16,27 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "\u2014",
+      "value": "9h 36m ago",
       "sub": "last backup",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "10h 5m ago",
+      "value": "11h 38m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 5m ago",
+      "value": "4h 37m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "\u2014",
+      "value": "10h 38m ago",
       "sub": "age keys \u00b7 varys",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "Backblaze B2",
@@ -89,7 +89,7 @@
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "14d",
+        "age": "15d",
         "ready": true
       },
       {
@@ -214,17 +214,17 @@
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: \u2014 series",
-      "status": "unknown"
+      "tag": "Sonarr: 69 series",
+      "status": "ok"
     },
     {
       "name": "Radarr",
-      "tag": "Radarr: \u2014 movies",
-      "status": "unknown"
+      "tag": "Radarr: 13 movies",
+      "status": "ok"
     },
     {
       "name": "Lidarr",
-      "tag": "Lidarr: \u2014 artists",
+      "tag": "Lidarr: 36 artists",
       "status": "ok"
     }
   ],
@@ -243,15 +243,15 @@
     }
   ],
   "network": {
-    "fw_hits": 26113,
-    "latency_ms": 4.6,
+    "fw_hits": 27508,
+    "latency_ms": 4.5,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 52.1,
+    "temp_c": 52.6,
     "temp_status": "ok",
-    "load": 0.16,
+    "load": 0.43,
     "mem_pct": 44.9
   },
   "ups": {
@@ -265,11 +265,39 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "12h ago",
+    "age": "13h ago",
     "message": "chore(deps): update helm release kube-prometheus-stack to v83.4.3",
     "sha": "d393d6f"
   },
-  "storage": [],
+  "storage": [
+    {
+      "name": "tera",
+      "used": "6.0 TB",
+      "total": "7.9 TB",
+      "pct": 76.8,
+      "status": "warn",
+      "pool_status": "ONLINE",
+      "healthy": true
+    },
+    {
+      "name": "archive",
+      "used": "463.1 GB",
+      "total": "4.0 TB",
+      "pct": 11.6,
+      "status": "ok",
+      "pool_status": "ONLINE",
+      "healthy": true
+    },
+    {
+      "name": "core",
+      "used": "39.6 GB",
+      "total": "476.7 GB",
+      "pct": 8.3,
+      "status": "ok",
+      "pool_status": "ONLINE",
+      "healthy": true
+    }
+  ],
   "contribs": {
     "days": {
       "2026-04-23": 0,
@@ -278,9 +306,9 @@
       "2026-04-20": 20,
       "2026-04-19": 61,
       "2026-04-18": 6,
-      "2026-04-17": 3
+      "2026-04-17": 2
     },
-    "total": 119,
+    "total": 118,
     "active_days": 7
   }
 }

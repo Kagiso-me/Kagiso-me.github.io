@@ -13,6 +13,9 @@ const current = Astro.url.pathname;
 ---
 
 <nav class="nav">
+  <!-- Event ticker — cycles through the 3 most recent digest entries -->
+  <div class="nav-ticker" id="nav-ticker" aria-live="polite" aria-label="Latest cluster event"></div>
+
   <div class="nav-inner">
     <a href="/" class="nav-brand">
       <span class="mono" style="color: var(--color-peach)">~/</span>
@@ -138,21 +141,158 @@ const current = Astro.url.pathname;
     .nav-mobile-toggle { display: flex; }
     .nav-mobile.open { display: flex; }
   }
+
+  /* ── Event ticker ── */
+  .nav-ticker {
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, var(--color-mantle) 80%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-muted) 50%, transparent);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .nav-ticker:empty { display: none; }
+
+  .ticker-item {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .ticker-item.visible { opacity: 1; }
+
+  .ticker-type {
+    font-weight: 700;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+  }
+
+  .ticker-type.DEPLOY   { color: var(--color-ok);      background: color-mix(in srgb, var(--color-ok)      12%, transparent); }
+  .ticker-type.FIX      { color: var(--color-peach);   background: color-mix(in srgb, var(--color-peach)   12%, transparent); }
+  .ticker-type.SECURITY { color: var(--color-warn);    background: color-mix(in srgb, var(--color-warn)    12%, transparent); }
+  .ticker-type.INCIDENT { color: var(--color-crit);    background: color-mix(in srgb, var(--color-crit)    12%, transparent); }
+  .ticker-type.CONFIG   { color: var(--color-sapphire);background: color-mix(in srgb, var(--color-sapphire)12%, transparent); }
+  .ticker-type.NETWORK  { color: var(--color-gold);    background: color-mix(in srgb, var(--color-gold)    12%, transparent); }
+  .ticker-type.DECISION { color: var(--color-mauve);   background: color-mix(in srgb, var(--color-mauve)   12%, transparent); }
+  .ticker-type.OPS      { color: var(--color-mauve);   background: color-mix(in srgb, var(--color-mauve)   12%, transparent); }
+
+  .ticker-sep  { color: var(--color-muted); }
+  .ticker-title { color: var(--color-subtle); max-width: 420px; overflow: hidden; text-overflow: ellipsis; }
+  .ticker-date  { color: var(--color-muted); flex-shrink: 0; }
+
+  .ticker-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .ticker-link:hover .ticker-title { color: var(--color-text); }
+
+  @media (max-width: 640px) {
+    .nav-ticker { display: none; }
+  }
 </style>
 
 <script>
-  const toggle = document.getElementById('nav-toggle');
-  const mobile = document.getElementById('nav-mobile');
+  function initNav() {
+    const toggle = document.getElementById('nav-toggle');
+    const mobile = document.getElementById('nav-mobile');
+    if (!toggle || !mobile) return;
 
-  toggle?.addEventListener('click', () => mobile?.classList.toggle('open'));
+    // Remove any stale listeners by cloning
+    const freshToggle = toggle.cloneNode(true) as HTMLElement;
+    toggle.parentNode!.replaceChild(freshToggle, toggle);
 
-  // Close menu on nav link click (for view-transition navigations)
-  mobile?.querySelectorAll('a').forEach(a =>
-    a.addEventListener('click', () => mobile.classList.remove('open'))
-  );
+    freshToggle.addEventListener('click', () => mobile.classList.toggle('open'));
 
-  // Close menu when a view-transition navigation starts
-  document.addEventListener('astro:before-preparation', () =>
-    mobile?.classList.remove('open')
-  );
+    mobile.querySelectorAll('a').forEach(a =>
+      a.addEventListener('click', () => mobile.classList.remove('open'))
+    );
+  }
+
+  // Run on first load and every Astro view-transition navigation
+  document.addEventListener('astro:page-load', initNav);
+  // Also run immediately for non-view-transition environments
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initNav);
+  } else {
+    initNav();
+  }
+
+  document.addEventListener('astro:before-preparation', () => {
+    document.getElementById('nav-mobile')?.classList.remove('open');
+  });
+
+  // ── Event ticker ─────────────────────────────────────────────────────────
+  (async function initTicker() {
+    const ticker = document.getElementById('nav-ticker');
+    if (!ticker) return;
+
+    let entries: any[] = [];
+    try {
+      const res = await fetch('/data/digest.json');
+      if (!res.ok) return;
+      const all = await res.json();
+      // Take the 3 most recent — already sorted newest-first
+      entries = all.slice(0, 3);
+    } catch { return; }
+
+    if (!entries.length) return;
+
+    function relativeDate(dateStr: string) {
+      // dateStr is "YYYY-MM" or "YYYY-MM-DD"
+      const d = new Date(dateStr.length === 7 ? dateStr + '-01' : dateStr);
+      const diffMs = Date.now() - d.getTime();
+      const diffDays = Math.floor(diffMs / 86400000);
+      if (diffDays === 0) return 'today';
+      if (diffDays === 1) return '1d ago';
+      if (diffDays < 30) return `${diffDays}d ago`;
+      const months = Math.floor(diffDays / 30);
+      return `${months}mo ago`;
+    }
+
+    // Build one DOM element per entry, stacked in the ticker
+    const items = entries.map(e => {
+      const el = document.createElement('div');
+      el.className = 'ticker-item';
+
+      const inner = e.hasDetail
+        ? `<a href="/digest/entry?slug=${e.slug}" class="ticker-link">`
+        : `<span class="ticker-link" style="cursor:default">`;
+      const close = e.hasDetail ? `</a>` : `</span>`;
+
+      el.innerHTML = `${inner}
+        <span class="ticker-type ${e.type}">${e.type}</span>
+        <span class="ticker-sep">·</span>
+        <span class="ticker-title">${e.title}</span>
+        <span class="ticker-sep">·</span>
+        <span class="ticker-date">${relativeDate(e.date)}</span>
+      ${close}`;
+
+      ticker.appendChild(el);
+      return el;
+    });
+
+    let current = 0;
+    items[0].classList.add('visible');
+
+    // Cycle every 4 seconds with crossfade
+    setInterval(() => {
+      items[current].classList.remove('visible');
+      current = (current + 1) % items.length;
+      items[current].classList.add('visible');
+    }, 4000);
+  })();
 </script>

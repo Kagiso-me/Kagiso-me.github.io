@@ -12,32 +12,19 @@ const recentPosts = (await getCollection('blog'))
 
   <!-- ── Hero ── -->
   <section class="hero fade-up">
+    <canvas id="hero-grid" aria-hidden="true"></canvas>
     <div class="hero-inner">
-      <div class="hero-left">
+
+      <!-- Identity block -->
+      <div class="hero-top">
         <div class="hero-accent" aria-hidden="true"></div>
         <div class="hero-content">
-          <h1>Living<br>Homelab</h1>
+          <h1><span id="h1-line1"></span><br><span id="h1-line2"></span><span class="h1-cursor" aria-hidden="true">▌</span></h1>
           <p class="hero-identity">Corporate exec by day. Self-taught engineer by night.</p>
           <p class="hero-sub">
             A real k3s cluster built and operated in public — live metrics, honest decisions,
             and an ops log that documents what actually happened.
           </p>
-          <div class="hero-stats" id="hero-stats">
-            <div class="hero-stat">
-              <span class="hero-stat-val mono" id="stat-nodes">—</span>
-              <span class="hero-stat-label">nodes ready</span>
-            </div>
-            <div class="hero-stat-div" aria-hidden="true"></div>
-            <div class="hero-stat">
-              <span class="hero-stat-val mono" id="stat-pods">—</span>
-              <span class="hero-stat-label">pods running</span>
-            </div>
-            <div class="hero-stat-div" aria-hidden="true"></div>
-            <div class="hero-stat">
-              <span class="hero-stat-val mono" id="stat-flux">—</span>
-              <span class="hero-stat-label">Flux releases</span>
-            </div>
-          </div>
           <div class="hero-actions">
             <a href="/status" class="btn-primary">Live Status</a>
             <a href="/decisions" class="btn-ghost">Architecture Decisions</a>
@@ -45,13 +32,34 @@ const recentPosts = (await getCollection('blog'))
           </div>
         </div>
       </div>
-      <div class="hero-right">
+
+      <!-- Terminal — full width centrepiece -->
+      <div class="hero-term-wrap">
         <div class="hero-term-label">
           <span class="mono">cluster · read-only · live</span>
           <span class="status-dot ok"></span>
         </div>
         <ClusterTerminal />
       </div>
+
+      <!-- Live stat strip — below terminal -->
+      <div class="hero-stats" id="hero-stats">
+        <div class="hero-stat">
+          <span class="hero-stat-val mono" id="stat-nodes">—</span>
+          <span class="hero-stat-label">nodes ready</span>
+        </div>
+        <div class="hero-stat-div" aria-hidden="true"></div>
+        <div class="hero-stat">
+          <span class="hero-stat-val mono" id="stat-pods">—</span>
+          <span class="hero-stat-label">pods running</span>
+        </div>
+        <div class="hero-stat-div" aria-hidden="true"></div>
+        <div class="hero-stat">
+          <span class="hero-stat-val mono" id="stat-flux">—</span>
+          <span class="hero-stat-label">Flux releases</span>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -77,19 +85,14 @@ const recentPosts = (await getCollection('blog'))
 
       <!-- Services grid -->
       <div class="svc-grid" id="svc-grid">
-        <div class="svc-item skeleton" style="height:48px;border-radius:8px"></div>
-        <div class="svc-item skeleton" style="height:48px;border-radius:8px"></div>
-        <div class="svc-item skeleton" style="height:48px;border-radius:8px"></div>
-        <div class="svc-item skeleton" style="height:48px;border-radius:8px"></div>
-        <div class="svc-item skeleton" style="height:48px;border-radius:8px"></div>
-        <div class="svc-item skeleton" style="height:48px;border-radius:8px"></div>
+        <div class="svc-card skeleton"></div>
+        <div class="svc-card skeleton"></div>
+        <div class="svc-card skeleton"></div>
+        <div class="svc-card skeleton"></div>
+        <div class="svc-card skeleton"></div>
+        <div class="svc-card skeleton"></div>
       </div>
 
-      <!-- Media player cards -->
-      <div class="media-grid" id="media-grid">
-        <div class="media-card skeleton" style="height:200px"></div>
-        <div class="media-card skeleton" style="height:200px"></div>
-      </div>
     </div>
   </section>
 
@@ -282,28 +285,48 @@ const recentPosts = (await getCollection('blog'))
     border-bottom: 1px solid var(--color-muted);
   }
 
+  #hero-grid {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.55;
+  }
+
+  /* Typewriter cursor */
+  .h1-cursor {
+    display: inline-block;
+    color: var(--color-peach);
+    animation: cur-blink 0.9s step-end infinite;
+    font-weight: 300;
+    margin-left: 0.05em;
+  }
+  .h1-cursor.done { animation: none; opacity: 0; }
+  @keyframes cur-blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+  }
+
   .hero-inner {
     max-width: 1200px;
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-    align-items: start;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
     position: relative;
   }
 
-  .hero-left {
+  .hero-top {
     display: flex;
     align-items: flex-start;
     gap: 0;
-    padding-bottom: 3rem;
   }
 
-  .hero-right {
+  .hero-term-wrap {
     display: flex;
     flex-direction: column;
     gap: 0.6rem;
-    padding-top: 0.5rem;
   }
 
   .hero-term-label {
@@ -358,7 +381,6 @@ const recentPosts = (await getCollection('blog'))
     display: flex;
     align-items: center;
     gap: 0;
-    margin-bottom: 2.25rem;
     border: 1px solid var(--color-muted);
     border-radius: 10px;
     overflow: hidden;
@@ -501,199 +523,110 @@ const recentPosts = (await getCollection('blog'))
     gap: 0.75rem;
   }
 
-  /* ── Services strip ── */
+  /* ── Services grid — NOC panel cards ── */
   .svc-grid {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    background: var(--color-mantle);
-    border: 1px solid var(--color-muted);
-    border-radius: 12px;
-    padding: 1rem 1.5rem;
-    margin-top: 1.25rem;
-    gap: 1rem;
-    overflow-x: auto;
-  }
-
-  .svc-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.2rem;
-    flex-shrink: 0;
-  }
-
-  .svc-header {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-  }
-
-  .svc-name {
-    font-family: var(--font-mono);
-    font-size: 0.825rem;
-    font-weight: 600;
-    color: var(--color-heading);
-  }
-
-  .svc-meta {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    color: var(--color-subtle);
-    white-space: nowrap;
-  }
-
-  /* ── Media player cards ── */
-  .media-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.75rem;
     margin-top: 1.25rem;
   }
 
-  .media-card {
+  @media (max-width: 900px) { .svc-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 480px) { .svc-grid { grid-template-columns: repeat(2, 1fr); } }
+
+  .svc-card {
+    position: relative;
     background: var(--color-surface);
     border: 1px solid var(--color-muted);
     border-radius: 14px;
+    padding: 1.1rem 1rem 0.9rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
     overflow: hidden;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    cursor: default;
+    min-height: 100px;
   }
 
-  .media-card.active {
-    border-color: var(--color-ok);
-    box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-ok) 20%, transparent);
-  }
-
-  .media-card.placeholder {
-    border-color: color-mix(in srgb, var(--color-mauve) 30%, transparent);
-    border-style: dashed;
-    opacity: 0.85;
-  }
-
-  /* Blurred art backdrop */
-  .media-backdrop {
+  /* Coloured top-edge glow — set per card via --svc-color */
+  .svc-card::before {
+    content: '';
     position: absolute;
-    inset: 0;
-    background-size: cover;
-    background-position: center;
-    filter: blur(28px) saturate(1.4);
-    opacity: 0.18;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--svc-color, var(--color-peach));
+    opacity: 0.8;
+    transition: opacity 0.2s;
+  }
+
+  /* Subtle ambient glow behind the card */
+  .svc-card::after {
+    content: '';
+    position: absolute;
+    top: -20px; left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 40px;
+    background: var(--svc-color, var(--color-peach));
+    filter: blur(18px);
+    opacity: 0.08;
     pointer-events: none;
-    transition: opacity 0.4s;
+    transition: opacity 0.3s;
   }
 
-  .media-card.active .media-backdrop { opacity: 0.28; }
-
-  .media-inner {
-    position: relative;
-    padding: 1.25rem;
-    z-index: 1;
+  .svc-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.4);
+    border-color: var(--svc-color, var(--color-peach));
   }
 
-  .media-card-header {
+  .svc-card:hover::before { opacity: 1; }
+  .svc-card:hover::after  { opacity: 0.18; }
+
+  .svc-card-top {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 1rem;
   }
 
-  .media-badge {
+  .svc-initial {
     font-family: var(--font-mono);
-    font-size: 0.72rem;
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--svc-color, var(--color-peach));
+    letter-spacing: -0.03em;
+    line-height: 1;
   }
 
-  .media-badge.playing { color: var(--color-ok); }
-  .media-badge.idle    { color: var(--color-subtle); }
-  .media-badge.soon    { color: var(--color-peach); }
+  /* Status dot with a glow matching --svc-color */
+  .svc-card .status-dot.ok {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--svc-color, var(--color-ok)) 20%, transparent);
+  }
 
-  .media-service-label {
+  .svc-card-name {
     font-family: var(--font-mono);
-    font-size: 0.72rem;
-    color: var(--color-subtle);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-
-  .media-body {
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-  }
-
-  .media-art {
-    width: 80px;
-    height: 80px;
-    border-radius: 8px;
-    object-fit: cover;
-    flex-shrink: 0;
-    background: var(--color-overlay);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
-  }
-
-  .media-art-placeholder {
-    width: 80px;
-    height: 80px;
-    border-radius: 8px;
-    background: var(--color-overlay);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-    flex-shrink: 0;
-    color: var(--color-subtle);
-  }
-
-  .media-text { min-width: 0; flex: 1; }
-
-  .media-title {
+    font-size: 0.78rem;
     font-weight: 700;
-    font-size: 1.05rem;
     color: var(--color-heading);
+    letter-spacing: 0.01em;
+  }
+
+  .svc-card-meta {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--color-subtle);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     line-height: 1.3;
   }
 
-  .media-sub {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--color-subtle);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-top: 0.3rem;
-  }
-
-  .media-next {
-    margin-top: 0.875rem;
-    padding-top: 0.875rem;
-    border-top: 1px solid var(--color-muted);
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    color: var(--color-subtle);
-  }
-
-  .media-next-label {
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--color-peach);
-    margin-bottom: 0.2rem;
-  }
 
   .two-col {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 3rem;
-  }
-
-  @media (max-width: 900px) {
-    .hero-inner { grid-template-columns: 1fr; gap: 2rem; }
-    .hero-left { padding-bottom: 0; }
   }
 
   @media (max-width: 768px) {
@@ -703,7 +636,6 @@ const recentPosts = (await getCollection('blog'))
     .hero-stats { flex-wrap: wrap; width: 100%; }
     .hero-stat { flex: 1; min-width: 80px; }
     .stack-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 0.5rem; }
-    .media-grid { grid-template-columns: 1fr; }
     .contrib-grid { gap: 1.5px; }
     .contrib-cell { width: 8px; height: 8px; }
   }
@@ -1071,18 +1003,22 @@ const recentPosts = (await getCollection('blog'))
 <script>
   // ── Fallback static list — shown immediately before live.json loads
   const STATIC_SERVICES = [
-    { name: 'Immich',    tag: '—',    status: 'unknown' },
-    { name: 'Nextcloud', tag: '—',    status: 'unknown' },
-    { name: 'SABnzbd',   tag: 'idle', status: 'unknown' },
-    { name: 'Sonarr',    tag: '—',    status: 'unknown' },
-    { name: 'Radarr',    tag: '—',    status: 'unknown' },
-    { name: 'Lidarr',    tag: '—',    status: 'unknown' },
+    { name: 'Immich',    tag: '',  status: 'unknown' },
+    { name: 'Nextcloud', tag: '',  status: 'unknown' },
+    { name: 'SABnzbd',   tag: '',  status: 'unknown' },
+    { name: 'Sonarr',    tag: '',  status: 'unknown' },
+    { name: 'Radarr',    tag: '',  status: 'unknown' },
+    { name: 'Lidarr',    tag: '',  status: 'unknown' },
   ];
 
-  const STATIC_MEDIA = [
-    { name: 'Plex',       label: 'idle',        status: 'unknown', playing: false },
-    { name: 'AzuraCast',  label: 'coming soon', status: 'unknown', playing: false, placeholder: true },
-  ];
+  const SVC_COLORS: Record<string, string> = {
+    Immich:    'var(--color-sapphire)',
+    Nextcloud: 'var(--color-mauve)',
+    SABnzbd:   'var(--color-gold)',
+    Sonarr:    'var(--color-peach)',
+    Radarr:    'var(--color-peach)',
+    Lidarr:    'var(--color-ok)',
+  };
 
   function buildSvcGrid(services: {name: string; tag: string; status: string}[]) {
     const grid = document.getElementById('svc-grid');
@@ -1090,100 +1026,23 @@ const recentPosts = (await getCollection('blog'))
     grid.innerHTML = services.map(s => {
       const colonIdx = s.tag.indexOf(':');
       const name = colonIdx > -1 ? s.tag.slice(0, colonIdx).trim() : s.name;
-      const meta = colonIdx > -1 ? s.tag.slice(colonIdx + 1).trim() : s.tag;
+      const meta = colonIdx > -1 ? s.tag.slice(colonIdx + 1).trim() : (s.tag === '—' ? '' : s.tag);
+      const color = SVC_COLORS[s.name] ?? 'var(--color-peach)';
+      const initial = s.name.slice(0, 2).toUpperCase();
       return `
-        <div class="svc-item ${s.status}">
-          <div class="svc-header">
+        <div class="svc-card" style="--svc-color:${color}">
+          <div class="svc-card-top">
+            <span class="svc-initial">${initial}</span>
             <span class="status-dot ${s.status}"></span>
-            <span class="svc-name">${name}</span>
           </div>
-          ${meta ? `<div class="svc-meta">${meta}</div>` : ''}
+          <div class="svc-card-name">${name}</div>
+          ${meta ? `<div class="svc-card-meta">${meta}</div>` : ''}
         </div>`;
     }).join('');
   }
 
-  function buildMedia(items: any[]) {
-    const grid = document.getElementById('media-grid');
-    if (!grid) return;
-
-    const icons: Record<string, string> = { Plex: '▶', AzuraCast: '📻' };
-
-    grid.innerHTML = items.map(m => {
-      const playing    = m.playing === true;
-      const isPlaceholder = m.placeholder === true;
-      const icon       = icons[m.name] ?? '▶';
-      const backdropStyle = playing && m.coverUrl
-        ? `style="background-image:url('${m.coverUrl}')"` : '';
-
-      const artHtml = playing && m.coverUrl
-        ? `<img class="media-art" src="${m.coverUrl}" alt="album art" loading="lazy"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-           <div class="media-art-placeholder" style="display:none">${icon}</div>`
-        : `<div class="media-art-placeholder">${icon}</div>`;
-
-      let textHtml = '';
-      let nextHtml = '';
-
-      if (isPlaceholder) {
-        textHtml = `
-          <div class="media-title" style="color:var(--color-mauve);font-weight:600;letter-spacing:0.01em">Self-hosted radio</div>
-          <div class="media-sub" style="color:var(--color-subtle);margin-top:0.35rem">AzuraCast · coming soon</div>
-          <div style="margin-top:0.6rem;display:flex;align-items:center;gap:0.4rem">
-            <span style="font-family:var(--font-mono);font-size:0.68rem;padding:0.15rem 0.5rem;border-radius:4px;background:color-mix(in srgb,var(--color-mauve) 12%,transparent);color:var(--color-mauve);border:1px solid color-mix(in srgb,var(--color-mauve) 25%,transparent)">in progress</span>
-          </div>`;
-      } else if (m.name === 'AzuraCast') {
-        if (playing) {
-          textHtml = `
-            <div class="media-title">${m.title || m.label}</div>
-            <div class="media-sub">${[m.artist, m.show].filter(Boolean).join(' · ')}</div>`;
-          if (m.next) {
-            nextHtml = `
-              <div class="media-next">
-                <div class="media-next-label">Up next</div>
-                <div>${m.next}</div>
-              </div>`;
-          }
-        } else {
-          textHtml = `<div class="media-title" style="color:var(--color-subtle);font-weight:400">Off air</div>`;
-        }
-      } else {
-        if (playing) {
-          textHtml = `
-            <div class="media-title">${m.title || m.label}</div>
-            <div class="media-sub">${[m.artist, m.album].filter(Boolean).join(' · ')}</div>`;
-        } else {
-          textHtml = `<div class="media-title" style="color:var(--color-subtle);font-weight:400">idle</div>`;
-        }
-      }
-
-      const badgeClass = isPlaceholder ? 'soon' : playing ? 'playing' : 'idle';
-      const badgeText  = isPlaceholder ? 'soon™' : playing ? 'playing' : 'idle';
-
-      return `
-      <div class="media-card${playing ? ' active' : ''}${isPlaceholder ? ' placeholder' : ''}">
-        <div class="media-backdrop" ${backdropStyle}></div>
-        <div class="media-inner">
-          <div class="media-card-header">
-            <span class="media-badge ${badgeClass}">
-              <span class="status-dot ${m.status}"></span>
-              ${badgeText}
-            </span>
-            <span class="media-service-label">${m.name}</span>
-          </div>
-          <div class="media-body">
-            ${artHtml}
-            <div class="media-text">${textHtml}</div>
-          </div>
-          ${nextHtml}
-        </div>
-      </div>`;
-    }).join('');
-  }
-
   async function loadLiveData() {
-    // Render immediately with static fallback
     buildSvcGrid(STATIC_SERVICES);
-    buildMedia(STATIC_MEDIA);
 
     try {
       const res = await fetch('/data/live.json');
@@ -1246,7 +1105,6 @@ const recentPosts = (await getCollection('blog'))
       }
 
       if (data.services?.length) buildSvcGrid(data.services);
-      if (data.media?.length)    buildMedia(data.media);
 
       const strip = document.getElementById('status-strip');
       if (strip && data.nodes) {
@@ -1344,9 +1202,120 @@ const recentPosts = (await getCollection('blog'))
     } catch { /* no data yet */ }
   }
 
-  loadLiveData();
-  loadDigest();
-  loadProject();
+  // Fire on both first load and Astro view-transition navigations
+  function initPage() {
+    loadLiveData();
+    loadDigest();
+    loadProject();
+  }
+
+  document.addEventListener('astro:page-load', initPage);
+  // Fallback for non-view-transition first render
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPage);
+  } else {
+    initPage();
+  }
+
+  // ── Dot-grid background ──────────────────────────────────────────────────
+  (function initDotGrid() {
+    const canvas = document.getElementById('hero-grid') as HTMLCanvasElement;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const DOT_SPACING = 28;
+    const DOT_RADIUS  = 1.2;
+    const BASE_ALPHA  = 0.18;
+    const WAVE_ALPHA  = 0.55;
+    const WAVE_SPEED  = 0.00055;
+    const WAVE_SCALE  = 0.008;
+
+    let W = 0, H = 0, cols = 0, rows = 0;
+    let raf = 0;
+
+    function resize() {
+      const rect = canvas.parentElement!.getBoundingClientRect();
+      W = canvas.width  = rect.width;
+      H = canvas.height = rect.height;
+      cols = Math.ceil(W / DOT_SPACING) + 1;
+      rows = Math.ceil(H / DOT_SPACING) + 1;
+    }
+
+    function draw(ts: number) {
+      ctx.clearRect(0, 0, W, H);
+      const t = ts * WAVE_SPEED;
+
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const x = c * DOT_SPACING;
+          const y = r * DOT_SPACING;
+          // Diagonal wave — sine driven by position + time
+          const wave = Math.sin(t + (x + y) * WAVE_SCALE);
+          const alpha = BASE_ALPHA + ((wave + 1) / 2) * (WAVE_ALPHA - BASE_ALPHA);
+          ctx.beginPath();
+          ctx.arc(x, y, DOT_RADIUS, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(250,179,135,${alpha})`; // --color-peach
+          ctx.fill();
+        }
+      }
+      raf = requestAnimationFrame(draw);
+    }
+
+    // Pause when not visible to save CPU
+    const obs = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) {
+        raf = requestAnimationFrame(draw);
+      } else {
+        cancelAnimationFrame(raf);
+      }
+    }, { threshold: 0 });
+
+    resize();
+    obs.observe(canvas);
+    window.addEventListener('resize', resize, { passive: true });
+
+    // Respect reduced-motion preference
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      // Draw once, static — no animation
+      requestAnimationFrame(ts => draw(ts));
+      return;
+    }
+  })();
+
+  // ── H1 Typewriter ────────────────────────────────────────────────────────
+  (function initTypewriter() {
+    const line1El  = document.getElementById('h1-line1');
+    const line2El  = document.getElementById('h1-line2');
+    const cursorEl = document.querySelector('.h1-cursor') as HTMLElement;
+    if (!line1El || !line2El || !cursorEl) return;
+
+    const LINE1 = 'Living';
+    const LINE2 = 'Homelab';
+
+    function typeInto(el: HTMLElement, text: string, charDelay: number, onDone: () => void) {
+      let i = 0;
+      function tick() {
+        if (i <= text.length) {
+          el.textContent = text.slice(0, i);
+          i++;
+          setTimeout(tick, charDelay + Math.random() * 30);
+        } else {
+          onDone();
+        }
+      }
+      tick();
+    }
+
+    // Type line 1, pause (as if reconsidering), then type line 2, then hide cursor
+    typeInto(line1El, LINE1, 90, () => {
+      setTimeout(() => {
+        typeInto(line2El, LINE2, 80, () => {
+          setTimeout(() => cursorEl.classList.add('done'), 900);
+        });
+      }, 420);
+    });
+  })();
 
 
   // ── GitHub contribution graph ────────────────────────────────────────────

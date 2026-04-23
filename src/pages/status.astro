@@ -206,11 +206,20 @@ import Layout from '../layouts/Layout.astro';
   .node-card.crit    { border-left-color: var(--color-crit); }
   .node-card.unknown { border-left-color: var(--color-muted); }
 
+  /* Ring scroll-in animation */
+  .node-status-ring circle.arc {
+    stroke-dasharray: 0 125.7;
+    transition: stroke-dasharray 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .node-status-ring circle.arc.ring-revealed {
+    /* dasharray set inline by JS once revealed */
+  }
+
   @keyframes ring-pulse {
     0%, 100% { opacity: 1; filter: drop-shadow(0 0 3px var(--color-ok)); }
     50%       { opacity: 0.7; filter: drop-shadow(0 0 8px var(--color-ok)); }
   }
-  .node-card.ok .node-status-ring circle.arc {
+  .node-card.ok .node-status-ring circle.arc.ring-revealed {
     animation: ring-pulse 2.4s ease-in-out infinite;
   }
 
@@ -652,7 +661,7 @@ import Layout from '../layouts/Layout.astro';
             <svg class="node-status-ring" viewBox="0 0 52 52" fill="none">
               <circle cx="26" cy="26" r="20" stroke="rgba(255,255,255,0.06)" stroke-width="4"/>
               <circle class="arc" cx="26" cy="26" r="20" stroke="${color}" stroke-width="4"
-                stroke-dasharray="${dash}" stroke-dashoffset="31.4"
+                stroke-dasharray="0 125.7" data-dash="${dash}" stroke-dashoffset="31.4"
                 stroke-linecap="round"/>
               <text x="26" y="26" text-anchor="middle" dominant-baseline="middle"
                 font-family="JetBrains Mono,monospace" font-size="11" font-weight="700"
@@ -1087,6 +1096,44 @@ import Layout from '../layouts/Layout.astro';
 
   function stopPolling() {
     if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
+  }
+
+  // ── Ring scroll-reveal ───────────────────────────────────────────────────
+  // Watches for node cards injected by loadStatus(), then animates each
+  // ring arc from 0 to its target dasharray when it enters the viewport.
+  function initRingObserver() {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const arc = entry.target as SVGCircleElement;
+        const target = arc.dataset.dash;
+        if (!target) return;
+        // Tiny delay so the CSS transition has a frame to start from zero
+        requestAnimationFrame(() => {
+          arc.style.strokeDasharray = target;
+          arc.classList.add('ring-revealed');
+        });
+        io.unobserve(arc);
+      });
+    }, { threshold: 0.3 });
+
+    document.querySelectorAll('.node-status-ring circle.arc[data-dash]').forEach(arc => {
+      io.observe(arc);
+    });
+  }
+
+  // Re-run after each data load (nodes grid is replaced each poll)
+  const _origLoadStatus = loadStatus;
+  (window as any).__ringObserverPatched = true;
+
+  // Hook into the nodes grid being populated via MutationObserver
+  const nodesGridEl = document.getElementById('nodes-grid');
+  if (nodesGridEl) {
+    const mo = new MutationObserver(() => {
+      // Small delay for innerHTML to fully settle before querying arcs
+      setTimeout(initRingObserver, 60);
+    });
+    mo.observe(nodesGridEl, { childList: true, subtree: false });
   }
 
   document.addEventListener('astro:page-load', () => { startPolling(); loadCVEBanner(); });

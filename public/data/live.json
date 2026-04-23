@@ -1,10 +1,10 @@
 {
-  "updated": "2026-04-22T23:12:39Z",
-  "fetched_at": "2026-04-22T23:12:39Z",
+  "updated": "2026-04-23T00:08:14Z",
+  "fetched_at": "2026-04-23T00:08:14Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "61/67",
+      "value": "60/67",
       "sub": "pods running",
       "status": "warn"
     },
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "93h 10m ago",
+      "value": "94h 5m ago",
       "sub": "last backup",
       "status": "crit"
     },
     {
       "label": "etcd Snapshot",
-      "value": "11h 12m ago",
+      "value": "8m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "4h 12m ago",
+      "value": "5h 7m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "22h 12m ago",
+      "value": "23h 8m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -50,9 +50,9 @@
       "name": "jaime",
       "role": "control-plane",
       "status": "ok",
-      "pods": "14/110",
-      "cpu": "20%",
-      "memory": "5%",
+      "pods": "15/110",
+      "cpu": "21%",
+      "memory": "6%",
       "pressure": []
     },
     {
@@ -68,8 +68,8 @@
       "name": "tywin",
       "role": "control-plane",
       "status": "ok",
-      "pods": "30/110",
-      "cpu": "40%",
+      "pods": "29/110",
+      "cpu": "39%",
       "memory": "11%",
       "pressure": []
     }
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 17868,
-    "latency_ms": 4.6,
+    "fw_hits": 18406,
+    "latency_ms": 6.0,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 52.1,
+    "temp_c": 51.5,
     "temp_status": "ok",
-    "load": 0.82,
-    "mem_pct": 42.1
+    "load": 0.78,
+    "mem_pct": 42.3
   },
   "ups": {
     "charge": 100,
@@ -265,7 +265,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "1h ago",
+    "age": "2h ago",
     "message": "chore(deps): update helm release kube-prometheus-stack to v83.4.3",
     "sha": "d393d6f"
   },
@@ -290,7 +290,7 @@
     },
     {
       "name": "core",
-      "used": "38.4 GB",
+      "used": "38.6 GB",
       "total": "476.7 GB",
       "pct": 8.1,
       "status": "ok",
@@ -305,9 +305,9 @@
       "2026-04-20": 20,
       "2026-04-19": 61,
       "2026-04-18": 6,
-      "2026-04-17": 10
+      "2026-04-17": 9
     },
-    "total": 126,
+    "total": 125,
     "active_days": 6
   }
 }

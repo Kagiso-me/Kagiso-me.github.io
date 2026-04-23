@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-23T06:02:43Z",
-  "fetched_at": "2026-04-23T06:02:43Z",
+  "updated": "2026-04-23T08:17:24Z",
+  "fetched_at": "2026-04-23T08:17:24Z",
   "cards": [
     {
       "label": "Workloads",
@@ -16,25 +16,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "4h 0m ago",
+      "value": "6h 15m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "6h 2m ago",
+      "value": "8h 17m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 2m ago",
+      "value": "1h 16m ago",
       "sub": "last cluster backup",
-      "status": "warn"
+      "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "5h 2m ago",
+      "value": "7h 17m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -243,16 +243,16 @@
     }
   ],
   "network": {
-    "fw_hits": 22235,
-    "latency_ms": 4.5,
+    "fw_hits": 24502,
+    "latency_ms": 4.6,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 51.0,
+    "temp_c": 51.5,
     "temp_status": "ok",
-    "load": 0.77,
-    "mem_pct": 43.9
+    "load": 0.68,
+    "mem_pct": 45.3
   },
   "ups": {
     "charge": 100,
@@ -265,7 +265,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "8h ago",
+    "age": "10h ago",
     "message": "chore(deps): update helm release kube-prometheus-stack to v83.4.3",
     "sha": "d393d6f"
   },
@@ -281,7 +281,7 @@
     },
     {
       "name": "archive",
-      "used": "463.0 GB",
+      "used": "463.1 GB",
       "total": "4.0 TB",
       "pct": 11.6,
       "status": "ok",
@@ -290,9 +290,9 @@
     },
     {
       "name": "core",
-      "used": "38.8 GB",
+      "used": "39.2 GB",
       "total": "476.7 GB",
-      "pct": 8.1,
+      "pct": 8.2,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -306,9 +306,9 @@
       "2026-04-20": 20,
       "2026-04-19": 61,
       "2026-04-18": 6,
-      "2026-04-17": 8
+      "2026-04-17": 4
     },
-    "total": 124,
+    "total": 120,
     "active_days": 7
   }
 }

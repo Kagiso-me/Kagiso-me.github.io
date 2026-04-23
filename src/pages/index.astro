@@ -81,33 +81,12 @@ const recentPosts = (await getCollection('blog'))
         <div class="live-card skeleton"></div>
       </div>
 
-      <!-- Preview toggle -->
-      <div class="svc-preview-toggle">
-        <button class="svc-toggle-btn active" id="btn-option-a" onclick="switchOption('a')">Option A — Monitor Feed</button>
-        <button class="svc-toggle-btn" id="btn-option-b" onclick="switchOption('b')">Option B — Bento Cards</button>
-      </div>
-
-      <!-- Option A: Glowing pill / monitor feed -->
-      <div id="svc-option-a">
-        <div class="svc-feed" id="svc-feed">
-          <div class="svc-feed-row skeleton" style="height:36px;border-radius:8px"></div>
-          <div class="svc-feed-row skeleton" style="height:36px;border-radius:8px"></div>
-          <div class="svc-feed-row skeleton" style="height:36px;border-radius:8px"></div>
-          <div class="svc-feed-row skeleton" style="height:36px;border-radius:8px"></div>
-          <div class="svc-feed-row skeleton" style="height:36px;border-radius:8px"></div>
-          <div class="svc-feed-row skeleton" style="height:36px;border-radius:8px"></div>
-        </div>
-      </div>
-
-      <!-- Option B: Bento mixed-size cards -->
-      <div id="svc-option-b" style="display:none">
-        <div class="svc-bento" id="svc-bento">
-          <div class="svc-bento-card wide skeleton" style="height:110px;border-radius:14px"></div>
-          <div class="svc-bento-card wide skeleton" style="height:110px;border-radius:14px"></div>
-          <div class="svc-bento-card skeleton" style="height:110px;border-radius:14px"></div>
-          <div class="svc-bento-card skeleton" style="height:110px;border-radius:14px"></div>
-          <div class="svc-bento-card skeleton" style="height:110px;border-radius:14px"></div>
-          <div class="svc-bento-card skeleton" style="height:110px;border-radius:14px"></div>
+      <!-- Option C: Infinite marquee -->
+      <div class="svc-marquee-wrap" id="svc-marquee-wrap">
+        <div class="svc-marquee" id="svc-marquee">
+          <div class="svc-marquee-track" id="svc-marquee-track">
+            <!-- populated by JS, duplicated for seamless loop -->
+          </div>
         </div>
       </div>
 
@@ -644,210 +623,119 @@ const recentPosts = (await getCollection('blog'))
     line-height: 1.3;
   }
 
-  /* ── Preview toggle ── */
-  .svc-preview-toggle {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: 1.25rem;
-    margin-bottom: 0.75rem;
-  }
-  .svc-toggle-btn {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    padding: 0.3rem 0.85rem;
-    border-radius: 6px;
-    border: 1px solid var(--color-muted);
-    background: var(--color-surface);
-    color: var(--color-subtle);
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .svc-toggle-btn:hover  { color: var(--color-heading); border-color: var(--color-peach); }
-  .svc-toggle-btn.active { color: var(--color-peach); border-color: var(--color-peach); background: color-mix(in srgb, var(--color-peach) 8%, transparent); }
-
-  /* ── Option A: Monitor feed pills ── */
-  .svc-feed {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-  }
-
-  .svc-feed-row {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 0.6rem 1.1rem;
-    border-radius: 8px;
-    border: 1px solid var(--color-muted);
-    background: var(--color-surface);
-    border-left: 3px solid var(--svc-color, var(--color-peach));
-    transition: background 0.15s, transform 0.15s;
+  /* ── Option C: Infinite marquee ── */
+  .svc-marquee-wrap {
     position: relative;
-    overflow: hidden;
-  }
-
-  .svc-feed-row::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, color-mix(in srgb, var(--svc-color, var(--color-peach)) 6%, transparent), transparent 40%);
-    pointer-events: none;
-  }
-
-  .svc-feed-row:hover {
-    background: var(--color-overlay);
-    transform: translateX(3px);
-  }
-
-  .svc-feed-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--svc-color, var(--color-ok));
-    box-shadow: 0 0 6px var(--svc-color, var(--color-ok));
-    flex-shrink: 0;
-    animation: feed-pulse 2.5s ease-in-out infinite;
-  }
-
-  @keyframes feed-pulse {
-    0%, 100% { opacity: 1; box-shadow: 0 0 4px var(--svc-color, var(--color-ok)); }
-    50%       { opacity: 0.6; box-shadow: 0 0 10px var(--svc-color, var(--color-ok)); }
-  }
-
-  .svc-feed-name {
-    font-family: var(--font-mono);
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: var(--color-heading);
-    min-width: 90px;
-  }
-
-  .svc-feed-sep { color: var(--color-muted); font-size: 0.7rem; }
-
-  .svc-feed-meta {
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    color: var(--color-subtle);
-    flex: 1;
-  }
-
-  .svc-feed-status {
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--svc-color, var(--color-ok));
-    margin-left: auto;
-    padding: 0.15rem 0.5rem;
-    border-radius: 4px;
-    background: color-mix(in srgb, var(--svc-color, var(--color-ok)) 12%, transparent);
-  }
-
-  /* ── Option B: Bento mixed-size cards ── */
-  .svc-bento {
-    display: grid;
-    grid-template-columns: 2fr 2fr 1fr 1fr 1fr 1fr;
-    gap: 0.75rem;
-  }
-
-  @media (max-width: 1000px) { .svc-bento { grid-template-columns: 1fr 1fr 1fr 1fr; } }
-  @media (max-width: 600px)  { .svc-bento { grid-template-columns: 1fr 1fr; } }
-
-  .svc-bento-card {
+    margin-top: 1.25rem;
     background: var(--color-surface);
     border: 1px solid var(--color-muted);
     border-radius: 14px;
-    padding: 1rem 1.1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    position: relative;
     overflow: hidden;
-    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    padding: 1.1rem 0;
   }
 
-  .svc-bento-card::after {
+  /* Fade edges */
+  .svc-marquee-wrap::before,
+  .svc-marquee-wrap::after {
     content: '';
     position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: var(--svc-color, var(--color-peach));
-  }
-
-  /* Ambient glow only on wide cards */
-  .svc-bento-card.wide::before {
-    content: '';
-    position: absolute;
-    bottom: -10px; right: -10px;
-    width: 80px; height: 80px;
-    border-radius: 50%;
-    background: var(--svc-color, var(--color-peach));
-    filter: blur(30px);
-    opacity: 0.12;
+    top: 0; bottom: 0;
+    width: 80px;
+    z-index: 2;
     pointer-events: none;
   }
-
-  .svc-bento-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 28px rgba(0,0,0,0.4);
-    border-color: var(--svc-color, var(--color-peach));
+  .svc-marquee-wrap::before {
+    left: 0;
+    background: linear-gradient(90deg, var(--color-surface), transparent);
+  }
+  .svc-marquee-wrap::after {
+    right: 0;
+    background: linear-gradient(-90deg, var(--color-surface), transparent);
   }
 
-  .svc-bento-top {
+  .svc-marquee {
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .svc-marquee-track {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 0;
+    width: max-content;
+    animation: marquee-scroll 28s linear infinite;
   }
 
-  .svc-bento-name {
+  .svc-marquee-wrap:hover .svc-marquee-track {
+    animation-play-state: paused;
+  }
+
+  @keyframes marquee-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .svc-marquee-track { animation: none; }
+  }
+
+  .svc-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 1.5rem;
+    border-right: 1px solid var(--color-muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: background 0.15s;
+    cursor: default;
+  }
+
+  .svc-chip:hover { background: var(--color-overlay); }
+
+  .svc-chip-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--svc-color, var(--color-ok));
+    box-shadow: 0 0 5px var(--svc-color, var(--color-ok));
+    flex-shrink: 0;
+    animation: chip-pulse 2.5s ease-in-out infinite;
+  }
+
+  @keyframes chip-pulse {
+    0%, 100% { box-shadow: 0 0 3px var(--svc-color, var(--color-ok)); }
+    50%       { box-shadow: 0 0 8px var(--svc-color, var(--color-ok)), 0 0 14px var(--svc-color, var(--color-ok)); }
+  }
+
+  .svc-chip-name {
     font-family: var(--font-mono);
     font-size: 0.8rem;
     font-weight: 700;
     color: var(--color-heading);
   }
 
-  .svc-bento-meta {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    color: var(--color-subtle);
-    line-height: 1.4;
-  }
-
-  /* Usage bar — only shown on wide cards */
-  .svc-bento-bar-wrap {
-    margin-top: auto;
-  }
-
-  .svc-bento-bar-label {
-    font-family: var(--font-mono);
-    font-size: 0.62rem;
+  .svc-chip-sep {
     color: var(--color-muted);
-    margin-bottom: 0.25rem;
+    font-size: 0.7rem;
   }
 
-  .svc-bento-bar {
-    height: 3px;
-    background: var(--color-overlay);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-
-  .svc-bento-bar-fill {
-    height: 100%;
-    border-radius: 2px;
-    background: var(--svc-color, var(--color-ok));
-    transition: width 1s cubic-bezier(0.4,0,0.2,1);
-    width: 0%;
-  }
-
-  .svc-bento-value {
+  .svc-chip-meta {
     font-family: var(--font-mono);
-    font-size: 1.3rem;
-    font-weight: 800;
-    color: var(--svc-color, var(--color-heading));
-    letter-spacing: -0.03em;
-    line-height: 1;
-    margin-top: auto;
+    font-size: 0.75rem;
+    color: var(--color-subtle);
+  }
+
+  .svc-chip-badge {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--svc-color, var(--color-ok));
+    background: color-mix(in srgb, var(--svc-color, var(--color-ok)) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--svc-color, var(--color-ok)) 30%, transparent);
+    border-radius: 4px;
+    padding: 0.1rem 0.45rem;
   }
 
 
@@ -1253,114 +1141,32 @@ const recentPosts = (await getCollection('blog'))
     Lidarr:    'var(--color-ok)',
   };
 
-  // Wide cards in bento get a usage bar — detect by name
-  const WIDE_SVCS = new Set(['Immich', 'Nextcloud']);
-
-  let _lastServices: any[] = [];
-
-  function parseSvc(s: any) {
-    const colonIdx = s.tag.indexOf(':');
-    const name = colonIdx > -1 ? s.tag.slice(0, colonIdx).trim() : s.name;
-    const meta = colonIdx > -1 ? s.tag.slice(colonIdx + 1).trim() : (s.tag === '—' ? '' : s.tag);
-    const color = SVC_COLORS[s.name] ?? 'var(--color-peach)';
-    return { ...s, name, meta, color };
-  }
-
-  // ── Option A: monitor feed pills ──
-  function buildOptionA(services: any[]) {
-    const feed = document.getElementById('svc-feed');
-    if (!feed) return;
-    feed.innerHTML = services.map(s => {
-      const { name, meta, color, status } = parseSvc(s);
-      const statusLabel = status === 'ok' ? 'online' : status === 'warn' ? 'degraded' : status === 'unknown' ? 'checking' : 'offline';
-      return `
-        <div class="svc-feed-row" style="--svc-color:${color}">
-          <span class="svc-feed-dot"></span>
-          <span class="svc-feed-name">${name}</span>
-          <span class="svc-feed-sep">·</span>
-          <span class="svc-feed-meta">${meta || '—'}</span>
-          <span class="svc-feed-status">${statusLabel}</span>
-        </div>`;
-    }).join('');
-  }
-
-  // ── Option B: bento mixed-size cards ──
-  function buildOptionB(services: any[]) {
-    const bento = document.getElementById('svc-bento');
-    if (!bento) return;
-    bento.innerHTML = services.map(s => {
-      const { name, meta, color, status } = parseSvc(s);
-      const isWide = WIDE_SVCS.has(s.name);
-
-      // Extract a highlight value for wide cards (first number found in meta)
-      const numMatch = meta.match(/[\d,.]+/);
-      const bigVal = numMatch ? numMatch[0] : '';
-      const bigUnit = bigVal ? meta.replace(bigVal, '').trim().split('·')[0].trim() : '';
-
-      // Rough usage % for bar (photos→cap 10k, storage→cap 100GB)
-      const pct = s.name === 'Immich'
-        ? Math.min(100, Math.round((parseInt(meta) / 10000) * 100))
-        : s.name === 'Nextcloud'
-        ? Math.min(100, Math.round((parseFloat(meta) / 100) * 100))
-        : 0;
-
-      const barHtml = isWide ? `
-        <div class="svc-bento-bar-wrap">
-          <div class="svc-bento-bar-label">usage</div>
-          <div class="svc-bento-bar">
-            <div class="svc-bento-bar-fill" data-pct="${pct}" style="width:0%"></div>
-          </div>
-        </div>` : '';
-
-      const valueHtml = isWide && bigVal ? `<div class="svc-bento-value">${bigVal}<span style="font-size:0.55em;font-weight:400;color:var(--color-subtle);margin-left:0.2em">${bigUnit}</span></div>` : '';
-
-      return `
-        <div class="svc-bento-card${isWide ? ' wide' : ''}" style="--svc-color:${color}">
-          <div class="svc-bento-top">
-            <span class="svc-bento-name">${name}</span>
-            <span class="status-dot ${status}"></span>
-          </div>
-          ${isWide ? valueHtml : `<div class="svc-bento-meta">${meta || '—'}</div>`}
-          ${barHtml}
-        </div>`;
-    }).join('');
-
-    // Animate bars in after a frame
-    requestAnimationFrame(() => {
-      document.querySelectorAll('.svc-bento-bar-fill').forEach(el => {
-        (el as HTMLElement).style.width = (el as HTMLElement).dataset.pct + '%';
-      });
-    });
-  }
-
+  // ── Option C: marquee builder ──
   function buildSvcGrid(services: any[]) {
-    _lastServices = services;
-    buildOptionA(services);
-    buildOptionB(services);
-  }
+    const track = document.getElementById('svc-marquee-track');
+    if (!track) return;
 
-  (window as any).switchOption = (opt: string) => {
-    const a = document.getElementById('svc-option-a')!;
-    const b = document.getElementById('svc-option-b')!;
-    const btnA = document.getElementById('btn-option-a')!;
-    const btnB = document.getElementById('btn-option-b')!;
-    if (opt === 'a') {
-      a.style.display = ''; b.style.display = 'none';
-      btnA.classList.add('active'); btnB.classList.remove('active');
-    } else {
-      a.style.display = 'none'; b.style.display = '';
-      btnA.classList.remove('active'); btnB.classList.add('active');
-      // Re-trigger bar animations
-      requestAnimationFrame(() => {
-        document.querySelectorAll('.svc-bento-bar-fill').forEach(el => {
-          (el as HTMLElement).style.width = '0%';
-          requestAnimationFrame(() => {
-            (el as HTMLElement).style.width = (el as HTMLElement).dataset.pct + '%';
-          });
-        });
-      });
+    function makeChips(svcs: any[]) {
+      return svcs.map(s => {
+        const colonIdx = s.tag.indexOf(':');
+        const name = colonIdx > -1 ? s.tag.slice(0, colonIdx).trim() : s.name;
+        const meta = colonIdx > -1 ? s.tag.slice(colonIdx + 1).trim() : (s.tag === '—' || s.tag === '' ? '' : s.tag);
+        const color = SVC_COLORS[s.name] ?? 'var(--color-peach)';
+        const badge = s.status === 'ok' ? 'online' : s.status === 'warn' ? 'degraded' : s.status === 'unknown' ? 'checking' : 'offline';
+        return `
+          <div class="svc-chip" style="--svc-color:${color}">
+            <span class="svc-chip-dot"></span>
+            <span class="svc-chip-name">${name}</span>
+            ${meta ? `<span class="svc-chip-sep">·</span><span class="svc-chip-meta">${meta}</span>` : ''}
+            <span class="svc-chip-badge">${badge}</span>
+          </div>`;
+      }).join('');
     }
-  };
+
+    // Duplicate chips for seamless infinite loop
+    const chips = makeChips(services);
+    track.innerHTML = chips + chips;
+  }
 
   async function loadLiveData() {
     buildSvcGrid(STATIC_SERVICES);
@@ -1524,14 +1330,18 @@ const recentPosts = (await getCollection('blog'))
   }
 
   // Fire on both first load and Astro view-transition navigations
+  let _pageInited = false;
   function initPage() {
+    if (_pageInited) return;
+    _pageInited = true;
     loadLiveData();
     loadDigest();
     loadProject();
+    // Reset for next navigation
+    setTimeout(() => { _pageInited = false; }, 500);
   }
 
   document.addEventListener('astro:page-load', initPage);
-  // Fallback for non-view-transition first render
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initPage);
   } else {

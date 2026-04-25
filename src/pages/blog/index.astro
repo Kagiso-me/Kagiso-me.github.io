@@ -17,7 +17,11 @@ const posts = (await getCollection('blog'))
     ...post,
     readingTime: Math.ceil((post.body ?? '').trim().split(/\s+/).length / 200),
     type: postType(post.data.adr, post.data.title),
+    tags: (post.data as any).tags ?? [],
   }));
+
+// Collect all unique tags
+const allTags = [...new Set(posts.flatMap(p => p.tags))].sort();
 ---
 
 <Layout title="Blog" description="Architecture decisions, homelab learnings, and the honest retrospective.">
@@ -35,9 +39,17 @@ const posts = (await getCollection('blog'))
       </p>
     </div>
 
-    <div class="post-list fade-up" style="animation-delay:0.05s">
+    <!-- ── Tag filter bar ── -->
+    <div class="tag-bar fade-up" style="animation-delay:0.04s" id="blog-tag-bar">
+      <button class="tag-btn active" data-tag="all">All</button>
+      {allTags.map(tag => (
+        <button class="tag-btn" data-tag={tag}>{tag}</button>
+      ))}
+    </div>
+
+    <div class="post-list fade-up" style="animation-delay:0.05s" id="post-list">
       {posts.map(post => (
-        <a href={`/blog/${post.id}`} class="post-card">
+        <a href={`/blog/${post.id}`} class="post-card" data-tags={post.tags.join(',')}>
           <div class="post-meta">
             <span class={`post-type-tag mono ${post.type.cls}`}>{post.type.label}</span>
             <span class="post-date mono">{new Date(post.data.date).toLocaleDateString('en-ZA', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
@@ -47,6 +59,9 @@ const posts = (await getCollection('blog'))
           <h2 class="post-title">{post.data.title}</h2>
           <p class="post-summary">{post.data.summary}</p>
           <div class="post-footer">
+            <div class="post-tags">
+              {post.tags.map((t: string) => <span class="post-tag mono">{t}</span>)}
+            </div>
             <span class="post-read-more mono">read →</span>
           </div>
         </a>
@@ -225,4 +240,85 @@ const posts = (await getCollection('blog'))
     font-size: 0.72rem;
     color: var(--color-subtle);
   }
+
+  /* ── Tag filter bar ── */
+  .tag-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .tag-btn {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    padding: 0.3rem 0.8rem;
+    border-radius: 99px;
+    border: 1px solid color-mix(in srgb, var(--color-muted) 60%, transparent);
+    background: transparent;
+    color: var(--color-subtle);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .tag-btn:hover {
+    border-color: var(--color-peach);
+    color: var(--color-peach);
+    background: color-mix(in srgb, var(--color-peach) 8%, transparent);
+  }
+
+  .tag-btn.active {
+    border-color: var(--color-peach);
+    color: var(--color-peach);
+    background: color-mix(in srgb, var(--color-peach) 12%, transparent);
+  }
+
+  /* ── Post inline tags ── */
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    align-items: center;
+  }
+
+  .post-tag {
+    font-size: 0.62rem;
+    color: var(--color-subtle);
+    background: color-mix(in srgb, var(--color-muted) 25%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-muted) 40%, transparent);
+    border-radius: 99px;
+    padding: 0.1rem 0.55rem;
+    letter-spacing: 0.03em;
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  .post-card:hover .post-tag {
+    color: var(--color-text);
+    border-color: color-mix(in srgb, var(--color-mauve) 30%, transparent);
+  }
+
+  .post-card[aria-hidden="true"] { display: none; }
 </style>
+
+<script>
+  function initBlogFilter() {
+    const bar = document.getElementById('blog-tag-bar');
+    if (!bar) return;
+    bar.addEventListener('click', (e) => {
+      const btn = (e.target as Element).closest('.tag-btn') as HTMLElement | null;
+      if (!btn) return;
+      const tag = btn.dataset.tag ?? 'all';
+      bar.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll<HTMLElement>('.post-card').forEach(card => {
+        const tags = card.dataset.tags?.split(',') ?? [];
+        const match = tag === 'all' || tags.includes(tag);
+        card.setAttribute('aria-hidden', match ? 'false' : 'true');
+      });
+    });
+  }
+  initBlogFilter();
+  document.addEventListener('astro:page-load', initBlogFilter);
+</script>

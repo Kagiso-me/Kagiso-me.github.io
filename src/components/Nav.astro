@@ -17,6 +17,7 @@ const current = Astro.url.pathname;
     <a href="/" class="nav-brand">
       <span class="mono" style="color: var(--color-peach)">~/</span>
       <span style="color: var(--color-heading); font-weight: 700;">kagiso.me</span>
+      <span class="nav-heartbeat" id="nav-heartbeat" title="Live cluster data"></span>
     </a>
 
     <ul class="nav-links">
@@ -72,11 +73,40 @@ const current = Astro.url.pathname;
     text-decoration: none;
     display: flex;
     align-items: center;
-    gap: 0.25rem;
+    gap: 0.35rem;
     flex-shrink: 0;
   }
 
   .nav-brand:hover { opacity: 0.8; }
+
+  .nav-heartbeat {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--color-ok);
+    box-shadow: 0 0 5px var(--color-ok);
+    animation: hb-pulse 2.2s ease-in-out infinite;
+    margin-left: 0.2rem;
+    flex-shrink: 0;
+    transition: background 0.4s, box-shadow 0.4s;
+  }
+
+  .nav-heartbeat.stale {
+    background: var(--color-warn);
+    box-shadow: 0 0 5px var(--color-warn);
+    animation: none;
+  }
+
+  .nav-heartbeat.offline {
+    background: var(--color-crit);
+    box-shadow: 0 0 5px var(--color-crit);
+    animation: none;
+  }
+
+  @keyframes hb-pulse {
+    0%, 100% { transform: scale(1);   opacity: 0.9; }
+    50%       { transform: scale(1.4); opacity: 1; box-shadow: 0 0 10px var(--color-ok); }
+  }
 
   .nav-links {
     display: flex;
@@ -231,6 +261,32 @@ const current = Astro.url.pathname;
   document.addEventListener('astro:before-preparation', () => {
     document.getElementById('nav-mobile')?.classList.remove('open');
   });
+
+  // ── Heartbeat indicator — checks live.json freshness ─────────────────────
+  async function checkHeartbeat() {
+    const dot = document.getElementById('nav-heartbeat');
+    if (!dot) return;
+    try {
+      const r = await fetch('/data/live.json', { cache: 'no-store' });
+      if (!r.ok) { dot.className = 'nav-heartbeat offline'; dot.title = 'Cluster data unavailable'; return; }
+      const data = await r.json();
+      const age = Date.now() - new Date(data.updated ?? 0).getTime();
+      const ageMin = Math.round(age / 60000);
+      if (age > 90 * 60 * 1000) {        // > 90 min — stale
+        dot.className = 'nav-heartbeat stale';
+        dot.title = `Data is ${ageMin}m old — may be stale`;
+      } else {
+        dot.className = 'nav-heartbeat';
+        dot.title = `Live · updated ${ageMin}m ago`;
+      }
+    } catch {
+      dot.className = 'nav-heartbeat offline';
+      dot.title = 'Cluster data offline';
+    }
+  }
+
+  checkHeartbeat();
+  document.addEventListener('astro:page-load', checkHeartbeat);
 
   // ── Event ticker ─────────────────────────────────────────────────────────
   (async function initTicker() {

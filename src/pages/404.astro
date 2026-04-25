@@ -4,39 +4,30 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout title="404" description="Page not found.">
   <div class="not-found">
+    <div class="aurora" aria-hidden="true">
+      <div class="aurora-orb a1"></div>
+      <div class="aurora-orb a2"></div>
+    </div>
     <div class="nf-inner fade-up">
-      <p class="mono nf-eyebrow">~/404</p>
-      <h1 class="nf-title">
-        <span class="gradient-text">Not Found</span>
-      </h1>
 
       <div class="nf-terminal">
         <div class="nf-bar">
           <span class="nf-dot" style="background:#ff5f57"></span>
           <span class="nf-dot" style="background:#ffbd2e"></span>
           <span class="nf-dot" style="background:#28c840"></span>
-          <span class="nf-bar-title mono">kagiso@homelab — bash</span>
+          <span class="nf-bar-title mono">kagiso@homelab — bash · exit 1</span>
         </div>
-        <div class="nf-body mono">
-          <div class="nf-line">
-            <span class="nf-prompt">kagiso@homelab:~$</span>
-            <span class="nf-cmd"> kubectl get page <span id="nf-slug" style="color:var(--color-peach)"></span></span>
-          </div>
-          <div class="nf-line nf-error">Error from server (NotFound): pages "<span id="nf-slug-2"></span>" not found</div>
-          <div class="nf-line nf-muted">exit code 1</div>
-          <div class="nf-line">&nbsp;</div>
-          <div class="nf-line">
-            <span class="nf-prompt">kagiso@homelab:~$</span>
-            <span class="nf-cmd" id="nf-suggest"></span>
-          </div>
+        <div class="nf-body mono" id="nf-body">
+          <!-- typed in by JS -->
         </div>
       </div>
 
       <div class="nf-actions">
         <a href="/" class="btn-primary">← Home</a>
         <a href="/status" class="btn-ghost">Status</a>
-        <a href="/digest" class="btn-ghost">Digest</a>
+        <a href="/blog" class="btn-ghost">Blog</a>
       </div>
+
     </div>
   </div>
 </Layout>
@@ -48,46 +39,67 @@ import Layout from '../layouts/Layout.astro';
     align-items: center;
     justify-content: center;
     padding: 3rem 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .aurora {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .aurora-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    mix-blend-mode: screen;
+  }
+  .a1 {
+    width: 50vw; height: 50vw;
+    top: -20%; left: -15%;
+    background: radial-gradient(ellipse, color-mix(in srgb, var(--color-crit) 14%, transparent), transparent 70%);
+    animation: adrift 20s ease-in-out infinite alternate;
+  }
+  .a2 {
+    width: 40vw; height: 40vw;
+    bottom: -15%; right: -10%;
+    background: radial-gradient(ellipse, color-mix(in srgb, var(--color-mauve) 10%, transparent), transparent 70%);
+    animation: adrift 26s ease-in-out infinite alternate-reverse;
+  }
+  @keyframes adrift {
+    from { transform: translate(0, 0); }
+    to   { transform: translate(6%, 10%); }
   }
 
   .nf-inner {
-    max-width: 640px;
+    max-width: 680px;
     width: 100%;
-    text-align: center;
-  }
-
-  .nf-eyebrow {
-    color: var(--color-crit);
-    margin-bottom: 0.75rem;
-    font-size: 0.9rem;
-  }
-
-  .nf-title {
-    font-size: clamp(3rem, 8vw, 5rem);
-    margin: 0 0 2rem;
+    position: relative;
+    z-index: 1;
   }
 
   .nf-terminal {
-    background: #0d0d0d;
-    border: 1px solid var(--color-muted);
-    border-radius: 12px;
+    background: #080b0f;
+    border: 1px solid color-mix(in srgb, var(--color-crit) 40%, var(--color-muted));
+    border-radius: 14px;
     overflow: hidden;
-    text-align: left;
     margin-bottom: 2rem;
+    box-shadow: 0 0 60px color-mix(in srgb, var(--color-crit) 12%, transparent),
+                0 24px 64px rgba(0,0,0,0.6);
   }
 
   .nf-bar {
     display: flex;
     align-items: center;
     gap: 0.4rem;
-    padding: 0.6rem 1rem;
-    background: #1a1a1a;
-    border-bottom: 1px solid #2a2a2a;
+    padding: 0.65rem 1rem;
+    background: #111417;
+    border-bottom: 1px solid #1e2228;
   }
 
   .nf-dot {
-    width: 12px;
-    height: 12px;
+    width: 12px; height: 12px;
     border-radius: 50%;
     display: inline-block;
   }
@@ -95,65 +107,145 @@ import Layout from '../layouts/Layout.astro';
   .nf-bar-title {
     margin-left: 0.5rem;
     font-size: 0.72rem;
-    color: #666;
+    color: #555;
   }
 
   .nf-body {
-    padding: 1.25rem 1.5rem;
+    padding: 1.5rem 1.75rem 1.75rem;
     font-size: 0.82rem;
-    line-height: 1.9;
+    line-height: 1.85;
     color: #c9d1d9;
+    min-height: 280px;
   }
 
-  .nf-line { display: block; }
-
-  .nf-prompt { color: var(--color-peach); }
-  .nf-cmd    { color: #58a6ff; }
-  .nf-error  { color: var(--color-crit); }
-  .nf-muted  { color: #555; }
+  :global(.nf-prompt)  { color: var(--color-peach); }
+  :global(.nf-cmd)     { color: #58a6ff; }
+  :global(.nf-error)   { color: var(--color-crit); }
+  :global(.nf-warn)    { color: var(--color-warn); }
+  :global(.nf-muted)   { color: #444; }
+  :global(.nf-ok)      { color: var(--color-ok); }
+  :global(.nf-dim)     { color: #333; font-size: 0.75rem; }
+  :global(.nf-cursor)  {
+    display: inline-block;
+    color: var(--color-peach);
+    animation: cur 1s step-end infinite;
+    margin-left: 1px;
+  }
+  @keyframes cur { 0%,100%{opacity:1} 50%{opacity:0} }
 
   .nf-actions {
     display: flex;
     gap: 0.75rem;
-    justify-content: center;
     flex-wrap: wrap;
   }
 
   .btn-primary {
-    padding: 0.625rem 1.5rem;
-    background: var(--color-peach);
+    padding: 0.7rem 1.75rem;
+    background: linear-gradient(135deg, var(--color-peach), color-mix(in srgb, var(--color-peach) 70%, var(--color-mauve)));
     color: var(--color-base);
     border-radius: 8px;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 0.9rem;
-    transition: opacity 0.2s, transform 0.2s;
+    transition: transform 0.2s, box-shadow 0.2s;
   }
-  .btn-primary:hover { opacity: 0.85; transform: translateY(-1px); color: var(--color-base); }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    color: var(--color-base);
+    box-shadow: 0 4px 24px color-mix(in srgb, var(--color-peach) 45%, transparent);
+  }
 
   .btn-ghost {
-    padding: 0.625rem 1.5rem;
+    padding: 0.7rem 1.75rem;
     border: 1px solid var(--color-muted);
     color: var(--color-text);
     border-radius: 8px;
     font-size: 0.9rem;
+    backdrop-filter: blur(4px);
+    background: color-mix(in srgb, var(--color-overlay) 40%, transparent);
     transition: border-color 0.2s, color 0.2s;
   }
   .btn-ghost:hover { border-color: var(--color-mauve); color: var(--color-mauve); }
 </style>
 
 <script>
-  // Show the attempted path in the terminal output
   const slug = window.location.pathname;
-  const s1 = document.getElementById('nf-slug');
-  const s2 = document.getElementById('nf-slug-2');
-  const suggest = document.getElementById('nf-suggest');
-  if (s1) s1.textContent = slug;
-  if (s2) s2.textContent = slug;
+  const body = document.getElementById('nf-body');
+  if (!body) throw new Error('no body');
 
-  // Suggest the closest nav page
-  const pages = ['/', '/status', '/digest', '/decisions', '/projects'];
-  const best = pages.find(p => slug.startsWith(p) && p !== '/') ?? '/';
-  if (suggest) {
-    suggest.innerHTML = ` <span style="color:#555"># try:</span> <a href="${best}" style="color:var(--color-ok)">${best}</a>`;
+  function line(html: string) {
+    const span = document.createElement('div');
+    span.innerHTML = html;
+    body.appendChild(span);
+    body.scrollTop = body.scrollHeight;
   }
+
+  function blankLine() { line('&nbsp;'); }
+
+  // Type a command letter by letter, then resolve
+  function typeCmd(text: string): Promise<void> {
+    return new Promise(resolve => {
+      const row = document.createElement('div');
+      row.innerHTML = `<span class="nf-prompt">kagiso@homelab:~$</span> <span class="nf-cmd"></span><span class="nf-cursor">▌</span>`;
+      body.appendChild(row);
+      const cmdSpan = row.querySelector('.nf-cmd') as HTMLElement;
+      const cursor  = row.querySelector('.nf-cursor') as HTMLElement;
+      let i = 0;
+      const tick = () => {
+        if (i < text.length) {
+          cmdSpan.textContent += text[i++];
+          setTimeout(tick, 45 + Math.random() * 50);
+        } else {
+          setTimeout(() => {
+            cursor.remove();
+            resolve();
+          }, 350);
+        }
+      };
+      setTimeout(tick, 180);
+    });
+  }
+
+  function delay(ms: number) { return new Promise(r => setTimeout(r, ms)); }
+
+  async function runSequence() {
+    // Suggest the closest page
+    const pages = [['/', 'home'], ['/status', 'status'], ['/blog', 'blog'], ['/decisions', 'decisions'], ['/digest', 'digest'], ['/projects', 'projects']];
+    const best = pages.find(([p]) => slug.startsWith(p) && p !== '/') ?? pages[0];
+
+    await delay(200);
+    await typeCmd(`kubectl get page ${slug}`);
+    await delay(300);
+    line(`<span class="nf-error">Error from server (NotFound): pages.v1 "${slug}" not found</span>`);
+    blankLine();
+    await delay(500);
+
+    await typeCmd('kubectl describe route --all-namespaces');
+    await delay(300);
+    line(`<span class="nf-muted">Traceback (most recent operation):</span>`);
+    line(`<span class="nf-dim">  kube-proxy[8472]: lookup ${slug}: no such route</span>`);
+    line(`<span class="nf-dim">  ingress-controller: 404 Not Found — no matching IngressRule</span>`);
+    line(`<span class="nf-dim">  traefik[traefik-7d9b4c]: route not registered</span>`);
+    line(`<span class="nf-error">RoutingException: path "${slug}" has no backend</span>`);
+    blankLine();
+    await delay(600);
+
+    await typeCmd('kubectl get routes --field-selector=path=valid -o name');
+    await delay(300);
+    line(`<span class="nf-ok">route/home</span>`);
+    line(`<span class="nf-ok">route/status</span>`);
+    line(`<span class="nf-ok">route/blog</span>`);
+    line(`<span class="nf-ok">route/decisions</span>`);
+    line(`<span class="nf-ok">route/digest</span>`);
+    line(`<span class="nf-ok">route/projects</span>`);
+    blankLine();
+    await delay(500);
+
+    await typeCmd(`cd ${best[1]}`);
+    await delay(300);
+    line(`<span class="nf-warn">hint:</span> <a href="${best[0]}" style="color:var(--color-ok);text-underline-offset:3px;text-decoration:underline">${best[0]}</a> — did you mean this?`);
+    blankLine();
+    line(`<span class="nf-prompt">kagiso@homelab:~$</span> <span class="nf-cursor">▌</span>`);
+  }
+
+  runSequence();
 </script>

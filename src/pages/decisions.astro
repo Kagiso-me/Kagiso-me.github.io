@@ -127,22 +127,29 @@ const REPO = 'https://github.com/Kagiso-me/homelab-infrastructure/blob/main/docs
       </p>
     </div>
 
-    <!-- ── ADR list ── -->
-    <section class="adr-list fade-up" style="animation-delay:0.05s">
-      {adrs.map(adr => (
+    <!-- ── ADR timeline ── -->
+    <section class="adr-timeline fade-up" style="animation-delay:0.05s">
+      {adrs.map((adr, i) => (
         <a
-          class="adr-row"
+          class="adr-entry"
           href={`${REPO}/${adr.slug}.md`}
           target="_blank"
           rel="noopener noreferrer"
+          style={`animation-delay:${0.05 + i * 0.04}s`}
         >
-          <span class="adr-id mono">ADR-{adr.id}</span>
-          <div class="adr-body">
-            <span class="adr-title">{adr.title}</span>
-            <span class="adr-decision">{adr.decision}</span>
+          <div class="adr-spine">
+            <div class={`adr-node cat-node-${adr.category}`}></div>
+            <div class="adr-line"></div>
           </div>
-          <span class={`adr-cat cat-${adr.category}`}>{adr.categoryLabel}</span>
-          <span class="adr-arrow">↗</span>
+          <div class="adr-card">
+            <div class="adr-card-top">
+              <span class="adr-id mono">ADR-{adr.id}</span>
+              <span class={`adr-cat cat-${adr.category}`}>{adr.categoryLabel}</span>
+              <span class="adr-arrow">↗</span>
+            </div>
+            <div class="adr-title">{adr.title}</div>
+            <div class="adr-decision">{adr.decision}</div>
+          </div>
         </a>
       ))}
     </section>
@@ -158,9 +165,7 @@ const REPO = 'https://github.com/Kagiso-me/homelab-infrastructure/blob/main/docs
     padding: 3rem 1.5rem 5rem;
   }
 
-  .page-header {
-    margin-bottom: 3rem;
-  }
+  .page-header { margin-bottom: 3.5rem; }
 
   h1 { font-size: clamp(1.75rem, 4vw, 2.5rem); }
 
@@ -172,107 +177,147 @@ const REPO = 'https://github.com/Kagiso-me/homelab-infrastructure/blob/main/docs
     margin: 0.75rem 0 0;
   }
 
-  /* ── ADR list ── */
-  .adr-list {
+  /* ── Timeline ── */
+  .adr-timeline {
     display: flex;
     flex-direction: column;
-    gap: 0;
-    border: 1px solid var(--color-muted);
-    border-radius: 14px;
-    overflow: hidden;
   }
 
-  .adr-row {
+  .adr-entry {
+    display: flex;
+    gap: 0;
+    text-decoration: none;
+    color: inherit;
+    outline-offset: 4px;
+  }
+
+  /* Spine: node + vertical line */
+  .adr-spine {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    width: 2.5rem;
+    padding-top: 0.35rem;
+  }
+
+  .adr-node {
+    width: 13px; height: 13px;
+    border-radius: 50%;
+    border: 2px solid var(--color-base);
+    flex-shrink: 0;
+    transition: transform 0.2s, box-shadow 0.2s;
+    z-index: 1;
+  }
+
+  .adr-entry:hover .adr-node {
+    transform: scale(1.4);
+  }
+
+  .adr-line {
+    flex: 1;
+    width: 1px;
+    background: linear-gradient(to bottom, color-mix(in srgb, var(--color-muted) 60%, transparent), color-mix(in srgb, var(--color-muted) 20%, transparent));
+    margin-top: 4px;
+  }
+
+  .adr-entry:last-child .adr-line { display: none; }
+
+  /* Node colours per category */
+  .cat-node-infra        { background: var(--color-peach);    box-shadow: 0 0 8px var(--color-peach); }
+  .cat-node-gitops       { background: var(--color-mauve);    box-shadow: 0 0 8px var(--color-mauve); }
+  .cat-node-network      { background: var(--color-sapphire); box-shadow: 0 0 8px var(--color-sapphire); }
+  .cat-node-observability{ background: var(--color-gold);     box-shadow: 0 0 8px var(--color-gold); }
+  .cat-node-platform     { background: var(--color-subtle);   box-shadow: none; }
+  .cat-node-security     { background: var(--color-crit);     box-shadow: 0 0 8px var(--color-crit); }
+  .cat-node-storage      { background: var(--color-green);    box-shadow: 0 0 8px var(--color-green); }
+  .cat-node-arch         { background: var(--color-gold);     box-shadow: 0 0 8px var(--color-gold); }
+
+  /* Card */
+  .adr-card {
+    flex: 1;
+    min-width: 0;
+    margin-bottom: 1.25rem;
+    padding: 1.1rem 1.25rem;
+    background: color-mix(in srgb, var(--color-surface) 70%, transparent);
+    backdrop-filter: blur(8px);
+    border: 1px solid color-mix(in srgb, var(--color-muted) 55%, transparent);
+    border-top: 1px solid color-mix(in srgb, white 7%, transparent);
+    border-radius: 12px;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  }
+
+  .adr-entry:hover .adr-card {
+    border-color: color-mix(in srgb, var(--color-peach) 35%, var(--color-muted));
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3), 0 0 0 1px color-mix(in srgb, var(--color-peach) 12%, transparent);
+    transform: translateX(4px);
+  }
+
+  .adr-card-top {
     display: flex;
     align-items: center;
-    gap: 1.25rem;
-    padding: 1.1rem 1.25rem;
-    text-decoration: none;
-    border-bottom: 1px solid var(--color-muted);
-    transition: background 0.15s;
-  }
-
-  .adr-row:last-child {
-    border-bottom: none;
-  }
-
-  .adr-row:hover {
-    background: var(--color-overlay);
-  }
-
-  .adr-row:hover .adr-arrow {
-    color: var(--color-peach);
-    transform: translate(2px, -2px);
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
   }
 
   .adr-id {
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     color: var(--color-peach);
-    min-width: 4.5rem;
+    letter-spacing: 0.05em;
     flex-shrink: 0;
-    letter-spacing: 0.04em;
-    align-self: flex-start;
-    padding-top: 0.1rem;
-  }
-
-  .adr-body {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-    flex: 1;
-    min-width: 0;
-  }
-
-  .adr-title {
-    font-size: 0.925rem;
-    color: var(--color-heading);
-    line-height: 1.4;
-  }
-
-  .adr-decision {
-    font-size: 0.8rem;
-    color: var(--color-subtle);
-    line-height: 1.5;
   }
 
   .adr-cat {
     font-family: var(--font-mono);
-    font-size: 0.65rem;
-    font-weight: 600;
+    font-size: 0.62rem;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    padding: 0.2rem 0.55rem;
+    padding: 0.15rem 0.5rem;
     border-radius: 4px;
     flex-shrink: 0;
     white-space: nowrap;
-    align-self: flex-start;
   }
 
-  .cat-infra        { background: color-mix(in srgb, var(--color-peach) 12%, transparent);    color: var(--color-peach); }
-  .cat-gitops       { background: color-mix(in srgb, var(--color-mauve) 12%, transparent);    color: var(--color-mauve); }
-  .cat-network      { background: color-mix(in srgb, var(--color-sapphire) 12%, transparent); color: var(--color-sapphire); }
-  .cat-observability{ background: color-mix(in srgb, var(--color-gold) 12%, transparent);     color: var(--color-gold); }
-  .cat-platform     { background: color-mix(in srgb, var(--color-subtle) 20%, transparent);   color: var(--color-subtle); }
-  .cat-security     { background: color-mix(in srgb, var(--color-crit) 12%, transparent);     color: var(--color-crit); }
-  .cat-storage      { background: color-mix(in srgb, var(--color-green) 12%, transparent);    color: var(--color-green); }
-  .cat-arch         { background: color-mix(in srgb, var(--color-gold) 12%, transparent);     color: var(--color-gold); }
+  .cat-infra        { background: color-mix(in srgb, var(--color-peach)     12%, transparent); color: var(--color-peach);     border: 1px solid color-mix(in srgb, var(--color-peach)     25%, transparent); }
+  .cat-gitops       { background: color-mix(in srgb, var(--color-mauve)     12%, transparent); color: var(--color-mauve);     border: 1px solid color-mix(in srgb, var(--color-mauve)     25%, transparent); }
+  .cat-network      { background: color-mix(in srgb, var(--color-sapphire)  12%, transparent); color: var(--color-sapphire);  border: 1px solid color-mix(in srgb, var(--color-sapphire)  25%, transparent); }
+  .cat-observability{ background: color-mix(in srgb, var(--color-gold)      12%, transparent); color: var(--color-gold);      border: 1px solid color-mix(in srgb, var(--color-gold)      25%, transparent); }
+  .cat-platform     { background: color-mix(in srgb, var(--color-subtle)    20%, transparent); color: var(--color-subtle);    border: 1px solid color-mix(in srgb, var(--color-muted)     30%, transparent); }
+  .cat-security     { background: color-mix(in srgb, var(--color-crit)      12%, transparent); color: var(--color-crit);      border: 1px solid color-mix(in srgb, var(--color-crit)      25%, transparent); }
+  .cat-storage      { background: color-mix(in srgb, var(--color-green)     12%, transparent); color: var(--color-green);     border: 1px solid color-mix(in srgb, var(--color-green)     25%, transparent); }
+  .cat-arch         { background: color-mix(in srgb, var(--color-gold)      12%, transparent); color: var(--color-gold);      border: 1px solid color-mix(in srgb, var(--color-gold)      25%, transparent); }
 
   .adr-arrow {
-    font-size: 0.85rem;
+    margin-left: auto;
+    font-size: 0.82rem;
     color: var(--color-muted);
     flex-shrink: 0;
-    align-self: flex-start;
-    padding-top: 0.1rem;
     transition: color 0.15s, transform 0.15s;
+  }
+
+  .adr-entry:hover .adr-arrow {
+    color: var(--color-peach);
+    transform: translate(3px, -3px);
+  }
+
+  .adr-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-heading);
+    line-height: 1.35;
+    margin-bottom: 0.35rem;
+    letter-spacing: -0.01em;
+  }
+
+  .adr-decision {
+    font-size: 0.82rem;
+    color: var(--color-subtle);
+    line-height: 1.6;
   }
 
   @media (max-width: 600px) {
     .adr-cat { display: none; }
-  }
-
-  @media (max-width: 480px) {
-    .adr-id { min-width: 3.5rem; }
-    .adr-row { gap: 0.75rem; padding: 0.875rem 1rem; }
-    .adr-decision { display: none; }
+    .adr-spine { width: 1.75rem; }
   }
 </style>

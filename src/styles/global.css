@@ -45,8 +45,9 @@ html {
 body {
   background-color: var(--color-base);
   background-image:
-    radial-gradient(ellipse 80% 50% at 50% -10%, color-mix(in srgb, var(--color-peach) 9%, transparent) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 80% 90%, color-mix(in srgb, var(--color-mauve) 4%, transparent) 0%, transparent 50%);
+    radial-gradient(ellipse 100% 60% at 50% -5%,  color-mix(in srgb, var(--color-peach)    11%, transparent) 0%, transparent 65%),
+    radial-gradient(ellipse 70%  50% at 90% 95%,  color-mix(in srgb, var(--color-mauve)     7%, transparent) 0%, transparent 55%),
+    radial-gradient(ellipse 50%  40% at -10% 60%, color-mix(in srgb, var(--color-sapphire)  4%, transparent) 0%, transparent 50%);
   color: var(--color-text);
   font-family: var(--font-sans);
   line-height: 1.6;
@@ -184,10 +185,10 @@ code, pre {
   inset: 0;
   z-index: 9999;
   background: radial-gradient(
-    600px circle at var(--cx, -9999px) var(--cy, -9999px),
-    rgba(250, 179, 135, 0.06) 0%,
-    rgba(203, 166, 247, 0.03) 40%,
-    transparent 70%
+    700px circle at var(--cx, -9999px) var(--cy, -9999px),
+    rgba(250, 179, 135, 0.09) 0%,
+    rgba(203, 166, 247, 0.05) 35%,
+    transparent 65%
   );
-  transition: background 0.1s ease;
+  mix-blend-mode: screen;
 }

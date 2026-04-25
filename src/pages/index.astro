@@ -139,6 +139,17 @@ const recentPosts = (await getCollection('blog'))
     </div>
   </section>
 
+  <!-- ── Cinematic break strip ── -->
+  <section class="manifesto-strip fade-up" style="animation-delay: 0.26s" aria-hidden="true">
+    <div class="manifesto-inner">
+      <span class="manifesto-line">No demos.</span>
+      <span class="manifesto-sep">·</span>
+      <span class="manifesto-line">No staging.</span>
+      <span class="manifesto-sep">·</span>
+      <span class="manifesto-line manifesto-accent">Built in public.</span>
+    </div>
+  </section>
+
   <!-- ── Recent Posts ── -->
   <section class="section fade-up" style="animation-delay: 0.28s">
     <div class="section-inner">
@@ -353,9 +364,9 @@ const recentPosts = (await getCollection('blog'))
   }
 
   h1 {
-    font-size: clamp(3.5rem, 7vw, 6rem);
-    letter-spacing: -0.04em;
-    line-height: 0.95;
+    font-size: clamp(3.75rem, 8vw, 6.5rem);
+    letter-spacing: -0.045em;
+    line-height: 0.92;
     margin: 0 0 1.5rem;
     color: var(--color-heading);
   }
@@ -425,33 +436,39 @@ const recentPosts = (await getCollection('blog'))
   }
 
   .btn-primary {
-    padding: 0.625rem 1.5rem;
-    background: var(--color-peach);
+    padding: 0.7rem 1.75rem;
+    background: linear-gradient(135deg, var(--color-peach), color-mix(in srgb, var(--color-peach) 70%, var(--color-mauve)));
     color: var(--color-base);
     border-radius: 8px;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 0.9rem;
-    transition: opacity 0.2s, transform 0.2s;
+    transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-peach) 40%, transparent);
   }
 
   .btn-primary:hover {
-    opacity: 0.85;
-    transform: translateY(-1px);
+    transform: translateY(-2px);
     color: var(--color-base);
+    box-shadow: 0 4px 24px color-mix(in srgb, var(--color-peach) 45%, transparent),
+                0 0 0 1px color-mix(in srgb, var(--color-peach) 30%, transparent);
   }
 
   .btn-ghost {
-    padding: 0.625rem 1.5rem;
+    padding: 0.7rem 1.75rem;
     border: 1px solid var(--color-muted);
     color: var(--color-text);
     border-radius: 8px;
     font-size: 0.9rem;
-    transition: border-color 0.2s, color 0.2s;
+    transition: border-color 0.2s, color 0.2s, background 0.2s, box-shadow 0.2s;
+    backdrop-filter: blur(4px);
+    background: color-mix(in srgb, var(--color-overlay) 40%, transparent);
   }
 
   .btn-ghost:hover {
-    border-color: var(--color-mauve);
+    border-color: color-mix(in srgb, var(--color-mauve) 60%, transparent);
     color: var(--color-mauve);
+    background: color-mix(in srgb, var(--color-mauve) 8%, transparent);
+    box-shadow: 0 0 16px color-mix(in srgb, var(--color-mauve) 15%, transparent);
   }
 
   .section {
@@ -472,11 +489,23 @@ const recentPosts = (await getCollection('blog'))
   }
 
   .section-title {
-    font-size: 1.35rem;
+    font-size: 1.4rem;
     margin: 0;
-    padding-left: 0.75rem;
-    border-left: 2px solid transparent;
-    border-image: linear-gradient(to bottom, var(--color-peach), transparent) 1;
+    position: relative;
+    padding-bottom: 0.5rem;
+    letter-spacing: -0.025em;
+  }
+
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 2.5rem;
+    height: 2px;
+    background: linear-gradient(90deg, var(--color-peach), var(--color-mauve));
+    border-radius: 2px;
+    box-shadow: 0 0 8px color-mix(in srgb, var(--color-peach) 60%, transparent);
   }
 
   .link-subtle {
@@ -505,17 +534,21 @@ const recentPosts = (await getCollection('blog'))
   }
 
   .live-card {
-    background: var(--color-surface);
-    border: 1px solid var(--color-muted);
-    border-radius: 12px;
-    padding: 1.25rem;
+    background: color-mix(in srgb, var(--color-surface) 65%, transparent);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid color-mix(in srgb, var(--color-muted) 55%, transparent);
+    border-top: 1px solid color-mix(in srgb, white 9%, transparent);
+    border-radius: 14px;
+    padding: 1.35rem;
     min-height: 100px;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
   }
 
   .live-card:hover {
-    border-color: rgba(255, 255, 255, 0.14);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    border-color: color-mix(in srgb, var(--color-peach) 35%, var(--color-muted));
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45), 0 0 0 1px color-mix(in srgb, var(--color-peach) 15%, transparent);
+    transform: translateY(-2px);
   }
 
   .status-strip {
@@ -776,33 +809,56 @@ const recentPosts = (await getCollection('blog'))
   /* ── Stack grid ── */
   .stack-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+    gap: 0.85rem;
   }
 
   .stack-item {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
-    background: var(--color-surface);
-    border: 1px solid var(--color-muted);
-    border-radius: 10px;
-    padding: 0.875rem 1rem;
-    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    gap: 0.3rem;
+    background: color-mix(in srgb, var(--color-surface) 70%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid color-mix(in srgb, var(--color-muted) 60%, transparent);
+    border-top: 1px solid color-mix(in srgb, white 8%, transparent);
+    border-radius: 12px;
+    padding: 1.1rem 1.1rem 1rem;
+    transition: border-color 0.25s, box-shadow 0.25s;
     position: relative;
     overflow: hidden;
     cursor: default;
+    will-change: transform;
   }
 
-  /* Accent glow on top edge */
+  /* Ambient glow behind each card */
+  .stack-item::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 12px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .stack-item[data-accent="peach"]::after    { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-peach)    45%, transparent); }
+  .stack-item[data-accent="mauve"]::after    { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-mauve)    45%, transparent); }
+  .stack-item[data-accent="gold"]::after     { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-gold)     45%, transparent); }
+  .stack-item[data-accent="sapphire"]::after { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-sapphire) 45%, transparent); }
+  .stack-item[data-accent="crit"]::after     { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-crit)     45%, transparent); }
+
+  /* Coloured top bar */
   .stack-item::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    border-radius: 10px 10px 0 0;
-    opacity: 0.7;
-    transition: opacity 0.2s;
+    border-radius: 12px 12px 0 0;
+    opacity: 0.6;
+    transition: opacity 0.25s, box-shadow 0.25s;
+    z-index: 1;
   }
 
   .stack-item[data-accent="peach"]::before    { background: var(--color-peach); }
@@ -811,24 +867,23 @@ const recentPosts = (await getCollection('blog'))
   .stack-item[data-accent="sapphire"]::before { background: var(--color-sapphire); }
   .stack-item[data-accent="crit"]::before     { background: var(--color-crit); }
 
-  .stack-item:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
-  }
-
-  .stack-item[data-accent="peach"]:hover    { border-color: var(--color-peach); }
-  .stack-item[data-accent="mauve"]:hover    { border-color: var(--color-mauve); }
-  .stack-item[data-accent="gold"]:hover     { border-color: var(--color-gold); }
-  .stack-item[data-accent="sapphire"]:hover { border-color: var(--color-sapphire); }
-  .stack-item[data-accent="crit"]:hover     { border-color: var(--color-crit); }
-
   .stack-item:hover::before { opacity: 1; }
+  .stack-item:hover::after  { opacity: 1; }
+
+  .stack-item[data-accent="peach"]:hover    { box-shadow: 0 12px 32px rgba(0,0,0,0.4), 0 0 20px color-mix(in srgb, var(--color-peach)    18%, transparent); }
+  .stack-item[data-accent="mauve"]:hover    { box-shadow: 0 12px 32px rgba(0,0,0,0.4), 0 0 20px color-mix(in srgb, var(--color-mauve)    18%, transparent); }
+  .stack-item[data-accent="gold"]:hover     { box-shadow: 0 12px 32px rgba(0,0,0,0.4), 0 0 20px color-mix(in srgb, var(--color-gold)     18%, transparent); }
+  .stack-item[data-accent="sapphire"]:hover { box-shadow: 0 12px 32px rgba(0,0,0,0.4), 0 0 20px color-mix(in srgb, var(--color-sapphire) 18%, transparent); }
+  .stack-item[data-accent="crit"]:hover     { box-shadow: 0 12px 32px rgba(0,0,0,0.4), 0 0 20px color-mix(in srgb, var(--color-crit)     18%, transparent); }
+
+  .stack-item > * { position: relative; z-index: 2; }
 
   .stack-name {
     font-family: var(--font-mono);
-    font-size: 0.9rem;
+    font-size: 0.92rem;
     font-weight: 700;
     color: var(--color-heading);
+    letter-spacing: 0.01em;
   }
 
   .stack-role {
@@ -836,6 +891,60 @@ const recentPosts = (await getCollection('blog'))
     font-size: 0.68rem;
     color: var(--color-subtle);
     line-height: 1.4;
+  }
+
+  /* ── Cinematic manifesto strip ── */
+  .manifesto-strip {
+    padding: 4rem 1.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      color-mix(in srgb, var(--color-mauve) 4%, transparent) 50%,
+      transparent
+    );
+  }
+
+  .manifesto-strip::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-muted) 50%, transparent), transparent);
+  }
+
+  .manifesto-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .manifesto-line {
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+    font-weight: 700;
+    color: var(--color-subtle);
+    letter-spacing: -0.03em;
+  }
+
+  .manifesto-accent {
+    background: linear-gradient(135deg, var(--color-peach), var(--color-mauve));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 20px color-mix(in srgb, var(--color-peach) 40%, transparent));
+  }
+
+  .manifesto-sep {
+    color: var(--color-muted);
+    font-size: 1.5rem;
+    font-weight: 300;
   }
 
   .skeleton {
@@ -1546,5 +1655,22 @@ const recentPosts = (await getCollection('blog'))
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
     });
   });
+
+  // ── Stack item 3D tilt ───────────────────────────────────────────────────────
+  if (window.matchMedia('(pointer: fine)').matches) {
+    document.querySelectorAll<HTMLElement>('.stack-item').forEach(card => {
+      card.addEventListener('mousemove', (e: MouseEvent) => {
+        const rect = card.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top  + rect.height / 2;
+        const rx = ((e.clientY - cy) / (rect.height / 2)) * -6;
+        const ry = ((e.clientX - cx) / (rect.width  / 2)) *  6;
+        card.style.transform = `perspective(600px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(4px)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+      });
+    });
+  }
 
 </script>

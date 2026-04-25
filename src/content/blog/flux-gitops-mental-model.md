@@ -3,6 +3,7 @@ title: "The Hardest Part of GitOps Is Unlearning kubectl"
 date: "2026-04-10"
 summary: "The first week with Flux, the cluster kept 'undoing' my changes. It wasn't broken. It was working exactly as designed. That gap between what I expected and what was actually happening took about three weeks to fully close."
 adr: "ADR-002"
+tags: ["gitops", "flux", "kubernetes", "decisions"]
 ---
 
 The first week with Flux, the cluster kept undoing things.

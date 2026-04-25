@@ -3,6 +3,7 @@ title: "What the Internet Does to a Homelab with a Public IP"
 date: "2026-03-30"
 summary: "The day the wildcard certificate came through was the day the scanning started. About 2,000 requests per day looking for WordPress installations, exposed .env files, and admin panels. My cluster has none of those. The scanners don't care."
 adr: "ADR-017"
+tags: ["security", "networking", "crowdsec", "traefik", "decisions"]
 ---
 
 The day the wildcard cert came through for `*.kagiso.me` was the day the cluster had a real public-facing presence. Traefik sitting on `10.0.10.110`, a Cloudflare DNS record pointed at the home IP, Let's Encrypt certificate issued and trusted. Everything I'd built for months was actually accessible.

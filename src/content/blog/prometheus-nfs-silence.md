@@ -3,6 +3,7 @@ title: "Prometheus Was Running. The Data Wasn't."
 date: "2026-03-28"
 summary: "I moved the monitoring stack to k3s, put the Prometheus TSDB on NFS like every other PVC, and spent weeks looking at graphs with unexplained gaps. The flag I'd set to 'fix' it was the thing that buried the real problem."
 adr: "ADR-006"
+tags: ["observability", "prometheus", "storage", "debugging", "decisions"]
 ---
 
 There's a specific kind of bad where everything looks fine.

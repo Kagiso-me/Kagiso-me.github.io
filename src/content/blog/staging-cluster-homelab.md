@@ -3,6 +3,7 @@ title: "Why a Staging Cluster in a Homelab Gives False Confidence"
 date: "2026-04-17"
 summary: "Staging sounds like best practice. In a homelab with one operator and limited hardware, it becomes a maintenance burden that validates almost nothing. Here's what we replaced it with."
 adr: "ADR-004"
+tags: ["gitops", "architecture", "ci-cd", "decisions"]
 ---
 
 For a few months, the homelab CI/CD pipeline had a staging cluster. A dedicated k3s VM on Proxmox, a `main` → `prod` promotion flow, automated health checks before anything reached production. It looked solid on paper.

@@ -2,11 +2,21 @@
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
+function postType(adr: string | undefined, title: string): { label: string; cls: string } {
+  if (adr) return { label: 'DECISION', cls: 'type-decision' };
+  const t = title.toLowerCase();
+  if (t.includes('incident') || t.includes('outage') || t.includes('broke') || t.includes('fail')) return { label: 'INCIDENT', cls: 'type-incident' };
+  if (t.includes('build') || t.includes('setup') || t.includes('install') || t.includes('deploy')) return { label: 'BUILD', cls: 'type-build' };
+  if (t.includes('security') || t.includes('cve') || t.includes('patch')) return { label: 'SECURITY', cls: 'type-security' };
+  return { label: 'OPS', cls: 'type-ops' };
+}
+
 const posts = (await getCollection('blog'))
   .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
   .map(post => ({
     ...post,
-    readingTime: Math.ceil(post.body.trim().split(/\s+/).length / 200),
+    readingTime: Math.ceil((post.body ?? '').trim().split(/\s+/).length / 200),
+    type: postType(post.data.adr, post.data.title),
   }));
 ---
 
@@ -29,13 +39,16 @@ const posts = (await getCollection('blog'))
       {posts.map(post => (
         <a href={`/blog/${post.id}`} class="post-card">
           <div class="post-meta">
+            <span class={`post-type-tag mono ${post.type.cls}`}>{post.type.label}</span>
             <span class="post-date mono">{new Date(post.data.date).toLocaleDateString('en-ZA', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
             {post.data.adr && <span class="post-adr mono">{post.data.adr}</span>}
             <span class="post-reading-time mono">{post.readingTime} min read</span>
           </div>
           <h2 class="post-title">{post.data.title}</h2>
           <p class="post-summary">{post.data.summary}</p>
-          <span class="post-read-more mono">read →</span>
+          <div class="post-footer">
+            <span class="post-read-more mono">read →</span>
+          </div>
         </a>
       ))}
     </div>
@@ -81,36 +94,70 @@ const posts = (await getCollection('blog'))
   .post-card {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    background: var(--color-surface);
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    border-radius: 14px;
-    padding: 1.5rem;
+    gap: 0.6rem;
+    background: color-mix(in srgb, var(--color-surface) 70%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid color-mix(in srgb, var(--color-muted) 55%, transparent);
+    border-top: 1px solid color-mix(in srgb, white 8%, transparent);
+    border-radius: 16px;
+    padding: 1.6rem 1.75rem;
     color: inherit;
-    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
     text-decoration: none;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .post-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-mauve) 40%, transparent), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
   }
 
   .post-card:hover {
-    border-color: var(--color-mauve);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    border-color: color-mix(in srgb, var(--color-mauve) 45%, var(--color-muted));
+    transform: translateY(-3px);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.45),
+                0 0 0 1px color-mix(in srgb, var(--color-mauve) 15%, transparent);
     color: inherit;
   }
+
+  .post-card:hover::before { opacity: 1; }
 
   .post-meta {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.6rem;
+    flex-wrap: wrap;
   }
 
+  .post-type-tag {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .type-decision { color: var(--color-mauve);    background: color-mix(in srgb, var(--color-mauve)    12%, transparent); border: 1px solid color-mix(in srgb, var(--color-mauve)    30%, transparent); }
+  .type-incident  { color: var(--color-crit);     background: color-mix(in srgb, var(--color-crit)     12%, transparent); border: 1px solid color-mix(in srgb, var(--color-crit)     30%, transparent); }
+  .type-build     { color: var(--color-ok);       background: color-mix(in srgb, var(--color-ok)       12%, transparent); border: 1px solid color-mix(in srgb, var(--color-ok)       30%, transparent); }
+  .type-security  { color: var(--color-warn);     background: color-mix(in srgb, var(--color-warn)     12%, transparent); border: 1px solid color-mix(in srgb, var(--color-warn)     30%, transparent); }
+  .type-ops       { color: var(--color-sapphire); background: color-mix(in srgb, var(--color-sapphire) 12%, transparent); border: 1px solid color-mix(in srgb, var(--color-sapphire) 30%, transparent); }
+
   .post-date {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: var(--color-subtle);
   }
 
   .post-adr {
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     color: var(--color-mauve);
     background: color-mix(in srgb, var(--color-mauve) 12%, transparent);
     border: 1px solid color-mix(in srgb, var(--color-mauve) 25%, transparent);
@@ -119,25 +166,42 @@ const posts = (await getCollection('blog'))
   }
 
   .post-title {
-    font-size: 1.15rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color: var(--color-heading);
     margin: 0;
     line-height: 1.3;
+    letter-spacing: -0.02em;
+    transition: color 0.2s;
   }
+
+  .post-card:hover .post-title { color: #fff; }
 
   .post-summary {
     font-size: 0.9rem;
     color: var(--color-subtle);
-    line-height: 1.65;
+    line-height: 1.7;
     margin: 0;
+    flex: 1;
+  }
+
+  .post-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.25rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid color-mix(in srgb, var(--color-muted) 35%, transparent);
   }
 
   .post-read-more {
     font-size: 0.75rem;
     color: var(--color-peach);
-    margin-top: 0.25rem;
+    transition: gap 0.2s;
+    letter-spacing: 0.02em;
   }
+
+  .post-card:hover .post-read-more { color: var(--color-mauve); }
 
   .post-reading-time {
     font-size: 0.72rem;

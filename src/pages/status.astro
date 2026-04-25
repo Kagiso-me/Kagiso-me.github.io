@@ -11,6 +11,11 @@ import Layout from '../layouts/Layout.astro';
       <div>
         <p class="mono" style="color:var(--color-peach); margin-bottom:0.25rem">~/status</p>
         <h1 style="margin:0">Cluster Status</h1>
+        <!-- Live cluster uptime counter -->
+        <div class="uptime-counter" id="uptime-counter">
+          <span class="uptime-label mono">cluster uptime</span>
+          <span class="uptime-value mono" id="uptime-value">—</span>
+        </div>
       </div>
       <div style="text-align:right">
         <div class="mono live-badge">
@@ -141,6 +146,32 @@ import Layout from '../layouts/Layout.astro';
     gap: 0.4rem;
     color: var(--color-ok);
     justify-content: flex-end;
+  }
+
+  .uptime-counter {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 0.75rem;
+    background: color-mix(in srgb, var(--color-ok) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-ok) 25%, transparent);
+    border-radius: 8px;
+    padding: 0.4rem 0.9rem;
+  }
+
+  .uptime-label {
+    font-size: 0.68rem;
+    color: var(--color-ok);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .uptime-value {
+    font-size: 0.82rem;
+    color: var(--color-heading);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
   }
 
   .section { margin-bottom: 3rem; }
@@ -1186,6 +1217,28 @@ import Layout from '../layouts/Layout.astro';
     });
     mo.observe(nodesGridEl, { childList: true, subtree: false });
   }
+
+  // ── Cluster uptime counter ───────────────────────────────────────────────
+  // k3s cluster first deployed 2024-11-01 (approximate — adjust if known)
+  const CLUSTER_EPOCH = new Date('2024-11-01T00:00:00Z').getTime();
+
+  function updateUptime() {
+    const el = document.getElementById('uptime-value');
+    if (!el) return;
+    const ms = Date.now() - CLUSTER_EPOCH;
+    const s  = Math.floor(ms / 1000);
+    const m  = Math.floor(s  / 60);
+    const h  = Math.floor(m  / 60);
+    const d  = Math.floor(h  / 24);
+    const hh = String(h % 24).padStart(2, '0');
+    const mm = String(m % 60).padStart(2, '0');
+    const ss = String(s % 60).padStart(2, '0');
+    el.textContent = `${d}d ${hh}h ${mm}m ${ss}s`;
+  }
+
+  updateUptime();
+  const _uptimeTimer = setInterval(updateUptime, 1000);
+  document.addEventListener('astro:before-swap', () => clearInterval(_uptimeTimer));
 
   document.addEventListener('astro:page-load', () => { startPolling(); loadCVEBanner(); initTopoMap(); });
   document.addEventListener('astro:before-swap', stopPolling);

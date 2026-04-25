@@ -340,6 +340,30 @@ const cmds = ['get nodes', 'get pods', 'top', 'uptime', 'whoami', 'help'];
     setTimeout(tick, 200);
   }
 
+  // Auto-sequence of commands that loops silently after boot
+  const AUTO_SEQUENCE = ['kubectl get nodes', 'kubectl get pods', 'kubectl top nodes'];
+  const SEQUENCE_CMDS = ['get nodes', 'get pods', 'top'];
+  let seqIdx = 0;
+  let seqRunning = false;
+
+  function runNextInSequence() {
+    if (!liveDataReady) return;
+    seqRunning = true;
+    const cmd  = AUTO_SEQUENCE[seqIdx];
+    const exec = SEQUENCE_CMDS[seqIdx];
+    seqIdx = (seqIdx + 1) % AUTO_SEQUENCE.length;
+
+    // Pause 4-7 seconds between commands — feels like a real operator
+    const pause = 4000 + Math.random() * 3000;
+    setTimeout(() => {
+      if (document.hidden) { seqRunning = false; return; }
+      typeCommand(cmd, () => {
+        runCommand(exec);
+        setTimeout(runNextInSequence, pause);
+      });
+    }, pause);
+  }
+
   function runBoot() {
     const body = document.getElementById('term-body');
     if (!body) return;
@@ -351,13 +375,12 @@ const cmds = ['get nodes', 'get pods', 'top', 'uptime', 'whoami', 'help'];
         body.scrollTop = body.scrollHeight;
         done++;
         if (done === BOOT_LINES.length) {
-          // After boot lines, wait then auto-type the command
           setTimeout(() => {
             typeCommand('kubectl get nodes', () => {
               if (liveDataReady) {
                 runCommand('get nodes');
+                setTimeout(runNextInSequence, 5000);
               } else {
-                // Show a waiting state — replace once data arrives
                 body.innerHTML += `<span class="term-line-muted">connecting to cluster api…</span>\n`;
                 body.scrollTop = body.scrollHeight;
               }
@@ -385,6 +408,8 @@ const cmds = ['get nodes', 'get pods', 'top', 'uptime', 'whoami', 'help'];
     liveDataReady = true;
     if (!autoRanOnce) {
       autoRanOnce = true;
+      // Also kick off the auto-sequence loop if boot already finished
+      if (!seqRunning) setTimeout(runNextInSequence, 5000);
       const body = document.getElementById('term-body');
       if (body) {
         // Replace the "connecting…" line if it exists, else just run the command

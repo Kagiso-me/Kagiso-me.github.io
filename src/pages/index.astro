@@ -137,7 +137,7 @@ const recentPosts = (await getCollection('blog'))
           { name: 'MikroTik',    role: 'Router / firewall',      accent: 'peach'    },
           { name: 'TrueNAS',     role: 'NAS / storage',          accent: 'gold'     },
         ].map(t => (
-          <div class="stack-item" data-accent={t.accent}>
+          <div class="stack-item sheen" data-accent={t.accent}>
             <span class="stack-name">{t.name}</span>
             <span class="stack-role">{t.role}</span>
           </div>
@@ -551,8 +551,8 @@ const recentPosts = (await getCollection('blog'))
   }
 
   .section {
-    padding: 3rem 1.5rem;
-    border-top: 1px solid var(--color-muted);
+    padding: 6rem 1.5rem;
+    border-top: 1px solid color-mix(in srgb, var(--color-muted) 50%, transparent);
   }
 
   .section-inner {
@@ -629,6 +629,24 @@ const recentPosts = (await getCollection('blog'))
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45), 0 0 0 1px color-mix(in srgb, var(--color-peach) 15%, transparent);
     transform: translateY(-2px);
   }
+
+  .live-card::after {
+    content: '';
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.3s;
+    background: radial-gradient(
+      500px circle at calc(var(--mx, 50%) * 1%) calc(var(--my, 50%) * 1%),
+      rgba(255,255,255,0.07) 0%,
+      rgba(255,255,255,0.025) 40%,
+      transparent 65%
+    );
+    z-index: 10;
+  }
+  .live-card:hover::after { opacity: 1; }
 
   .status-strip {
     display: grid;
@@ -1366,21 +1384,43 @@ const recentPosts = (await getCollection('blog'))
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    background: var(--color-surface);
-    border: 1px solid var(--color-muted);
+    background: color-mix(in srgb, var(--color-surface) 70%, transparent);
+    backdrop-filter: blur(8px);
+    border: 1px solid color-mix(in srgb, var(--color-muted) 55%, transparent);
+    border-top: 1px solid color-mix(in srgb, white 7%, transparent);
     border-radius: 12px;
     padding: 1.25rem;
     text-decoration: none;
     color: inherit;
-    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
   }
 
   .blog-card:hover {
-    border-color: var(--color-mauve);
+    border-color: color-mix(in srgb, var(--color-mauve) 45%, var(--color-muted));
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 0 0 1px color-mix(in srgb, var(--color-mauve) 12%, transparent);
     color: inherit;
   }
+
+  .blog-card::after {
+    content: '';
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.3s;
+    background: radial-gradient(
+      500px circle at calc(var(--mx, 50%) * 1%) calc(var(--my, 50%) * 1%),
+      rgba(255,255,255,0.07) 0%,
+      rgba(255,255,255,0.025) 40%,
+      transparent 65%
+    );
+    z-index: 10;
+  }
+  .blog-card:hover::after { opacity: 1; }
 
   .blog-card-meta {
     display: flex;

@@ -174,7 +174,7 @@ import Layout from '../layouts/Layout.astro';
     font-variant-numeric: tabular-nums;
   }
 
-  .section { margin-bottom: 3rem; }
+  .section { margin-bottom: 5.5rem; }
 
   .section-label {
     font-size: 0.72rem;
@@ -1248,7 +1248,7 @@ import Layout from '../layouts/Layout.astro';
     const canvas = document.getElementById('topo-canvas') as HTMLCanvasElement;
     const tooltip = document.getElementById('topo-tooltip');
     if (!canvas || !tooltip) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d')!;
     if (!ctx) return;
 
     // Physical cluster topology — static layout reflects real homelab

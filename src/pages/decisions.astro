@@ -245,6 +245,8 @@ const REPO = 'https://github.com/Kagiso-me/homelab-infrastructure/blob/main/docs
     border-top: 1px solid color-mix(in srgb, white 7%, transparent);
     border-radius: 12px;
     transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    position: relative;
+    overflow: hidden;
   }
 
   .adr-entry:hover .adr-card {
@@ -252,6 +254,24 @@ const REPO = 'https://github.com/Kagiso-me/homelab-infrastructure/blob/main/docs
     box-shadow: 0 8px 32px rgba(0,0,0,0.3), 0 0 0 1px color-mix(in srgb, var(--color-peach) 12%, transparent);
     transform: translateX(4px);
   }
+
+  .adr-card::after {
+    content: '';
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.3s;
+    background: radial-gradient(
+      500px circle at calc(var(--mx, 50%) * 1%) calc(var(--my, 50%) * 1%),
+      rgba(255,255,255,0.07) 0%,
+      rgba(255,255,255,0.025) 40%,
+      transparent 65%
+    );
+    z-index: 10;
+  }
+  .adr-entry:hover .adr-card::after { opacity: 1; }
 
   .adr-card-top {
     display: flex;

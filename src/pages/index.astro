@@ -88,14 +88,8 @@ const recentPosts = (await getCollection('blog'))
         <div class="live-card skeleton"></div>
       </div>
 
-      <!-- Option C: Infinite marquee -->
-      <div class="svc-marquee-wrap" id="svc-marquee-wrap">
-        <div class="svc-marquee" id="svc-marquee">
-          <div class="svc-marquee-track" id="svc-marquee-track">
-            <!-- populated by JS, duplicated for seamless loop -->
-          </div>
-        </div>
-      </div>
+      <!-- Service grid — populated immediately by JS with static data, then enriched from live.json -->
+      <div class="svc-grid" id="svc-grid"></div>
 
     </div>
   </section>
@@ -654,224 +648,128 @@ const recentPosts = (await getCollection('blog'))
     gap: 0.75rem;
   }
 
-  /* ── Services grid — NOC panel cards ── */
+  /* ── Service card grid ── */
   .svc-grid {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 0.75rem;
-    margin-top: 1.25rem;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
   }
-
-  @media (max-width: 900px) { .svc-grid { grid-template-columns: repeat(3, 1fr); } }
-  @media (max-width: 480px) { .svc-grid { grid-template-columns: repeat(2, 1fr); } }
 
   .svc-card {
     position: relative;
-    background: var(--color-surface);
-    border: 1px solid var(--color-muted);
+    background: color-mix(in srgb, var(--color-surface) 70%, transparent);
+    backdrop-filter: blur(8px);
+    border: 1px solid color-mix(in srgb, var(--color-muted) 55%, transparent);
+    border-top: 1px solid color-mix(in srgb, white 7%, transparent);
     border-radius: 14px;
-    padding: 1.1rem 1rem 0.9rem;
+    padding: 1.25rem 1.25rem 1.1rem;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
     overflow: hidden;
-    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
     cursor: default;
-    min-height: 100px;
   }
 
-  /* Coloured top-edge glow — set per card via --svc-color */
   .svc-card::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: var(--svc-color, var(--color-peach));
-    opacity: 0.8;
+    background: var(--svc-color, var(--color-ok));
+    opacity: 0.7;
+    border-radius: 14px 14px 0 0;
     transition: opacity 0.2s;
   }
 
-  /* Subtle ambient glow behind the card */
   .svc-card::after {
     content: '';
-    position: absolute;
-    top: -20px; left: 50%;
-    transform: translateX(-50%);
-    width: 60%;
-    height: 40px;
-    background: var(--svc-color, var(--color-peach));
-    filter: blur(18px);
-    opacity: 0.08;
     pointer-events: none;
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    opacity: 0;
     transition: opacity 0.3s;
+    background: radial-gradient(
+      400px circle at calc(var(--mx, 50%) * 1%) calc(var(--my, 50%) * 1%),
+      rgba(255,255,255,0.06) 0%,
+      transparent 65%
+    );
+    z-index: 1;
   }
 
   .svc-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 28px rgba(0,0,0,0.4);
-    border-color: var(--svc-color, var(--color-peach));
+    border-color: color-mix(in srgb, var(--svc-color, var(--color-ok)) 40%, var(--color-muted));
+    box-shadow: 0 8px 32px rgba(0,0,0,0.35), 0 0 0 1px color-mix(in srgb, var(--svc-color, var(--color-ok)) 12%, transparent);
+    transform: translateY(-2px);
   }
 
   .svc-card:hover::before { opacity: 1; }
-  .svc-card:hover::after  { opacity: 0.18; }
+  .svc-card:hover::after { opacity: 1; }
 
-  .svc-card-top {
+  .svc-card-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
 
-  .svc-initial {
-    font-family: var(--font-mono);
-    font-size: 1.15rem;
-    font-weight: 800;
-    color: var(--svc-color, var(--color-peach));
-    letter-spacing: -0.03em;
-    line-height: 1;
-  }
-
-  /* Status dot with a glow matching --svc-color */
-  .svc-card .status-dot.ok {
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--svc-color, var(--color-ok)) 20%, transparent);
-  }
-
-  .svc-card-name {
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    font-weight: 700;
-    color: var(--color-heading);
-    letter-spacing: 0.01em;
-  }
-
-  .svc-card-meta {
-    font-family: var(--font-mono);
-    font-size: 0.68rem;
-    color: var(--color-subtle);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    line-height: 1.3;
-  }
-
-  /* ── Option C: Infinite marquee ── */
-  .svc-marquee-wrap {
-    position: relative;
-    margin-top: 1.5rem;
-    background: color-mix(in srgb, var(--color-surface) 80%, var(--color-mantle));
-    border: 1px solid color-mix(in srgb, var(--color-muted) 70%, transparent);
-    border-top: 1px solid color-mix(in srgb, var(--color-peach) 20%, var(--color-muted));
-    border-radius: 16px;
-    overflow: hidden;
-    padding: 1.4rem 0;
-    box-shadow: 0 1px 20px color-mix(in srgb, var(--color-crust) 60%, transparent);
-  }
-
-  /* Fade edges */
-  .svc-marquee-wrap::before,
-  .svc-marquee-wrap::after {
-    content: '';
-    position: absolute;
-    top: 0; bottom: 0;
-    width: 80px;
-    z-index: 2;
-    pointer-events: none;
-  }
-  .svc-marquee-wrap::before {
-    left: 0;
-    background: linear-gradient(90deg, var(--color-surface), transparent);
-  }
-  .svc-marquee-wrap::after {
-    right: 0;
-    background: linear-gradient(-90deg, var(--color-surface), transparent);
-  }
-
-  .svc-marquee {
-    overflow: hidden;
-    width: 100%;
-  }
-
-  .svc-marquee-track {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    width: max-content;
-    animation: marquee-scroll 28s linear infinite;
-  }
-
-  .svc-marquee-wrap:hover .svc-marquee-track {
-    animation-play-state: paused;
-  }
-
-  @keyframes marquee-scroll {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-50%); }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .svc-marquee-track { animation: none; }
-  }
-
-  .svc-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.85rem;
-    padding: 0.65rem 2.75rem;
-    border-right: 1px solid color-mix(in srgb, var(--color-muted) 40%, transparent);
-    white-space: nowrap;
-    flex-shrink: 0;
-    transition: background 0.15s;
-    cursor: default;
-  }
-
-  .svc-chip:hover {
-    background: color-mix(in srgb, var(--svc-color, var(--color-ok)) 5%, transparent);
-  }
-
-  .svc-chip-dot {
+  .svc-card-dot {
     width: 8px; height: 8px;
     border-radius: 50%;
     background: var(--svc-color, var(--color-ok));
     box-shadow: 0 0 6px var(--svc-color, var(--color-ok));
     flex-shrink: 0;
-    animation: chip-pulse 2.5s ease-in-out infinite;
+    animation: svc-pulse 2.5s ease-in-out infinite;
   }
 
-  @keyframes chip-pulse {
-    0%, 100% { box-shadow: 0 0 3px var(--svc-color, var(--color-ok)); opacity: 0.85; }
-    50%       { box-shadow: 0 0 10px var(--svc-color, var(--color-ok)), 0 0 18px var(--svc-color, var(--color-ok)); opacity: 1; }
+  @keyframes svc-pulse {
+    0%, 100% { box-shadow: 0 0 3px var(--svc-color, var(--color-ok)); }
+    50%       { box-shadow: 0 0 10px var(--svc-color, var(--color-ok)); }
   }
 
-  .svc-chip-name {
+  .svc-card-badge {
     font-family: var(--font-mono);
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: var(--color-heading);
-    letter-spacing: 0.02em;
-  }
-
-  .svc-chip-sep {
-    color: var(--color-muted);
-    font-size: 0.7rem;
-  }
-
-  .svc-chip-meta {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--color-subtle);
-  }
-
-  .svc-chip-badge {
-    font-family: var(--font-mono);
-    font-size: 0.6rem;
+    font-size: 0.58rem;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--svc-color, var(--color-ok));
     background: color-mix(in srgb, var(--svc-color, var(--color-ok)) 12%, transparent);
-    border: 1px solid color-mix(in srgb, var(--svc-color, var(--color-ok)) 35%, transparent);
+    border: 1px solid color-mix(in srgb, var(--svc-color, var(--color-ok)) 30%, transparent);
     border-radius: 4px;
-    padding: 0.15rem 0.5rem;
-    margin-left: 0.2rem;
+    padding: 0.12rem 0.45rem;
+  }
+
+  .svc-card-name {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-heading);
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+
+  .svc-card-meta {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--color-subtle);
+    line-height: 1.5;
+    min-height: 1.05rem;
+  }
+
+  .svc-card.skeleton {
+    height: 110px;
+    animation: skeleton-shimmer 1.5s ease-in-out infinite;
+  }
+
+  @keyframes skeleton-shimmer {
+    0%, 100% { opacity: 0.4; }
+    50%       { opacity: 0.7; }
+  }
+
+  @media (max-width: 600px) {
+    .svc-grid { grid-template-columns: repeat(2, 1fr); }
   }
 
 
@@ -1466,12 +1364,12 @@ const recentPosts = (await getCollection('blog'))
 <script>
   // ── Fallback static list — shown immediately before live.json loads
   const STATIC_SERVICES = [
-    { name: 'Immich',    tag: '',  status: 'unknown' },
-    { name: 'Nextcloud', tag: '',  status: 'unknown' },
-    { name: 'SABnzbd',   tag: '',  status: 'unknown' },
-    { name: 'Sonarr',    tag: '',  status: 'unknown' },
-    { name: 'Radarr',    tag: '',  status: 'unknown' },
-    { name: 'Lidarr',    tag: '',  status: 'unknown' },
+    { name: 'Immich',    tag: 'photo library',   status: 'ok' },
+    { name: 'Nextcloud', tag: 'file storage',     status: 'ok' },
+    { name: 'SABnzbd',   tag: 'download client',  status: 'ok' },
+    { name: 'Sonarr',    tag: 'tv automation',    status: 'ok' },
+    { name: 'Radarr',    tag: 'movie automation', status: 'ok' },
+    { name: 'Lidarr',    tag: 'music automation', status: 'ok' },
   ];
 
   const SVC_COLORS: Record<string, string> = {
@@ -1483,31 +1381,26 @@ const recentPosts = (await getCollection('blog'))
     Lidarr:    'var(--color-ok)',
   };
 
-  // ── Option C: marquee builder ──
+  // ── Service card grid builder ──
   function buildSvcGrid(services: any[]) {
-    const track = document.getElementById('svc-marquee-track');
-    if (!track) return;
+    const grid = document.getElementById('svc-grid');
+    if (!grid) return;
 
-    function makeChips(svcs: any[]) {
-      return svcs.map(s => {
-        const colonIdx = s.tag.indexOf(':');
-        const name = colonIdx > -1 ? s.tag.slice(0, colonIdx).trim() : s.name;
-        const meta = colonIdx > -1 ? s.tag.slice(colonIdx + 1).trim() : (s.tag === '—' || s.tag === '' ? '' : s.tag);
-        const color = SVC_COLORS[s.name] ?? 'var(--color-peach)';
-        const badge = s.status === 'ok' ? 'online' : s.status === 'warn' ? 'degraded' : s.status === 'unknown' ? 'checking' : 'offline';
-        return `
-          <div class="svc-chip" style="--svc-color:${color}">
-            <span class="svc-chip-dot"></span>
-            <span class="svc-chip-name">${name}</span>
-            ${meta ? `<span class="svc-chip-sep">·</span><span class="svc-chip-meta">${meta}</span>` : ''}
-            <span class="svc-chip-badge">${badge}</span>
-          </div>`;
-      }).join('');
-    }
-
-    // Duplicate chips for seamless infinite loop
-    const chips = makeChips(services);
-    track.innerHTML = chips + chips;
+    grid.innerHTML = services.map(s => {
+      const colonIdx = s.tag?.indexOf(':') ?? -1;
+      const meta = colonIdx > -1 ? s.tag.slice(colonIdx + 1).trim() : (s.tag && s.tag !== '—' ? s.tag : '');
+      const color = SVC_COLORS[s.name] ?? 'var(--color-peach)';
+      const badge = s.status === 'ok' ? 'online' : s.status === 'warn' ? 'degraded' : s.status === 'unknown' ? 'checking' : 'offline';
+      return `
+        <div class="svc-card" style="--svc-color:${color}">
+          <div class="svc-card-header">
+            <span class="svc-card-dot"></span>
+            <span class="svc-card-badge">${badge}</span>
+          </div>
+          <div class="svc-card-name">${s.name}</div>
+          <div class="svc-card-meta">${meta || '—'}</div>
+        </div>`;
+    }).join('');
   }
 
   async function loadLiveData() {

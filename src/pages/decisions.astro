@@ -127,11 +127,25 @@ const REPO = 'https://github.com/Kagiso-me/homelab-infrastructure/blob/main/docs
       </p>
     </div>
 
+    <!-- ── Category filters ── -->
+    <div class="filter-bar fade-up" style="animation-delay:0.04s" id="adr-filter-bar">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="infra">Infrastructure</button>
+      <button class="filter-btn" data-filter="gitops">GitOps</button>
+      <button class="filter-btn" data-filter="network">Networking</button>
+      <button class="filter-btn" data-filter="security">Security</button>
+      <button class="filter-btn" data-filter="storage">Storage</button>
+      <button class="filter-btn" data-filter="observability">Observability</button>
+      <button class="filter-btn" data-filter="platform">Platform</button>
+      <button class="filter-btn" data-filter="arch">Architecture</button>
+    </div>
+
     <!-- ── ADR timeline ── -->
-    <section class="adr-timeline fade-up" style="animation-delay:0.05s">
+    <section class="adr-timeline fade-up" style="animation-delay:0.05s" id="adr-timeline">
       {adrs.map((adr, i) => (
         <a
           class="adr-entry"
+          data-category={adr.category}
           href={`${REPO}/${adr.slug}.md`}
           target="_blank"
           rel="noopener noreferrer"
@@ -340,4 +354,68 @@ const REPO = 'https://github.com/Kagiso-me/homelab-infrastructure/blob/main/docs
     .adr-cat { display: none; }
     .adr-spine { width: 1.75rem; }
   }
+
+  /* ── Filter bar ── */
+  .filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .filter-btn {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.9rem;
+    border-radius: 6px;
+    border: 1px solid color-mix(in srgb, var(--color-muted) 60%, transparent);
+    background: transparent;
+    color: var(--color-subtle);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+  }
+
+  .filter-btn:hover {
+    border-color: var(--color-peach);
+    color: var(--color-peach);
+    background: color-mix(in srgb, var(--color-peach) 6%, transparent);
+  }
+
+  .filter-btn.active {
+    border-color: var(--color-peach);
+    color: var(--color-peach);
+    background: color-mix(in srgb, var(--color-peach) 10%, transparent);
+  }
+
+  .adr-entry[aria-hidden="true"] {
+    display: none;
+  }
 </style>
+
+<script>
+  function initAdrFilter() {
+    const bar = document.getElementById('adr-filter-bar');
+    if (!bar) return;
+
+    bar.addEventListener('click', (e) => {
+      const btn = (e.target as Element).closest('.filter-btn') as HTMLElement | null;
+      if (!btn) return;
+
+      const filter = btn.dataset.filter ?? 'all';
+
+      bar.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      document.querySelectorAll<HTMLElement>('.adr-entry').forEach(entry => {
+        const match = filter === 'all' || entry.dataset.category === filter;
+        entry.setAttribute('aria-hidden', match ? 'false' : 'true');
+      });
+    });
+  }
+
+  initAdrFilter();
+  document.addEventListener('astro:page-load', initAdrFilter);
+</script>

@@ -12,6 +12,13 @@ const recentPosts = (await getCollection('blog'))
 
   <!-- ── Hero ── -->
   <section class="hero fade-up">
+    <!-- Aurora background layers -->
+    <div class="aurora" aria-hidden="true">
+      <div class="aurora-orb aurora-orb-1"></div>
+      <div class="aurora-orb aurora-orb-2"></div>
+      <div class="aurora-orb aurora-orb-3"></div>
+    </div>
+    <!-- Particle network canvas -->
     <canvas id="hero-grid" aria-hidden="true"></canvas>
     <div class="hero-inner">
 
@@ -147,6 +154,22 @@ const recentPosts = (await getCollection('blog'))
       <span class="manifesto-line">No staging.</span>
       <span class="manifesto-sep">·</span>
       <span class="manifesto-line manifesto-accent">Built in public.</span>
+    </div>
+  </section>
+
+  <!-- ── 24h commit timeline ── -->
+  <section class="section fade-up" style="animation-delay: 0.27s">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2 class="section-title">Activity — Last 24h</h2>
+        <span class="mono live-badge">
+          <span class="status-dot ok"></span>
+          github.com/Kagiso-me
+        </span>
+      </div>
+      <div class="timeline-wrap" id="timeline-wrap">
+        <div class="timeline-loading mono">loading activity…</div>
+      </div>
     </div>
   </section>
 
@@ -293,13 +316,69 @@ const recentPosts = (await getCollection('blog'))
     border-bottom: 1px solid var(--color-muted);
   }
 
+  /* Aurora orbs */
+  .aurora {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .aurora-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    mix-blend-mode: screen;
+    will-change: transform;
+  }
+
+  .aurora-orb-1 {
+    width: 55vw; height: 55vw;
+    top: -20%; left: -10%;
+    background: radial-gradient(ellipse, color-mix(in srgb, var(--color-peach) 22%, transparent), transparent 70%);
+    animation: aurora-drift-1 18s ease-in-out infinite alternate;
+  }
+
+  .aurora-orb-2 {
+    width: 45vw; height: 45vw;
+    top: -15%; right: -5%;
+    background: radial-gradient(ellipse, color-mix(in srgb, var(--color-mauve) 18%, transparent), transparent 70%);
+    animation: aurora-drift-2 22s ease-in-out infinite alternate;
+  }
+
+  .aurora-orb-3 {
+    width: 35vw; height: 35vw;
+    bottom: -10%; left: 35%;
+    background: radial-gradient(ellipse, color-mix(in srgb, var(--color-sapphire) 12%, transparent), transparent 70%);
+    animation: aurora-drift-3 26s ease-in-out infinite alternate;
+  }
+
+  @keyframes aurora-drift-1 {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(8%, 12%) scale(1.15); }
+  }
+  @keyframes aurora-drift-2 {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(-10%, 8%) scale(1.2); }
+  }
+  @keyframes aurora-drift-3 {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(-6%, -14%) scale(1.1); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .aurora-orb { animation: none; }
+  }
+
   #hero-grid {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     pointer-events: none;
-    opacity: 0.55;
+    opacity: 0.7;
+    z-index: 1;
   }
 
   /* Typewriter cursor */
@@ -893,6 +972,114 @@ const recentPosts = (await getCollection('blog'))
     line-height: 1.4;
   }
 
+  /* ── 24h Activity Timeline ── */
+  .timeline-wrap {
+    position: relative;
+    padding-left: 1.5rem;
+  }
+
+  .timeline-wrap::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--color-peach), var(--color-mauve) 60%, transparent);
+    border-radius: 1px;
+  }
+
+  .timeline-loading {
+    color: var(--color-subtle);
+    font-size: 0.78rem;
+    padding: 1rem 0;
+  }
+
+  .timeline-empty {
+    color: var(--color-subtle);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    padding: 0.5rem 0;
+  }
+
+  .timeline-event {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 0.6rem 0;
+    position: relative;
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  .timeline-event.reveal {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .timeline-dot {
+    position: absolute;
+    left: -1.75rem;
+    top: 0.85rem;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 2px solid var(--color-base);
+  }
+
+  .timeline-dot.push    { background: var(--color-ok); box-shadow: 0 0 6px var(--color-ok); }
+  .timeline-dot.pr      { background: var(--color-mauve); box-shadow: 0 0 6px var(--color-mauve); }
+  .timeline-dot.deploy  { background: var(--color-peach); box-shadow: 0 0 6px var(--color-peach); }
+  .timeline-dot.other   { background: var(--color-muted); }
+
+  .timeline-body {
+    flex: 1;
+    min-width: 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-muted) 30%, transparent);
+    padding-bottom: 0.5rem;
+  }
+
+  .timeline-event:last-child .timeline-body { border-bottom: none; }
+
+  .timeline-repo {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-peach);
+    font-weight: 600;
+  }
+
+  .timeline-desc {
+    font-size: 0.85rem;
+    color: var(--color-text);
+    margin: 0.15rem 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .timeline-meta {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--color-subtle);
+  }
+
+  .timeline-badge {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+  }
+
+  .timeline-badge.push   { color: var(--color-ok);    background: color-mix(in srgb, var(--color-ok)    12%, transparent); border: 1px solid color-mix(in srgb, var(--color-ok)    30%, transparent); }
+  .timeline-badge.pr     { color: var(--color-mauve); background: color-mix(in srgb, var(--color-mauve) 12%, transparent); border: 1px solid color-mix(in srgb, var(--color-mauve) 30%, transparent); }
+  .timeline-badge.deploy { color: var(--color-peach); background: color-mix(in srgb, var(--color-peach) 12%, transparent); border: 1px solid color-mix(in srgb, var(--color-peach) 30%, transparent); }
+  .timeline-badge.other  { color: var(--color-subtle); background: color-mix(in srgb, var(--color-muted) 15%, transparent); border: 1px solid color-mix(in srgb, var(--color-muted) 30%, transparent); }
+
   /* ── Cinematic manifesto strip ── */
   .manifesto-strip {
     padding: 4rem 1.5rem;
@@ -1464,68 +1651,153 @@ const recentPosts = (await getCollection('blog'))
   }
 
   // ── Dot-grid background ──────────────────────────────────────────────────
-  (function initDotGrid() {
+  // ── Particle network (cursor-reactive) ──────────────────────────────────
+  (function initParticleNet() {
     const canvas = document.getElementById('hero-grid') as HTMLCanvasElement;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const DOT_SPACING = 28;
-    const DOT_RADIUS  = 1.2;
-    const BASE_ALPHA  = 0.18;
-    const WAVE_ALPHA  = 0.55;
-    const WAVE_SPEED  = 0.00055;
-    const WAVE_SCALE  = 0.008;
+    const PARTICLE_COUNT = 70;
+    const MAX_DIST       = 140;   // max px before a line fades out
+    const CURSOR_ATTRACT = 180;   // px radius around cursor that attracts
+    const CURSOR_FORCE   = 0.012; // strength of cursor pull
+    const BASE_SPEED     = 0.28;
+    const PEACH  = [250, 179, 135] as const;
+    const MAUVE  = [203, 166, 247] as const;
+    const SAPHIR = [116, 199, 236] as const;
+    const COLS   = [PEACH, MAUVE, SAPHIR];
 
-    let W = 0, H = 0, cols = 0, rows = 0;
-    let raf = 0;
+    let W = 0, H = 0, raf = 0;
+    let mouse = { x: -9999, y: -9999 };
+
+    type Particle = {
+      x: number; y: number;
+      vx: number; vy: number;
+      r: number;
+      col: readonly [number,number,number];
+      alpha: number;
+    };
+
+    let particles: Particle[] = [];
 
     function resize() {
       const rect = canvas.parentElement!.getBoundingClientRect();
       W = canvas.width  = rect.width;
       H = canvas.height = rect.height;
-      cols = Math.ceil(W / DOT_SPACING) + 1;
-      rows = Math.ceil(H / DOT_SPACING) + 1;
     }
 
-    function draw(ts: number) {
-      ctx.clearRect(0, 0, W, H);
-      const t = ts * WAVE_SPEED;
+    function spawn(): Particle {
+      const col = COLS[Math.floor(Math.random() * COLS.length)];
+      const angle = Math.random() * Math.PI * 2;
+      return {
+        x: Math.random() * W,
+        y: Math.random() * H,
+        vx: Math.cos(angle) * BASE_SPEED * (0.5 + Math.random()),
+        vy: Math.sin(angle) * BASE_SPEED * (0.5 + Math.random()),
+        r: 1.5 + Math.random() * 1.5,
+        col,
+        alpha: 0.4 + Math.random() * 0.5,
+      };
+    }
 
-      for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-          const x = c * DOT_SPACING;
-          const y = r * DOT_SPACING;
-          // Diagonal wave — sine driven by position + time
-          const wave = Math.sin(t + (x + y) * WAVE_SCALE);
-          const alpha = BASE_ALPHA + ((wave + 1) / 2) * (WAVE_ALPHA - BASE_ALPHA);
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+
+      // Update positions + cursor attraction
+      for (const p of particles) {
+        const dx = mouse.x - p.x;
+        const dy = mouse.y - p.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < CURSOR_ATTRACT && dist > 1) {
+          p.vx += (dx / dist) * CURSOR_FORCE;
+          p.vy += (dy / dist) * CURSOR_FORCE;
+        }
+        // Speed limit
+        const spd = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+        if (spd > 1.2) { p.vx *= 0.97; p.vy *= 0.97; }
+
+        p.x += p.vx;
+        p.y += p.vy;
+
+        // Wrap around edges
+        if (p.x < 0)  p.x = W;
+        if (p.x > W)  p.x = 0;
+        if (p.y < 0)  p.y = H;
+        if (p.y > H)  p.y = 0;
+      }
+
+      // Draw connecting lines between nearby particles
+      for (let i = 0; i < particles.length; i++) {
+        const a = particles[i];
+        for (let j = i + 1; j < particles.length; j++) {
+          const b = particles[j];
+          const dx = a.x - b.x;
+          const dy = a.y - b.y;
+          const d  = Math.sqrt(dx * dx + dy * dy);
+          if (d > MAX_DIST) continue;
+
+          const t = 1 - d / MAX_DIST;
+          const [r, g, bv] = a.col;
           ctx.beginPath();
-          ctx.arc(x, y, DOT_RADIUS, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(250,179,135,${alpha})`; // --color-peach
-          ctx.fill();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.strokeStyle = `rgba(${r},${g},${bv},${t * 0.22})`;
+          ctx.lineWidth = t * 1.2;
+          ctx.stroke();
+        }
+
+        // Lines from particle to cursor
+        const cdx = a.x - mouse.x;
+        const cdy = a.y - mouse.y;
+        const cd  = Math.sqrt(cdx * cdx + cdy * cdy);
+        if (cd < CURSOR_ATTRACT) {
+          const t = 1 - cd / CURSOR_ATTRACT;
+          const [r, g, bv] = a.col;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(mouse.x, mouse.y);
+          ctx.strokeStyle = `rgba(${r},${g},${bv},${t * 0.45})`;
+          ctx.lineWidth = t * 1.5;
+          ctx.stroke();
         }
       }
+
+      // Draw dots
+      for (const p of particles) {
+        const [r, g, bv] = p.col;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${r},${g},${bv},${p.alpha})`;
+        ctx.fill();
+      }
+
       raf = requestAnimationFrame(draw);
     }
 
-    // Pause when not visible to save CPU
     const obs = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting) {
-        raf = requestAnimationFrame(draw);
-      } else {
-        cancelAnimationFrame(raf);
-      }
+      if (entries[0].isIntersecting) { raf = requestAnimationFrame(draw); }
+      else { cancelAnimationFrame(raf); }
     }, { threshold: 0 });
 
     resize();
+    particles = Array.from({ length: PARTICLE_COUNT }, spawn);
     obs.observe(canvas);
-    window.addEventListener('resize', resize, { passive: true });
+    window.addEventListener('resize', () => { resize(); }, { passive: true });
 
-    // Respect reduced-motion preference
+    // Track cursor relative to canvas
+    canvas.parentElement!.addEventListener('mousemove', (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+    }, { passive: true });
+    canvas.parentElement!.addEventListener('mouseleave', () => {
+      mouse.x = -9999; mouse.y = -9999;
+    }, { passive: true });
+
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      // Draw once, static — no animation
-      requestAnimationFrame(ts => draw(ts));
-      return;
+      cancelAnimationFrame(raf);
+      requestAnimationFrame(draw);
     }
   })();
 
@@ -1672,5 +1944,95 @@ const recentPosts = (await getCollection('blog'))
       });
     });
   }
+
+  // ── 24h Activity Timeline ────────────────────────────────────────────────────
+  (async function loadTimeline() {
+    const wrap = document.getElementById('timeline-wrap');
+    if (!wrap) return;
+
+    function relTime(iso: string) {
+      const diff = Date.now() - new Date(iso).getTime();
+      const m = Math.floor(diff / 60000);
+      if (m < 1)  return 'just now';
+      if (m < 60) return `${m}m ago`;
+      const h = Math.floor(m / 60);
+      return `${h}h ago`;
+    }
+
+    function eventType(type: string): 'push'|'pr'|'deploy'|'other' {
+      if (type === 'PushEvent')        return 'push';
+      if (type === 'PullRequestEvent') return 'pr';
+      if (type === 'CreateEvent' || type === 'ReleaseEvent') return 'deploy';
+      return 'other';
+    }
+
+    function badgeLabel(type: string, payload: any): string {
+      if (type === 'PushEvent')        return `${payload?.commits?.length ?? 1} commit${(payload?.commits?.length ?? 1) > 1 ? 's' : ''}`;
+      if (type === 'PullRequestEvent') return payload?.action ?? 'PR';
+      if (type === 'CreateEvent')      return payload?.ref_type ?? 'create';
+      if (type === 'ReleaseEvent')     return 'release';
+      return type.replace('Event', '').toLowerCase();
+    }
+
+    function eventDesc(type: string, payload: any, repo: string): string {
+      if (type === 'PushEvent') {
+        const msg = payload?.commits?.[0]?.message ?? '';
+        return msg.split('\n')[0].slice(0, 80) || `pushed to ${repo}`;
+      }
+      if (type === 'PullRequestEvent') return payload?.pull_request?.title?.slice(0, 80) ?? repo;
+      if (type === 'CreateEvent') return `created ${payload?.ref_type} ${payload?.ref ?? ''} in ${repo}`;
+      if (type === 'ReleaseEvent') return payload?.release?.name ?? payload?.release?.tag_name ?? repo;
+      return repo;
+    }
+
+    try {
+      const repos = ['homelab-infrastructure', 'kagiso-me.github.io'];
+      const cutoff = Date.now() - 24 * 60 * 60 * 1000;
+      const events: any[] = [];
+
+      for (const repo of repos) {
+        try {
+          const r = await fetch(`https://api.github.com/repos/Kagiso-me/${repo}/events?per_page=30`);
+          if (!r.ok) continue;
+          const data = await r.json();
+          for (const ev of data) {
+            if (new Date(ev.created_at).getTime() < cutoff) break;
+            events.push({ ...ev, repoName: repo });
+          }
+        } catch {}
+      }
+
+      events.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+      if (!events.length) {
+        wrap.innerHTML = '<div class="timeline-empty">No activity in the last 24 hours.</div>';
+        return;
+      }
+
+      wrap.innerHTML = '';
+      events.slice(0, 12).forEach((ev, i) => {
+        const kind = eventType(ev.type);
+        const label = badgeLabel(ev.type, ev.payload);
+        const desc  = eventDesc(ev.type, ev.payload, ev.repoName);
+
+        const el = document.createElement('div');
+        el.className = 'timeline-event';
+        el.innerHTML = `
+          <div class="timeline-dot ${kind}"></div>
+          <div class="timeline-body">
+            <div class="timeline-repo">${ev.repoName}</div>
+            <div class="timeline-desc">${desc}</div>
+            <div class="timeline-meta">${relTime(ev.created_at)}</div>
+          </div>
+          <span class="timeline-badge ${kind}">${label}</span>
+        `;
+        wrap.appendChild(el);
+
+        setTimeout(() => el.classList.add('reveal'), i * 60);
+      });
+    } catch {
+      wrap.innerHTML = '<div class="timeline-empty">Activity unavailable.</div>';
+    }
+  })();
 
 </script>

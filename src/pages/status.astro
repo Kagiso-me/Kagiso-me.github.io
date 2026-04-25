@@ -83,6 +83,15 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </section>
 
+    <!-- ── Network Topology Map ── -->
+    <section class="section fade-up" style="animation-delay:0.18s">
+      <h2 class="section-label">Network Topology</h2>
+      <div class="topo-wrap">
+        <canvas id="topo-canvas" aria-label="Network topology diagram"></canvas>
+        <div class="topo-tooltip" id="topo-tooltip"></div>
+      </div>
+    </section>
+
     <!-- ── GitOps ── -->
     <section class="section fade-up" style="animation-delay:0.20s">
       <h2 class="section-label">GitOps — Flux Kustomizations</h2>
@@ -593,6 +602,49 @@ import Layout from '../layouts/Layout.astro';
     .flux-row > *:nth-child(2),
     .flux-row > *:nth-child(3) { display: none; }
   }
+
+  /* ── Network Topology ── */
+  .topo-wrap {
+    position: relative;
+    background: color-mix(in srgb, var(--color-surface) 60%, transparent);
+    backdrop-filter: blur(12px);
+    border: 1px solid color-mix(in srgb, var(--color-muted) 50%, transparent);
+    border-top: 1px solid color-mix(in srgb, white 8%, transparent);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.35);
+  }
+
+  #topo-canvas {
+    display: block;
+    width: 100%;
+    height: 420px;
+    cursor: default;
+  }
+
+  @media (max-width: 640px) { #topo-canvas { height: 320px; } }
+
+  .topo-tooltip {
+    position: absolute;
+    pointer-events: none;
+    background: var(--color-mantle);
+    border: 1px solid var(--color-muted);
+    border-radius: 10px;
+    padding: 0.65rem 0.9rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-heading);
+    line-height: 1.6;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 10;
+    max-width: 280px;
+    white-space: normal;
+  }
+
+  .topo-tooltip.visible { opacity: 1; }
 </style>
 
 <script>
@@ -1123,7 +1175,6 @@ import Layout from '../layouts/Layout.astro';
   }
 
   // Re-run after each data load (nodes grid is replaced each poll)
-  const _origLoadStatus = loadStatus;
   (window as any).__ringObserverPatched = true;
 
   // Hook into the nodes grid being populated via MutationObserver
@@ -1136,6 +1187,249 @@ import Layout from '../layouts/Layout.astro';
     mo.observe(nodesGridEl, { childList: true, subtree: false });
   }
 
-  document.addEventListener('astro:page-load', () => { startPolling(); loadCVEBanner(); });
+  document.addEventListener('astro:page-load', () => { startPolling(); loadCVEBanner(); initTopoMap(); });
   document.addEventListener('astro:before-swap', stopPolling);
+
+  // ── Network Topology Map ──────────────────────────────────────────────────
+  async function initTopoMap() {
+    const canvas = document.getElementById('topo-canvas') as HTMLCanvasElement;
+    const tooltip = document.getElementById('topo-tooltip');
+    if (!canvas || !tooltip) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Physical cluster topology — static layout reflects real homelab
+    type NodeDef = {
+      id: string; label: string; sublabel: string; role: string;
+      color: string; x: number; y: number; // 0..1 normalized
+      links: string[]; services?: string[];
+    };
+
+    const NODES: NodeDef[] = [
+      { id: 'mikrotik', label: 'MikroTik', sublabel: 'RouterOS',   role: 'router',
+        color: '#fab387', x: 0.5,  y: 0.08,
+        links: ['tywin','jaime','tyrion','bronn','varys','ned','bran'],
+        services: ['DNS', 'DHCP', 'Firewall', 'VLANs'] },
+      { id: 'tywin',    label: 'Tywin',    sublabel: 'k3s master', role: 'k3s',
+        color: '#cba6f7', x: 0.2,  y: 0.38,
+        links: ['jaime','tyrion'],
+        services: ['k3s control-plane', 'Traefik', 'Authentik', 'Flux'] },
+      { id: 'jaime',    label: 'Jaime',    sublabel: 'k3s worker', role: 'k3s',
+        color: '#cba6f7', x: 0.5,  y: 0.38,
+        links: ['tyrion'],
+        services: ['k3s worker', 'Prometheus', 'Grafana', 'Loki'] },
+      { id: 'tyrion',   label: 'Tyrion',   sublabel: 'k3s worker', role: 'k3s',
+        color: '#cba6f7', x: 0.8,  y: 0.38,
+        links: [],
+        services: ['k3s worker', 'CrowdSec', 'SOPS'] },
+      { id: 'bronn',    label: 'Bronn',    sublabel: 'Docker host', role: 'docker',
+        color: '#74c7ec', x: 0.28, y: 0.72,
+        links: ['ned'],
+        services: ['Ollama', 'Open WebUI', 'Docker Compose'] },
+      { id: 'varys',    label: 'Varys',    sublabel: 'control',   role: 'control',
+        color: '#a6e3a1', x: 0.5,  y: 0.72,
+        links: [],
+        services: ['CI runner', 'GitHub Actions'] },
+      { id: 'ned',      label: 'Ned',      sublabel: 'TrueNAS',   role: 'storage',
+        color: '#e6b450', x: 0.72, y: 0.72,
+        links: [],
+        services: ['TrueNAS SCALE', '8TB+4TB SAS', 'NFS/iSCSI'] },
+      { id: 'bran',     label: 'Bran',     sublabel: 'RPi 3B+',   role: 'pi',
+        color: '#f38ba8', x: 0.5,  y: 0.92,
+        links: [],
+        services: ['Pi-hole', 'DNS', 'CI runner'] },
+    ];
+
+    let W = 0, H = 0;
+    let hoveredId: string | null = null;
+    let liveStatuses: Record<string, string> = {};
+    let raf = 0;
+
+    function resize() {
+      const rect = canvas.parentElement!.getBoundingClientRect();
+      W = canvas.width  = rect.width  * window.devicePixelRatio;
+      H = canvas.height = 420          * window.devicePixelRatio;
+      canvas.style.width  = rect.width + 'px';
+      canvas.style.height = '420px';
+    }
+
+    function px(node: NodeDef) {
+      return { x: node.x * W, y: node.y * H };
+    }
+
+    function nodeRadius() { return Math.min(W, H) * 0.055; }
+
+    function drawFrame() {
+      ctx.clearRect(0, 0, W, H);
+      const dpr = window.devicePixelRatio;
+      const R = nodeRadius();
+      const FONT_SIZE = Math.max(10, R * 0.45) * dpr;
+
+      // Draw links
+      for (const node of NODES) {
+        const from = px(node);
+        for (const lid of node.links) {
+          const target = NODES.find(n => n.id === lid);
+          if (!target) continue;
+          const to = px(target);
+          const isHovered = hoveredId === node.id || hoveredId === lid;
+
+          ctx.beginPath();
+          ctx.moveTo(from.x, from.y);
+          ctx.lineTo(to.x, to.y);
+          ctx.strokeStyle = isHovered
+            ? `rgba(250,179,135,0.55)`
+            : `rgba(255,255,255,0.08)`;
+          ctx.lineWidth = isHovered ? 2 * dpr : 1 * dpr;
+          ctx.setLineDash(isHovered ? [] : [6 * dpr, 8 * dpr]);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          // Arrow midpoint indicator
+          if (isHovered) {
+            const mx = (from.x + to.x) / 2;
+            const my = (from.y + to.y) / 2;
+            ctx.beginPath();
+            ctx.arc(mx, my, 3 * dpr, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(250,179,135,0.7)';
+            ctx.fill();
+          }
+        }
+      }
+
+      // Draw nodes
+      for (const node of NODES) {
+        const { x, y } = px(node);
+        const isHovered = hoveredId === node.id;
+        const status = liveStatuses[node.id] ?? 'ok';
+        const statusColor = status === 'ok' ? '#a6e3a1' : status === 'warn' ? '#f9e2af' : '#f38ba8';
+
+        // Outer glow
+        if (isHovered) {
+          const grad = ctx.createRadialGradient(x, y, R * 0.5, x, y, R * 2);
+          grad.addColorStop(0, node.color + '33');
+          grad.addColorStop(1, 'transparent');
+          ctx.beginPath();
+          ctx.arc(x, y, R * 2, 0, Math.PI * 2);
+          ctx.fillStyle = grad;
+          ctx.fill();
+        }
+
+        // Node circle — glass look
+        const nodeGrad = ctx.createRadialGradient(x - R * 0.3, y - R * 0.3, 0, x, y, R);
+        nodeGrad.addColorStop(0, `rgba(255,255,255,0.12)`);
+        nodeGrad.addColorStop(1, `rgba(0,0,0,0.4)`);
+
+        ctx.beginPath();
+        ctx.arc(x, y, R, 0, Math.PI * 2);
+        ctx.fillStyle = nodeGrad;
+        ctx.fill();
+
+        // Coloured ring
+        ctx.beginPath();
+        ctx.arc(x, y, R, 0, Math.PI * 2);
+        ctx.strokeStyle = isHovered ? node.color : node.color + '88';
+        ctx.lineWidth = (isHovered ? 3 : 2) * dpr;
+        ctx.stroke();
+
+        // Status dot (top-right of circle)
+        const sdx = x + R * 0.68;
+        const sdy = y - R * 0.68;
+        ctx.beginPath();
+        ctx.arc(sdx, sdy, 5 * dpr, 0, Math.PI * 2);
+        ctx.fillStyle = statusColor;
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(sdx, sdy, 5 * dpr, 0, Math.PI * 2);
+        ctx.strokeStyle = '#0d1117';
+        ctx.lineWidth = 2 * dpr;
+        ctx.stroke();
+
+        // Label
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.font = `bold ${FONT_SIZE}px 'JetBrains Mono', monospace`;
+        ctx.fillStyle = isHovered ? '#fff' : '#e6e1cf';
+        ctx.fillText(node.label, x, y - FONT_SIZE * 0.3);
+
+        ctx.font = `${FONT_SIZE * 0.75}px 'JetBrains Mono', monospace`;
+        ctx.fillStyle = isHovered ? node.color : '#6b7280';
+        ctx.fillText(node.sublabel, x, y + FONT_SIZE * 0.55);
+      }
+
+      raf = requestAnimationFrame(drawFrame);
+    }
+
+    function hitTest(cx: number, cy: number): NodeDef | null {
+      const R = nodeRadius();
+      for (const node of NODES) {
+        const { x, y } = px(node);
+        const dx = cx * window.devicePixelRatio - x;
+        const dy = cy * window.devicePixelRatio - y;
+        if (dx * dx + dy * dy < R * R) return node;
+      }
+      return null;
+    }
+
+    canvas.addEventListener('mousemove', (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const cx = e.clientX - rect.left;
+      const cy = e.clientY - rect.top;
+      const hit = hitTest(cx, cy);
+
+      hoveredId = hit ? hit.id : null;
+      canvas.style.cursor = hit ? 'pointer' : 'default';
+
+      if (hit && tooltip) {
+        const services = hit.services?.join(', ') ?? '';
+        tooltip.innerHTML = `
+          <div style="color:${hit.color};font-weight:700;margin-bottom:0.3rem">${hit.label}</div>
+          <div style="color:#8b949e;margin-bottom:0.15rem">${hit.role} · ${hit.sublabel}</div>
+          ${services ? `<div style="color:#6b7280;font-size:0.68rem;margin-top:0.4rem;border-top:1px solid #2a2a2a;padding-top:0.4rem">${services}</div>` : ''}
+        `;
+        tooltip.classList.add('visible');
+        const ttW = 240, ttH = 90;
+        const left = Math.min(cx + 16, rect.width - ttW - 8);
+        const top  = Math.max(cy - ttH / 2, 8);
+        tooltip.style.left = left + 'px';
+        tooltip.style.top  = top  + 'px';
+      } else if (tooltip) {
+        tooltip.classList.remove('visible');
+      }
+    });
+
+    canvas.addEventListener('mouseleave', () => {
+      hoveredId = null;
+      tooltip?.classList.remove('visible');
+    });
+
+    // Pull live node statuses from live.json if available
+    try {
+      const r = await fetch('/data/live.json');
+      if (r.ok) {
+        const data = await r.json();
+        const nodes: any[] = data.nodes ?? [];
+        for (const n of nodes) {
+          const match = NODES.find(nd => nd.label.toLowerCase() === n.name?.toLowerCase());
+          if (match) liveStatuses[match.id] = n.status ?? 'ok';
+        }
+      }
+    } catch {}
+
+    const obs = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) { raf = requestAnimationFrame(drawFrame); }
+      else { cancelAnimationFrame(raf); }
+    }, { threshold: 0 });
+
+    resize();
+    obs.observe(canvas);
+    window.addEventListener('resize', () => { resize(); }, { passive: true });
+  }
+
+  // Kick off topology on initial load too
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTopoMap);
+  } else {
+    initTopoMap();
+  }
 </script>

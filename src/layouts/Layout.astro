@@ -234,6 +234,18 @@ const umamiSiteId = import.meta.env.PUBLIC_UMAMI_SITE_ID;
     });
   }
 
+  // ── Card sheen — tracks mouse position per card ───────────────────────────
+  if (window.matchMedia('(pointer: fine)').matches) {
+    const SHEEN_SEL = '.sheen, .live-card, .blog-card, .post-card, .adr-card, .card, .stack-item';
+    document.addEventListener('mousemove', (e: MouseEvent) => {
+      const card = (e.target as Element).closest(SHEEN_SEL) as HTMLElement | null;
+      if (!card) return;
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', String(((e.clientX - r.left) / r.width)  * 100));
+      card.style.setProperty('--my', String(((e.clientY - r.top)  / r.height) * 100));
+    }, { passive: true });
+  }
+
   // ── Scroll-driven reveal ────────────────────────────────────────────────────
   function initReveal() {
     const els = document.querySelectorAll('.fade-up');

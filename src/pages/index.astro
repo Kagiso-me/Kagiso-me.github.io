@@ -151,7 +151,7 @@ const recentPosts = (await getCollection('blog'))
     </div>
   </section>
 
-  <!-- ── 24h commit timeline ── -->
+  <!-- ── 24h Activity ── -->
   <section class="section fade-up" style="animation-delay: 0.27s">
     <div class="section-inner">
       <div class="section-header">
@@ -161,8 +161,10 @@ const recentPosts = (await getCollection('blog'))
           github.com/Kagiso-me ↗
         </a>
       </div>
-      <div class="tl-feed" id="timeline-wrap">
-        <div class="tl-loading mono">loading activity…</div>
+      <div class="act-wrap" id="act-wrap">
+        <!-- Skeleton -->
+        <div class="act-repo-card skeleton" style="height:140px"></div>
+        <div class="act-repo-card skeleton" style="height:140px"></div>
       </div>
     </div>
   </section>
@@ -888,120 +890,168 @@ const recentPosts = (await getCollection('blog'))
     line-height: 1.4;
   }
 
-  /* ── Activity Feed ── */
-  .tl-feed {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    border: 1px solid color-mix(in srgb, var(--color-muted) 50%, transparent);
-    border-radius: 14px;
-    overflow: hidden;
-    background: color-mix(in srgb, var(--color-surface) 60%, transparent);
-    backdrop-filter: blur(8px);
-  }
-
-  .tl-loading, .tl-empty {
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    color: var(--color-subtle);
-    padding: 1.5rem;
-  }
-
-  .tl-event {
+  /* ── Activity cards ── */
+  .act-wrap {
     display: grid;
-    grid-template-columns: 3rem 1fr auto;
-    align-items: center;
-    gap: 0;
-    border-bottom: 1px solid color-mix(in srgb, var(--color-muted) 30%, transparent);
-    opacity: 0;
-    transform: translateY(6px);
-    transition: opacity 0.35s ease, transform 0.35s ease, background 0.15s;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
   }
 
-  .tl-event:last-child { border-bottom: none; }
-  .tl-event.reveal { opacity: 1; transform: translateY(0); }
-  .tl-event:hover { background: color-mix(in srgb, var(--color-overlay) 50%, transparent); }
+  @media (max-width: 640px) { .act-wrap { grid-template-columns: 1fr; } }
 
-  .tl-gutter {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    padding: 1rem 0;
-    border-right: 1px solid color-mix(in srgb, var(--color-muted) 25%, transparent);
+  .act-repo-card {
     position: relative;
+    background: color-mix(in srgb, var(--color-surface) 70%, transparent);
+    backdrop-filter: blur(10px);
+    border: 1px solid color-mix(in srgb, var(--color-muted) 55%, transparent);
+    border-top: 1px solid color-mix(in srgb, white 8%, transparent);
+    border-radius: 16px;
+    padding: 1.5rem 1.5rem 1.25rem;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.4s ease, transform 0.4s ease, border-color 0.2s, box-shadow 0.2s;
   }
 
-  .tl-dot {
-    width: 9px; height: 9px;
-    border-radius: 50%;
-    border: 2px solid var(--color-base);
-    flex-shrink: 0;
-  }
-  .tl-dot.push   { background: var(--color-ok);    box-shadow: 0 0 6px var(--color-ok); }
-  .tl-dot.pr     { background: var(--color-mauve);  box-shadow: 0 0 6px var(--color-mauve); }
-  .tl-dot.deploy { background: var(--color-peach);  box-shadow: 0 0 6px var(--color-peach); }
-  .tl-dot.other  { background: var(--color-muted); }
+  .act-repo-card.reveal { opacity: 1; transform: translateY(0); }
 
-  .tl-body {
-    padding: 0.85rem 1rem;
-    min-width: 0;
+  .act-repo-card:hover {
+    border-color: color-mix(in srgb, var(--color-peach) 35%, var(--color-muted));
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
   }
 
-  .tl-row1 {
+  .act-repo-card::before {
+    content: \'\';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--color-peach), var(--color-mauve));
+    border-radius: 16px 16px 0 0;
+  }
+
+  .act-repo-header {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
-    margin-bottom: 0.2rem;
+    justify-content: space-between;
+    margin-bottom: 1rem;
   }
 
-  .tl-repo {
+  .act-repo-name {
     font-family: var(--font-mono);
-    font-size: 0.68rem;
+    font-size: 0.72rem;
     font-weight: 700;
     color: var(--color-peach);
-    letter-spacing: 0.02em;
-    flex-shrink: 0;
+    letter-spacing: 0.04em;
   }
 
-  .tl-desc {
-    font-size: 0.83rem;
+  .act-repo-link {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--color-subtle);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .act-repo-link:hover { color: var(--color-peach); }
+
+  .act-stat-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .act-stat-num {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--color-heading);
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  .act-stat-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--color-subtle);
+    letter-spacing: 0.03em;
+  }
+
+  .act-heatmap {
+    display: flex;
+    gap: 3px;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+
+  .act-pip {
+    width: 10px; height: 10px;
+    border-radius: 2px;
+    background: var(--color-ok);
+    opacity: 0.15;
+  }
+  .act-pip.active {
+    opacity: 1;
+    box-shadow: 0 0 4px var(--color-ok);
+  }
+
+  .act-last-commit {
+    font-family: var(--font-mono);
+    font-size: 0.73rem;
     color: var(--color-text);
+    line-height: 1.5;
+    padding-top: 0.9rem;
+    border-top: 1px solid color-mix(in srgb, var(--color-muted) 35%, transparent);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    line-height: 1.4;
   }
 
-  .tl-meta {
+  .act-commit-label {
+    display: block;
+    font-size: 0.6rem;
+    color: var(--color-subtle);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.3rem;
+  }
+
+  .act-time-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.6rem;
+  }
+
+  .act-time {
     font-family: var(--font-mono);
-    font-size: 0.63rem;
+    font-size: 0.62rem;
     color: var(--color-subtle);
   }
 
-  .tl-badge-wrap {
-    padding: 0 1rem;
-    flex-shrink: 0;
-  }
+  .act-type-pills { display: flex; gap: 0.35rem; }
 
-  .tl-badge {
+  .act-pill {
     font-family: var(--font-mono);
-    font-size: 0.58rem;
+    font-size: 0.55rem;
     font-weight: 700;
     letter-spacing: 0.07em;
     text-transform: uppercase;
-    padding: 0.18rem 0.5rem;
+    padding: 0.12rem 0.45rem;
     border-radius: 4px;
-    white-space: nowrap;
   }
-  .tl-badge.push   { color: var(--color-ok);    background: color-mix(in srgb, var(--color-ok)    10%, transparent); border: 1px solid color-mix(in srgb, var(--color-ok)    28%, transparent); }
-  .tl-badge.pr     { color: var(--color-mauve);  background: color-mix(in srgb, var(--color-mauve) 10%, transparent); border: 1px solid color-mix(in srgb, var(--color-mauve) 28%, transparent); }
-  .tl-badge.deploy { color: var(--color-peach);  background: color-mix(in srgb, var(--color-peach) 10%, transparent); border: 1px solid color-mix(in srgb, var(--color-peach) 28%, transparent); }
-  .tl-badge.other  { color: var(--color-subtle); background: color-mix(in srgb, var(--color-muted) 12%, transparent); border: 1px solid color-mix(in srgb, var(--color-muted) 25%, transparent); }
+  .act-pill.push   { color: var(--color-ok);    background: color-mix(in srgb, var(--color-ok)    10%, transparent); border: 1px solid color-mix(in srgb, var(--color-ok)    28%, transparent); }
+  .act-pill.pr     { color: var(--color-mauve);  background: color-mix(in srgb, var(--color-mauve) 10%, transparent); border: 1px solid color-mix(in srgb, var(--color-mauve) 28%, transparent); }
+  .act-pill.deploy { color: var(--color-peach);  background: color-mix(in srgb, var(--color-peach) 10%, transparent); border: 1px solid color-mix(in srgb, var(--color-peach) 28%, transparent); }
 
-  @media (max-width: 600px) {
-    .tl-badge-wrap { display: none; }
+  .act-empty {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--color-subtle);
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 2rem;
   }
+
 
   /* ── Cinematic manifesto strip ── */
   .manifesto-strip {
@@ -1885,9 +1935,9 @@ const recentPosts = (await getCollection('blog'))
     });
   }
 
-  // ── 24h Activity Timeline ────────────────────────────────────────────────────
-  (async function loadTimeline() {
-    const wrap = document.getElementById('timeline-wrap');
+  // ── Activity cards — grouped by repo ────────────────────────────────────────
+  (async function loadActivity() {
+    const wrap = document.getElementById('act-wrap');
     if (!wrap) return;
 
     function relTime(iso: string) {
@@ -1896,87 +1946,103 @@ const recentPosts = (await getCollection('blog'))
       if (m < 1)  return 'just now';
       if (m < 60) return `${m}m ago`;
       const h = Math.floor(m / 60);
-      return `${h}h ago`;
+      if (h < 24) return `${h}h ago`;
+      return `${Math.floor(h / 24)}d ago`;
     }
 
-    function eventType(type: string): 'push'|'pr'|'deploy'|'other' {
-      if (type === 'PushEvent')        return 'push';
-      if (type === 'PullRequestEvent') return 'pr';
-      if (type === 'CreateEvent' || type === 'ReleaseEvent') return 'deploy';
-      return 'other';
-    }
+    const REPOS = [
+      { id: 'homelab-infrastructure', label: 'homelab-infrastructure', url: 'https://github.com/Kagiso-me/homelab-infrastructure' },
+      { id: 'kagiso-me.github.io',    label: 'kagiso-me.github.io',    url: 'https://github.com/Kagiso-me/kagiso-me.github.io' },
+    ];
 
-    function badgeLabel(type: string, payload: any): string {
-      if (type === 'PushEvent')        return `${payload?.commits?.length ?? 1} commit${(payload?.commits?.length ?? 1) > 1 ? 's' : ''}`;
-      if (type === 'PullRequestEvent') return payload?.action ?? 'PR';
-      if (type === 'CreateEvent')      return payload?.ref_type ?? 'create';
-      if (type === 'ReleaseEvent')     return 'release';
-      return type.replace('Event', '').toLowerCase();
-    }
-
-    function eventDesc(type: string, payload: any, repo: string): string {
-      if (type === 'PushEvent') {
-        const msg = payload?.commits?.[0]?.message ?? '';
-        return msg.split('\n')[0].slice(0, 80) || `pushed to ${repo}`;
-      }
-      if (type === 'PullRequestEvent') return payload?.pull_request?.title?.slice(0, 80) ?? repo;
-      if (type === 'CreateEvent') return `created ${payload?.ref_type} ${payload?.ref ?? ''} in ${repo}`;
-      if (type === 'ReleaseEvent') return payload?.release?.name ?? payload?.release?.tag_name ?? repo;
-      return repo;
-    }
+    const cutoff = Date.now() - 24 * 60 * 60 * 1000;
 
     try {
-      const repos = ['homelab-infrastructure', 'kagiso-me.github.io'];
-      const cutoff = Date.now() - 24 * 60 * 60 * 1000;
-      const events: any[] = [];
-
-      for (const repo of repos) {
+      const repoData = await Promise.all(REPOS.map(async repo => {
         try {
-          const r = await fetch(`https://api.github.com/repos/Kagiso-me/${repo}/events?per_page=30`);
-          if (!r.ok) continue;
-          const data = await r.json();
-          for (const ev of data) {
-            if (new Date(ev.created_at).getTime() < cutoff) break;
-            events.push({ ...ev, repoName: repo });
-          }
-        } catch {}
-      }
+          const r = await fetch(`https://api.github.com/repos/Kagiso-me/${repo.id}/events?per_page=30`);
+          if (!r.ok) return { ...repo, events: [] };
+          const data: any[] = await r.json();
+          const events = data.filter(ev => new Date(ev.created_at).getTime() > cutoff);
+          return { ...repo, events };
+        } catch {
+          return { ...repo, events: [] };
+        }
+      }));
 
-      events.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-
-      if (!events.length) {
-        wrap.innerHTML = '<div class="tl-empty">No activity in the last 24 hours.</div>';
+      const totalEvents = repoData.reduce((s, r) => s + r.events.length, 0);
+      if (totalEvents === 0) {
+        wrap.innerHTML = '<div class="act-empty mono">No activity in the last 24 hours.</div>';
         return;
       }
 
       wrap.innerHTML = '';
-      events.slice(0, 12).forEach((ev, i) => {
-        const kind  = eventType(ev.type);
-        const label = badgeLabel(ev.type, ev.payload);
-        const desc  = eventDesc(ev.type, ev.payload, ev.repoName);
 
-        const el = document.createElement('div');
-        el.className = 'tl-event';
-        el.innerHTML = `
-          <div class="tl-gutter">
-            <div class="tl-dot ${kind}"></div>
+      repoData.forEach((repo, idx) => {
+        const evs = repo.events;
+        if (!evs.length) return;
+
+        // Counts by type
+        const pushCount   = evs.filter((e: any) => e.type === 'PushEvent').length;
+        const prCount     = evs.filter((e: any) => e.type === 'PullRequestEvent').length;
+        const deployCount = evs.filter((e: any) => e.type === 'CreateEvent' || e.type === 'ReleaseEvent').length;
+
+        // Total commits across all push events
+        const commitCount = evs
+          .filter((e: any) => e.type === 'PushEvent')
+          .reduce((s: number, e: any) => s + (e.payload?.commits?.length ?? 1), 0);
+
+        // Most recent push commit message
+        const lastPush = evs.find((e: any) => e.type === 'PushEvent');
+        const lastMsg  = lastPush?.payload?.commits?.[0]?.message?.split('\n')[0]?.slice(0, 72) ?? '';
+        const lastTime = evs[0]?.created_at ?? '';
+
+        // 24-slot heatmap — one pip per event slot
+        const SLOTS = 16;
+        const oldest = new Date(evs[evs.length - 1]?.created_at ?? Date.now()).getTime();
+        const range  = Date.now() - oldest || 1;
+        const activePips = new Set(evs.map((e: any) =>
+          Math.floor(((Date.now() - new Date(e.created_at).getTime()) / range) * (SLOTS - 1))
+        ));
+        const pips = Array.from({ length: SLOTS }, (_, i) =>
+          `<div class="act-pip${activePips.has(i) ? ' active' : ''}"></div>`
+        ).join('');
+
+        // Type pills
+        const pills = [
+          pushCount   ? `<span class="act-pill push">${pushCount} push</span>` : '',
+          prCount     ? `<span class="act-pill pr">${prCount} PR</span>` : '',
+          deployCount ? `<span class="act-pill deploy">${deployCount} release</span>` : '',
+        ].filter(Boolean).join('');
+
+        const card = document.createElement('div');
+        card.className = 'act-repo-card';
+        card.innerHTML = `
+          <div class="act-repo-header">
+            <span class="act-repo-name">${repo.label}</span>
+            <a class="act-repo-link" href="${repo.url}" target="_blank" rel="noopener">view →</a>
           </div>
-          <div class="tl-body">
-            <div class="tl-row1">
-              <span class="tl-repo">${ev.repoName}</span>
-            </div>
-            <div class="tl-desc">${desc}</div>
-            <div class="tl-meta">${relTime(ev.created_at)}</div>
+          <div class="act-stat-row">
+            <span class="act-stat-num">${commitCount}</span>
+            <span class="act-stat-label">commit${commitCount !== 1 ? 's' : ''}<br>last 24h</span>
           </div>
-          <div class="tl-badge-wrap">
-            <span class="tl-badge ${kind}">${label}</span>
+          <div class="act-heatmap">${pips}</div>
+          ${lastMsg ? `
+          <div class="act-last-commit">
+            <span class="act-commit-label">last commit</span>
+            ${lastMsg}
+          </div>` : ''}
+          <div class="act-time-row">
+            <span class="act-time">${lastTime ? relTime(lastTime) : ''}</span>
+            <div class="act-type-pills">${pills}</div>
           </div>
         `;
-        wrap.appendChild(el);
-        setTimeout(() => el.classList.add('reveal'), i * 55);
+        wrap.appendChild(card);
+        setTimeout(() => card.classList.add('reveal'), idx * 120);
       });
+
     } catch {
-      wrap.innerHTML = '<div class="tl-empty">Activity unavailable.</div>';
+      wrap.innerHTML = '<div class="act-empty mono">Activity unavailable.</div>';
     }
   })();
 

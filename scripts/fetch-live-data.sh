@@ -930,8 +930,28 @@ except Exception:
 PYEOF
 }
 
+# ── Cluster start timestamp (earliest node creationTimestamp) ─────────────────
+build_cluster_start() {
+  kubectl get nodes -o json 2>/dev/null | python3 -c "
+import json, sys, datetime
+try:
+  nodes = json.load(sys.stdin).get('items', [])
+  earliest = None
+  for n in nodes:
+    ts = n.get('metadata', {}).get('creationTimestamp', '')
+    if not ts: continue
+    dt = datetime.datetime.fromisoformat(ts.replace('Z', '+00:00'))
+    if earliest is None or dt < earliest:
+      earliest = dt
+  print(earliest.strftime('%Y-%m-%dT%H:%M:%SZ') if earliest else '')
+except:
+  print('')
+" 2>/dev/null || echo ""
+}
+
 # ── Assemble live cards ────────────────────────────────────────────────────────
 NODES=$(build_nodes)
+CLUSTER_START=$(build_cluster_start)
 FLUX=$(build_flux)
 BACKUP=$(build_backup)
 VELERO=$(build_velero)
@@ -1032,8 +1052,9 @@ running = int('${RUNNING_PODS}')
 total   = int('${TOTAL_PODS}')
 
 data = {
-  'updated':    '${NOW}',
-  'fetched_at': '${NOW}',
+  'updated':       '${NOW}',
+  'fetched_at':    '${NOW}',
+  'cluster_start': '${CLUSTER_START}' or None,
   'cards': [
     {'label': 'Workloads',      'value': f'{running}/{total}',   'sub': 'pods running',       'status': 'ok' if running == total else 'warn'},
     {'label': 'Flux',           'value': '${FLUX_LABEL}',        'sub': '${FLUX_SYNC}',       'status': '${FLUX_STATUS}'},

@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-28T20:46:38Z",
-  "fetched_at": "2026-04-28T20:46:38Z",
+  "updated": "2026-04-28T21:52:53Z",
+  "fetched_at": "2026-04-28T21:52:53Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -23,13 +23,13 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "128h 46m ago",
+      "value": "129h 53m ago",
       "sub": "last snapshot",
       "status": "crit"
     },
     {
       "label": "Velero",
-      "value": "1h 11m ago",
+      "value": "2h 17m ago",
       "sub": "last cluster backup",
       "status": "unknown"
     },
@@ -244,26 +244,26 @@
     }
   ],
   "network": {
-    "fw_hits": 64255,
-    "latency_ms": 4.5,
+    "fw_hits": 65371,
+    "latency_ms": 4.4,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
     "temp_c": 52.1,
     "temp_status": "ok",
-    "load": 0.65,
-    "mem_pct": 39.8
+    "load": 0.6,
+    "mem_pct": 40.2
   },
   "ups": {
-    "charge": 48,
-    "runtime_s": 108,
-    "runtime_str": "1m",
-    "load_pct": 28,
-    "status": "OL CHRG LB",
+    "charge": 66,
+    "runtime_s": 176,
+    "runtime_str": "2m",
+    "load_pct": 26,
+    "status": "OL CHRG",
     "nominal_w": 390,
     "on_battery": false,
-    "dot": "warn"
+    "dot": "ok"
   },
   "last_deploy": {
     "age": "3d ago",
@@ -291,7 +291,7 @@
     },
     {
       "name": "core",
-      "used": "39.8 GB",
+      "used": "40.0 GB",
       "total": "476.7 GB",
       "pct": 8.4,
       "status": "ok",

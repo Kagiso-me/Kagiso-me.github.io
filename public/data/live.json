@@ -1,18 +1,19 @@
 {
-  "updated": "2026-04-28T19:34:15Z",
-  "fetched_at": "2026-04-28T19:34:15Z",
+  "updated": "2026-04-28T20:10:26Z",
+  "fetched_at": "2026-04-28T20:10:26Z",
+  "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "42/72",
+      "value": "55/68",
       "sub": "pods running",
       "status": "warn"
     },
     {
       "label": "Flux",
-      "value": "15/19 synced",
+      "value": "19/19 synced",
       "sub": "20d",
-      "status": "warn"
+      "status": "ok"
     },
     {
       "label": "Docker Appdata",
@@ -22,19 +23,19 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "127h 34m ago",
+      "value": "128h 10m ago",
       "sub": "last snapshot",
       "status": "crit"
     },
     {
       "label": "Velero",
-      "value": "126h 34m ago",
+      "value": "35m ago",
       "sub": "last cluster backup",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "varys Keys",
-      "value": "138h 34m ago",
+      "value": "139h 10m ago",
       "sub": "age keys \u00b7 varys",
       "status": "crit"
     },
@@ -50,35 +51,35 @@
       "name": "jaime",
       "role": "control-plane",
       "status": "ok",
-      "pods": "6/110",
-      "cpu": "13%",
-      "memory": "1%",
+      "pods": "22/110",
+      "cpu": "33%",
+      "memory": "9%",
       "pressure": []
     },
     {
       "name": "tyrion",
       "role": "control-plane",
       "status": "ok",
-      "pods": "6/110",
-      "cpu": "13%",
-      "memory": "1%",
+      "pods": "25/110",
+      "cpu": "31%",
+      "memory": "6%",
       "pressure": []
     },
     {
       "name": "tywin",
       "role": "control-plane",
-      "status": "crit",
-      "pods": "54/110",
-      "cpu": "75%",
-      "memory": "22%",
+      "status": "ok",
+      "pods": "18/110",
+      "cpu": "38%",
+      "memory": "10%",
       "pressure": []
     }
   ],
   "flux": {
-    "ready": 15,
+    "ready": 19,
     "total": 19,
     "last_sync": "20d",
-    "status": "warn",
+    "status": "ok",
     "kustomizations": [
       {
         "namespace": "flux-system",
@@ -96,7 +97,7 @@
         "namespace": "flux-system",
         "name": "platform-authentik",
         "age": "20d",
-        "ready": false
+        "ready": true
       },
       {
         "namespace": "flux-system",
@@ -120,7 +121,7 @@
         "namespace": "flux-system",
         "name": "platform-databases",
         "age": "20d",
-        "ready": false
+        "ready": true
       },
       {
         "namespace": "flux-system",
@@ -144,7 +145,7 @@
         "namespace": "flux-system",
         "name": "platform-networking-tls",
         "age": "20d",
-        "ready": false
+        "ready": true
       },
       {
         "namespace": "flux-system",
@@ -174,7 +175,7 @@
         "namespace": "flux-system",
         "name": "platform-security-issuers",
         "age": "20d",
-        "ready": false
+        "ready": true
       },
       {
         "namespace": "flux-system",
@@ -243,46 +244,64 @@
     }
   ],
   "network": {
-    "fw_hits": 62801,
-    "latency_ms": 9.7,
+    "fw_hits": 63611,
+    "latency_ms": 4.4,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 55.3,
+    "temp_c": 54.8,
     "temp_status": "ok",
-    "load": 5.01,
-    "mem_pct": 39.2
+    "load": 1.09,
+    "mem_pct": 42.0
   },
   "ups": {
-    "charge": 92,
-    "runtime_s": 152,
-    "runtime_str": "2m",
-    "load_pct": 31,
-    "status": "OL CHRG",
+    "charge": 38,
+    "runtime_s": 0,
+    "runtime_str": "0m",
+    "load_pct": 51,
+    "status": "OL CHRG LB",
     "nominal_w": 390,
     "on_battery": false,
-    "dot": "ok"
+    "dot": "warn"
   },
   "last_deploy": {
-    "age": "3d ago",
-    "message": "chore(deps): update helm release n8n to >=1.16.37 (#236)",
-    "sha": "f109759"
+    "age": "\u2014",
+    "message": "unavailable",
+    "sha": "\u2014"
   },
-  "storage": [],
-  "contribs": {
-    "days": {
-      "2026-04-26": 0,
-      "2026-04-25": 2,
-      "2026-04-24": 2,
-      "2026-04-23": 0,
-      "2026-04-22": 23,
-      "2026-04-21": 6,
-      "2026-04-20": 20,
-      "2026-04-19": 61,
-      "2026-04-18": 4
+  "storage": [
+    {
+      "name": "tera",
+      "used": "6.0 TB",
+      "total": "7.9 TB",
+      "pct": 76.8,
+      "status": "warn",
+      "pool_status": "ONLINE",
+      "healthy": true
     },
-    "total": 118,
-    "active_days": 9
+    {
+      "name": "archive",
+      "used": "463.3 GB",
+      "total": "4.0 TB",
+      "pct": 11.6,
+      "status": "ok",
+      "pool_status": "ONLINE",
+      "healthy": true
+    },
+    {
+      "name": "core",
+      "used": "40.0 GB",
+      "total": "476.7 GB",
+      "pct": 8.4,
+      "status": "ok",
+      "pool_status": "ONLINE",
+      "healthy": true
+    }
+  ],
+  "contribs": {
+    "days": {},
+    "total": 0,
+    "active_days": 0
   }
 }

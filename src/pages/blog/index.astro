@@ -17,7 +17,7 @@ const posts = (await getCollection('blog'))
     ...post,
     readingTime: Math.ceil((post.body ?? '').trim().split(/\s+/).length / 200),
     type: postType(post.data.adr, post.data.title),
-    tags: (post.data as any).tags ?? [],
+    tags: post.data.tags ?? [],
   }));
 
 // Collect all unique tags

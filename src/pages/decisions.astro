@@ -104,6 +104,12 @@ const adrs = [
     category: 'security', categoryLabel: 'Security',
     decision: 'Collaborative threat intelligence with local decision-making. Blocks known bad actors across all ingress points using a shared community blocklist.',
   },
+  {
+    id: '018', slug: 'ADR-018-mikrotik-adblock-static-dns',
+    title: 'MikroTik replaces Pi-hole as DNS server',
+    category: 'network', categoryLabel: 'Networking',
+    decision: 'Pi-hole caused intermittent DNS timeouts and unexplained blacklisting. The MikroTik router — dedicated hardware, always-on — now handles LAN DNS, adblock, and split DNS via static entries. Operational stability over feature depth.',
+  },
 ];
 
 const REPO = 'https://github.com/Kagiso-me/homelab-infrastructure/blob/main/docs/adr';

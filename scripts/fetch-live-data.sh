@@ -1079,3 +1079,16 @@ print(json.dumps(data, indent=2))
 PYEOF
 
 rm -f "$TMP_NODES" "$TMP_FLUX" "$TMP_SVC_DATA" "$TMP_NETWORK" "$TMP_BRAN" "$TMP_UPS" "$TMP_DEPLOY" "$TMP_STORAGE" "$TMP_CONTRIBS"
+
+# ── Write maintenance.json — active only when no nodes are ready ──────────────
+READY_NODES=$(echo "$NODES" | python3 -c "
+import sys, json
+nodes = json.load(sys.stdin)
+print(sum(1 for n in nodes if n.get('status') == 'ok'))
+" 2>/dev/null || echo "0")
+
+if [ "$READY_NODES" -gt 0 ] 2>/dev/null; then
+  echo '{"active":false}' > public/data/maintenance.json
+else
+  echo '{"active":true,"message":"Homelab is under maintenance — nodes are offline. Back shortly."}' > public/data/maintenance.json
+fi

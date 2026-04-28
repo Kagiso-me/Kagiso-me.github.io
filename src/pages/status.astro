@@ -1514,26 +1514,44 @@ import Layout from '../layouts/Layout.astro';
   }
 
   // ── Cluster uptime counter ───────────────────────────────────────────────
-  // k3s cluster first deployed 2024-11-01 (approximate — adjust if known)
-  const CLUSTER_EPOCH = new Date('2024-11-01T00:00:00Z').getTime();
+  let _clusterEpoch: number | null = null;
+  let _uptimeTimer: ReturnType<typeof setInterval> | null = null;
 
-  function updateUptime() {
-    const el = document.getElementById('uptime-value');
-    if (!el) return;
-    const ms = Date.now() - CLUSTER_EPOCH;
-    const s  = Math.floor(ms / 1000);
-    const m  = Math.floor(s  / 60);
-    const h  = Math.floor(m  / 60);
-    const d  = Math.floor(h  / 24);
-    const hh = String(h % 24).padStart(2, '0');
-    const mm = String(m % 60).padStart(2, '0');
-    const ss = String(s % 60).padStart(2, '0');
-    el.textContent = `${d}d ${hh}h ${mm}m ${ss}s`;
+  function startUptimeCounter(epochMs: number) {
+    if (_uptimeTimer) clearInterval(_uptimeTimer);
+    _clusterEpoch = epochMs;
+    function tick() {
+      const el = document.getElementById('uptime-value');
+      if (!el || _clusterEpoch === null) return;
+      const ms = Date.now() - _clusterEpoch;
+      const s  = Math.floor(ms / 1000);
+      const m  = Math.floor(s  / 60);
+      const h  = Math.floor(m  / 60);
+      const d  = Math.floor(h  / 24);
+      const hh = String(h % 24).padStart(2, '0');
+      const mm = String(m % 60).padStart(2, '0');
+      const ss = String(s % 60).padStart(2, '0');
+      el.textContent = `${d}d ${hh}h ${mm}m ${ss}s`;
+    }
+    tick();
+    _uptimeTimer = setInterval(tick, 1000);
   }
 
-  updateUptime();
-  const _uptimeTimer = setInterval(updateUptime, 1000);
-  document.addEventListener('astro:before-swap', () => clearInterval(_uptimeTimer));
+  // Seed with live data; falls back to hardcoded epoch if cluster_start unavailable
+  (async () => {
+    try {
+      const r = await fetch('/data/live.json?t=' + Date.now());
+      const d = r.ok ? await r.json() : null;
+      const epoch = d?.cluster_start
+        ? new Date(d.cluster_start).getTime()
+        : new Date('2024-11-01T00:00:00Z').getTime();
+      startUptimeCounter(epoch);
+    } catch {
+      startUptimeCounter(new Date('2024-11-01T00:00:00Z').getTime());
+    }
+  })();
+
+  document.addEventListener('astro:before-swap', () => { if (_uptimeTimer) clearInterval(_uptimeTimer); });
 
   document.addEventListener('astro:page-load', () => { startPolling(); loadCVEBanner(); initNetMap(); });
   document.addEventListener('astro:before-swap', stopPolling);

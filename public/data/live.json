@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-29T02:29:42Z",
-  "fetched_at": "2026-04-29T02:29:42Z",
+  "updated": "2026-04-29T05:40:29Z",
+  "fetched_at": "2026-04-29T05:40:29Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -23,15 +23,15 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "2h 29m ago",
+      "value": "5h 40m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "1h 29m ago",
+      "value": "2h 40m ago",
       "sub": "last cluster backup",
-      "status": "ok"
+      "status": "warn"
     },
     {
       "label": "varys Keys",
@@ -244,16 +244,16 @@
     }
   ],
   "network": {
-    "fw_hits": 68164,
-    "latency_ms": 4.5,
+    "fw_hits": 70626,
+    "latency_ms": 4.6,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
     "temp_c": 51.5,
     "temp_status": "ok",
-    "load": 0.51,
-    "mem_pct": 44.5
+    "load": 0.67,
+    "mem_pct": 45.3
   },
   "ups": {
     "charge": 100,
@@ -291,7 +291,7 @@
     },
     {
       "name": "core",
-      "used": "40.2 GB",
+      "used": "40.3 GB",
       "total": "476.7 GB",
       "pct": 8.4,
       "status": "ok",
@@ -301,6 +301,7 @@
   ],
   "contribs": {
     "days": {
+      "2026-04-29": 0,
       "2026-04-28": 0,
       "2026-04-26": 0,
       "2026-04-25": 2,
@@ -313,6 +314,6 @@
       "2026-04-18": 1
     },
     "total": 115,
-    "active_days": 10
+    "active_days": 11
   }
 }

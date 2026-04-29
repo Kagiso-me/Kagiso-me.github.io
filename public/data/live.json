@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-29T11:58:29Z",
-  "fetched_at": "2026-04-29T11:58:29Z",
+  "updated": "2026-04-29T14:05:35Z",
+  "fetched_at": "2026-04-29T14:05:35Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -12,7 +12,7 @@
     {
       "label": "Flux",
       "value": "19/19 synced",
-      "sub": "20d",
+      "sub": "21d",
       "status": "ok"
     },
     {
@@ -23,19 +23,19 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "11h 58m ago",
+      "value": "2h 5m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "4h 58m ago",
+      "value": "1h 5m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "154h 58m ago",
+      "value": "157h 5m ago",
       "sub": "age keys \u00b7 varys",
       "status": "crit"
     },
@@ -78,13 +78,13 @@
   "flux": {
     "ready": 19,
     "total": 19,
-    "last_sync": "20d",
+    "last_sync": "21d",
     "status": "ok",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
-        "age": "20d",
+        "age": "21d",
         "ready": true
       },
       {
@@ -96,103 +96,103 @@
       {
         "namespace": "flux-system",
         "name": "platform-authentik",
-        "age": "20d",
+        "age": "21d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
-        "age": "20d",
+        "age": "21d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
-        "age": "20d",
+        "age": "21d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
-        "age": "20d",
+        "age": "21d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
-        "age": "20d",
+        "age": "21d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-namespaces",
-        "age": "20d",
+        "age": "21d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking",
-        "age": "20d",
+        "age": "21d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-config",
-        "age": "20d",
+        "age": "21d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-tls",
-        "age": "20d",
+        "age": "21d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability",
-        "age": "20d",
+        "age": "21d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
-        "age": "20d",
+        "age": "21d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
-        "age": "20d",
+        "age": "21d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security",
-        "age": "20d",
+        "age": "21d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security-issuers",
-        "age": "20d",
+        "age": "21d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-storage",
-        "age": "20d",
+        "age": "21d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade",
-        "age": "20d",
+        "age": "21d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade-plans",
-        "age": "20d",
+        "age": "21d",
         "ready": true
       }
     ]
@@ -200,7 +200,7 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 532 photos \u00b7 15 videos",
+      "tag": "Immich: 536 photos \u00b7 15 videos",
       "status": "ok"
     },
     {
@@ -244,21 +244,21 @@
     }
   ],
   "network": {
-    "fw_hits": 73978,
-    "latency_ms": 4.7,
+    "fw_hits": 74860,
+    "latency_ms": 4.5,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 52.6,
+    "temp_c": 52.1,
     "temp_status": "ok",
-    "load": 0.84,
-    "mem_pct": 45.1
+    "load": 0.54,
+    "mem_pct": 45.8
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 280,
-    "runtime_str": "4m",
+    "runtime_s": 300,
+    "runtime_str": "5m",
     "load_pct": 25,
     "status": "OL",
     "nominal_w": 390,
@@ -282,7 +282,7 @@
     },
     {
       "name": "archive",
-      "used": "463.7 GB",
+      "used": "463.9 GB",
       "total": "4.0 TB",
       "pct": 11.6,
       "status": "ok",
@@ -291,9 +291,9 @@
     },
     {
       "name": "core",
-      "used": "41.0 GB",
+      "used": "41.3 GB",
       "total": "476.7 GB",
-      "pct": 8.6,
+      "pct": 8.7,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true

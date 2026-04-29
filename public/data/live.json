@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-29T10:23:24Z",
-  "fetched_at": "2026-04-29T10:23:24Z",
+  "updated": "2026-04-29T11:58:29Z",
+  "fetched_at": "2026-04-29T11:58:29Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -23,19 +23,19 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "10h 23m ago",
+      "value": "11h 58m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 23m ago",
+      "value": "4h 58m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "153h 23m ago",
+      "value": "154h 58m ago",
       "sub": "age keys \u00b7 varys",
       "status": "crit"
     },
@@ -90,7 +90,7 @@
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "20d",
+        "age": "21d",
         "ready": true
       },
       {
@@ -200,7 +200,7 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 527 photos \u00b7 15 videos",
+      "tag": "Immich: 532 photos \u00b7 15 videos",
       "status": "ok"
     },
     {
@@ -244,21 +244,21 @@
     }
   ],
   "network": {
-    "fw_hits": 73316,
-    "latency_ms": 4.5,
+    "fw_hits": 73978,
+    "latency_ms": 4.7,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
     "temp_c": 52.6,
     "temp_status": "ok",
-    "load": 0.6,
-    "mem_pct": 44.3
+    "load": 0.84,
+    "mem_pct": 45.1
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 300,
-    "runtime_str": "5m",
+    "runtime_s": 280,
+    "runtime_str": "4m",
     "load_pct": 25,
     "status": "OL",
     "nominal_w": 390,
@@ -291,7 +291,7 @@
     },
     {
       "name": "core",
-      "used": "40.9 GB",
+      "used": "41.0 GB",
       "total": "476.7 GB",
       "pct": 8.6,
       "status": "ok",

@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-29T05:40:29Z",
-  "fetched_at": "2026-04-29T05:40:29Z",
+  "updated": "2026-04-29T08:08:11Z",
+  "fetched_at": "2026-04-29T08:08:11Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -23,21 +23,21 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "5h 40m ago",
+      "value": "8h 8m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "2h 40m ago",
+      "value": "1h 8m ago",
       "sub": "last cluster backup",
-      "status": "warn"
+      "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "\u2014",
+      "value": "151h 8m ago",
       "sub": "age keys \u00b7 varys",
-      "status": "unknown"
+      "status": "crit"
     },
     {
       "label": "Backblaze B2",
@@ -200,13 +200,13 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: offline",
-      "status": "crit"
+      "tag": "Immich: 527 photos \u00b7 15 videos",
+      "status": "ok"
     },
     {
       "name": "Nextcloud",
-      "tag": "Nextcloud: offline",
-      "status": "crit"
+      "tag": "Nextcloud: 60.9 MB used",
+      "status": "ok"
     },
     {
       "name": "SABnzbd",
@@ -244,29 +244,29 @@
     }
   ],
   "network": {
-    "fw_hits": 70626,
-    "latency_ms": 4.6,
+    "fw_hits": 72263,
+    "latency_ms": 4.4,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
     "temp_c": 51.5,
     "temp_status": "ok",
-    "load": 0.67,
-    "mem_pct": 45.3
+    "load": 0.63,
+    "mem_pct": 44.6
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 280,
+    "runtime_s": 268,
     "runtime_str": "4m",
-    "load_pct": 25,
+    "load_pct": 26,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "3d ago",
+    "age": "4d ago",
     "message": "chore(deps): update helm release n8n to >=1.16.37 (#236)",
     "sha": "f109759"
   },
@@ -282,7 +282,7 @@
     },
     {
       "name": "archive",
-      "used": "463.6 GB",
+      "used": "463.7 GB",
       "total": "4.0 TB",
       "pct": 11.6,
       "status": "ok",
@@ -291,9 +291,9 @@
     },
     {
       "name": "core",
-      "used": "40.3 GB",
+      "used": "40.7 GB",
       "total": "476.7 GB",
-      "pct": 8.4,
+      "pct": 8.5,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true

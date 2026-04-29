@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-29T17:55:44Z",
-  "fetched_at": "2026-04-29T17:55:44Z",
+  "updated": "2026-04-29T19:17:58Z",
+  "fetched_at": "2026-04-29T19:17:58Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -23,19 +23,19 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "5h 55m ago",
+      "value": "7h 18m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "4h 55m ago",
+      "value": "18m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "160h 55m ago",
+      "value": "162h 18m ago",
       "sub": "age keys \u00b7 varys",
       "status": "crit"
     },
@@ -200,7 +200,7 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 536 photos \u00b7 15 videos",
+      "tag": "Immich: 540 photos \u00b7 15 videos",
       "status": "ok"
     },
     {
@@ -244,16 +244,16 @@
     }
   ],
   "network": {
-    "fw_hits": 77117,
-    "latency_ms": 4.6,
+    "fw_hits": 77888,
+    "latency_ms": 4.4,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 53.7,
+    "temp_c": 53.2,
     "temp_status": "ok",
-    "load": 0.62,
-    "mem_pct": 43.0
+    "load": 0.48,
+    "mem_pct": 43.8
   },
   "ups": {
     "charge": 100,
@@ -282,7 +282,7 @@
     },
     {
       "name": "archive",
-      "used": "463.9 GB",
+      "used": "464.0 GB",
       "total": "4.0 TB",
       "pct": 11.6,
       "status": "ok",

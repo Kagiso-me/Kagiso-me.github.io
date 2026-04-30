@@ -225,7 +225,7 @@ const recentPosts = (await getCollection('blog'))
       <div class="about-grid">
 
         <div class="about-text">
-          <p class="mono" style="color:var(--color-peach);margin-bottom:0.75rem">~/whoami</p>
+          <p class="mono" style="color:var(--color-gold);margin-bottom:0.75rem">~/whoami</p>
           <h2 style="font-size:clamp(1.5rem,3vw,2rem);margin:0 0 1.25rem">Hey, I'm Kagiso.</h2>
           <p style="color:var(--color-subtle);line-height:1.8;margin-bottom:1rem">
             Corporate exec by day, self-taught engineer by night. I built this cluster to close the gap
@@ -310,7 +310,7 @@ const recentPosts = (await getCollection('blog'))
     border-bottom: 1px solid var(--color-muted);
   }
 
-  /* Aurora orbs */
+  /* ── Circuit-grid background — the site's visual signature ── */
   .aurora {
     position: absolute;
     inset: 0;
@@ -319,50 +319,70 @@ const recentPosts = (await getCollection('blog'))
     z-index: 0;
   }
 
+  /* Dot-grid: a PCB/oscilloscope-style graph paper pattern */
+  .aurora::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle, color-mix(in srgb, var(--color-muted) 35%, transparent) 1px, transparent 1px);
+    background-size: 32px 32px;
+    opacity: 0.45;
+    mask-image: radial-gradient(ellipse 80% 100% at 50% 0%, black 40%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 100% at 50% 0%, black 40%, transparent 100%);
+  }
+
+  /* Warm gold bloom — top-left origin, like a sunrise */
   .aurora-orb {
     position: absolute;
     border-radius: 50%;
-    filter: blur(80px);
+    filter: blur(90px);
     mix-blend-mode: screen;
     will-change: transform;
   }
 
   .aurora-orb-1 {
-    width: 55vw; height: 55vw;
-    top: -20%; left: -10%;
-    background: radial-gradient(ellipse, color-mix(in srgb, var(--color-peach) 22%, transparent), transparent 70%);
-    animation: aurora-drift-1 18s ease-in-out infinite alternate;
+    width: 50vw; height: 50vw;
+    top: -25%; left: -8%;
+    background: radial-gradient(ellipse, color-mix(in srgb, var(--color-gold) 20%, transparent), transparent 70%);
+    animation: aurora-drift-1 20s ease-in-out infinite alternate;
   }
 
   .aurora-orb-2 {
-    width: 45vw; height: 45vw;
-    top: -15%; right: -5%;
-    background: radial-gradient(ellipse, color-mix(in srgb, var(--color-mauve) 18%, transparent), transparent 70%);
-    animation: aurora-drift-2 22s ease-in-out infinite alternate;
+    width: 40vw; height: 40vw;
+    bottom: -15%; right: 5%;
+    background: radial-gradient(ellipse, color-mix(in srgb, var(--color-green) 13%, transparent), transparent 70%);
+    animation: aurora-drift-2 25s ease-in-out infinite alternate;
   }
 
   .aurora-orb-3 {
-    width: 35vw; height: 35vw;
-    bottom: -10%; left: 35%;
-    background: radial-gradient(ellipse, color-mix(in srgb, var(--color-sapphire) 12%, transparent), transparent 70%);
-    animation: aurora-drift-3 26s ease-in-out infinite alternate;
+    width: 30vw; height: 30vw;
+    top: 30%; left: 55%;
+    background: radial-gradient(ellipse, color-mix(in srgb, var(--color-sapphire) 8%, transparent), transparent 70%);
+    animation: aurora-drift-3 28s ease-in-out infinite alternate;
   }
 
   @keyframes aurora-drift-1 {
     from { transform: translate(0, 0) scale(1); }
-    to   { transform: translate(8%, 12%) scale(1.15); }
+    to   { transform: translate(6%, 14%) scale(1.1); }
   }
   @keyframes aurora-drift-2 {
     from { transform: translate(0, 0) scale(1); }
-    to   { transform: translate(-10%, 8%) scale(1.2); }
+    to   { transform: translate(-8%, -10%) scale(1.15); }
   }
   @keyframes aurora-drift-3 {
     from { transform: translate(0, 0) scale(1); }
-    to   { transform: translate(-6%, -14%) scale(1.1); }
+    to   { transform: translate(-12%, 8%) scale(1.08); }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .aurora-orb { animation: none; }
+  }
+
+  /* Disable expensive aurora on mobile */
+  @media (max-width: 768px) {
+    .aurora-orb { display: none; }
+    .aurora::before { opacity: 0.25; }
   }
 
   #hero-grid {
@@ -375,10 +395,14 @@ const recentPosts = (await getCollection('blog'))
     z-index: 1;
   }
 
+  @media (max-width: 768px) {
+    #hero-grid { display: none; }
+  }
+
   /* Typewriter cursor */
   .h1-cursor {
     display: inline-block;
-    color: var(--color-peach);
+    color: var(--color-gold);
     animation: cur-blink 0.9s step-end infinite;
     font-weight: 300;
     margin-left: 0.05em;
@@ -422,13 +446,14 @@ const recentPosts = (await getCollection('blog'))
 
   /* The vertical accent line — the visual signature */
   .hero-accent {
-    width: 3px;
+    width: 4px;
     align-self: stretch;
-    background: linear-gradient(to bottom, var(--color-peach), var(--color-mauve) 60%, transparent);
-    border-radius: 3px;
+    background: linear-gradient(to bottom, var(--color-gold), var(--color-green) 65%, transparent);
+    border-radius: 4px;
     flex-shrink: 0;
     margin-right: 2.5rem;
     min-height: 200px;
+    box-shadow: 0 0 16px color-mix(in srgb, var(--color-gold) 50%, transparent);
   }
 
   .hero-content {
@@ -447,7 +472,7 @@ const recentPosts = (await getCollection('blog'))
   .hero-identity {
     font-size: clamp(1rem, 2vw, 1.1rem);
     font-weight: 600;
-    color: var(--color-peach);
+    color: var(--color-gold);
     margin: 0 0 0.75rem;
     letter-spacing: -0.01em;
   }
@@ -510,20 +535,20 @@ const recentPosts = (await getCollection('blog'))
 
   .btn-primary {
     padding: 0.7rem 1.75rem;
-    background: linear-gradient(135deg, var(--color-peach), color-mix(in srgb, var(--color-peach) 70%, var(--color-mauve)));
+    background: linear-gradient(135deg, var(--color-gold), color-mix(in srgb, var(--color-gold) 70%, var(--color-green)));
     color: var(--color-base);
     border-radius: 8px;
     font-weight: 700;
     font-size: 0.9rem;
     transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-peach) 40%, transparent);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-gold) 40%, transparent);
   }
 
   .btn-primary:hover {
     transform: translateY(-2px);
     color: var(--color-base);
-    box-shadow: 0 4px 24px color-mix(in srgb, var(--color-peach) 45%, transparent),
-                0 0 0 1px color-mix(in srgb, var(--color-peach) 30%, transparent);
+    box-shadow: 0 4px 24px color-mix(in srgb, var(--color-gold) 45%, transparent),
+                0 0 0 1px color-mix(in srgb, var(--color-gold) 30%, transparent);
   }
 
   .btn-ghost {
@@ -538,10 +563,10 @@ const recentPosts = (await getCollection('blog'))
   }
 
   .btn-ghost:hover {
-    border-color: color-mix(in srgb, var(--color-mauve) 60%, transparent);
-    color: var(--color-mauve);
-    background: color-mix(in srgb, var(--color-mauve) 8%, transparent);
-    box-shadow: 0 0 16px color-mix(in srgb, var(--color-mauve) 15%, transparent);
+    border-color: color-mix(in srgb, var(--color-gold) 60%, transparent);
+    color: var(--color-gold);
+    background: color-mix(in srgb, var(--color-gold) 8%, transparent);
+    box-shadow: 0 0 16px color-mix(in srgb, var(--color-gold) 15%, transparent);
   }
 
   .section {
@@ -576,9 +601,9 @@ const recentPosts = (await getCollection('blog'))
     left: 0;
     width: 2.5rem;
     height: 2px;
-    background: linear-gradient(90deg, var(--color-peach), var(--color-mauve));
+    background: linear-gradient(90deg, var(--color-gold), var(--color-green));
     border-radius: 2px;
-    box-shadow: 0 0 8px color-mix(in srgb, var(--color-peach) 60%, transparent);
+    box-shadow: 0 0 8px color-mix(in srgb, var(--color-gold) 60%, transparent);
   }
 
   .link-subtle {
@@ -586,7 +611,7 @@ const recentPosts = (await getCollection('blog'))
     transition: color 0.2s;
   }
 
-  .link-subtle:hover { color: var(--color-peach); }
+  .link-subtle:hover { color: var(--color-gold); }
 
   .live-badge {
     display: flex;
@@ -722,7 +747,7 @@ const recentPosts = (await getCollection('blog'))
   .ops-badge.warn    { color: var(--color-warn);     background: color-mix(in srgb, var(--color-warn)    12%, transparent); border: 1px solid color-mix(in srgb, var(--color-warn)    28%, transparent); }
   .ops-badge.crit    { color: var(--color-crit);     background: color-mix(in srgb, var(--color-crit)    12%, transparent); border: 1px solid color-mix(in srgb, var(--color-crit)    28%, transparent); }
   .ops-badge.unknown { color: var(--color-subtle);   background: color-mix(in srgb, var(--color-muted)   12%, transparent); border: 1px solid color-mix(in srgb, var(--color-muted)   28%, transparent); }
-  .ops-badge.active  { color: var(--color-peach);    background: color-mix(in srgb, var(--color-peach)   12%, transparent); border: 1px solid color-mix(in srgb, var(--color-peach)   28%, transparent); }
+  .ops-badge.active  { color: var(--color-gold);     background: color-mix(in srgb, var(--color-gold)    12%, transparent); border: 1px solid color-mix(in srgb, var(--color-gold)    28%, transparent); }
 
   /* skeleton rows */
   .ops-skeleton-row {
@@ -765,19 +790,23 @@ const recentPosts = (await getCollection('blog'))
 
   @media (max-width: 768px) {
     .two-col { grid-template-columns: 1fr; gap: 2rem; }
-    .hero { padding: 3rem 1.25rem 2.5rem; }
+    .hero { padding: 2.5rem 1.25rem 2rem; }
     .hero-accent { margin-right: 1.5rem; min-height: 160px; }
     .hero-stats { flex-wrap: wrap; width: 100%; }
     .hero-stat { flex: 1; min-width: 80px; }
     .stack-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 0.5rem; }
     .contrib-grid { gap: 1.5px; }
     .contrib-cell { width: 8px; height: 8px; }
+    /* Terminal: keep it compact but usable on mobile */
+    .hero-right { padding-top: 0; }
   }
 
   @media (max-width: 480px) {
     .stack-grid { grid-template-columns: repeat(2, 1fr); }
     .hero-accent { display: none; }
     .hero-stat-val { font-size: 1.4rem; }
+    /* Reduce terminal height on small phones so it doesn't dominate */
+    .hero-right .term-wrap { border-radius: 8px; }
   }
 
   /* ── Stack grid ── */
@@ -893,7 +922,7 @@ const recentPosts = (await getCollection('blog'))
   .act-repo-card.reveal { opacity: 1; transform: translateY(0); }
 
   .act-repo-card:hover {
-    border-color: color-mix(in srgb, var(--color-peach) 35%, var(--color-muted));
+    border-color: color-mix(in srgb, var(--color-gold) 35%, var(--color-muted));
     box-shadow: 0 8px 32px rgba(0,0,0,0.3);
   }
 
@@ -902,7 +931,7 @@ const recentPosts = (await getCollection('blog'))
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, var(--color-peach), var(--color-mauve));
+    background: linear-gradient(90deg, var(--color-gold), var(--color-green));
     border-radius: 16px 16px 0 0;
   }
 
@@ -917,7 +946,7 @@ const recentPosts = (await getCollection('blog'))
     font-family: var(--font-mono);
     font-size: 0.72rem;
     font-weight: 700;
-    color: var(--color-peach);
+    color: var(--color-gold);
     letter-spacing: 0.04em;
   }
 
@@ -928,7 +957,7 @@ const recentPosts = (await getCollection('blog'))
     text-decoration: none;
     transition: color 0.15s;
   }
-  .act-repo-link:hover { color: var(--color-peach); }
+  .act-repo-link:hover { color: var(--color-gold); }
 
   .act-stat-row {
     display: flex;
@@ -1071,11 +1100,11 @@ const recentPosts = (await getCollection('blog'))
   }
 
   .manifesto-accent {
-    background: linear-gradient(135deg, var(--color-peach), var(--color-mauve));
+    background: linear-gradient(135deg, var(--color-gold), var(--color-green));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    filter: drop-shadow(0 0 20px color-mix(in srgb, var(--color-peach) 40%, transparent));
+    filter: drop-shadow(0 0 20px color-mix(in srgb, var(--color-gold) 40%, transparent));
   }
 
   .manifesto-sep {
@@ -1138,9 +1167,9 @@ const recentPosts = (await getCollection('blog'))
   }
 
   .about-link:hover {
-    color: var(--color-peach);
-    border-color: var(--color-peach);
-    background: color-mix(in srgb, var(--color-peach) 8%, transparent);
+    color: var(--color-gold);
+    border-color: var(--color-gold);
+    background: color-mix(in srgb, var(--color-gold) 8%, transparent);
   }
 
   .about-link-icon {
@@ -1278,10 +1307,10 @@ const recentPosts = (await getCollection('blog'))
   .contrib-cell:hover { transform: scale(1.4); }
 
   .contrib-cell[data-level="0"] { background: var(--color-overlay); }
-  .contrib-cell[data-level="1"] { background: color-mix(in srgb, var(--color-peach) 25%, var(--color-overlay)); }
-  .contrib-cell[data-level="2"] { background: color-mix(in srgb, var(--color-peach) 50%, var(--color-overlay)); }
-  .contrib-cell[data-level="3"] { background: color-mix(in srgb, var(--color-peach) 75%, var(--color-overlay)); }
-  .contrib-cell[data-level="4"] { background: var(--color-peach); }
+  .contrib-cell[data-level="1"] { background: color-mix(in srgb, var(--color-gold) 25%, var(--color-overlay)); }
+  .contrib-cell[data-level="2"] { background: color-mix(in srgb, var(--color-gold) 50%, var(--color-overlay)); }
+  .contrib-cell[data-level="3"] { background: color-mix(in srgb, var(--color-gold) 75%, var(--color-overlay)); }
+  .contrib-cell[data-level="4"] { background: var(--color-gold); }
 
   .contrib-loading {
     font-family: var(--font-mono);
@@ -1390,7 +1419,7 @@ const recentPosts = (await getCollection('blog'))
 
   .blog-read {
     font-size: 0.72rem;
-    color: var(--color-peach);
+    color: var(--color-gold);
     margin-top: 0.25rem;
   }
 </style>
@@ -1559,7 +1588,7 @@ const recentPosts = (await getCollection('blog'))
               <div class="mono">${node.role}</div>
             </div>
             <div style="margin-left:auto;text-align:right">
-              <div class="mono" style="color:var(--color-peach)">${node.pods} pods</div>
+              <div class="mono" style="color:var(--color-gold)">${node.pods} pods</div>
               <div class="mono">${node.cpu} CPU · ${node.memory} mem</div>
             </div>
           </div>`).join('');
@@ -1579,7 +1608,7 @@ const recentPosts = (await getCollection('blog'))
       const list = document.getElementById('digest-list');
       if (list) {
         const TYPE_COLOR: Record<string, string> = {
-          DEPLOY: 'var(--color-ok)', FIX: 'var(--color-peach)', INCIDENT: 'var(--color-crit)',
+          DEPLOY: 'var(--color-ok)', FIX: 'var(--color-gold)', INCIDENT: 'var(--color-crit)',
           HARDWARE: 'var(--color-gold)', NETWORK: 'var(--color-mauve)', SECURITY: 'var(--color-warn)',
         };
         list.innerHTML = entries.slice(0, 3).map((e: any) => {
@@ -1592,7 +1621,7 @@ const recentPosts = (await getCollection('blog'))
               <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.4rem">
                 <span style="font-family:var(--font-mono);font-size:0.65rem;font-weight:600;padding:0.15rem 0.45rem;border-radius:4px;background:color-mix(in srgb,${color} 12%,transparent);color:${color};text-transform:uppercase;letter-spacing:0.05em">${e.type}</span>
                 <span class="mono" style="color:var(--color-subtle);font-size:0.72rem">${e.date}</span>
-                ${e.hasDetail ? `<span class="mono" style="color:var(--color-peach);font-size:0.7rem;margin-left:auto">read more →</span>` : ''}
+                ${e.hasDetail ? `<span class="mono" style="color:var(--color-gold);font-size:0.7rem;margin-left:auto">read more →</span>` : ''}
               </div>
               <div style="color:var(--color-heading);font-weight:600;font-size:0.875rem;line-height:1.4">${e.title}</div>
             </div>
@@ -1661,12 +1690,13 @@ const recentPosts = (await getCollection('blog'))
     initPage();
   }
 
-  // ── Dot-grid background ──────────────────────────────────────────────────
-  // ── Particle network (cursor-reactive) ──────────────────────────────────
+  // ── Particle network (cursor-reactive, desktop only) ────────────────────
   (function initParticleNet() {
+    // Skip on mobile — saves battery, particles are invisible on touch anyway
+    if (window.innerWidth < 768) return;
     const canvas = document.getElementById('hero-grid') as HTMLCanvasElement;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d')!;
     if (!ctx) return;
 
     const PARTICLE_COUNT = 70;
@@ -1674,10 +1704,10 @@ const recentPosts = (await getCollection('blog'))
     const CURSOR_ATTRACT = 180;   // px radius around cursor that attracts
     const CURSOR_FORCE   = 0.012; // strength of cursor pull
     const BASE_SPEED     = 0.28;
-    const PEACH  = [250, 179, 135] as const;
-    const MAUVE  = [203, 166, 247] as const;
+    const GOLD   = [230, 180, 80]  as const;
+    const GREEN  = [166, 227, 161] as const;
     const SAPHIR = [116, 199, 236] as const;
-    const COLS   = [PEACH, MAUVE, SAPHIR];
+    const COLS   = [GOLD, GREEN, SAPHIR];
 
     let W = 0, H = 0, raf = 0;
     let mouse = { x: -9999, y: -9999 };

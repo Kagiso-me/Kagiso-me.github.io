@@ -58,9 +58,9 @@ html::before {
 body {
   background-color: var(--color-base);
   background-image:
-    radial-gradient(ellipse 100% 60% at 50% -5%,  color-mix(in srgb, var(--color-peach)    11%, transparent) 0%, transparent 65%),
-    radial-gradient(ellipse 70%  50% at 90% 95%,  color-mix(in srgb, var(--color-mauve)     7%, transparent) 0%, transparent 55%),
-    radial-gradient(ellipse 50%  40% at -10% 60%, color-mix(in srgb, var(--color-sapphire)  4%, transparent) 0%, transparent 50%);
+    radial-gradient(ellipse 80% 50% at 20% 0%,   color-mix(in srgb, var(--color-gold)      8%, transparent) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 85% 100%, color-mix(in srgb, var(--color-green)     5%, transparent) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 30% at -5% 55%,  color-mix(in srgb, var(--color-sapphire)  3%, transparent) 0%, transparent 50%);
   color: var(--color-text);
   font-family: var(--font-sans);
   line-height: 1.6;
@@ -89,13 +89,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 a {
-  color: var(--color-peach);
+  color: var(--color-gold);
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 a:hover {
-  color: var(--color-mauve);
+  color: var(--color-green);
 }
 
 code, pre {
@@ -161,7 +161,7 @@ code, pre {
 
 /* ── Gradient text ── */
 .gradient-text {
-  background: linear-gradient(135deg, var(--color-peach), var(--color-mauve));
+  background: linear-gradient(135deg, var(--color-gold), var(--color-green));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -256,8 +256,8 @@ code, pre {
   z-index: 9999;
   background: radial-gradient(
     700px circle at var(--cx, -9999px) var(--cy, -9999px),
-    rgba(250, 179, 135, 0.09) 0%,
-    rgba(203, 166, 247, 0.05) 35%,
+    rgba(230, 180, 80, 0.08) 0%,
+    rgba(166, 227, 161, 0.04) 35%,
     transparent 65%
   );
   mix-blend-mode: screen;

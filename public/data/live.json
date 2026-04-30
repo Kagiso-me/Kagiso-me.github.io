@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-30T18:51:33Z",
-  "fetched_at": "2026-04-30T18:51:33Z",
+  "updated": "2026-04-30T20:07:17Z",
+  "fetched_at": "2026-04-30T20:07:17Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -23,19 +23,19 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "6h 51m ago",
+      "value": "8h 7m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "5h 51m ago",
+      "value": "1h 6m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "17h 51m ago",
+      "value": "19h 7m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -244,16 +244,16 @@
     }
   ],
   "network": {
-    "fw_hits": 95431,
-    "latency_ms": 8.0,
+    "fw_hits": 97023,
+    "latency_ms": 4.7,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 51.5,
+    "temp_c": 52.6,
     "temp_status": "ok",
-    "load": 0.5,
-    "mem_pct": 40.4
+    "load": 0.64,
+    "mem_pct": 41.7
   },
   "ups": {
     "charge": 100,
@@ -266,7 +266,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "18m ago",
+    "age": "1h ago",
     "message": "chore(deps): update helm release velero to v12.0.1 (#238)",
     "sha": "3ca604a"
   },
@@ -282,7 +282,7 @@
     },
     {
       "name": "archive",
-      "used": "464.5 GB",
+      "used": "464.7 GB",
       "total": "4.0 TB",
       "pct": 11.7,
       "status": "ok",

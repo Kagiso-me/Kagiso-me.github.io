@@ -26,6 +26,12 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </div>
 
+    <!-- ── Known Issues ── -->
+    <section class="section fade-up" id="known-issues-section" style="animation-delay:0.01s">
+      <h2 class="section-label">Known Issues</h2>
+      <div id="known-issues-list"></div>
+    </section>
+
     <!-- ── Security ── -->
     <section class="section fade-up" style="animation-delay:0.02s">
       <h2 class="section-label">Security</h2>
@@ -292,6 +298,69 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <style is:global>
+  /* ── Known Issues ── */
+  #known-issues-section:has(#known-issues-list:empty) { display: none; }
+
+  .known-issue {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: start;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: color-mix(in srgb, var(--color-warn) 5%, var(--color-surface));
+    border: 1px solid color-mix(in srgb, var(--color-warn) 30%, var(--color-muted));
+    border-left: 3px solid var(--color-warn);
+    border-radius: 10px;
+    margin-bottom: 0.6rem;
+  }
+
+  .known-issue:last-child { margin-bottom: 0; }
+
+  .known-issue.crit {
+    background: color-mix(in srgb, var(--color-crit) 5%, var(--color-surface));
+    border-color: color-mix(in srgb, var(--color-crit) 30%, var(--color-muted));
+    border-left-color: var(--color-crit);
+  }
+
+  .known-issue.info {
+    background: color-mix(in srgb, var(--color-sapphire) 5%, var(--color-surface));
+    border-color: color-mix(in srgb, var(--color-sapphire) 30%, var(--color-muted));
+    border-left-color: var(--color-sapphire);
+  }
+
+  .ki-icon {
+    font-size: 1rem;
+    line-height: 1.5;
+    flex-shrink: 0;
+  }
+
+  .ki-body {}
+
+  .ki-title {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-heading);
+    margin-bottom: 0.2rem;
+    letter-spacing: -0.01em;
+  }
+
+  .ki-desc {
+    font-size: 0.85rem;
+    color: var(--color-subtle);
+    line-height: 1.6;
+  }
+
+  .ki-meta {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--color-subtle);
+    white-space: nowrap;
+    padding-top: 0.2rem;
+    letter-spacing: 0.03em;
+  }
+
+  /* ── Page wrap ── */
   .page-wrap {
     max-width: 1200px;
     margin: 0 auto;
@@ -1564,7 +1633,46 @@ import Layout from '../layouts/Layout.astro';
         }
       }
 
+      // ── Known Issues — derives from live data ─────────────────────────────
+      renderKnownIssues(data);
+
     } catch { /* skeletons remain */ }
+  }
+
+  function renderKnownIssues(data: any) {
+    const el = document.getElementById('known-issues-list');
+    if (!el) return;
+
+    const issues: Array<{ severity: string; icon: string; title: string; desc: string; since: string }> = [];
+
+    // UPS runtime check — anything under 10 minutes on a 390W unit is a dead battery
+    const ups = data.ups ?? {};
+    if (ups.runtime_s != null && ups.runtime_s < 600) {
+      const mins = Math.round(ups.runtime_s / 60);
+      issues.push({
+        severity: 'warn',
+        icon: '⚡',
+        title: 'UPS battery degraded — replacement needed',
+        desc: `APC Back-UPS Pro 650VA is showing ${mins} minute${mins !== 1 ? 's' : ''} of runtime at ${ups.load_pct ?? '—'}% load. Rated capacity is ~2h at 390W nominal. The battery cells have failed and will not sustain an orderly shutdown during a power outage. Replacement battery ordered.`,
+        since: 'Since 2026-04',
+      });
+    }
+
+    if (!issues.length) {
+      el.innerHTML = '';
+      return;
+    }
+
+    el.innerHTML = issues.map(i => `
+      <div class="known-issue ${i.severity}">
+        <span class="ki-icon">${i.icon}</span>
+        <div class="ki-body">
+          <div class="ki-title">${i.title}</div>
+          <div class="ki-desc">${i.desc}</div>
+        </div>
+        <span class="ki-meta">${i.since}</span>
+      </div>
+    `).join('');
   }
 
   // ── Number counters ───────────────────────────────────────────────────────

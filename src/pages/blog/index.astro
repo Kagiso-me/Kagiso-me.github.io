@@ -30,13 +30,31 @@ const allTags = [...new Set(posts.flatMap(p => p.tags))].sort();
 
     <div class="page-header fade-up">
       <div>
-        <p class="mono" style="color:var(--color-peach);margin-bottom:0.25rem">~/blog</p>
+        <p class="mono" style="color:var(--color-gold);margin-bottom:0.25rem">~/blog</p>
         <h1 style="margin:0">Blog</h1>
       </div>
       <p class="hero-sub">
         Architecture decisions, homelab learnings, and honest retrospectives.
         Rooted in real <a href="https://github.com/Kagiso-me/homelab-infrastructure/tree/main/docs/adr" target="_blank" rel="noopener" class="link-inline">ADRs</a> — what we decided, why, and what actually happened.
       </p>
+    </div>
+
+    <!-- ── Search ── -->
+    <div class="search-wrap fade-up" style="animation-delay:0.03s">
+      <div class="search-box">
+        <span class="search-icon" aria-hidden="true">⌕</span>
+        <input
+          id="blog-search"
+          class="search-input"
+          type="search"
+          placeholder="Search posts…"
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Search blog posts"
+        />
+        <kbd class="search-kbd" aria-hidden="true">/</kbd>
+      </div>
+      <span class="search-count mono" id="search-count"></span>
     </div>
 
     <!-- ── Tag filter bar ── -->
@@ -94,7 +112,7 @@ const allTags = [...new Set(posts.flatMap(p => p.tags))].sort();
   }
 
   .link-inline {
-    color: var(--color-peach);
+    color: var(--color-gold);
     text-decoration: underline;
     text-underline-offset: 3px;
   }
@@ -229,7 +247,7 @@ const allTags = [...new Set(posts.flatMap(p => p.tags))].sort();
 
   .post-read-more {
     font-size: 0.75rem;
-    color: var(--color-peach);
+    color: var(--color-gold);
     transition: gap 0.2s;
     letter-spacing: 0.02em;
   }
@@ -239,6 +257,78 @@ const allTags = [...new Set(posts.flatMap(p => p.tags))].sort();
   .post-reading-time {
     font-size: 0.72rem;
     color: var(--color-subtle);
+  }
+
+  /* ── Search ── */
+  .search-wrap {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .search-box {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: color-mix(in srgb, var(--color-surface) 70%, transparent);
+    border: 1px solid var(--color-muted);
+    border-radius: 10px;
+    padding: 0.6rem 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .search-box:focus-within {
+    border-color: var(--color-gold);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-gold) 12%, transparent);
+  }
+
+  .search-icon {
+    color: var(--color-subtle);
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    line-height: 1;
+    user-select: none;
+  }
+
+  .search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--color-heading);
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    line-height: 1;
+  }
+
+  .search-input::placeholder { color: var(--color-subtle); }
+
+  /* Hide browser's default clear button */
+  .search-input::-webkit-search-cancel-button { display: none; }
+
+  .search-kbd {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--color-subtle);
+    background: var(--color-overlay);
+    border: 1px solid var(--color-muted);
+    border-radius: 4px;
+    padding: 0.1rem 0.4rem;
+    flex-shrink: 0;
+    opacity: 0.7;
+  }
+
+  /* Hide the / shortcut hint once focused */
+  .search-box:focus-within .search-kbd { display: none; }
+
+  .search-count {
+    font-size: 0.72rem;
+    color: var(--color-subtle);
+    white-space: nowrap;
+    min-width: 5ch;
+    text-align: right;
   }
 
   /* ── Tag filter bar ── */
@@ -264,15 +354,15 @@ const allTags = [...new Set(posts.flatMap(p => p.tags))].sort();
   }
 
   .tag-btn:hover {
-    border-color: var(--color-peach);
-    color: var(--color-peach);
-    background: color-mix(in srgb, var(--color-peach) 8%, transparent);
+    border-color: var(--color-gold);
+    color: var(--color-gold);
+    background: color-mix(in srgb, var(--color-gold) 8%, transparent);
   }
 
   .tag-btn.active {
-    border-color: var(--color-peach);
-    color: var(--color-peach);
-    background: color-mix(in srgb, var(--color-peach) 12%, transparent);
+    border-color: var(--color-gold);
+    color: var(--color-gold);
+    background: color-mix(in srgb, var(--color-gold) 12%, transparent);
   }
 
   /* ── Post inline tags ── */
@@ -303,22 +393,69 @@ const allTags = [...new Set(posts.flatMap(p => p.tags))].sort();
 </style>
 
 <script>
-  function initBlogFilter() {
-    const bar = document.getElementById('blog-tag-bar');
+  function initBlog() {
+    const bar       = document.getElementById('blog-tag-bar');
+    const searchEl  = document.getElementById('blog-search') as HTMLInputElement | null;
+    const countEl   = document.getElementById('search-count');
     if (!bar) return;
+
+    let activeTag   = 'all';
+    let searchQuery = '';
+
+    function applyFilters() {
+      const cards = document.querySelectorAll<HTMLElement>('.post-card');
+      let visible = 0;
+      cards.forEach(card => {
+        const tags  = card.dataset.tags?.split(',') ?? [];
+        const title = card.querySelector('.post-title')?.textContent?.toLowerCase() ?? '';
+        const summ  = card.querySelector('.post-summary')?.textContent?.toLowerCase() ?? '';
+        const q     = searchQuery.toLowerCase();
+
+        const tagMatch    = activeTag === 'all' || tags.includes(activeTag);
+        const searchMatch = !q || title.includes(q) || summ.includes(q) || tags.some(t => t.includes(q));
+        const show        = tagMatch && searchMatch;
+
+        card.setAttribute('aria-hidden', show ? 'false' : 'true');
+        if (show) visible++;
+      });
+
+      if (countEl) {
+        countEl.textContent = searchQuery
+          ? `${visible} result${visible !== 1 ? 's' : ''}`
+          : '';
+      }
+    }
+
     bar.addEventListener('click', (e) => {
       const btn = (e.target as Element).closest('.tag-btn') as HTMLElement | null;
       if (!btn) return;
-      const tag = btn.dataset.tag ?? 'all';
+      activeTag = btn.dataset.tag ?? 'all';
       bar.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      document.querySelectorAll<HTMLElement>('.post-card').forEach(card => {
-        const tags = card.dataset.tags?.split(',') ?? [];
-        const match = tag === 'all' || tags.includes(tag);
-        card.setAttribute('aria-hidden', match ? 'false' : 'true');
-      });
+      applyFilters();
+    });
+
+    searchEl?.addEventListener('input', () => {
+      searchQuery = searchEl.value.trim();
+      // Reset tag filter when searching so results aren't double-filtered unexpectedly
+      if (searchQuery) {
+        activeTag = 'all';
+        bar.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
+        bar.querySelector<HTMLElement>('[data-tag="all"]')?.classList.add('active');
+      }
+      applyFilters();
+    });
+
+    // / key shortcut to focus search
+    document.addEventListener('keydown', (e) => {
+      if (e.key === '/' && document.activeElement !== searchEl) {
+        e.preventDefault();
+        searchEl?.focus();
+        searchEl?.select();
+      }
     });
   }
-  initBlogFilter();
-  document.addEventListener('astro:page-load', initBlogFilter);
+
+  initBlog();
+  document.addEventListener('astro:page-load', initBlog);
 </script>

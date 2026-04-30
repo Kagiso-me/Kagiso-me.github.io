@@ -6,7 +6,7 @@ const links = [
   { href: '/digest',    label: 'Digest' },
   { href: '/blog',      label: 'Blog' },
   { href: '/decisions', label: 'Decisions' },
-  { href: '/projects',  label: 'Roadmap' },
+  { href: '/projects',  label: 'Projects' },
 ];
 
 const current = Astro.url.pathname;
@@ -15,7 +15,7 @@ const current = Astro.url.pathname;
 <nav class="nav">
   <div class="nav-inner">
     <a href="/" class="nav-brand">
-      <span class="mono" style="color: var(--color-peach)">~/</span>
+      <span class="mono" style="color: var(--color-gold)">~/</span>
       <span style="color: var(--color-heading); font-weight: 700;">kagiso.me</span>
       <span class="nav-heartbeat" id="nav-heartbeat" title="Live cluster data"></span>
     </a>
@@ -132,7 +132,7 @@ const current = Astro.url.pathname;
   }
 
   .nav-link.active {
-    color: var(--color-peach);
+    color: var(--color-gold);
   }
 
   .nav-mobile-toggle {

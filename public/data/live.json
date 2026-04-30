@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-30T08:11:58Z",
-  "fetched_at": "2026-04-30T08:11:58Z",
+  "updated": "2026-04-30T10:23:30Z",
+  "fetched_at": "2026-04-30T10:23:30Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -23,19 +23,19 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "8h 12m ago",
+      "value": "10h 23m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "1h 12m ago",
+      "value": "3h 23m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "7h 12m ago",
+      "value": "9h 23m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -244,23 +244,23 @@
     }
   ],
   "network": {
-    "fw_hits": 86909,
-    "latency_ms": 4.7,
+    "fw_hits": 88376,
+    "latency_ms": 4.5,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 51.5,
+    "temp_c": 51.0,
     "temp_status": "ok",
-    "load": 0.51,
-    "mem_pct": 45.1
+    "load": 0.41,
+    "mem_pct": 45.3
   },
   "ups": {
-    "charge": 54,
-    "runtime_s": 140,
-    "runtime_str": "2m",
-    "load_pct": 27,
-    "status": "OL DISCHRG",
+    "charge": 60,
+    "runtime_s": 180,
+    "runtime_str": "3m",
+    "load_pct": 25,
+    "status": "OL CHRG",
     "nominal_w": 390,
     "on_battery": false,
     "dot": "ok"
@@ -291,7 +291,7 @@
     },
     {
       "name": "core",
-      "used": "43.7 GB",
+      "used": "44.0 GB",
       "total": "476.7 GB",
       "pct": 9.2,
       "status": "ok",
@@ -312,9 +312,9 @@
       "2026-04-21": 6,
       "2026-04-20": 20,
       "2026-04-19": 61,
-      "2026-04-18": 1
+      "2026-04-18": 0
     },
-    "total": 115,
+    "total": 114,
     "active_days": 12
   }
 }

@@ -2,13 +2,13 @@
 import Layout from '../layouts/Layout.astro';
 
 // ── Cost data ──────────────────────────────────────────────────────────────
-// Self-hosted start date — when Kagiso's cluster went live
-const SELF_HOSTED_SINCE = '2024-01-01'; // update to actual go-live date
+// When the cluster went live and cloud subscriptions were cancelled
+const SELF_HOSTED_SINCE = '2024-06-01'; // update to your actual go-live date
 
 // Hardware — amortised over 36 months
 const HARDWARE = [
-  { item: '3× Lenovo ThinkCentre M93p', cost: 4200  },  // ~R1400 each
-  { item: '2× Intel NUC (Bronn + Varys)', cost: 2400  },  // ~R1200 each
+  { item: '3× Lenovo ThinkCentre M93p', cost: 4200  },
+  { item: '2× Intel NUC (Bronn + Varys)', cost: 2400 },
   { item: 'HP MicroServer Gen8 (Ned)',   cost: 2800  },
   { item: '3× HDDs + 2× SSDs (Ned)',    cost: 3200  },
   { item: 'APC Back-UPS Pro 650VA',     cost: 1800  },
@@ -16,93 +16,117 @@ const HARDWARE = [
   { item: 'Networking — switch, cables', cost: 600   },
 ];
 const HARDWARE_TOTAL   = HARDWARE.reduce((s, h) => s + h.cost, 0);
-const HARDWARE_MONTHLY = Math.round(HARDWARE_TOTAL / 36); // R/month amortised
+const HARDWARE_MONTHLY = Math.round(HARDWARE_TOTAL / 36);
 
 // Ongoing monthly costs (ZAR)
 const ONGOING = [
-  { item: 'Backblaze B2 (offsite backup)', cost: 85  },
-  { item: 'Domain — kagiso.me',            cost: 15  },
-  { item: 'Cloudflare (free tier)',         cost: 0   },
-  { item: 'GitHub Actions (free tier)',     cost: 0   },
+  { item: 'Backblaze B2 (offsite backup)', cost: 85 },
+  { item: 'Domain — kagiso.me',            cost: 15 },
+  { item: 'Cloudflare (free tier)',         cost: 0  },
+  { item: 'GitHub Actions (free tier)',     cost: 0  },
 ];
 const ONGOING_TOTAL = ONGOING.reduce((s, o) => s + o.cost, 0);
 
-// Electricity — measured from UPS load + device power draw
-// ~5 active mini PCs avg 25W + NAS avg 60W + RPi 5W + networking 15W ≈ 205W
-// 205W × 24h × 30d = 147.6 kWh/month @ R3.50/kWh ≈ R516/month
-const ELECTRICITY_KWH   = 148;
-const ELECTRICITY_RATE  = 3.50;  // R/kWh — Johannesburg Eskom residential
-const ELECTRICITY_COST  = Math.round(ELECTRICITY_KWH * ELECTRICITY_RATE);
+// Electricity — derived from UPS load readings + device power draw
+// 5 mini PCs ~25W avg + NAS ~60W + RPi ~5W + networking ~15W ≈ 205W continuous
+// 205W × 24h × 30d = 147 kWh/month @ R3.50/kWh
+const ELECTRICITY_KWH  = 147;
+const ELECTRICITY_RATE = 3.50; // R/kWh — Johannesburg municipal tariff
+const ELECTRICITY_COST = Math.round(ELECTRICITY_KWH * ELECTRICITY_RATE);
 
 const MY_MONTHLY_TOTAL = HARDWARE_MONTHLY + ONGOING_TOTAL + ELECTRICITY_COST;
 
-// ── Cloud equivalent pricing (ZAR, ~R18.50/USD) ───────────────────────────
-// What you'd pay the platforms for equivalent services
-const CLOUD_SERVICES = [
+// ── Subscriptions actually cancelled ─────────────────────────────────────
+// These are real invoices that no longer arrive. Exact prices as billed.
+const CANCELLED = [
   {
-    name:       'Google Photos',
-    replaces:   'Immich',
-    cloudCost:  130,   // 2TB Google One plan
-    selfCost:   0,
-    unit:       '/mo',
-    note:       '2TB Google One · R130/mo',
+    name:     'iCloud 200GB',
+    replaces: 'Immich + Nextcloud',
+    vendor:   'Apple',
+    cost:     59.99,
+    note:     'Photos → Immich · Files → Nextcloud · Calendar/Contacts → Nextcloud',
+    emoji:    '🍎',
   },
   {
-    name:       'iCloud / Backblaze Personal',
-    replaces:   'Velero + B2 offsite',
-    cloudCost:  85,    // 2TB iCloud = ~R65 + extras
-    selfCost:   85,    // B2 is already counted in ongoing
-    unit:       '/mo',
-    note:       'B2 offsite already paid — iCloud would be R65–130 on top',
+    name:     'Microsoft 365 Basic',
+    replaces: 'Nextcloud',
+    vendor:   'Microsoft',
+    cost:     39.00,
+    note:     'OneDrive 1TB + Office web → Nextcloud handles files and docs',
+    emoji:    '🪟',
   },
   {
-    name:       'Plex Pass',
-    replaces:   'Jellyfin',
-    cloudCost:  220,   // ~$12/mo Plex Pass
-    selfCost:   0,
-    unit:       '/mo',
-    note:       'Plex Pass $12/mo · Jellyfin is free',
-  },
-  {
-    name:       'Nextcloud Hosted (Hetzner)',
-    replaces:   'Nextcloud self-hosted',
-    cloudCost:  185,   // Hetzner 2TB cloud storage plan
-    selfCost:   0,
-    unit:       '/mo',
-    note:       'Equivalent managed Nextcloud on Hetzner',
-  },
-  {
-    name:       'Sonarr / cloud DVR',
-    replaces:   'Sonarr + Prowlarr',
-    cloudCost:  150,   // YouTube TV or similar DVR
-    selfCost:   0,
-    unit:       '/mo',
-    note:       'YouTube TV base plan for DVR equivalent',
-  },
-  {
-    name:       'Grafana Cloud',
-    replaces:   'Prometheus + Grafana + Loki',
-    cloudCost:  370,   // Grafana Cloud Pro ~$20/mo
-    selfCost:   0,
-    unit:       '/mo',
-    note:       'Grafana Cloud Pro $20/mo for equivalent metrics + logs',
-  },
-  {
-    name:       'Okta / Auth0',
-    replaces:   'Authentik',
-    cloudCost:  260,   // Auth0 B2C basic plan
-    selfCost:   0,
-    unit:       '/mo',
-    note:       'Auth0 B2C $14/mo for ~10 MAU on essential plan',
+    name:     'Apple TV+',
+    replaces: 'Plex',
+    vendor:   'Apple',
+    cost:     124.99,
+    note:     'Streaming → self-hosted Plex library. Own the content, own the server.',
+    emoji:    '📺',
   },
 ];
 
-const CLOUD_TOTAL = CLOUD_SERVICES.reduce((s, c) => s + c.cloudCost, 0);
-const SELF_TOTAL_CLOUD_EQUIV = CLOUD_SERVICES.reduce((s, c) => s + c.selfCost, 0) + MY_MONTHLY_TOTAL;
-const MONTHLY_SAVINGS = CLOUD_TOTAL - SELF_TOTAL_CLOUD_EQUIV;
+const CANCELLED_TOTAL = CANCELLED.reduce((s, c) => s + c.cost, 0);
 
-// Cap displayed savings at a reasonable number for the ticker
-const TICKER_RATE_PER_SEC = MONTHLY_SAVINGS / (30 * 24 * 3600); // R per second
+// ── What the full cloud stack would cost ─────────────────────────────────
+// If you had to pay for every layer of the homelab as a managed service.
+// These are the services you run free that would cost real money on the cloud.
+const CLOUD_SERVICES = [
+  {
+    name:     'iCloud 200GB',
+    replaces: 'Immich + Nextcloud',
+    cloudCost: 59.99,
+    selfCost:  0,
+    note:     'Actually cancelled · exact price',
+    actual:   true,
+  },
+  {
+    name:     'Microsoft 365 Basic',
+    replaces: 'Nextcloud',
+    cloudCost: 39.00,
+    selfCost:  0,
+    note:     'Actually cancelled · exact price',
+    actual:   true,
+  },
+  {
+    name:     'Apple TV+',
+    replaces: 'Plex',
+    cloudCost: 124.99,
+    selfCost:  0,
+    note:     'Actually cancelled · exact price',
+    actual:   true,
+  },
+  {
+    name:     'Grafana Cloud Pro',
+    replaces: 'Prometheus + Grafana + Loki',
+    cloudCost: 370,
+    selfCost:  0,
+    note:     'Grafana Cloud Pro ~$20/mo · equivalent metrics + logs retention',
+    actual:   false,
+  },
+  {
+    name:     'Auth0 / Okta',
+    replaces: 'Authentik',
+    cloudCost: 260,
+    selfCost:  0,
+    note:     'Auth0 B2C essential ~$14/mo for SSO + identity management',
+    actual:   false,
+  },
+  {
+    name:     'Backblaze Personal Backup',
+    replaces: 'Velero + B2 offsite',
+    cloudCost: 130,
+    selfCost:  85, // B2 already in ONGOING
+    note:     'Consumer backup equivalent — B2 offsite already paid',
+    actual:   false,
+  },
+];
+
+const CLOUD_TOTAL        = CLOUD_SERVICES.reduce((s, c) => s + c.cloudCost, 0);
+const SELF_CLOUD_EQUIV   = CLOUD_SERVICES.reduce((s, c) => s + c.selfCost, 0) + MY_MONTHLY_TOTAL;
+const MONTHLY_SAVINGS    = CLOUD_TOTAL - SELF_CLOUD_EQUIV;
+const ACTUAL_SAVINGS     = Math.round(CANCELLED_TOTAL); // what literally stopped being billed
+
+const TICKER_RATE_PER_SEC = ACTUAL_SAVINGS / (30 * 24 * 3600); // R per second saved
 ---
 
 <Layout
@@ -119,31 +143,102 @@ const TICKER_RATE_PER_SEC = MONTHLY_SAVINGS / (30 * 24 * 3600); // R per second
       <h1 style="margin:0">The Bill You're Not Paying</h1>
     </div>
     <p class="hero-sub">
-      What the cloud would charge for everything running in this homelab —
-      versus what it actually costs to run it yourself.
-      Real numbers. No rounding up.
+      The money saved is real. But that's not why I did it.
+      I did it because I was tired of paying companies to store my data
+      on their terms, train their models on it, and change the rules whenever they felt like it.
+      The savings are a bonus. The control is the point.
     </p>
   </div>
 
   <!-- ── Live savings ticker ── -->
   <section class="ticker-section fade-up" style="animation-delay:0.05s">
     <div class="ticker-wrap">
-      <div class="ticker-label mono">saved vs cloud since going self-hosted</div>
-      <div class="ticker-amount" id="savings-ticker">
+      <div class="ticker-label mono">saved in cancelled subscriptions since going self-hosted</div>
+      <div class="ticker-amount">
         <span class="ticker-currency">R</span>
         <span class="ticker-number" id="ticker-num">0</span>
       </div>
-      <div class="ticker-sub mono" id="ticker-sub">
-        and counting — at R<span id="ticker-rate">{MONTHLY_SAVINGS.toLocaleString()}</span>/month
+      <div class="ticker-sub mono">
+        and counting — R{ACTUAL_SAVINGS.toFixed(2).replace('.', ',')} every month that no longer leaves your account
       </div>
-      <div class="ticker-since mono" id="ticker-since">
+      <div class="ticker-since mono">
         since <span>{new Date(SELF_HOSTED_SINCE).toLocaleDateString('en-ZA', { year: 'numeric', month: 'long' })}</span>
       </div>
     </div>
   </section>
 
+  <!-- ── What I actually cancelled ── -->
+  <section class="section fade-up" style="animation-delay:0.08s">
+    <div class="section-header">
+      <h2 class="section-title">What I Actually Cancelled</h2>
+      <span class="mono" style="color:var(--color-subtle);font-size:0.72rem">real invoices · exact prices</span>
+    </div>
+    <div class="cancelled-grid">
+      {CANCELLED.map(c => (
+        <div class="cancelled-card">
+          <div class="cancelled-top">
+            <span class="cancelled-emoji">{c.emoji}</span>
+            <div class="cancelled-meta">
+              <span class="cancelled-vendor mono">{c.vendor}</span>
+              <span class="cancelled-name">{c.name}</span>
+            </div>
+            <div class="cancelled-price-wrap">
+              <span class="cancelled-was mono">was</span>
+              <span class="cancelled-price">R{c.cost.toFixed(2).replace('.', ',')}</span>
+              <span class="cancelled-per mono">/mo</span>
+            </div>
+          </div>
+          <div class="cancelled-arrow">
+            <span class="cancelled-arrow-line"></span>
+            <span class="cancelled-arrow-label mono">now runs on</span>
+            <span class="cancelled-arrow-line"></span>
+          </div>
+          <div class="cancelled-self mono">{c.replaces}</div>
+          <p class="cancelled-note mono">{c.note}</p>
+        </div>
+      ))}
+    </div>
+
+    <div class="cancelled-total-row">
+      <span class="mono" style="color:var(--color-subtle)">Total cancelled</span>
+      <span class="cancelled-total-amount">R{CANCELLED_TOTAL.toFixed(2).replace('.', ',')}<span class="mono" style="font-size:1rem;color:var(--color-subtle)">/mo</span></span>
+      <span class="mono" style="color:var(--color-subtle)">= R{(CANCELLED_TOTAL * 12).toFixed(0)}/year</span>
+    </div>
+  </section>
+
+  <!-- ── The real reason ── -->
+  <section class="privacy-section fade-up" style="animation-delay:0.1s">
+    <div class="privacy-inner">
+      <div class="privacy-icon" aria-hidden="true">⚿</div>
+      <div class="privacy-body">
+        <h2 class="privacy-title">The Real Reason</h2>
+        <p class="privacy-text">
+          Saving R224 a month is nice. It's not why I spent weeks building this.
+        </p>
+        <p class="privacy-text">
+          Every photo I took was living on Apple's servers. Every document I wrote
+          sat on Microsoft's infrastructure. Every show I watched was feeding a
+          recommendation algorithm. I was the product, not the customer.
+        </p>
+        <p class="privacy-text">
+          Now my photos live on <em>my</em> drives, backed up to <em>my</em> offsite storage.
+          My files are on <em>my</em> Nextcloud, encrypted at rest, not indexed for anything.
+          My media library is mine — not licensed to me until a company decides otherwise.
+        </p>
+        <p class="privacy-text" style="color:var(--color-heading);font-weight:600">
+          The cost comparison below is honest. But the reason I did this
+          can't be put in a spreadsheet.
+        </p>
+      </div>
+    </div>
+  </section>
+
   <!-- ── Receipt comparison ── -->
-  <section class="section fade-up" style="animation-delay:0.1s">
+  <section class="section fade-up" style="animation-delay:0.12s">
+    <div class="section-header">
+      <h2 class="section-title">Full Stack Comparison</h2>
+      <span class="mono" style="color:var(--color-subtle);font-size:0.72rem">if you had to pay for every layer</span>
+    </div>
     <div class="receipts-wrap">
 
       <!-- Cloud receipt — thermal printer style -->
@@ -151,25 +246,28 @@ const TICKER_RATE_PER_SEC = MONTHLY_SAVINGS / (30 * 24 * 3600); // R per second
         <div class="receipt-header">
           <div class="receipt-logo">☁</div>
           <div class="receipt-title">CLOUD INVOICE</div>
-          <div class="receipt-sub mono">what you'd pay them</div>
+          <div class="receipt-sub mono">what they'd charge</div>
           <div class="receipt-dashes">- - - - - - - - - - - - - - - - -</div>
         </div>
         <div class="receipt-body">
           {CLOUD_SERVICES.map(s => (
-            <div class="receipt-line">
-              <span class="receipt-item">{s.name}</span>
-              <span class="receipt-price cloud-price">R{s.cloudCost}</span>
+            <div class={`receipt-line${s.actual ? ' receipt-line-actual' : ''}`}>
+              <span class="receipt-item">
+                {s.actual && <span class="receipt-actual-dot" title="Actually cancelled">●</span>}
+                {s.name}
+              </span>
+              <span class="receipt-price cloud-price">R{s.cloudCost % 1 === 0 ? s.cloudCost : s.cloudCost.toFixed(2)}</span>
             </div>
           ))}
         </div>
         <div class="receipt-dashes">= = = = = = = = = = = = = = = = =</div>
         <div class="receipt-total">
           <span>MONTHLY TOTAL</span>
-          <span class="receipt-total-price cloud-total">R{CLOUD_TOTAL.toLocaleString()}</span>
+          <span class="receipt-total-price cloud-total">R{CLOUD_TOTAL.toFixed(0)}</span>
         </div>
         <div class="receipt-dashes">- - - - - - - - - - - - - - - - -</div>
-        <div class="receipt-footer mono">per month · every month · forever</div>
-        <div class="receipt-footer mono" style="margin-top:0.25rem">and they own your data</div>
+        <div class="receipt-footer mono">● = actually cancelled · rest = avoided</div>
+        <div class="receipt-footer mono" style="margin-top:0.25rem;color:var(--color-crit)">and they own your data</div>
       </div>
 
       <!-- VS divider -->
@@ -188,7 +286,7 @@ const TICKER_RATE_PER_SEC = MONTHLY_SAVINGS / (30 * 24 * 3600); // R per second
           <div class="receipt-dashes" style="color:var(--color-muted)">─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─</div>
         </div>
         <div class="receipt-body">
-          <div class="receipt-section-label mono">Hardware (amortised /36mo)</div>
+          <div class="receipt-section-label mono">Hardware (amortised over 3 years)</div>
           {HARDWARE.map(h => (
             <div class="receipt-line">
               <span class="receipt-item">{h.item}</span>
@@ -216,20 +314,20 @@ const TICKER_RATE_PER_SEC = MONTHLY_SAVINGS / (30 * 24 * 3600); // R per second
           <span class="receipt-total-price self-total">R{MY_MONTHLY_TOTAL.toLocaleString()}</span>
         </div>
         <div class="receipt-dashes" style="color:var(--color-muted)">─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─</div>
-        <div class="receipt-footer mono" style="color:var(--color-green)">you own the data · you control the stack</div>
+        <div class="receipt-footer mono" style="color:var(--color-green)">your data · your hardware · your rules</div>
       </div>
 
     </div>
 
     <!-- Savings callout -->
-    <div class="savings-callout fade-up" style="animation-delay:0.15s">
+    <div class="savings-callout">
       <div class="savings-callout-inner">
-        <span class="savings-callout-label mono">monthly saving</span>
+        <span class="savings-callout-label mono">full-stack saving</span>
         <span class="savings-callout-amount">R{MONTHLY_SAVINGS.toLocaleString()}</span>
-        <span class="savings-callout-label mono">vs cloud equivalent</span>
+        <span class="savings-callout-label mono">/month vs cloud equivalent</span>
       </div>
       <p class="savings-callout-note mono">
-        That's R{(MONTHLY_SAVINGS * 12).toLocaleString()} per year — enough to buy another server.
+        R{(MONTHLY_SAVINGS * 12).toLocaleString()} per year. The hardware paid for itself in under {Math.ceil(HARDWARE_TOTAL / (MONTHLY_SAVINGS * 12))} year{Math.ceil(HARDWARE_TOTAL / (MONTHLY_SAVINGS * 12)) !== 1 ? 's' : ''}.
       </p>
     </div>
   </section>
@@ -242,10 +340,11 @@ const TICKER_RATE_PER_SEC = MONTHLY_SAVINGS / (30 * 24 * 3600); // R per second
     <div class="breakdown-list">
       {CLOUD_SERVICES.map(s => {
         const savings = s.cloudCost - s.selfCost;
-        const pct = Math.round((savings / s.cloudCost) * 100);
+        const pct = Math.round((savings / CLOUD_TOTAL) * 100);
         return (
-          <div class="breakdown-row">
+          <div class={`breakdown-row${s.actual ? ' breakdown-actual' : ''}`}>
             <div class="breakdown-names">
+              {s.actual && <span class="breakdown-actual-badge mono">cancelled</span>}
               <span class="breakdown-cloud-name">{s.name}</span>
               <span class="breakdown-arrow mono">→</span>
               <span class="breakdown-self-name">{s.replaces}</span>
@@ -254,7 +353,7 @@ const TICKER_RATE_PER_SEC = MONTHLY_SAVINGS / (30 * 24 * 3600); // R per second
               <div class="breakdown-bar">
                 <div class="breakdown-bar-fill" style={`width:${pct}%`}></div>
               </div>
-              <span class="breakdown-pct mono">{savings > 0 ? `−R${savings}/mo` : 'same'}</span>
+              <span class="breakdown-pct mono">−R{savings % 1 === 0 ? savings : savings.toFixed(2)}/mo</span>
             </div>
             <span class="breakdown-note mono">{s.note}</span>
           </div>
@@ -273,25 +372,25 @@ const TICKER_RATE_PER_SEC = MONTHLY_SAVINGS / (30 * 24 * 3600); // R per second
           <div class="caveat-title">Time</div>
           <p class="caveat-desc">
             Every hour spent on upgrades, debugging, and maintenance is real cost.
-            Estimate: 3–5 hours/month. At any meaningful hourly rate, this changes the math.
-            I do it because I'm learning, not because it's cheaper per hour.
+            Estimate: 3–5 hours/month. At any meaningful hourly rate, this changes the math entirely.
+            I do it because I'm learning — not because it's cheaper per hour.
           </p>
         </div>
         <div class="caveat-card">
           <div class="caveat-icon">🔋</div>
           <div class="caveat-title">Reliability</div>
           <p class="caveat-desc">
-            Google Photos has never lost a photo. My cluster has had incidents.
-            If Immich goes down on holiday, it's a me problem. Cloud SLAs don't exist here.
+            iCloud has never lost a photo. My cluster has had incidents.
+            If Immich goes down on holiday, it's a me problem. There is no SLA here.
           </p>
         </div>
         <div class="caveat-card">
           <div class="caveat-icon">📐</div>
-          <div class="caveat-title">Assumptions</div>
+          <div class="caveat-title">Methodology</div>
           <p class="caveat-desc">
-            Cloud prices converted at ~R18.50/USD. Electricity at R3.50/kWh.
-            Hardware amortised over 3 years. Power draw estimated from UPS load readings.
-            Real figures rounded to nearest R5.
+            Cancelled subscription prices are exact. Cloud equivalents converted at ~R18.50/USD.
+            Electricity at R3.50/kWh (Johannesburg municipal). Power draw from UPS load readings.
+            Hardware amortised over 36 months.
           </p>
         </div>
       </div>
@@ -609,6 +708,238 @@ const TICKER_RATE_PER_SEC = MONTHLY_SAVINGS / (30 * 24 * 3600); // R per second
     border-radius: 2px;
   }
 
+  /* ── The real reason ── */
+  .privacy-section {
+    margin-bottom: 0;
+    padding: 2.5rem 0;
+    border-top: 1px solid color-mix(in srgb, var(--color-muted) 40%, transparent);
+  }
+
+  .privacy-inner {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    background: color-mix(in srgb, var(--color-mauve) 4%, var(--color-surface));
+    border: 1px solid color-mix(in srgb, var(--color-mauve) 20%, var(--color-muted));
+    border-left: 4px solid var(--color-mauve);
+    border-radius: 14px;
+    padding: 2rem;
+  }
+
+  .privacy-icon {
+    font-size: 2.5rem;
+    flex-shrink: 0;
+    opacity: 0.6;
+    margin-top: 0.1rem;
+  }
+
+  .privacy-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-heading);
+    margin: 0 0 1rem;
+    letter-spacing: -0.02em;
+  }
+
+  .privacy-text {
+    font-size: 0.95rem;
+    color: var(--color-subtle);
+    line-height: 1.8;
+    margin: 0 0 0.75rem;
+  }
+
+  .privacy-text:last-child { margin-bottom: 0; }
+
+  .privacy-text em {
+    color: var(--color-mauve);
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  @media (max-width: 600px) {
+    .privacy-inner { flex-direction: column; gap: 1rem; }
+    .privacy-icon { font-size: 1.8rem; }
+  }
+
+  /* ── What I actually cancelled ── */
+  .cancelled-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .cancelled-card {
+    background: color-mix(in srgb, var(--color-green) 4%, var(--color-surface));
+    border: 1px solid color-mix(in srgb, var(--color-green) 25%, var(--color-muted));
+    border-radius: 14px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .cancelled-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .cancelled-emoji {
+    font-size: 1.6rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .cancelled-meta {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .cancelled-vendor {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-subtle);
+  }
+
+  .cancelled-name {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-heading);
+    letter-spacing: -0.01em;
+  }
+
+  .cancelled-price-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.05rem;
+    flex-shrink: 0;
+  }
+
+  .cancelled-was {
+    font-size: 0.6rem;
+    color: var(--color-subtle);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-decoration: line-through;
+    opacity: 0.7;
+  }
+
+  .cancelled-price {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--color-crit);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    text-decoration: line-through;
+    opacity: 0.85;
+  }
+
+  .cancelled-per {
+    font-size: 0.62rem;
+    color: var(--color-subtle);
+  }
+
+  .cancelled-arrow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .cancelled-arrow-line {
+    flex: 1;
+    height: 1px;
+    background: color-mix(in srgb, var(--color-green) 40%, var(--color-muted));
+  }
+
+  .cancelled-arrow-label {
+    font-size: 0.6rem;
+    color: var(--color-green);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+  }
+
+  .cancelled-self {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-green);
+    letter-spacing: 0.02em;
+  }
+
+  .cancelled-note {
+    font-size: 0.72rem;
+    color: var(--color-subtle);
+    line-height: 1.5;
+    margin: 0;
+    border-top: 1px solid color-mix(in srgb, var(--color-muted) 40%, transparent);
+    padding-top: 0.5rem;
+  }
+
+  .cancelled-total-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: color-mix(in srgb, var(--color-green) 6%, var(--color-surface));
+    border: 1px solid color-mix(in srgb, var(--color-green) 25%, var(--color-muted));
+    border-radius: 12px;
+    flex-wrap: wrap;
+  }
+
+  .cancelled-total-amount {
+    font-family: var(--font-display);
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: var(--color-green);
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  /* ── Receipt lines: actual cancelled entries highlighted ── */
+  .receipt-line-actual {
+    background: color-mix(in srgb, var(--color-green) 6%, transparent);
+    margin: 0 -0.25rem;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+    border-radius: 3px;
+  }
+
+  .receipt-actual-dot {
+    color: var(--color-green);
+    font-size: 0.5rem;
+    margin-right: 0.3rem;
+    vertical-align: middle;
+  }
+
+  /* ── Breakdown: actual cancelled items ── */
+  .breakdown-actual {
+    background: color-mix(in srgb, var(--color-green) 3%, transparent);
+    border-radius: 8px;
+    margin: 0 -0.5rem;
+    padding: 0 0.5rem;
+  }
+
+  .breakdown-actual-badge {
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-green);
+    background: color-mix(in srgb, var(--color-green) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-green) 30%, transparent);
+    border-radius: 4px;
+    padding: 0.1rem 0.4rem;
+    flex-shrink: 0;
+  }
+
   /* ── Per-service breakdown ── */
   .breakdown-list {
     display: flex;
@@ -732,7 +1063,7 @@ const TICKER_RATE_PER_SEC = MONTHLY_SAVINGS / (30 * 24 * 3600); // R per second
   }
 </style>
 
-<script define:vars={{ SELF_HOSTED_SINCE, TICKER_RATE_PER_SEC, MONTHLY_SAVINGS }}>
+<script is:inline define:vars={{ SELF_HOSTED_SINCE, TICKER_RATE_PER_SEC, ACTUAL_SAVINGS }}>
   function initTicker() {
     const numEl = document.getElementById('ticker-num');
     if (!numEl) return;

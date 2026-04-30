@@ -1,0 +1,780 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// ── Cost data ──────────────────────────────────────────────────────────────
+// Self-hosted start date — when Kagiso's cluster went live
+const SELF_HOSTED_SINCE = '2024-01-01'; // update to actual go-live date
+
+// Hardware — amortised over 36 months
+const HARDWARE = [
+  { item: '3× Lenovo ThinkCentre M93p', cost: 4200  },  // ~R1400 each
+  { item: '2× Intel NUC (Bronn + Varys)', cost: 2400  },  // ~R1200 each
+  { item: 'HP MicroServer Gen8 (Ned)',   cost: 2800  },
+  { item: '3× HDDs + 2× SSDs (Ned)',    cost: 3200  },
+  { item: 'APC Back-UPS Pro 650VA',     cost: 1800  },
+  { item: 'Raspberry Pi 3B+ (Bran)',    cost: 800   },
+  { item: 'Networking — switch, cables', cost: 600   },
+];
+const HARDWARE_TOTAL   = HARDWARE.reduce((s, h) => s + h.cost, 0);
+const HARDWARE_MONTHLY = Math.round(HARDWARE_TOTAL / 36); // R/month amortised
+
+// Ongoing monthly costs (ZAR)
+const ONGOING = [
+  { item: 'Backblaze B2 (offsite backup)', cost: 85  },
+  { item: 'Domain — kagiso.me',            cost: 15  },
+  { item: 'Cloudflare (free tier)',         cost: 0   },
+  { item: 'GitHub Actions (free tier)',     cost: 0   },
+];
+const ONGOING_TOTAL = ONGOING.reduce((s, o) => s + o.cost, 0);
+
+// Electricity — measured from UPS load + device power draw
+// ~5 active mini PCs avg 25W + NAS avg 60W + RPi 5W + networking 15W ≈ 205W
+// 205W × 24h × 30d = 147.6 kWh/month @ R3.50/kWh ≈ R516/month
+const ELECTRICITY_KWH   = 148;
+const ELECTRICITY_RATE  = 3.50;  // R/kWh — Johannesburg Eskom residential
+const ELECTRICITY_COST  = Math.round(ELECTRICITY_KWH * ELECTRICITY_RATE);
+
+const MY_MONTHLY_TOTAL = HARDWARE_MONTHLY + ONGOING_TOTAL + ELECTRICITY_COST;
+
+// ── Cloud equivalent pricing (ZAR, ~R18.50/USD) ───────────────────────────
+// What you'd pay the platforms for equivalent services
+const CLOUD_SERVICES = [
+  {
+    name:       'Google Photos',
+    replaces:   'Immich',
+    cloudCost:  130,   // 2TB Google One plan
+    selfCost:   0,
+    unit:       '/mo',
+    note:       '2TB Google One · R130/mo',
+  },
+  {
+    name:       'iCloud / Backblaze Personal',
+    replaces:   'Velero + B2 offsite',
+    cloudCost:  85,    // 2TB iCloud = ~R65 + extras
+    selfCost:   85,    // B2 is already counted in ongoing
+    unit:       '/mo',
+    note:       'B2 offsite already paid — iCloud would be R65–130 on top',
+  },
+  {
+    name:       'Plex Pass',
+    replaces:   'Jellyfin',
+    cloudCost:  220,   // ~$12/mo Plex Pass
+    selfCost:   0,
+    unit:       '/mo',
+    note:       'Plex Pass $12/mo · Jellyfin is free',
+  },
+  {
+    name:       'Nextcloud Hosted (Hetzner)',
+    replaces:   'Nextcloud self-hosted',
+    cloudCost:  185,   // Hetzner 2TB cloud storage plan
+    selfCost:   0,
+    unit:       '/mo',
+    note:       'Equivalent managed Nextcloud on Hetzner',
+  },
+  {
+    name:       'Sonarr / cloud DVR',
+    replaces:   'Sonarr + Prowlarr',
+    cloudCost:  150,   // YouTube TV or similar DVR
+    selfCost:   0,
+    unit:       '/mo',
+    note:       'YouTube TV base plan for DVR equivalent',
+  },
+  {
+    name:       'Grafana Cloud',
+    replaces:   'Prometheus + Grafana + Loki',
+    cloudCost:  370,   // Grafana Cloud Pro ~$20/mo
+    selfCost:   0,
+    unit:       '/mo',
+    note:       'Grafana Cloud Pro $20/mo for equivalent metrics + logs',
+  },
+  {
+    name:       'Okta / Auth0',
+    replaces:   'Authentik',
+    cloudCost:  260,   // Auth0 B2C basic plan
+    selfCost:   0,
+    unit:       '/mo',
+    note:       'Auth0 B2C $14/mo for ~10 MAU on essential plan',
+  },
+];
+
+const CLOUD_TOTAL = CLOUD_SERVICES.reduce((s, c) => s + c.cloudCost, 0);
+const SELF_TOTAL_CLOUD_EQUIV = CLOUD_SERVICES.reduce((s, c) => s + c.selfCost, 0) + MY_MONTHLY_TOTAL;
+const MONTHLY_SAVINGS = CLOUD_TOTAL - SELF_TOTAL_CLOUD_EQUIV;
+
+// Cap displayed savings at a reasonable number for the ticker
+const TICKER_RATE_PER_SEC = MONTHLY_SAVINGS / (30 * 24 * 3600); // R per second
+---
+
+<Layout
+  title="Cost"
+  description="What this homelab actually costs — and what you'd pay the cloud for the same."
+>
+
+<div class="page-wrap">
+
+  <!-- ── Header ── -->
+  <div class="page-header fade-up">
+    <div>
+      <p class="mono" style="color:var(--color-gold);margin-bottom:0.25rem">~/cost</p>
+      <h1 style="margin:0">The Bill You're Not Paying</h1>
+    </div>
+    <p class="hero-sub">
+      What the cloud would charge for everything running in this homelab —
+      versus what it actually costs to run it yourself.
+      Real numbers. No rounding up.
+    </p>
+  </div>
+
+  <!-- ── Live savings ticker ── -->
+  <section class="ticker-section fade-up" style="animation-delay:0.05s">
+    <div class="ticker-wrap">
+      <div class="ticker-label mono">saved vs cloud since going self-hosted</div>
+      <div class="ticker-amount" id="savings-ticker">
+        <span class="ticker-currency">R</span>
+        <span class="ticker-number" id="ticker-num">0</span>
+      </div>
+      <div class="ticker-sub mono" id="ticker-sub">
+        and counting — at R<span id="ticker-rate">{MONTHLY_SAVINGS.toLocaleString()}</span>/month
+      </div>
+      <div class="ticker-since mono" id="ticker-since">
+        since <span>{new Date(SELF_HOSTED_SINCE).toLocaleDateString('en-ZA', { year: 'numeric', month: 'long' })}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Receipt comparison ── -->
+  <section class="section fade-up" style="animation-delay:0.1s">
+    <div class="receipts-wrap">
+
+      <!-- Cloud receipt — thermal printer style -->
+      <div class="receipt receipt-cloud">
+        <div class="receipt-header">
+          <div class="receipt-logo">☁</div>
+          <div class="receipt-title">CLOUD INVOICE</div>
+          <div class="receipt-sub mono">what you'd pay them</div>
+          <div class="receipt-dashes">- - - - - - - - - - - - - - - - -</div>
+        </div>
+        <div class="receipt-body">
+          {CLOUD_SERVICES.map(s => (
+            <div class="receipt-line">
+              <span class="receipt-item">{s.name}</span>
+              <span class="receipt-price cloud-price">R{s.cloudCost}</span>
+            </div>
+          ))}
+        </div>
+        <div class="receipt-dashes">= = = = = = = = = = = = = = = = =</div>
+        <div class="receipt-total">
+          <span>MONTHLY TOTAL</span>
+          <span class="receipt-total-price cloud-total">R{CLOUD_TOTAL.toLocaleString()}</span>
+        </div>
+        <div class="receipt-dashes">- - - - - - - - - - - - - - - - -</div>
+        <div class="receipt-footer mono">per month · every month · forever</div>
+        <div class="receipt-footer mono" style="margin-top:0.25rem">and they own your data</div>
+      </div>
+
+      <!-- VS divider -->
+      <div class="vs-divider">
+        <div class="vs-line"></div>
+        <div class="vs-badge">VS</div>
+        <div class="vs-line"></div>
+      </div>
+
+      <!-- Self-hosted bill — terminal style -->
+      <div class="receipt receipt-self">
+        <div class="receipt-header">
+          <div class="receipt-logo" style="color:var(--color-gold)">⬡</div>
+          <div class="receipt-title" style="color:var(--color-gold)">HOMELAB BILL</div>
+          <div class="receipt-sub mono">what you actually pay</div>
+          <div class="receipt-dashes" style="color:var(--color-muted)">─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─</div>
+        </div>
+        <div class="receipt-body">
+          <div class="receipt-section-label mono">Hardware (amortised /36mo)</div>
+          {HARDWARE.map(h => (
+            <div class="receipt-line">
+              <span class="receipt-item">{h.item}</span>
+              <span class="receipt-price" style="color:var(--color-subtle)">R{Math.round(h.cost/36)}/mo</span>
+            </div>
+          ))}
+          <div class="receipt-section-label mono" style="margin-top:0.75rem">Electricity</div>
+          <div class="receipt-line">
+            <span class="receipt-item">{ELECTRICITY_KWH} kWh @ R{ELECTRICITY_RATE}/kWh</span>
+            <span class="receipt-price" style="color:var(--color-subtle)">R{ELECTRICITY_COST}</span>
+          </div>
+          <div class="receipt-section-label mono" style="margin-top:0.75rem">Services</div>
+          {ONGOING.map(o => (
+            <div class="receipt-line">
+              <span class="receipt-item">{o.item}</span>
+              <span class="receipt-price" style={`color:${o.cost === 0 ? 'var(--color-green)' : 'var(--color-subtle)'}`}>
+                {o.cost === 0 ? 'free' : `R${o.cost}`}
+              </span>
+            </div>
+          ))}
+        </div>
+        <div class="receipt-dashes" style="color:var(--color-muted)">─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─</div>
+        <div class="receipt-total">
+          <span>MONTHLY TOTAL</span>
+          <span class="receipt-total-price self-total">R{MY_MONTHLY_TOTAL.toLocaleString()}</span>
+        </div>
+        <div class="receipt-dashes" style="color:var(--color-muted)">─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─</div>
+        <div class="receipt-footer mono" style="color:var(--color-green)">you own the data · you control the stack</div>
+      </div>
+
+    </div>
+
+    <!-- Savings callout -->
+    <div class="savings-callout fade-up" style="animation-delay:0.15s">
+      <div class="savings-callout-inner">
+        <span class="savings-callout-label mono">monthly saving</span>
+        <span class="savings-callout-amount">R{MONTHLY_SAVINGS.toLocaleString()}</span>
+        <span class="savings-callout-label mono">vs cloud equivalent</span>
+      </div>
+      <p class="savings-callout-note mono">
+        That's R{(MONTHLY_SAVINGS * 12).toLocaleString()} per year — enough to buy another server.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── Per-service breakdown ── -->
+  <section class="section fade-up" style="animation-delay:0.18s">
+    <div class="section-header">
+      <h2 class="section-title">Service by Service</h2>
+    </div>
+    <div class="breakdown-list">
+      {CLOUD_SERVICES.map(s => {
+        const savings = s.cloudCost - s.selfCost;
+        const pct = Math.round((savings / s.cloudCost) * 100);
+        return (
+          <div class="breakdown-row">
+            <div class="breakdown-names">
+              <span class="breakdown-cloud-name">{s.name}</span>
+              <span class="breakdown-arrow mono">→</span>
+              <span class="breakdown-self-name">{s.replaces}</span>
+            </div>
+            <div class="breakdown-bar-wrap">
+              <div class="breakdown-bar">
+                <div class="breakdown-bar-fill" style={`width:${pct}%`}></div>
+              </div>
+              <span class="breakdown-pct mono">{savings > 0 ? `−R${savings}/mo` : 'same'}</span>
+            </div>
+            <span class="breakdown-note mono">{s.note}</span>
+          </div>
+        );
+      })}
+    </div>
+  </section>
+
+  <!-- ── Honest caveats ── -->
+  <section class="section fade-up" style="animation-delay:0.2s">
+    <div class="caveat-wrap">
+      <h2 class="section-title" style="margin-bottom:1.5rem">What These Numbers Don't Show</h2>
+      <div class="caveat-grid">
+        <div class="caveat-card">
+          <div class="caveat-icon">⏱</div>
+          <div class="caveat-title">Time</div>
+          <p class="caveat-desc">
+            Every hour spent on upgrades, debugging, and maintenance is real cost.
+            Estimate: 3–5 hours/month. At any meaningful hourly rate, this changes the math.
+            I do it because I'm learning, not because it's cheaper per hour.
+          </p>
+        </div>
+        <div class="caveat-card">
+          <div class="caveat-icon">🔋</div>
+          <div class="caveat-title">Reliability</div>
+          <p class="caveat-desc">
+            Google Photos has never lost a photo. My cluster has had incidents.
+            If Immich goes down on holiday, it's a me problem. Cloud SLAs don't exist here.
+          </p>
+        </div>
+        <div class="caveat-card">
+          <div class="caveat-icon">📐</div>
+          <div class="caveat-title">Assumptions</div>
+          <p class="caveat-desc">
+            Cloud prices converted at ~R18.50/USD. Electricity at R3.50/kWh.
+            Hardware amortised over 3 years. Power draw estimated from UPS load readings.
+            Real figures rounded to nearest R5.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</Layout>
+
+<style is:global>
+  .page-wrap {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+  }
+
+  .page-header { margin-bottom: 2.5rem; }
+  h1 { font-size: clamp(1.75rem, 4vw, 2.5rem); margin-bottom: 0.75rem; }
+
+  .hero-sub {
+    color: var(--color-subtle);
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 640px;
+    margin: 0;
+  }
+
+  /* ── Live savings ticker ── */
+  .ticker-section {
+    margin-bottom: 4rem;
+  }
+
+  .ticker-wrap {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: color-mix(in srgb, var(--color-gold) 4%, var(--color-surface));
+    border: 1px solid color-mix(in srgb, var(--color-gold) 25%, var(--color-muted));
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ticker-wrap::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 50% 0%, color-mix(in srgb, var(--color-gold) 8%, transparent), transparent 70%);
+    pointer-events: none;
+  }
+
+  .ticker-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-subtle);
+    margin-bottom: 0.75rem;
+  }
+
+  .ticker-amount {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.15em;
+    line-height: 1;
+    margin-bottom: 0.75rem;
+  }
+
+  .ticker-currency {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    color: var(--color-gold);
+    letter-spacing: -0.02em;
+  }
+
+  .ticker-number {
+    font-family: var(--font-display);
+    font-size: clamp(4rem, 12vw, 8rem);
+    font-weight: 800;
+    color: var(--color-heading);
+    letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+
+  .ticker-sub {
+    font-size: 0.85rem;
+    color: var(--color-subtle);
+    margin-bottom: 0.4rem;
+  }
+
+  .ticker-since {
+    font-size: 0.72rem;
+    color: color-mix(in srgb, var(--color-subtle) 60%, transparent);
+  }
+
+  /* ── Receipts ── */
+  .receipts-wrap {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 0;
+    align-items: start;
+    margin-bottom: 2rem;
+  }
+
+  @media (max-width: 700px) {
+    .receipts-wrap {
+      grid-template-columns: 1fr;
+    }
+    .vs-divider {
+      flex-direction: row !important;
+      padding: 1.5rem 0;
+    }
+    .vs-line { flex: 1 !important; width: auto !important; height: 1px !important; }
+  }
+
+  .receipt {
+    border-radius: 12px;
+    padding: 1.75rem;
+    font-family: var(--font-mono);
+  }
+
+  .receipt-cloud {
+    background: color-mix(in srgb, var(--color-crit) 4%, var(--color-surface));
+    border: 1px solid color-mix(in srgb, var(--color-crit) 20%, var(--color-muted));
+  }
+
+  .receipt-self {
+    background: color-mix(in srgb, var(--color-green) 4%, var(--color-surface));
+    border: 1px solid color-mix(in srgb, var(--color-green) 20%, var(--color-muted));
+  }
+
+  .receipt-header {
+    text-align: center;
+    margin-bottom: 1.25rem;
+  }
+
+  .receipt-logo {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+    color: var(--color-crit);
+  }
+
+  .receipt-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: var(--color-heading);
+    margin-bottom: 0.2rem;
+  }
+
+  .receipt-sub {
+    font-size: 0.65rem;
+    color: var(--color-subtle);
+    margin-bottom: 0.75rem;
+  }
+
+  .receipt-dashes {
+    font-size: 0.65rem;
+    color: color-mix(in srgb, var(--color-crit) 50%, var(--color-muted));
+    letter-spacing: 0.05em;
+    text-align: center;
+    margin: 0.75rem 0;
+    overflow: hidden;
+  }
+
+  .receipt-section-label {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-subtle);
+    margin: 0.5rem 0 0.4rem;
+  }
+
+  .receipt-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem;
+    font-size: 0.78rem;
+    padding: 0.2rem 0;
+    border-bottom: 1px dotted color-mix(in srgb, var(--color-muted) 25%, transparent);
+  }
+
+  .receipt-item {
+    color: var(--color-text);
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .receipt-price {
+    color: var(--color-subtle);
+    white-space: nowrap;
+    flex-shrink: 0;
+    font-size: 0.82rem;
+  }
+
+  .cloud-price { color: var(--color-crit) !important; }
+
+  .receipt-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-heading);
+    padding: 0.25rem 0;
+    letter-spacing: 0.04em;
+  }
+
+  .cloud-total { color: var(--color-crit) !important; font-size: 1.1rem; }
+  .self-total  { color: var(--color-green) !important; font-size: 1.1rem; }
+
+  .receipt-footer {
+    font-size: 0.62rem;
+    color: var(--color-subtle);
+    text-align: center;
+  }
+
+  /* ── VS divider ── */
+  .vs-divider {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 1.5rem;
+    padding-top: 4rem;
+    gap: 0.75rem;
+  }
+
+  .vs-line {
+    width: 1px;
+    flex: 1;
+    background: var(--color-muted);
+    min-height: 40px;
+  }
+
+  .vs-badge {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: var(--color-subtle);
+    background: var(--color-overlay);
+    border: 1px solid var(--color-muted);
+    border-radius: 99px;
+    padding: 0.35rem 0.75rem;
+    flex-shrink: 0;
+  }
+
+  /* ── Savings callout ── */
+  .savings-callout {
+    text-align: center;
+    padding: 2rem;
+    border-top: 1px solid color-mix(in srgb, var(--color-muted) 40%, transparent);
+  }
+
+  .savings-callout-inner {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+  }
+
+  .savings-callout-label {
+    font-size: 0.72rem;
+    color: var(--color-subtle);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .savings-callout-amount {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    font-weight: 800;
+    color: var(--color-green);
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  .savings-callout-note {
+    font-size: 0.8rem;
+    color: var(--color-subtle);
+    margin: 0;
+  }
+
+  /* ── Section ── */
+  .section {
+    padding: 3rem 0;
+    border-top: 1px solid color-mix(in srgb, var(--color-muted) 40%, transparent);
+  }
+
+  .section-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .section-title {
+    font-size: 1.3rem;
+    margin: 0 0 0.5rem;
+    position: relative;
+    padding-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+  }
+
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 2.5rem; height: 2px;
+    background: linear-gradient(90deg, var(--color-gold), var(--color-green));
+    border-radius: 2px;
+  }
+
+  /* ── Per-service breakdown ── */
+  .breakdown-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .breakdown-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-muted) 25%, transparent);
+  }
+
+  @media (max-width: 700px) {
+    .breakdown-row {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+    .breakdown-note { display: none; }
+  }
+
+  .breakdown-names {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .breakdown-cloud-name {
+    font-size: 0.82rem;
+    color: var(--color-crit);
+    font-family: var(--font-mono);
+    font-weight: 600;
+  }
+
+  .breakdown-arrow {
+    font-size: 0.75rem;
+    color: var(--color-muted);
+  }
+
+  .breakdown-self-name {
+    font-size: 0.82rem;
+    color: var(--color-green);
+    font-family: var(--font-mono);
+    font-weight: 600;
+  }
+
+  .breakdown-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .breakdown-bar {
+    flex: 1;
+    height: 6px;
+    background: var(--color-overlay);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .breakdown-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-gold), var(--color-green));
+    border-radius: 3px;
+    transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .breakdown-pct {
+    font-size: 0.72rem;
+    color: var(--color-green);
+    white-space: nowrap;
+    min-width: 6ch;
+    font-weight: 700;
+  }
+
+  .breakdown-note {
+    font-size: 0.68rem;
+    color: var(--color-subtle);
+    line-height: 1.5;
+  }
+
+  /* ── Caveats ── */
+  .caveat-wrap { }
+
+  .caveat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+  }
+
+  .caveat-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-muted);
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+
+  .caveat-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .caveat-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--color-heading);
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.01em;
+  }
+
+  .caveat-desc {
+    font-size: 0.85rem;
+    color: var(--color-subtle);
+    line-height: 1.7;
+    margin: 0;
+  }
+</style>
+
+<script define:vars={{ SELF_HOSTED_SINCE, TICKER_RATE_PER_SEC, MONTHLY_SAVINGS }}>
+  function initTicker() {
+    const numEl = document.getElementById('ticker-num');
+    if (!numEl) return;
+
+    const start   = new Date(SELF_HOSTED_SINCE).getTime();
+    const elapsed = (Date.now() - start) / 1000; // seconds since go-live
+    let   savings = elapsed * TICKER_RATE_PER_SEC;
+
+    // Format with thousands separator
+    function fmt(n) {
+      return Math.floor(n).toLocaleString('en-ZA');
+    }
+
+    // Tick every 100ms — smooth enough to feel live
+    numEl.textContent = fmt(savings);
+    setInterval(() => {
+      savings += TICKER_RATE_PER_SEC * 0.1;
+      numEl.textContent = fmt(savings);
+    }, 100);
+  }
+
+  // Animate breakdown bars in on scroll
+  function initBars() {
+    const bars = document.querySelectorAll('.breakdown-bar-fill');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          // width is already set via inline style — just trigger the transition
+          const el = e.target;
+          const target = el.style.width;
+          el.style.width = '0';
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => { el.style.width = target; });
+          });
+          observer.unobserve(el);
+        }
+      });
+    }, { threshold: 0.3 });
+    bars.forEach(b => observer.observe(b));
+  }
+
+  initTicker();
+  initBars();
+  document.addEventListener('astro:page-load', () => { initTicker(); initBars(); });
+</script>

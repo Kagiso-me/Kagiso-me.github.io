@@ -1,11 +1,11 @@
 {
-  "updated": "2026-04-30T05:53:42Z",
-  "fetched_at": "2026-04-30T05:53:42Z",
+  "updated": "2026-04-30T08:11:58Z",
+  "fetched_at": "2026-04-30T08:11:58Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "60/67",
+      "value": "63/66",
       "sub": "pods running",
       "status": "warn"
     },
@@ -23,19 +23,19 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "5h 53m ago",
+      "value": "8h 12m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "2h 53m ago",
+      "value": "1h 12m ago",
       "sub": "last cluster backup",
-      "status": "warn"
+      "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "4h 53m ago",
+      "value": "7h 12m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -69,9 +69,9 @@
       "name": "tywin",
       "role": "control-plane",
       "status": "ok",
-      "pods": "18/110",
-      "cpu": "38%",
-      "memory": "10%",
+      "pods": "17/110",
+      "cpu": "35%",
+      "memory": "9%",
       "pressure": []
     }
   ],
@@ -200,7 +200,7 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 584 photos \u00b7 11 videos",
+      "tag": "Immich: 786 photos \u00b7 22 videos",
       "status": "ok"
     },
     {
@@ -244,23 +244,23 @@
     }
   ],
   "network": {
-    "fw_hits": 85542,
-    "latency_ms": 4.5,
+    "fw_hits": 86909,
+    "latency_ms": 4.7,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
     "temp_c": 51.5,
     "temp_status": "ok",
-    "load": 0.36,
-    "mem_pct": 43.6
+    "load": 0.51,
+    "mem_pct": 45.1
   },
   "ups": {
-    "charge": 100,
-    "runtime_s": 280,
-    "runtime_str": "4m",
-    "load_pct": 25,
-    "status": "OL",
+    "charge": 54,
+    "runtime_s": 140,
+    "runtime_str": "2m",
+    "load_pct": 27,
+    "status": "OL DISCHRG",
     "nominal_w": 390,
     "on_battery": false,
     "dot": "ok"
@@ -282,18 +282,18 @@
     },
     {
       "name": "archive",
-      "used": "464.2 GB",
+      "used": "464.4 GB",
       "total": "4.0 TB",
-      "pct": 11.6,
+      "pct": 11.7,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
     },
     {
       "name": "core",
-      "used": "42.2 GB",
+      "used": "43.7 GB",
       "total": "476.7 GB",
-      "pct": 8.9,
+      "pct": 9.2,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true

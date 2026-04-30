@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-30T21:31:49Z",
-  "fetched_at": "2026-04-30T21:31:49Z",
+  "updated": "2026-04-30T22:48:40Z",
+  "fetched_at": "2026-04-30T22:48:40Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -23,19 +23,19 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "9h 31m ago",
+      "value": "10h 48m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "2h 31m ago",
+      "value": "3h 48m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "20h 32m ago",
+      "value": "21h 48m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -200,7 +200,7 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 787 photos \u00b7 22 videos",
+      "tag": "Immich: 789 photos \u00b7 22 videos",
       "status": "ok"
     },
     {
@@ -244,29 +244,29 @@
     }
   ],
   "network": {
-    "fw_hits": 99380,
-    "latency_ms": 4.5,
+    "fw_hits": 101975,
+    "latency_ms": 4.4,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 51.5,
+    "temp_c": 52.1,
     "temp_status": "ok",
-    "load": 0.6,
-    "mem_pct": 41.4
+    "load": 0.49,
+    "mem_pct": 42.2
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 268,
-    "runtime_str": "4m",
-    "load_pct": 26,
-    "status": "OL",
+    "runtime_s": 88,
+    "runtime_str": "1m",
+    "load_pct": 36,
+    "status": "OL LB",
     "nominal_w": 390,
     "on_battery": false,
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "2h ago",
+    "age": "4h ago",
     "message": "chore(deps): update helm release velero to v12.0.1 (#238)",
     "sha": "3ca604a"
   },
@@ -282,7 +282,7 @@
     },
     {
       "name": "archive",
-      "used": "464.7 GB",
+      "used": "464.8 GB",
       "total": "4.0 TB",
       "pct": 11.7,
       "status": "ok",
@@ -291,7 +291,7 @@
     },
     {
       "name": "core",
-      "used": "44.6 GB",
+      "used": "44.8 GB",
       "total": "476.7 GB",
       "pct": 9.4,
       "status": "ok",
@@ -301,12 +301,12 @@
   ],
   "contribs": {
     "days": {
-      "2026-04-22": 12,
+      "2026-04-22": 18,
       "2026-04-21": 6,
       "2026-04-20": 20,
-      "2026-04-19": 61
+      "2026-04-19": 56
     },
-    "total": 99,
+    "total": 100,
     "active_days": 4
   }
 }

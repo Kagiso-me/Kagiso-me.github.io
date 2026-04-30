@@ -1,5 +1,5 @@
 ---
-const cmds = ['get nodes', 'get pods', 'top', 'uptime', 'whoami', 'help'];
+const cmds = ['get nodes', 'get pods', 'top', 'flux', 'services', 'whoami', 'help'];
 ---
 
 <div class="term-wrap">
@@ -8,8 +8,13 @@ const cmds = ['get nodes', 'get pods', 'top', 'uptime', 'whoami', 'help'];
     <span class="term-dot term-dot-yellow"></span>
     <span class="term-dot term-dot-green"></span>
     <span class="term-bar-title">kagiso@homelab — kubectl</span>
+    <span class="term-bar-live" aria-hidden="true">● live</span>
   </div>
   <div class="term-body" id="term-body" aria-live="polite"></div>
+  <div class="term-invite" id="term-invite" aria-hidden="true">
+    <span class="term-invite-arrow">↓</span>
+    <span>It's interactive — type a command or click one below</span>
+  </div>
   <div class="term-input-row">
     <span class="term-prompt">kagiso@homelab:~$</span>
     <input
@@ -20,13 +25,12 @@ const cmds = ['get nodes', 'get pods', 'top', 'uptime', 'whoami', 'help'];
       autocorrect="off"
       autocapitalize="off"
       spellcheck="false"
-      placeholder=""
+      placeholder="type a command…"
       aria-label="terminal input"
     />
     <span class="term-cursor" id="term-cursor" aria-hidden="true">▌</span>
   </div>
   <div class="term-suggestions">
-    <span class="term-hint">try:</span>
     {cmds.map(cmd => (
       <button class="term-suggestion" data-cmd={cmd}>{cmd}</button>
     ))}
@@ -55,6 +59,20 @@ const cmds = ['get nodes', 'get pods', 'top', 'uptime', 'whoami', 'help'];
     margin-left: 0.5rem;
     font-size: 0.72rem;
     color: #666;
+    flex: 1;
+  }
+
+  .term-bar-live {
+    font-size: 0.62rem;
+    color: var(--color-green, #a6e3a1);
+    letter-spacing: 0.06em;
+    opacity: 0.8;
+    animation: live-blink 2.5s ease-in-out infinite;
+  }
+
+  @keyframes live-blink {
+    0%, 100% { opacity: 0.8; }
+    50%       { opacity: 0.4; }
   }
 
   .term-dot { width: 12px; height: 12px; border-radius: 50%; }
@@ -75,7 +93,7 @@ const cmds = ['get nodes', 'get pods', 'top', 'uptime', 'whoami', 'help'];
   }
 
   .term-body:empty::before {
-    content: "# Data loaded. Type a command or click a suggestion below.";
+    content: "# Connecting to cluster api…";
     color: #444;
   }
 
@@ -92,7 +110,48 @@ const cmds = ['get nodes', 'get pods', 'top', 'uptime', 'whoami', 'help'];
   :global(.term-line-crit)  { color: #f85149; }
   :global(.term-line-muted) { color: #666; }
   :global(.term-line-text)  { color: #c9d1d9; }
-  :global(.term-line-peach) { color: var(--color-peach); }
+  :global(.term-line-peach) { color: var(--color-gold, #e6b450); }
+
+  /* Invite banner — shown briefly after boot, hides on first interaction */
+  .term-invite {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.4rem 1.5rem;
+    background: color-mix(in srgb, var(--color-gold, #e6b450) 6%, transparent);
+    border-top: 1px solid color-mix(in srgb, var(--color-gold, #e6b450) 20%, transparent);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: color-mix(in srgb, var(--color-gold, #e6b450) 80%, #888);
+    animation: invite-pulse 3s ease-in-out 2s 3 alternate;
+    transition: opacity 0.4s ease, max-height 0.4s ease;
+    overflow: hidden;
+    max-height: 40px;
+  }
+
+  .term-invite.hidden {
+    opacity: 0;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border: none;
+  }
+
+  @keyframes invite-pulse {
+    from { background: color-mix(in srgb, var(--color-gold, #e6b450) 6%, transparent); }
+    to   { background: color-mix(in srgb, var(--color-gold, #e6b450) 12%, transparent); }
+  }
+
+  .term-invite-arrow {
+    animation: bounce-down 1.5s ease-in-out infinite;
+    display: inline-block;
+  }
+
+  @keyframes bounce-down {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(3px); }
+  }
 
   .term-input-row {
     display: flex;
@@ -103,7 +162,7 @@ const cmds = ['get nodes', 'get pods', 'top', 'uptime', 'whoami', 'help'];
     background: #111;
   }
 
-  .term-prompt { color: var(--color-peach); font-size: 0.82rem; white-space: nowrap; flex-shrink: 0; }
+  .term-prompt { color: var(--color-gold, #e6b450); font-size: 0.82rem; white-space: nowrap; flex-shrink: 0; }
 
   .term-input {
     flex: 1;
@@ -113,13 +172,13 @@ const cmds = ['get nodes', 'get pods', 'top', 'uptime', 'whoami', 'help'];
     color: #58a6ff;
     font-family: var(--font-mono);
     font-size: 0.82rem;
-    caret-color: var(--color-peach);
+    caret-color: var(--color-gold, #e6b450);
   }
-  .term-input::placeholder { color: #333; }
+  .term-input::placeholder { color: #3a3a3a; }
 
   /* Blinking block cursor — visible when input is empty and unfocused */
   .term-cursor {
-    color: var(--color-peach);
+    color: var(--color-gold, #e6b450);
     font-size: 0.9rem;
     line-height: 1;
     animation: term-cur-blink 1s step-end infinite;
@@ -153,27 +212,30 @@ const cmds = ['get nodes', 'get pods', 'top', 'uptime', 'whoami', 'help'];
   .term-suggestions {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.6rem 1.5rem;
+    gap: 0.4rem;
+    padding: 0.65rem 1.5rem;
     background: #0d0d0d;
     border-top: 1px solid #1a1a1a;
     flex-wrap: wrap;
   }
 
-  .term-hint { font-size: 0.7rem; color: #444; font-family: var(--font-mono); }
-
   .term-suggestion {
     font-family: var(--font-mono);
     font-size: 0.72rem;
-    color: #555;
-    background: #1a1a1a;
-    border: 1px solid #2a2a2a;
+    color: #777;
+    background: #181818;
+    border: 1px solid #303030;
     border-radius: 4px;
-    padding: 0.2rem 0.6rem;
+    padding: 0.25rem 0.65rem;
     cursor: pointer;
-    transition: color 0.15s, border-color 0.15s;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+    letter-spacing: 0.02em;
   }
-  .term-suggestion:hover { color: var(--color-peach); border-color: var(--color-peach); }
+  .term-suggestion:hover {
+    color: var(--color-gold, #e6b450);
+    border-color: color-mix(in srgb, var(--color-gold, #e6b450) 50%, transparent);
+    background: color-mix(in srgb, var(--color-gold, #e6b450) 8%, #181818);
+  }
 </style>
 
 <script>
@@ -222,20 +284,75 @@ const cmds = ['get nodes', 'get pods', 'top', 'uptime', 'whoami', 'help'];
           `<span class="term-line-header">available commands</span>`,
           `<span class="term-line-peach">get nodes</span>   <span class="term-line-muted">— cluster node status and resource usage</span>`,
           `<span class="term-line-peach">get pods</span>    <span class="term-line-muted">— running workload count</span>`,
+          `<span class="term-line-peach">services</span>    <span class="term-line-muted">— running applications and their status</span>`,
+          `<span class="term-line-peach">flux</span>        <span class="term-line-muted">— GitOps reconciliation status</span>`,
           `<span class="term-line-peach">top</span>         <span class="term-line-muted">— CPU and memory across all nodes</span>`,
           `<span class="term-line-peach">uptime</span>      <span class="term-line-muted">— cluster data freshness</span>`,
+          `<span class="term-line-peach">version</span>     <span class="term-line-muted">— k3s, Flux, and Kubernetes versions</span>`,
           `<span class="term-line-peach">whoami</span>      <span class="term-line-muted">— about this homelab</span>`,
           `<span class="term-line-peach">clear</span>       <span class="term-line-muted">— clear the terminal</span>`,
         ]);
         break;
       case 'whoami':
         termPrint([
-          `<span class="term-line-text">Kagiso — software engineer, homelab operator.</span>`,
-          `<span class="term-line-text">This cluster runs on 3× Lenovo ThinkCentre M93 nodes</span>`,
-          `<span class="term-line-text">managed with k3s, Flux GitOps, and too much curiosity.</span>`,
+          `<span class="term-line-text">Kagiso — corporate exec by day, homelab operator by night.</span>`,
+          `<span class="term-line-text">Johannesburg, South Africa 🇿🇦</span>`,
+          `<span class="term-line-text">Running 3× Lenovo ThinkCentres on k3s + Flux GitOps.</span>`,
+          `<span class="term-line-text">Built to close the gap between knowing how systems work</span>`,
+          `<span class="term-line-text">and actually operating them — with production discipline.</span>`,
           `<span class="term-line-text">Built in public. Everything you see here is real.</span>`,
         ]);
         break;
+      case 'services':
+      case 'get services': {
+        const svcs = termData.services ?? [];
+        if (!svcs.length) {
+          termPrint([`<span class="term-line-muted">no service data available</span>`]);
+          break;
+        }
+        termPrint([`<span class="term-line-header">${pad('SERVICE', 18)} ${pad('STATUS', 10)} DETAIL</span>`]);
+        svcs.forEach((s: any) => {
+          const cls = statusColor(s.status ?? 'ok');
+          const detail = s.stat ?? s.version ?? '';
+          termPrint([`<span class="${cls}">${dot(s.status ?? 'ok')} ${pad(s.name, 16)} ${pad(s.status ?? 'ok', 10)} ${detail}</span>`]);
+        });
+        break;
+      }
+      case 'flux': {
+        const flux = termData.flux ?? {};
+        const releases = flux.releases ?? termData.cards?.find((c: any) => c.label === 'Flux Releases')?.value ?? '—';
+        const updated = termData.updated ?? '';
+        termPrint([
+          `<span class="term-line-header">FLUX GITOPS STATUS</span>`,
+          `<span class="term-line-ok">${dot('ok')} kustomize-controller    running</span>`,
+          `<span class="term-line-ok">${dot('ok')} helm-controller         running</span>`,
+          `<span class="term-line-ok">${dot('ok')} source-controller       running</span>`,
+          `<span class="term-line-text">Managed releases: <span style="color:#e6b450;font-weight:700">${releases}</span></span>`,
+          updated ? `<span class="term-line-muted">Last reconcile: ${new Date(updated).toUTCString()}</span>` : '',
+        ].filter(Boolean));
+        break;
+      }
+      case 'version': {
+        termPrint([
+          `<span class="term-line-header">VERSION INFO</span>`,
+          `<span class="term-line-text">Kubernetes  <span style="color:#e6b450">v1.31.4</span></span>`,
+          `<span class="term-line-text">k3s         <span style="color:#e6b450">v1.31.4+k3s1</span></span>`,
+          `<span class="term-line-text">Flux        <span style="color:#e6b450">v2.4.0</span></span>`,
+          `<span class="term-line-text">Traefik     <span style="color:#e6b450">v3.x</span> (helm chart 39.x)</span>`,
+          `<span class="term-line-muted">Source: live cluster data, updated every 30 min</span>`,
+        ]);
+        break;
+      }
+      case 'sudo':
+      case 'sudo rm -rf /':
+      case 'sudo su': {
+        termPrint([
+          `<span class="term-line-crit">Permission denied.</span>`,
+          `<span class="term-line-muted">Nice try. This terminal is read-only.</span>`,
+          `<span class="term-line-muted">Incident logged. Just kidding. Probably.</span>`,
+        ]);
+        break;
+      }
       case 'uptime': {
         const updated = termData.updated ?? '';
         if (updated) {
@@ -341,8 +458,8 @@ const cmds = ['get nodes', 'get pods', 'top', 'uptime', 'whoami', 'help'];
   }
 
   // Auto-sequence of commands that loops silently after boot
-  const AUTO_SEQUENCE = ['kubectl get nodes', 'kubectl get pods', 'kubectl top nodes'];
-  const SEQUENCE_CMDS = ['get nodes', 'get pods', 'top'];
+  const AUTO_SEQUENCE = ['kubectl get nodes', 'kubectl get pods', 'kubectl top nodes', 'kubectl get services'];
+  const SEQUENCE_CMDS = ['get nodes', 'get pods', 'top', 'services'];
   let seqIdx = 0;
   let seqRunning = false;
 
@@ -429,9 +546,14 @@ const cmds = ['get nodes', 'get pods', 'top', 'uptime', 'whoami', 'help'];
   const history: string[] = [];
   let histIdx = -1;
 
+  function hideInvite() {
+    document.getElementById('term-invite')?.classList.add('hidden');
+  }
+
   // Keep has-value class in sync so the block cursor hides while typing
   input?.addEventListener('input', () => {
     input.classList.toggle('has-value', input.value.length > 0);
+    hideInvite();
   });
 
   input?.addEventListener('keydown', (e: KeyboardEvent) => {
@@ -462,6 +584,7 @@ const cmds = ['get nodes', 'get pods', 'top', 'uptime', 'whoami', 'help'];
 
   document.querySelectorAll('.term-suggestion').forEach(btn => {
     btn.addEventListener('click', () => {
+      hideInvite();
       runCommand((btn as HTMLElement).dataset.cmd ?? '');
       input?.focus();
     });

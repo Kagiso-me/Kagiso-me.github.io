@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-30T02:30:36Z",
-  "fetched_at": "2026-04-30T02:30:36Z",
+  "updated": "2026-04-30T05:53:42Z",
+  "fetched_at": "2026-04-30T05:53:42Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -23,19 +23,19 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "2h 30m ago",
+      "value": "5h 53m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "1h 30m ago",
+      "value": "2h 53m ago",
       "sub": "last cluster backup",
-      "status": "ok"
+      "status": "warn"
     },
     {
       "label": "varys Keys",
-      "value": "1h 30m ago",
+      "value": "4h 53m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -200,7 +200,7 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 582 photos \u00b7 11 videos",
+      "tag": "Immich: 584 photos \u00b7 11 videos",
       "status": "ok"
     },
     {
@@ -244,21 +244,21 @@
     }
   ],
   "network": {
-    "fw_hits": 83139,
+    "fw_hits": 85542,
     "latency_ms": 4.5,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 52.1,
+    "temp_c": 51.5,
     "temp_status": "ok",
-    "load": 0.61,
-    "mem_pct": 42.3
+    "load": 0.36,
+    "mem_pct": 43.6
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 300,
-    "runtime_str": "5m",
+    "runtime_s": 280,
+    "runtime_str": "4m",
     "load_pct": 25,
     "status": "OL",
     "nominal_w": 390,
@@ -266,7 +266,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "4d ago",
+    "age": "5d ago",
     "message": "chore(deps): update helm release n8n to >=1.16.37 (#236)",
     "sha": "f109759"
   },
@@ -301,6 +301,7 @@
   ],
   "contribs": {
     "days": {
+      "2026-04-30": 0,
       "2026-04-29": 0,
       "2026-04-28": 0,
       "2026-04-26": 0,
@@ -314,6 +315,6 @@
       "2026-04-18": 1
     },
     "total": 115,
-    "active_days": 11
+    "active_days": 12
   }
 }

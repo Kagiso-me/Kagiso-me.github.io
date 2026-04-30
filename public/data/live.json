@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-29T23:50:39Z",
-  "fetched_at": "2026-04-29T23:50:39Z",
+  "updated": "2026-04-30T02:30:36Z",
+  "fetched_at": "2026-04-30T02:30:36Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -23,21 +23,21 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "11h 50m ago",
+      "value": "2h 30m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "4h 50m ago",
+      "value": "1h 30m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "166h 50m ago",
+      "value": "1h 30m ago",
       "sub": "age keys \u00b7 varys",
-      "status": "crit"
+      "status": "ok"
     },
     {
       "label": "Backblaze B2",
@@ -244,16 +244,16 @@
     }
   ],
   "network": {
-    "fw_hits": 81632,
-    "latency_ms": 4.4,
+    "fw_hits": 83139,
+    "latency_ms": 4.5,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 53.7,
+    "temp_c": 52.1,
     "temp_status": "ok",
-    "load": 0.51,
-    "mem_pct": 39.9
+    "load": 0.61,
+    "mem_pct": 42.3
   },
   "ups": {
     "charge": 100,
@@ -282,7 +282,7 @@
     },
     {
       "name": "archive",
-      "used": "464.0 GB",
+      "used": "464.2 GB",
       "total": "4.0 TB",
       "pct": 11.6,
       "status": "ok",
@@ -291,9 +291,9 @@
     },
     {
       "name": "core",
-      "used": "42.0 GB",
+      "used": "42.2 GB",
       "total": "476.7 GB",
-      "pct": 8.8,
+      "pct": 8.9,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true

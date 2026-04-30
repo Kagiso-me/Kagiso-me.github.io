@@ -182,7 +182,7 @@ import Layout from '../layouts/Layout.astro';
             </div>
             <div class="nm-node nm-k3s nm-worker" id="nm-tyrion"
                  data-id="tyrion" data-ip="10.0.10.13" data-role="k3s Worker"
-                 data-services="CrowdSec · SOPS · Velero · Longhorn">
+                 data-services="CrowdSec · SOPS · Velero · NFS storage">
               <div class="nm-node-glow"></div>
               <svg class="nm-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
@@ -237,7 +237,7 @@ import Layout from '../layouts/Layout.astro';
 
         <div class="nm-node nm-edge nm-pi" id="nm-bran"
              data-id="bran" data-ip="10.0.10.9" data-role="RPi 3B+ · DNS"
-             data-services="Pi-hole · Unbound · recursive DNS · ad-blocking">
+             data-services="Unbound · recursive DNS · DNSSEC">
           <div class="nm-node-glow"></div>
           <svg class="nm-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/><path d="M12 6v6l4 2"/>

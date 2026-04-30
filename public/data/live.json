@@ -1,6 +1,6 @@
 {
-  "updated": "2026-04-30T10:23:30Z",
-  "fetched_at": "2026-04-30T10:23:30Z",
+  "updated": "2026-04-30T11:57:28Z",
+  "fetched_at": "2026-04-30T11:57:28Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -23,19 +23,19 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "10h 23m ago",
+      "value": "11h 57m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 23m ago",
+      "value": "4h 57m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "9h 23m ago",
+      "value": "10h 57m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -90,7 +90,7 @@
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "21d",
+        "age": "22d",
         "ready": true
       },
       {
@@ -244,21 +244,21 @@
     }
   ],
   "network": {
-    "fw_hits": 88376,
+    "fw_hits": 89268,
     "latency_ms": 4.5,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 51.0,
+    "temp_c": 51.5,
     "temp_status": "ok",
-    "load": 0.41,
-    "mem_pct": 45.3
+    "load": 0.62,
+    "mem_pct": 47.2
   },
   "ups": {
-    "charge": 60,
-    "runtime_s": 180,
-    "runtime_str": "3m",
+    "charge": 86,
+    "runtime_s": 244,
+    "runtime_str": "4m",
     "load_pct": 25,
     "status": "OL CHRG",
     "nominal_w": 390,
@@ -291,9 +291,9 @@
     },
     {
       "name": "core",
-      "used": "44.0 GB",
+      "used": "44.3 GB",
       "total": "476.7 GB",
-      "pct": 9.2,
+      "pct": 9.3,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -301,20 +301,13 @@
   ],
   "contribs": {
     "days": {
-      "2026-04-30": 0,
-      "2026-04-29": 0,
-      "2026-04-28": 0,
-      "2026-04-26": 0,
-      "2026-04-25": 2,
-      "2026-04-24": 2,
-      "2026-04-23": 0,
-      "2026-04-22": 23,
+      "2026-04-22": 6,
       "2026-04-21": 6,
       "2026-04-20": 20,
       "2026-04-19": 61,
       "2026-04-18": 0
     },
-    "total": 114,
-    "active_days": 12
+    "total": 93,
+    "active_days": 5
   }
 }

@@ -49,7 +49,8 @@ const CANCELLED = [
     vendor:   'Apple',
     cost:     59.99,
     note:     'Photos → Immich · Files → Nextcloud · Calendar/Contacts → Nextcloud',
-    emoji:    '🍎',
+    logo:     '/logos/apple.svg',
+    invert:   true,
   },
   {
     name:     'Microsoft 365 Basic',
@@ -57,7 +58,8 @@ const CANCELLED = [
     vendor:   'Microsoft',
     cost:     39.00,
     note:     'OneDrive 1TB + Office web → Nextcloud handles files and docs',
-    emoji:    '🪟',
+    logo:     '/logos/microsoft.svg',
+    invert:   false,
   },
   {
     name:     'Apple TV+',
@@ -65,7 +67,8 @@ const CANCELLED = [
     vendor:   'Apple',
     cost:     124.99,
     note:     'Streaming → self-hosted Plex library. Own the content, own the server.',
-    emoji:    '📺',
+    logo:     '/logos/apple.svg',
+    invert:   true,
   },
   {
     name:     'Showmax',
@@ -73,7 +76,8 @@ const CANCELLED = [
     vendor:   'Showmax',
     cost:     99,
     note:     'Streaming → self-hosted Plex library.',
-    emoji:    '📺',
+    logo:     '/logos/showmax.svg',
+    invert:   false,
   },
   {
     name:     'Apple Music',
@@ -81,7 +85,8 @@ const CANCELLED = [
     vendor:   'Apple',
     cost:     69.99,
     note:     'Music streaming → Navidrome self-hosted music server.',
-    emoji:    '🎵',
+    logo:     '/logos/apple-music.svg',
+    invert:   false,
   },
 ];
 
@@ -220,7 +225,9 @@ const TICKER_RATE_PER_SEC = ACTUAL_SAVINGS / (30 * 24 * 3600); // R per second s
       {CANCELLED.map(c => (
         <div class="cancelled-card">
           <div class="cancelled-top">
-            <span class="cancelled-emoji">{c.emoji}</span>
+            <div class="cancelled-logo-wrap">
+              <img src={c.logo} alt={c.vendor} class={`cancelled-logo${c.invert ? ' cancelled-logo-invert' : ''}`} />
+            </div>
             <div class="cancelled-meta">
               <span class="cancelled-vendor mono">{c.vendor}</span>
               <span class="cancelled-name">{c.name}</span>
@@ -865,10 +872,24 @@ const TICKER_RATE_PER_SEC = ACTUAL_SAVINGS / (30 * 24 * 3600); // R per second s
     gap: 0.75rem;
   }
 
-  .cancelled-emoji {
-    font-size: 1.6rem;
-    line-height: 1;
+  .cancelled-logo-wrap {
+    width: 40px;
+    height: 40px;
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cancelled-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0.9;
+  }
+
+  .cancelled-logo-invert {
+    filter: brightness(0) invert(1);
   }
 
   .cancelled-meta {

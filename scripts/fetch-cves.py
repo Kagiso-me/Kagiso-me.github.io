@@ -111,20 +111,33 @@ def parse_vuln(v: dict) -> dict:
 
 
 
+def load_prev_ids() -> set:
+    """Return the set of vuln IDs from the previous cve.json run."""
+    try:
+        with open(PREV_CVE_FILE) as f:
+            prev = json.load(f)
+        return {v["id"] for v in prev.get("vulnerabilities", [])}
+    except Exception:
+        return set()
+
+
 def send_discord_alert(all_vulns: list, total_counts: dict) -> None:
     if not DISCORD_WEBHOOK:
         return
     if not all_vulns:
         return
 
-    crit = [v for v in all_vulns if v["severity"] == "CRITICAL"]
-    high = [v for v in all_vulns if v["severity"] == "HIGH"]
+    prev_ids = load_prev_ids()
+    new_vulns = [v for v in all_vulns if v["id"] not in prev_ids]
+
+    crit = [v for v in new_vulns if v["severity"] == "CRITICAL"]
+    high = [v for v in new_vulns if v["severity"] == "HIGH"]
 
     if not crit and not high:
         return
 
     lines = []
-    lines.append(f"🚨 **Homelab CVE digest — {len(crit)} CRITICAL, {len(high)} HIGH**\n")
+    lines.append(f"🚨 **Homelab CVE digest — {len(crit)} new CRITICAL, {len(high)} new HIGH**\n")
 
     if crit:
         lines.append(f"**CRITICAL ({len(crit)})**")
@@ -164,7 +177,7 @@ def send_discord_alert(all_vulns: list, total_counts: dict) -> None:
     )
     try:
         urllib.request.urlopen(req, timeout=10)
-        print(f"Discord digest sent: {len(crit)} CRITICAL, {len(high)} HIGH.", file=sys.stderr)
+        print(f"Discord digest sent: {len(crit)} new CRITICAL, {len(high)} new HIGH.", file=sys.stderr)
     except Exception as e:
         print(f"Discord alert failed: {e}", file=sys.stderr)
 

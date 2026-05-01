@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Showmax "S" wordmark-style icon — bold red S on dark background -->
+  <rect width="200" height="200" rx="24" fill="#E5001E"/>
+  <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle"
+        font-family="Arial Black, Arial, sans-serif" font-weight="900"
+        font-size="140" fill="#ffffff">S</text>
+</svg>

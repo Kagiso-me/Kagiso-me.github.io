@@ -16,8 +16,7 @@ const HARDWARE = [
   { item: 'Raspberry Pi 3B+ (Bran)',    cost: 800   },
   { item: 'Networking — switch, cables', cost: 600   },
 ];
-const HARDWARE_TOTAL   = HARDWARE.reduce((s, h) => s + h.cost, 0);
-const HARDWARE_MONTHLY = Math.round(HARDWARE_TOTAL / 36); // for display only
+const HARDWARE_TOTAL = HARDWARE.reduce((s, h) => s + h.cost, 0);
 
 // Ongoing monthly costs (ZAR) — infrastructure only, what actually leaves the account
 const ONGOING = [
@@ -86,7 +85,7 @@ const CANCELLED = [
     cost:     69.99,
     note:     'Music streaming → Navidrome self-hosted music server.',
     logo:     '/logos/apple-music.svg',
-    invert:   false,
+    invert:   true,
   },
 ];
 

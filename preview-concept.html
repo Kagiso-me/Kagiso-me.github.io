@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>kagiso.me — Design Concepts Preview</title>
+<style>
+  /* ── Tokens (same as site) ── */
+  :root {
+    --color-base:     #09090e;
+    --color-mantle:   #0f1118;
+    --color-surface:  #1e2534;
+    --color-overlay:  #2a3347;
+    --color-muted:    #3d4663;
+    --color-subtle:   #6e7a9a;
+    --color-text:     #bfbdb6;
+    --color-heading:  #e6e1cf;
+    --color-gold:     #e6b450;
+    --color-green:    #a6e3a1;
+    --color-sapphire: #74c7ec;
+    --color-mauve:    #cba6f7;
+    --color-ok:       #a6e3a1;
+    --color-warn:     #e6b450;
+    --color-crit:     #f38ba8;
+    --font-display:   'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+    --font-mono:      'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--color-base);
+    color: var(--color-text);
+    font-family: var(--font-display);
+    overflow-x: hidden;
+  }
+
+  a { text-decoration: none; color: inherit; }
+
+  /* ─────────────────────────────────────────────────────────────
+     CONCEPT LABEL STRIP
+  ───────────────────────────────────────────────────────────── */
+  .concept-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 0.6rem 1.5rem;
+    background: rgba(9,9,14,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+  }
+  .concept-nav a {
+    color: var(--color-subtle);
+    padding: 0.3rem 0.75rem;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+  .concept-nav a:hover { color: var(--color-gold); border-color: var(--color-gold); }
+  .concept-nav .sep { color: var(--color-muted); }
+  .concept-tag {
+    color: var(--color-gold);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    font-size: 0.65rem;
+  }
+
+  /* ─────────────────────────────────────────────────────────────
+     SHARED UTILITIES
+  ───────────────────────────────────────────────────────────── */
+  .mono { font-family: var(--font-mono); }
+  .gold { color: var(--color-gold); }
+  .green { color: var(--color-green); }
+  .subtle { color: var(--color-subtle); }
+
+  /* ─────────────────────────────────────────────────────────────
+     ═══════════════════════════════════════════════════════════
+     TIER 1 — FULL-VIEWPORT TOPOLOGY HERO
+     The topology SVG becomes the entire background.
+     Text overlays it center-left. Network is the backdrop.
+     ═══════════════════════════════════════════════════════════
+  ───────────────────────────────────────────────────────────── */
+  #tier1 {
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Fake nav */
+  .t1-nav {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    z-index: 10;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2.5rem;
+    background: linear-gradient(to bottom, rgba(9,9,14,0.95), transparent);
+  }
+  .t1-nav-brand { font-weight: 700; font-size: 1rem; }
+  .t1-nav-links { display: flex; gap: 1.5rem; font-size: 0.8rem; color: var(--color-subtle); }
+  .t1-nav-links span { cursor: pointer; transition: color 0.2s; }
+  .t1-nav-links span:hover { color: var(--color-gold); }
+
+  /* Full-viewport topology canvas */
+  #t1-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* PCB dot-grid layer */
+  #tier1::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(230,180,80,0.15) 1px, transparent 1px);
+    background-size: 32px 32px;
+    z-index: 1;
+    pointer-events: none;
+    mask-image: radial-gradient(ellipse 100% 100% at 50% 50%, black 20%, transparent 80%);
+  }
+
+  /* Vignette */
+  #tier1::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 80% at 50% 50%, transparent 20%, rgba(9,9,14,0.55) 100%),
+      linear-gradient(to bottom, rgba(9,9,14,0.2) 0%, transparent 30%, transparent 60%, rgba(9,9,14,0.9) 100%);
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  /* Hero text — centered over the network */
+  .t1-hero {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 0 2.5rem;
+    max-width: 700px;
+  }
+
+  .t1-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .t1-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 2rem;
+    height: 1px;
+    background: var(--color-gold);
+  }
+
+  .t1-h1 {
+    font-size: clamp(3.5rem, 7vw, 6rem);
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+    font-weight: 800;
+    color: var(--color-heading);
+    margin-bottom: 1.75rem;
+  }
+  .t1-h1 em {
+    font-style: normal;
+    background: linear-gradient(90deg, var(--color-gold), var(--color-green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .t1-sub {
+    font-size: 1.05rem;
+    color: var(--color-subtle);
+    max-width: 480px;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+  }
+
+  /* Live stat pills — float over the network */
+  .t1-stats {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+  }
+  .t1-stat {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: rgba(15,17,24,0.75);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(230,180,80,0.2);
+    border-radius: 100px;
+    padding: 0.5rem 1.1rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+  }
+  .t1-stat-val { color: var(--color-heading); font-weight: 700; font-size: 1rem; }
+  .t1-stat-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--color-ok);
+    box-shadow: 0 0 8px var(--color-ok);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  .t1-actions { display: flex; gap: 0.75rem; }
+  .t1-btn-primary {
+    padding: 0.85rem 2rem;
+    background: linear-gradient(135deg, var(--color-gold), color-mix(in srgb, var(--color-gold) 60%, var(--color-green)));
+    color: #09090e;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.01em;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .t1-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(230,180,80,0.4);
+  }
+  .t1-btn-ghost {
+    padding: 0.85rem 2rem;
+    border: 1px solid rgba(230,180,80,0.3);
+    color: var(--color-gold);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    backdrop-filter: blur(8px);
+    background: rgba(230,180,80,0.05);
+    transition: all 0.2s;
+  }
+  .t1-btn-ghost:hover {
+    background: rgba(230,180,80,0.12);
+    border-color: rgba(230,180,80,0.6);
+    transform: translateY(-2px);
+  }
+
+  /* Scroll cue */
+  .t1-scroll-cue {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-subtle);
+    animation: scroll-cue-bob 2s ease-in-out infinite;
+  }
+  .t1-scroll-cue svg { opacity: 0.5; }
+  @keyframes scroll-cue-bob {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(6px); }
+  }
+
+  /* Tier 1 label badge */
+  .tier-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(230,180,80,0.12);
+    border: 1px solid rgba(230,180,80,0.3);
+    border-radius: 4px;
+    padding: 0.35rem 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--color-gold);
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+  }
+
+  /* ─────────────────────────────────────────────────────────────
+     ═══════════════════════════════════════════════════════════
+     TIER 2 — SCENE-BASED SCROLL EXPERIENCE
+     Each section is a full-viewport "scene" with its own
+     visual identity. Scroll-linked parallax via CSS.
+     ═══════════════════════════════════════════════════════════
+  ───────────────────────────────────────────────────────────── */
+
+  /* Scene divider */
+  .scene-divider {
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--color-gold), var(--color-green), transparent);
+    position: relative;
+    overflow: visible;
+  }
+
+  /* ── Scene 1: Identity ── */
+  #scene-identity {
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background: var(--color-base);
+  }
+
+  .scene-identity-bg {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(230,180,80,0.12) 1px, transparent 1px);
+    background-size: 28px 28px;
+    pointer-events: none;
+  }
+  .scene-identity-orb {
+    position: absolute;
+    width: 70vw; height: 70vw;
+    max-width: 800px; max-height: 800px;
+    top: 50%; right: -15%;
+    transform: translateY(-50%);
+    background: radial-gradient(circle, rgba(230,180,80,0.06) 0%, transparent 65%);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: orb-breathe 8s ease-in-out infinite alternate;
+  }
+  @keyframes orb-breathe {
+    from { transform: translateY(-50%) scale(1); opacity: 0.6; }
+    to   { transform: translateY(-50%) scale(1.08); opacity: 1; }
+  }
+
+  .scene-identity-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    width: 100%;
+  }
+
+  .s1-left {}
+
+  .s1-kicker {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .s1-kicker::after {
+    content: '';
+    flex: 1;
+    max-width: 80px;
+    height: 1px;
+    background: linear-gradient(90deg, var(--color-gold), transparent);
+  }
+
+  .s1-h1 {
+    font-size: clamp(3rem, 5.5vw, 5rem);
+    font-weight: 800;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    color: var(--color-heading);
+    margin-bottom: 2rem;
+  }
+  .s1-h1 .line { display: block; }
+  .s1-h1 .accent-line {
+    background: linear-gradient(90deg, var(--color-gold), var(--color-green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .s1-body {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: var(--color-subtle);
+    max-width: 420px;
+    margin-bottom: 2.5rem;
+  }
+
+  .s1-actions { display: flex; gap: 0.75rem; }
+  .s1-btn-p {
+    padding: 0.8rem 2rem;
+    background: linear-gradient(135deg, var(--color-gold), var(--color-green));
+    color: #09090e;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.875rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .s1-btn-p:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(230,180,80,0.35); }
+  .s1-btn-g {
+    padding: 0.8rem 2rem;
+    border: 1px solid var(--color-muted);
+    color: var(--color-text);
+    border-radius: 8px;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+    background: rgba(30,37,52,0.6);
+  }
+  .s1-btn-g:hover { border-color: var(--color-gold); color: var(--color-gold); }
+
+  /* Right: big live stat card */
+  .s1-right {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .s1-stat-card {
+    background: var(--color-mantle);
+    border: 1px solid var(--color-muted);
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: default;
+  }
+  .s1-stat-card:hover {
+    border-color: rgba(230,180,80,0.4);
+    transform: translateX(4px);
+  }
+  .s1-stat-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+  .s1-stat-icon.gold-bg { background: rgba(230,180,80,0.12); }
+  .s1-stat-icon.green-bg { background: rgba(166,227,161,0.1); }
+  .s1-stat-icon.sap-bg { background: rgba(116,199,236,0.1); }
+  .s1-stat-num {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    color: var(--color-heading);
+    line-height: 1;
+  }
+  .s1-stat-lbl {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-subtle);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 0.2rem;
+  }
+  .s1-stat-live {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--color-ok);
+  }
+
+  /* ── Scene 2: Network ── */
+  #scene-network {
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: linear-gradient(to bottom, var(--color-base), var(--color-mantle));
+    overflow: hidden;
+  }
+
+  .scene-network-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 5rem 2.5rem;
+    width: 100%;
+  }
+
+  .s2-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+  }
+
+  .s2-kicker {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-sapphire);
+    margin-bottom: 0.75rem;
+  }
+
+  .s2-h2 {
+    font-size: clamp(2.5rem, 4.5vw, 4rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    color: var(--color-heading);
+    line-height: 0.95;
+  }
+
+  .s2-cta {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--color-gold);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-bottom: 1px solid rgba(230,180,80,0.3);
+    padding-bottom: 0.15rem;
+    transition: gap 0.2s;
+  }
+  .s2-cta:hover { gap: 0.75rem; color: var(--color-green); }
+
+  /* Network scene canvas */
+  #s2-canvas {
+    width: 100%;
+    height: 400px;
+    border-radius: 16px;
+    border: 1px solid var(--color-muted);
+    background: var(--color-mantle);
+    display: block;
+    position: relative;
+    overflow: hidden;
+  }
+  #s2-canvas canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ── Scene 3: Terminal ── */
+  #scene-terminal {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    background: var(--color-base);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scene-terminal-bg {
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 31px,
+      rgba(166,227,161,0.025) 31px,
+      rgba(166,227,161,0.025) 32px
+    );
+    pointer-events: none;
+  }
+
+  .scene-terminal-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 5rem 2.5rem;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .s3-left {}
+  .s3-kicker {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-green);
+    margin-bottom: 1rem;
+  }
+  .s3-h2 {
+    font-size: clamp(2.2rem, 4vw, 3.5rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 0.95;
+    color: var(--color-heading);
+    margin-bottom: 1.5rem;
+  }
+  .s3-h2 em {
+    font-style: normal;
+    color: var(--color-green);
+  }
+  .s3-body {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--color-subtle);
+    max-width: 380px;
+    margin-bottom: 2rem;
+  }
+  .s3-features {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .s3-feature {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--color-text);
+  }
+  .s3-feature-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--color-green);
+    box-shadow: 0 0 6px var(--color-green);
+    flex-shrink: 0;
+  }
+
+  /* Fake terminal */
+  .s3-terminal {
+    background: rgba(9,9,14,0.95);
+    border: 1px solid var(--color-muted);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 32px 64px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
+  }
+  .s3-term-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 1.25rem;
+    background: rgba(30,37,52,0.8);
+    border-bottom: 1px solid var(--color-muted);
+  }
+  .s3-term-dot { width: 11px; height: 11px; border-radius: 50%; }
+  .s3-term-title {
+    flex: 1;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--color-subtle);
+  }
+  .s3-term-live {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    color: var(--color-ok);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  .s3-term-body {
+    padding: 1.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    line-height: 1.7;
+    color: var(--color-text);
+    min-height: 240px;
+  }
+  .term-prompt { color: var(--color-green); }
+  .term-cmd { color: var(--color-heading); }
+  .term-out-key { color: var(--color-subtle); }
+  .term-out-val { color: var(--color-gold); }
+  .term-out-ok { color: var(--color-ok); }
+  .term-cursor {
+    display: inline-block;
+    width: 7px; height: 1em;
+    background: var(--color-green);
+    vertical-align: text-bottom;
+    animation: tcur 0.9s step-end infinite;
+    margin-left: 2px;
+  }
+  @keyframes tcur { 0%,100% { opacity:1; } 50% { opacity:0; } }
+
+  /* ─────────────────────────────────────────────────────────────
+     SHARED ANIMATIONS
+  ───────────────────────────────────────────────────────────── */
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 4px var(--color-ok); opacity: 0.9; }
+    50% { box-shadow: 0 0 12px var(--color-ok); opacity: 1; }
+  }
+
+  /* Scroll-reveal — works without JS on modern browsers */
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  /* Floating label bar at bottom of concept sections */
+  .concept-footer {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 100;
+    background: rgba(9,9,14,0.9);
+    border: 1px solid var(--color-muted);
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--color-subtle);
+    backdrop-filter: blur(8px);
+  }
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="concept-nav">
+  <span class="concept-tag">PREVIEW</span>
+  <span class="sep">·</span>
+  <a href="#tier1">Tier 1 — Full-viewport hero</a>
+  <span class="sep">|</span>
+  <a href="#tier2">Tier 2 — Scene architecture</a>
+</nav>
+
+<!-- ══════════════════════════════════════════════════
+     TIER 1 — Full-Viewport Topology Hero
+     The network is the hero. Text lives inside it.
+     ══════════════════════════════════════════════════ -->
+<div id="tier1" style="padding-top: 40px;">
+
+  <!-- Full-screen topology canvas -->
+  <canvas id="t1-canvas"></canvas>
+
+  <!-- Nav overlay -->
+  <div class="t1-nav">
+    <div class="t1-nav-brand">
+      <span class="mono gold">~/</span>
+      <span style="color: var(--color-heading); font-weight:700;">kagiso.me</span>
+    </div>
+    <div class="t1-nav-links">
+      <span>Status</span>
+      <span>Network</span>
+      <span>Blog</span>
+      <span>Cost</span>
+    </div>
+  </div>
+
+  <!-- Hero text -->
+  <div class="t1-hero">
+    <div class="tier-label">TIER 1 CONCEPT</div>
+    <div class="t1-eyebrow">Live homelab · Johannesburg, ZA</div>
+    <h1 class="t1-h1">
+      Built in<br>
+      <em>public.</em>
+    </h1>
+    <p class="t1-sub">
+      A production-grade k3s cluster designed, operated, and documented in the open.
+      Every decision logged. Every failure published.
+    </p>
+    <div class="t1-stats">
+      <div class="t1-stat">
+        <div class="t1-stat-dot"></div>
+        <span class="t1-stat-val mono">3</span>
+        <span class="subtle mono" style="font-size:0.72rem">nodes ready</span>
+      </div>
+      <div class="t1-stat">
+        <div class="t1-stat-dot"></div>
+        <span class="t1-stat-val mono">47</span>
+        <span class="subtle mono" style="font-size:0.72rem">pods running</span>
+      </div>
+      <div class="t1-stat">
+        <div class="t1-stat-dot"></div>
+        <span class="t1-stat-val mono">31</span>
+        <span class="subtle mono" style="font-size:0.72rem">Flux releases</span>
+      </div>
+    </div>
+    <div class="t1-actions">
+      <a href="#" class="t1-btn-primary">Live Status</a>
+      <a href="#" class="t1-btn-ghost">Architecture Decisions →</a>
+    </div>
+  </div>
+
+  <!-- Scroll cue -->
+  <div class="t1-scroll-cue">
+    <span>scroll</span>
+    <svg width="16" height="20" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.5">
+      <rect x="1" y="1" width="14" height="18" rx="7"/>
+      <circle cx="8" cy="6" r="2" fill="currentColor" stroke="none">
+        <animate attributeName="cy" values="6;12;6" dur="1.8s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="1;0;1" dur="1.8s" repeatCount="indefinite"/>
+      </circle>
+    </svg>
+  </div>
+
+</div>
+
+<!-- Scene divider -->
+<div class="scene-divider"></div>
+
+<!-- ══════════════════════════════════════════════════
+     TIER 2 — Scene Architecture
+     Each screen is a distinct "moment"
+     ══════════════════════════════════════════════════ -->
+<div id="tier2">
+
+  <!-- Scene 1: Identity -->
+  <section id="scene-identity">
+    <div class="scene-identity-bg"></div>
+    <div class="scene-identity-orb"></div>
+
+    <div class="scene-identity-inner">
+      <div class="s1-left">
+        <div class="tier-label reveal">TIER 2 — SCENE 1 / 3</div>
+        <div class="s1-kicker reveal reveal-delay-1">Corporate exec by day · Self-taught engineer by night</div>
+        <h1 class="s1-h1 reveal reveal-delay-1">
+          <span class="line">Command</span>
+          <span class="line accent-line">Center.</span>
+        </h1>
+        <p class="s1-body reveal reveal-delay-2">
+          A real k3s cluster built and operated in public — live metrics, honest decisions,
+          and an ops log that documents what <em style="color:var(--color-gold); font-style:normal">actually happened</em>.
+        </p>
+        <div class="s1-actions reveal reveal-delay-3">
+          <a href="#" class="s1-btn-p">Live Status</a>
+          <a href="#" class="s1-btn-g">Read the Blog</a>
+        </div>
+      </div>
+
+      <div class="s1-right reveal reveal-delay-1">
+        <div class="s1-stat-card">
+          <div class="s1-stat-icon gold-bg">⚙️</div>
+          <div>
+            <div class="s1-stat-num mono">3</div>
+            <div class="s1-stat-lbl">k3s nodes ready</div>
+          </div>
+          <div class="s1-stat-live">
+            <div style="width:5px;height:5px;border-radius:50%;background:var(--color-ok);box-shadow:0 0 6px var(--color-ok);animation:pulse 2s infinite"></div>
+            live
+          </div>
+        </div>
+        <div class="s1-stat-card">
+          <div class="s1-stat-icon green-bg">📦</div>
+          <div>
+            <div class="s1-stat-num mono">47</div>
+            <div class="s1-stat-lbl">pods running</div>
+          </div>
+          <div class="s1-stat-live">
+            <div style="width:5px;height:5px;border-radius:50%;background:var(--color-ok);box-shadow:0 0 6px var(--color-ok);animation:pulse 2s infinite"></div>
+            live
+          </div>
+        </div>
+        <div class="s1-stat-card">
+          <div class="s1-stat-icon sap-bg">🚀</div>
+          <div>
+            <div class="s1-stat-num mono">R223.98</div>
+            <div class="s1-stat-lbl">saved per month vs cloud</div>
+          </div>
+          <div style="margin-left:auto; font-family:var(--font-mono); font-size:0.65rem; color:var(--color-subtle)">
+            vs iCloud + M365 + AppleTV+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scene 2: Network -->
+  <section id="scene-network">
+    <div class="scene-network-inner">
+      <div class="s2-header">
+        <div>
+          <div class="s2-kicker reveal">Scene 2 / 3 · Network Topology</div>
+          <h2 class="s2-h2 reveal reveal-delay-1">Your network,<br>alive.</h2>
+        </div>
+        <a href="#" class="s2-cta reveal">Explore full map →</a>
+      </div>
+      <div id="s2-canvas" class="reveal reveal-delay-2">
+        <canvas id="s2-net-canvas"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scene 3: Terminal -->
+  <section id="scene-terminal">
+    <div class="scene-terminal-bg"></div>
+    <div class="scene-terminal-inner">
+
+      <div class="s3-left">
+        <div class="s3-kicker reveal">Scene 3 / 3 · Live Terminal</div>
+        <h2 class="s3-h2 reveal reveal-delay-1">
+          Ask the<br>
+          <em>cluster.</em>
+        </h2>
+        <p class="s3-body reveal reveal-delay-2">
+          An interactive read-only terminal connected to live cluster data.
+          Type commands, get real answers.
+        </p>
+        <div class="s3-features reveal reveal-delay-2">
+          <div class="s3-feature"><div class="s3-feature-dot"></div>kubectl get nodes — live</div>
+          <div class="s3-feature"><div class="s3-feature-dot"></div>flux status — GitOps health</div>
+          <div class="s3-feature"><div class="s3-feature-dot"></div>top — CPU &amp; memory per node</div>
+          <div class="s3-feature"><div class="s3-feature-dot"></div>whoami — the human behind it</div>
+        </div>
+      </div>
+
+      <div class="s3-terminal reveal reveal-delay-1">
+        <div class="s3-term-bar">
+          <div class="s3-term-dot" style="background:#f38ba8"></div>
+          <div class="s3-term-dot" style="background:#e6b450"></div>
+          <div class="s3-term-dot" style="background:#a6e3a1"></div>
+          <div class="s3-term-title">cluster · read-only · live</div>
+          <div class="s3-term-live"><div style="width:5px;height:5px;border-radius:50%;background:var(--color-ok);box-shadow:0 0 5px var(--color-ok)"></div>● live</div>
+        </div>
+        <div class="s3-term-body">
+          <div><span class="term-prompt">kagiso@cluster</span><span class="subtle">:</span><span class="gold">~</span><span class="subtle">$</span> <span class="term-cmd">kubectl get nodes</span></div>
+          <div style="margin-top:0.5rem; color:var(--color-subtle); font-size:0.75rem">NAME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STATUS&nbsp;&nbsp;&nbsp;ROLES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AGE&nbsp;&nbsp;&nbsp;VERSION</div>
+          <div><span class="term-out-key">tywin&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="term-out-ok">Ready&nbsp;&nbsp;&nbsp;</span><span class="subtle">control-plane&nbsp;&nbsp;47d&nbsp;&nbsp;&nbsp;v1.31.4+k3s1</span></div>
+          <div><span class="term-out-key">jaime&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="term-out-ok">Ready&nbsp;&nbsp;&nbsp;</span><span class="subtle">worker&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;47d&nbsp;&nbsp;&nbsp;v1.31.4+k3s1</span></div>
+          <div><span class="term-out-key">tyrion&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="term-out-ok">Ready&nbsp;&nbsp;&nbsp;</span><span class="subtle">worker&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;47d&nbsp;&nbsp;&nbsp;v1.31.4+k3s1</span></div>
+          <div style="margin-top:0.75rem"><span class="term-prompt">kagiso@cluster</span><span class="subtle">:</span><span class="gold">~</span><span class="subtle">$</span> <span class="term-cmd">whoami</span></div>
+          <div style="margin-top:0.35rem; color:var(--color-subtle)">Kagiso · Johannesburg 🇿🇦</div>
+          <div style="color:var(--color-subtle)">Corporate exec by day, self-taught engineer by night.</div>
+          <div style="color:var(--color-subtle)">This cluster runs on hardware under my desk.</div>
+          <div style="margin-top:0.75rem"><span class="term-prompt">kagiso@cluster</span><span class="subtle">:</span><span class="gold">~</span><span class="subtle">$</span> <span class="term-cursor"></span></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
+<div class="concept-footer">
+  kagiso.me · design preview · <span style="color:var(--color-gold)">open in browser to interact</span>
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────────────────────────────
+// TIER 1: Full-viewport network topology canvas
+// Nodes spread across full screen, animated packet beams between them
+// ─────────────────────────────────────────────────────────────────────────────
+(function initTier1Canvas() {
+  const canvas = document.getElementById('t1-canvas');
+  const ctx = canvas.getContext('2d');
+
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', () => { resize(); });
+
+  // Node definitions — spread across the viewport
+  const W = () => canvas.width, H = () => canvas.height;
+  function nodes() {
+    const w = W(), h = H();
+    return [
+      { id: 'internet', label: 'Internet',  x: w*0.5,  y: h*0.08, color: '#74c7ec', r: 18 },
+      { id: 'mikrotik', label: 'MikroTik',  x: w*0.5,  y: h*0.23, color: '#fab387', r: 16 },
+      { id: 'tywin',    label: 'Tywin',     x: w*0.35, y: h*0.45, color: '#cba6f7', r: 14 },
+      { id: 'jaime',    label: 'Jaime',     x: w*0.5,  y: h*0.48, color: '#cba6f7', r: 14 },
+      { id: 'tyrion',   label: 'Tyrion',    x: w*0.65, y: h*0.45, color: '#cba6f7', r: 14 },
+      { id: 'bronn',    label: 'Bronn',     x: w*0.2,  y: h*0.68, color: '#74c7ec', r: 12 },
+      { id: 'varys',    label: 'Varys',     x: w*0.38, y: h*0.72, color: '#a6e3a1', r: 12 },
+      { id: 'ned',      label: 'Ned (NAS)', x: w*0.62, y: h*0.72, color: '#e6b450', r: 12 },
+      { id: 'bran',     label: 'Bran',      x: w*0.8,  y: h*0.68, color: '#f38ba8', r: 11 },
+    ];
+  }
+
+  const edges = [
+    ['internet','mikrotik'],
+    ['mikrotik','tywin'],['mikrotik','jaime'],['mikrotik','tyrion'],
+    ['tywin','bronn'],['tywin','varys'],
+    ['jaime','ned'],
+    ['tyrion','bran'],
+    ['mikrotik','ned'],
+  ];
+
+  // Packets
+  let packets = [];
+  function spawnPacket() {
+    const nd = nodes();
+    const edge = edges[Math.floor(Math.random() * edges.length)];
+    const from = nd.find(n => n.id === edge[0]);
+    const to   = nd.find(n => n.id === edge[1]);
+    if (!from || !to) return;
+    const reverse = Math.random() > 0.5;
+    packets.push({
+      x: reverse ? to.x : from.x,
+      y: reverse ? to.y : from.y,
+      tx: reverse ? from.x : to.x,
+      ty: reverse ? from.y : to.y,
+      sx: reverse ? to.x : from.x,
+      sy: reverse ? to.y : from.y,
+      color: from.color,
+      t: 0, speed: 0.004 + Math.random() * 0.006,
+      size: 3 + Math.random() * 2,
+    });
+  }
+
+  let lastSpawn = 0;
+  let mouseX = W()/2, mouseY = H()/2;
+  window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; }, { passive: true });
+
+  function draw(ts) {
+    const w = W(), h = H();
+    ctx.clearRect(0, 0, w, h);
+
+    // Background
+    ctx.fillStyle = '#09090e';
+    ctx.fillRect(0, 0, w, h);
+
+    // Subtle radial glow at mouse position
+    const mg = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, 350);
+    mg.addColorStop(0, 'rgba(230,180,80,0.04)');
+    mg.addColorStop(1, 'transparent');
+    ctx.fillStyle = mg;
+    ctx.fillRect(0, 0, w, h);
+
+    const nd = nodes();
+
+    // Draw edges (glowing beams)
+    edges.forEach(([a, b]) => {
+      const na = nd.find(n => n.id === a);
+      const nb = nd.find(n => n.id === b);
+      if (!na || !nb) return;
+      ctx.beginPath();
+      ctx.moveTo(na.x, na.y);
+      ctx.lineTo(nb.x, nb.y);
+      ctx.strokeStyle = 'rgba(100,120,160,0.18)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    });
+
+    // Spawn packets
+    if (ts - lastSpawn > 350) {
+      spawnPacket();
+      lastSpawn = ts;
+    }
+
+    // Animate + draw packets
+    packets = packets.filter(p => p.t <= 1);
+    packets.forEach(p => {
+      p.t += p.speed;
+      const ease = p.t < 0.5 ? 2*p.t*p.t : -1+(4-2*p.t)*p.t;
+      p.x = p.sx + (p.tx - p.sx) * ease;
+      p.y = p.sy + (p.ty - p.sy) * ease;
+      // Trail
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+      const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size*3);
+      grad.addColorStop(0, p.color + 'cc');
+      grad.addColorStop(1, 'transparent');
+      ctx.fillStyle = grad;
+      ctx.fill();
+    });
+
+    // Draw nodes
+    nd.forEach(node => {
+      // Outer halo (interactive — brighter near mouse)
+      const dist = Math.hypot(node.x - mouseX, node.y - mouseY);
+      const proximity = Math.max(0, 1 - dist / 300);
+
+      const haloR = node.r * (3 + proximity * 3);
+      const hg = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, haloR);
+      hg.addColorStop(0, node.color + '30');
+      hg.addColorStop(1, 'transparent');
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, haloR, 0, Math.PI*2);
+      ctx.fillStyle = hg;
+      ctx.fill();
+
+      // Node circle
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, node.r, 0, Math.PI*2);
+      ctx.fillStyle = '#0f1118';
+      ctx.fill();
+      ctx.strokeStyle = node.color;
+      ctx.lineWidth = 1.5 + proximity * 1.5;
+      ctx.stroke();
+
+      // Center dot
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, node.r * 0.35, 0, Math.PI*2);
+      ctx.fillStyle = node.color;
+      ctx.fill();
+
+      // Label
+      ctx.fillStyle = proximity > 0.3 ? '#e6e1cf' : '#6e7a9a';
+      ctx.font = `${node.r < 14 ? 10 : 11}px "JetBrains Mono", monospace`;
+      ctx.textAlign = 'center';
+      ctx.fillText(node.label, node.x, node.y + node.r + 16);
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  requestAnimationFrame(draw);
+})();
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TIER 2 SCENE 2: Mini network canvas (contained in a card)
+// ─────────────────────────────────────────────────────────────────────────────
+(function initScene2Canvas() {
+  const wrap = document.getElementById('s2-canvas');
+  const canvas = document.getElementById('s2-net-canvas');
+  if (!canvas || !wrap) return;
+  const ctx = canvas.getContext('2d');
+
+  function resize() {
+    canvas.width  = wrap.offsetWidth;
+    canvas.height = wrap.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function nodes() {
+    const w = canvas.width, h = canvas.height;
+    return [
+      { id: 'internet', label: 'Internet',  x: w*0.5,  y: h*0.1,  color: '#74c7ec', r: 14 },
+      { id: 'mikrotik', label: 'MikroTik',  x: w*0.5,  y: h*0.3,  color: '#fab387', r: 13 },
+      { id: 'tywin',    label: 'Tywin',     x: w*0.3,  y: h*0.56, color: '#cba6f7', r: 11 },
+      { id: 'jaime',    label: 'Jaime',     x: w*0.5,  y: h*0.6,  color: '#cba6f7', r: 11 },
+      { id: 'tyrion',   label: 'Tyrion',    x: w*0.7,  y: h*0.56, color: '#cba6f7', r: 11 },
+      { id: 'bronn',    label: 'Bronn',     x: w*0.18, y: h*0.82, color: '#74c7ec', r: 9  },
+      { id: 'ned',      label: 'Ned',       x: w*0.5,  y: h*0.86, color: '#e6b450', r: 9  },
+      { id: 'bran',     label: 'Bran',      x: w*0.82, y: h*0.82, color: '#f38ba8', r: 8  },
+    ];
+  }
+
+  const edges = [
+    ['internet','mikrotik'],
+    ['mikrotik','tywin'],['mikrotik','jaime'],['mikrotik','tyrion'],
+    ['tywin','bronn'],['jaime','ned'],['tyrion','bran'],
+  ];
+
+  let packets = [], lastSpawn = 0;
+
+  function spawnPacket() {
+    const nd = nodes();
+    const edge = edges[Math.floor(Math.random() * edges.length)];
+    const from = nd.find(n => n.id === edge[0]);
+    const to   = nd.find(n => n.id === edge[1]);
+    if (!from || !to) return;
+    const rev = Math.random() > 0.4;
+    packets.push({
+      x: rev ? to.x : from.x, y: rev ? to.y : from.y,
+      tx: rev ? from.x : to.x, ty: rev ? from.y : to.y,
+      sx: rev ? to.x : from.x, sy: rev ? to.y : from.y,
+      color: from.color, t: 0, speed: 0.007 + Math.random() * 0.008, size: 2.5,
+    });
+  }
+
+  function draw(ts) {
+    const w = canvas.width, h = canvas.height;
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = '#0f1118';
+    ctx.fillRect(0, 0, w, h);
+
+    const nd = nodes();
+
+    // Grid
+    ctx.strokeStyle = 'rgba(203,166,247,0.04)';
+    ctx.lineWidth = 1;
+    for (let x = 0; x < w; x += 32) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,h); ctx.stroke(); }
+    for (let y = 0; y < h; y += 32) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
+
+    // Edges
+    edges.forEach(([a,b]) => {
+      const na = nd.find(n=>n.id===a), nb = nd.find(n=>n.id===b);
+      if (!na||!nb) return;
+      ctx.beginPath(); ctx.moveTo(na.x,na.y); ctx.lineTo(nb.x,nb.y);
+      ctx.strokeStyle = 'rgba(100,120,160,0.25)'; ctx.lineWidth = 1; ctx.stroke();
+    });
+
+    if (ts - lastSpawn > 280) { spawnPacket(); lastSpawn = ts; }
+
+    packets = packets.filter(p => p.t <= 1);
+    packets.forEach(p => {
+      p.t += p.speed;
+      const e = p.t < 0.5 ? 2*p.t*p.t : -1+(4-2*p.t)*p.t;
+      p.x = p.sx + (p.tx-p.sx)*e; p.y = p.sy + (p.ty-p.sy)*e;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+      ctx.fillStyle = p.color + 'cc'; ctx.fill();
+    });
+
+    nd.forEach(node => {
+      const hg = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, node.r*3);
+      hg.addColorStop(0, node.color+'28'); hg.addColorStop(1,'transparent');
+      ctx.beginPath(); ctx.arc(node.x,node.y,node.r*3,0,Math.PI*2); ctx.fillStyle=hg; ctx.fill();
+
+      ctx.beginPath(); ctx.arc(node.x,node.y,node.r,0,Math.PI*2);
+      ctx.fillStyle='#0f1118'; ctx.fill();
+      ctx.strokeStyle=node.color; ctx.lineWidth=1.5; ctx.stroke();
+
+      ctx.beginPath(); ctx.arc(node.x,node.y,node.r*0.3,0,Math.PI*2);
+      ctx.fillStyle=node.color; ctx.fill();
+
+      ctx.fillStyle='#6e7a9a'; ctx.font='9px monospace'; ctx.textAlign='center';
+      ctx.fillText(node.label, node.x, node.y+node.r+12);
+    });
+
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Scroll reveal
+// ─────────────────────────────────────────────────────────────────────────────
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.1, rootMargin: '-30px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

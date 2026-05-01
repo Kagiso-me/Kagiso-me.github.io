@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>kagiso.me — Isometric Rack Preview</title>
+<style>
+  :root {
+    --base:    #09090e;
+    --mantle:  #0f1118;
+    --surface: #1e2534;
+    --muted:   #3d4663;
+    --subtle:  #6e7a9a;
+    --text:    #bfbdb6;
+    --heading: #e6e1cf;
+    --gold:    #e6b450;
+    --green:   #a6e3a1;
+    --sap:     #74c7ec;
+    --mauve:   #cba6f7;
+    --ok:      #a6e3a1;
+    --warn:    #e6b450;
+    --crit:    #f38ba8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    background: var(--base);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ── Layout ── */
+  .page {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+
+  /* ── Left: Identity ── */
+  .left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem 3rem 4rem 4rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .dot-grid {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(230,180,80,0.14) 1px, transparent 1px);
+    background-size: 28px 28px;
+    pointer-events: none;
+    mask-image: radial-gradient(ellipse 90% 80% at 20% 50%, black 20%, transparent 80%);
+  }
+
+  .eyebrow {
+    font-family: 'Courier New', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .eyebrow::before {
+    content: '';
+    display: block;
+    width: 28px; height: 1px;
+    background: var(--gold);
+  }
+
+  h1 {
+    font-size: clamp(3rem, 5.5vw, 5.5rem);
+    font-weight: 800;
+    line-height: 0.88;
+    letter-spacing: -0.05em;
+    color: var(--heading);
+    margin-bottom: 2rem;
+  }
+  h1 .grad {
+    background: linear-gradient(95deg, var(--gold) 0%, var(--green) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .sub {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--subtle);
+    max-width: 400px;
+    margin-bottom: 2.5rem;
+  }
+
+  /* Live stat pills */
+  .stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-bottom: 2.5rem;
+  }
+  .stat-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    background: rgba(15,17,24,0.8);
+    border: 1px solid rgba(230,180,80,0.22);
+    border-radius: 100px;
+    padding: 0.45rem 1rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.72rem;
+    backdrop-filter: blur(8px);
+  }
+  .stat-pill-val { color: var(--heading); font-weight: 700; font-size: 0.95rem; }
+  .stat-pill-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--ok); box-shadow: 0 0 7px var(--ok);
+    animation: dot-pulse 2.2s ease-in-out infinite;
+  }
+  @keyframes dot-pulse {
+    0%,100%{box-shadow:0 0 4px var(--ok);}
+    50%{box-shadow:0 0 12px var(--ok);}
+  }
+
+  .actions { display: flex; gap: 0.75rem; }
+  .btn-p {
+    padding: 0.8rem 2rem;
+    background: linear-gradient(135deg, var(--gold), color-mix(in srgb, var(--gold) 55%, var(--green)));
+    color: #09090e;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer; border: none;
+  }
+  .btn-p:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(230,180,80,0.4); }
+  .btn-g {
+    padding: 0.8rem 2rem;
+    border: 1px solid rgba(230,180,80,0.3);
+    color: var(--gold);
+    border-radius: 8px;
+    font-size: 0.875rem;
+    background: rgba(230,180,80,0.05);
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .btn-g:hover { background: rgba(230,180,80,0.1); transform: translateY(-2px); }
+
+  /* ── Right: Isometric rack ── */
+  .right {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* Ambient glow behind the rack */
+  .right::before {
+    content: '';
+    position: absolute;
+    width: 80%; height: 80%;
+    top: 10%; left: 10%;
+    background: radial-gradient(ellipse, rgba(230,180,80,0.07) 0%, rgba(166,227,161,0.04) 50%, transparent 80%);
+    border-radius: 50%;
+    animation: glow-breathe 6s ease-in-out infinite alternate;
+    pointer-events: none;
+  }
+  @keyframes glow-breathe {
+    from { opacity: 0.6; transform: scale(0.95); }
+    to   { opacity: 1;   transform: scale(1.05); }
+  }
+
+  #rack-svg {
+    width: 100%;
+    max-width: 640px;
+    height: auto;
+    position: relative;
+    z-index: 2;
+    filter: drop-shadow(0 40px 80px rgba(0,0,0,0.7));
+  }
+
+  /* ── Legend below rack ── */
+  .legend {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 1.5rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.65rem;
+    color: var(--subtle);
+    white-space: nowrap;
+  }
+  .legend-item { display: flex; align-items: center; gap: 0.4rem; }
+  .legend-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+  /* ── Floating tooltip ── */
+  .hw-tooltip {
+    position: absolute;
+    background: rgba(15,17,24,0.95);
+    border: 1px solid var(--muted);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.72rem;
+    color: var(--text);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+    z-index: 20;
+    max-width: 220px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+  }
+  .hw-tooltip.visible { opacity: 1; }
+  .hw-tooltip-name { color: var(--heading); font-weight: 700; margin-bottom: 0.25rem; font-size: 0.8rem; }
+  .hw-tooltip-role { color: var(--gold); margin-bottom: 0.35rem; }
+  .hw-tooltip-specs { color: var(--subtle); font-size: 0.65rem; line-height: 1.5; }
+
+  /* ── Responsive ── */
+  @media (max-width: 860px) {
+    .page { grid-template-columns: 1fr; }
+    .left { padding: 6rem 2rem 2rem; }
+    .right { min-height: 400px; }
+    #rack-svg { max-width: 380px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- Left: identity -->
+  <div class="left">
+    <div class="dot-grid"></div>
+
+    <div class="eyebrow">Homelab · Johannesburg, ZA · Built in public</div>
+
+    <h1>
+      Under<br>
+      my <span class="grad">desk.</span><br>
+      In prod.
+    </h1>
+
+    <p class="sub">
+      A production-grade k3s cluster designed, operated, and documented in the open.
+      Every decision logged. Every failure published. Running on real hardware.
+    </p>
+
+    <div class="stats">
+      <div class="stat-pill">
+        <div class="stat-pill-dot"></div>
+        <span class="stat-pill-val">3</span>
+        <span style="color:var(--subtle)">nodes ready</span>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-pill-dot"></div>
+        <span class="stat-pill-val">47</span>
+        <span style="color:var(--subtle)">pods running</span>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-pill-dot"></div>
+        <span class="stat-pill-val">31</span>
+        <span style="color:var(--subtle)">Flux releases</span>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn-p">Live Status</button>
+      <button class="btn-g">Architecture Decisions →</button>
+    </div>
+  </div>
+
+  <!-- Right: isometric rack illustration -->
+  <div class="right" id="rack-wrap">
+
+    <svg id="rack-svg" viewBox="0 0 600 720" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- LED glow filters -->
+        <filter id="glow-ok" x="-100%" y="-100%" width="300%" height="300%">
+          <feGaussianBlur stdDeviation="3" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="glow-gold" x="-100%" y="-100%" width="300%" height="300%">
+          <feGaussianBlur stdDeviation="4" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="glow-sap" x="-100%" y="-100%" width="300%" height="300%">
+          <feGaussianBlur stdDeviation="3" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="glow-mauve" x="-100%" y="-100%" width="300%" height="300%">
+          <feGaussianBlur stdDeviation="3" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000" flood-opacity="0.5"/>
+        </filter>
+
+        <!-- Isometric grid lines for rack faces -->
+        <pattern id="vent-h" width="6" height="4" patternUnits="userSpaceOnUse">
+          <rect width="5" height="2" rx="1" fill="rgba(0,0,0,0.3)"/>
+        </pattern>
+        <pattern id="vent-v" width="4" height="6" patternUnits="userSpaceOnUse">
+          <rect width="2" height="5" rx="1" fill="rgba(0,0,0,0.25)"/>
+        </pattern>
+
+        <!-- Cable gradient -->
+        <linearGradient id="cable-ok" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#a6e3a1" stop-opacity="0.9"/>
+          <stop offset="100%" stop-color="#a6e3a1" stop-opacity="0.3"/>
+        </linearGradient>
+        <linearGradient id="cable-sap" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#74c7ec" stop-opacity="0.9"/>
+          <stop offset="100%" stop-color="#74c7ec" stop-opacity="0.3"/>
+        </linearGradient>
+        <linearGradient id="cable-gold" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#e6b450" stop-opacity="0.9"/>
+          <stop offset="100%" stop-color="#e6b450" stop-opacity="0.3"/>
+        </linearGradient>
+
+        <!-- Face gradients for isometric surfaces -->
+        <linearGradient id="face-top" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#2a3347"/>
+          <stop offset="100%" stop-color="#1e2534"/>
+        </linearGradient>
+        <linearGradient id="face-left" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#141821"/>
+          <stop offset="100%" stop-color="#1a2030"/>
+        </linearGradient>
+        <linearGradient id="face-front" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#1e2534"/>
+          <stop offset="100%" stop-color="#161c28"/>
+        </linearGradient>
+        <linearGradient id="rack-body" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#1a2030"/>
+          <stop offset="100%" stop-color="#0d1119"/>
+        </linearGradient>
+        <linearGradient id="rack-side" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#0d1119"/>
+          <stop offset="100%" stop-color="#111620"/>
+        </linearGradient>
+      </defs>
+
+      <!-- ════════════════════════════════════════════════
+           RACK ENCLOSURE
+           Isometric cabinet: 6U open-frame rack
+           Origin: bottom-center at (300, 680)
+           Iso transform: x' = x·cos30 - y·cos30, y' = x·sin30 + y·sin30
+           We draw manually for full control.
+      ════════════════════════════════════════════════ -->
+
+      <!-- Shadow on floor -->
+      <ellipse cx="300" cy="710" rx="180" ry="22" fill="rgba(0,0,0,0.45)"/>
+
+      <!-- ── Rack frame – left side panel ── -->
+      <polygon points="90,460 90,680 150,714 150,494" fill="url(#rack-side)" stroke="#2a3347" stroke-width="0.5"/>
+
+      <!-- ── Rack frame – right side panel ── -->
+      <polygon points="510,460 510,680 450,714 450,494" fill="url(#rack-side)" stroke="#2a3347" stroke-width="0.5"/>
+
+      <!-- ── Rack floor ── -->
+      <polygon points="90,680 300,714 510,680 300,646" fill="#0d1119" stroke="#1e2534" stroke-width="0.5"/>
+
+      <!-- ── Rack top rail ── -->
+      <polygon points="90,460 300,494 510,460 300,426" fill="#232d3f" stroke="#2a3347" stroke-width="1"/>
+
+      <!-- ── Vertical rail left-front ── -->
+      <polygon points="90,460 90,680 100,685 100,465" fill="#1a2030" stroke="#2a3347" stroke-width="0.5"/>
+      <!-- ── Vertical rail right-front ── -->
+      <polygon points="510,460 510,680 500,685 500,465" fill="#1a2030" stroke="#2a3347" stroke-width="0.5"/>
+
+      <!-- ── Cable management tray – right side ── -->
+      <polygon points="500,465 500,685 510,680 510,460" fill="#161c28" stroke="#2a3347" stroke-width="0.5"/>
+
+      <!-- ═══════════════════════════════════════════════════════
+           UNITS — drawn front-to-back, bottom-to-top
+           Each unit is a 3-face isometric box:
+             top face, left/shadow face, front face
+           Iso projection: 30° angles
+      ═══════════════════════════════════════════════════════ -->
+
+      <!-- ───────────────────────────────────────────
+           U1-U2: HP MicroServer Gen8 — Ned (NAS/TrueNAS)
+           Big yellow unit, 2U, bottom of rack
+      ─────────────────────────────────────────────── -->
+      <!-- Front face -->
+      <polygon id="ned-front" points="100,634 500,634 500,666 100,666"
+               fill="#1a2232" stroke="#2e3a52" stroke-width="0.8"
+               class="hw-target" data-id="ned"/>
+      <!-- Top face -->
+      <polygon points="100,634 500,634 510,628 110,628" fill="#232f45" stroke="#2e3a52" stroke-width="0.5"/>
+      <!-- Right shadow -->
+      <polygon points="500,634 510,628 510,660 500,666" fill="#111828" stroke="#2e3a52" stroke-width="0.5"/>
+
+      <!-- Ned drive bay lights (4 drives) -->
+      <rect x="120" y="643" width="18" height="14" rx="2" fill="#111828" stroke="#1e2a3f" stroke-width="0.5"/>
+      <rect x="145" y="643" width="18" height="14" rx="2" fill="#111828" stroke="#1e2a3f" stroke-width="0.5"/>
+      <rect x="170" y="643" width="18" height="14" rx="2" fill="#111828" stroke="#1e2a3f" stroke-width="0.5"/>
+      <rect x="195" y="643" width="18" height="14" rx="2" fill="#111828" stroke="#1e2a3f" stroke-width="0.5"/>
+      <!-- Drive LEDs -->
+      <circle cx="135" cy="658" r="2.5" fill="#e6b450" filter="url(#glow-gold)" class="led-blink" style="animation-delay:0.3s"/>
+      <circle cx="160" cy="658" r="2.5" fill="#e6b450" filter="url(#glow-gold)" class="led-blink" style="animation-delay:0.7s"/>
+      <circle cx="185" cy="658" r="2.5" fill="#e6b450" filter="url(#glow-gold)" class="led-blink" style="animation-delay:1.1s"/>
+      <circle cx="210" cy="658" r="2.5" fill="#e6b450" filter="url(#glow-gold)" class="led-blink" style="animation-delay:1.5s"/>
+
+      <!-- Ned label -->
+      <text x="250" y="653" font-family="'Courier New',monospace" font-size="9" fill="#6e7a9a" text-anchor="middle">HP MicroServer · TrueNAS · Ned</text>
+      <!-- Status LED -->
+      <circle cx="480" cy="650" r="4" fill="#e6b450" filter="url(#glow-gold)" class="led-blink" style="animation-delay:0s"/>
+      <text x="472" y="663" font-family="'Courier New',monospace" font-size="7" fill="#6e7a9a" text-anchor="middle">NAS</text>
+
+      <!-- ───────────────────────────────────────────
+           U3: Patch panel / Switch spacer
+      ─────────────────────────────────────────────── -->
+      <polygon points="100,614 500,614 500,634 100,634" fill="#131820" stroke="#222d40" stroke-width="0.5"/>
+      <polygon points="100,614 500,614 510,608 110,608" fill="#1a2232" stroke="#222d40" stroke-width="0.3"/>
+      <polygon points="500,614 510,608 510,628 500,634" fill="#0d1318" stroke="#222d40" stroke-width="0.3"/>
+      <!-- Switch ports -->
+      {Array.from({length: 16}).map((_,i) => `
+        <rect x="${108 + i*22}" y="619" width="14" height="8" rx="1" fill="#0a0f18" stroke="#1e2a3f" stroke-width="0.5"/>
+        <circle cx="${115 + i*22}" cy="${i%3===0?619.5:i%3===1?620.5:621.5}" r="1.5" fill="${i%4===3?'#74c7ec':'#a6e3a1'}" opacity="${i<12?1:0.3}"/>
+      `).join('')}
+      <text x="475" y="626" font-family="'Courier New',monospace" font-size="7" fill="#3d4663" text-anchor="end">MikroTik SW</text>
+
+      <!-- ───────────────────────────────────────────
+           U4: ThinkCentre Tyrion (worker)
+      ─────────────────────────────────────────────── -->
+      <polygon id="tyrion-front" points="100,588 500,588 500,614 100,614"
+               fill="#192130" stroke="#2a3650" stroke-width="0.8"
+               class="hw-target" data-id="tyrion"/>
+      <polygon points="100,588 500,588 510,582 110,582" fill="#1e2a3e" stroke="#2a3650" stroke-width="0.5"/>
+      <polygon points="500,588 510,582 510,608 500,614" fill="#101622" stroke="#2a3650" stroke-width="0.5"/>
+      <!-- Vent slots -->
+      <rect x="108" y="593" width="60" height="16" rx="1" fill="url(#vent-h)" opacity="0.6"/>
+      <!-- Label -->
+      <text x="240" y="602" font-family="'Courier New',monospace" font-size="8.5" fill="#8896b0" text-anchor="middle">Lenovo ThinkCentre M93p</text>
+      <text x="240" y="612" font-family="'Courier New',monospace" font-size="7.5" fill="#cba6f7" text-anchor="middle">Tyrion · k3s Worker</text>
+      <!-- Status LED -->
+      <circle cx="476" cy="599" r="3.5" fill="#a6e3a1" filter="url(#glow-ok)">
+        <animate attributeName="opacity" values="0.8;1;0.8" dur="2.8s" repeatCount="indefinite"/>
+      </circle>
+      <!-- Activity LED -->
+      <circle cx="466" cy="599" r="2" fill="#74c7ec" filter="url(#glow-sap)" class="led-blink" style="animation-delay:0.5s"/>
+      <!-- USB port -->
+      <rect x="488" y="595" width="7" height="5" rx="0.5" fill="#0d1318" stroke="#2a3650" stroke-width="0.5"/>
+
+      <!-- ───────────────────────────────────────────
+           U5: ThinkCentre Jaime (worker)
+      ─────────────────────────────────────────────── -->
+      <polygon id="jaime-front" points="100,562 500,562 500,588 100,588"
+               fill="#192130" stroke="#2a3650" stroke-width="0.8"
+               class="hw-target" data-id="jaime"/>
+      <polygon points="100,562 500,562 510,556 110,556" fill="#1e2a3e" stroke="#2a3650" stroke-width="0.5"/>
+      <polygon points="500,562 510,556 510,582 500,588" fill="#101622" stroke="#2a3650" stroke-width="0.5"/>
+      <rect x="108" y="567" width="60" height="16" rx="1" fill="url(#vent-h)" opacity="0.6"/>
+      <text x="240" y="576" font-family="'Courier New',monospace" font-size="8.5" fill="#8896b0" text-anchor="middle">Lenovo ThinkCentre M93p</text>
+      <text x="240" y="586" font-family="'Courier New',monospace" font-size="7.5" fill="#cba6f7" text-anchor="middle">Jaime · k3s Worker</text>
+      <circle cx="476" cy="573" r="3.5" fill="#a6e3a1" filter="url(#glow-ok)">
+        <animate attributeName="opacity" values="0.8;1;0.8" dur="3.1s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="466" cy="573" r="2" fill="#74c7ec" filter="url(#glow-sap)" class="led-blink" style="animation-delay:1.2s"/>
+      <rect x="488" y="569" width="7" height="5" rx="0.5" fill="#0d1318" stroke="#2a3650" stroke-width="0.5"/>
+
+      <!-- ───────────────────────────────────────────
+           U6: ThinkCentre Tywin (control-plane) — gold accent
+      ─────────────────────────────────────────────── -->
+      <polygon id="tywin-front" points="100,536 500,536 500,562 100,562"
+               fill="#1c2235" stroke="#3a4a68" stroke-width="0.8"
+               class="hw-target" data-id="tywin"/>
+      <polygon points="100,536 500,536 510,530 110,530" fill="#232d45" stroke="#3a4a68" stroke-width="0.5"/>
+      <polygon points="500,536 510,530 510,556 500,562" fill="#111928" stroke="#3a4a68" stroke-width="0.5"/>
+      <!-- Gold accent bar — control-plane distinction -->
+      <rect x="100" y="536" width="4" height="26" fill="#e6b450" opacity="0.8"/>
+      <rect x="108" y="541" width="60" height="16" rx="1" fill="url(#vent-h)" opacity="0.6"/>
+      <text x="245" y="550" font-family="'Courier New',monospace" font-size="8.5" fill="#8896b0" text-anchor="middle">Lenovo ThinkCentre M93p</text>
+      <text x="245" y="560" font-family="'Courier New',monospace" font-size="7.5" fill="#e6b450" text-anchor="middle">Tywin · k3s Control-plane ★</text>
+      <!-- Status LEDs — control-plane gets extra -->
+      <circle cx="476" cy="547" r="3.5" fill="#a6e3a1" filter="url(#glow-ok)">
+        <animate attributeName="opacity" values="0.8;1;0.8" dur="2.5s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="466" cy="547" r="2" fill="#e6b450" filter="url(#glow-gold)" class="led-blink" style="animation-delay:0.2s"/>
+      <rect x="488" y="543" width="7" height="5" rx="0.5" fill="#0d1318" stroke="#3a4a68" stroke-width="0.5"/>
+
+      <!-- ───────────────────────────────────────────
+           U7: Intel NUC — Bronn (Docker / AI)
+      ─────────────────────────────────────────────── -->
+      <polygon id="bronn-front" points="100,510 260,510 260,536 100,536"
+               fill="#16202e" stroke="#243040" stroke-width="0.8"
+               class="hw-target" data-id="bronn"/>
+      <polygon points="100,510 260,510 270,504 110,504" fill="#1c2838" stroke="#243040" stroke-width="0.5"/>
+      <polygon points="260,510 270,504 270,530 260,536" fill="#0e1720" stroke="#243040" stroke-width="0.5"/>
+      <rect x="108" y="515" width="30" height="16" rx="1" fill="url(#vent-v)" opacity="0.5"/>
+      <text x="185" y="524" font-family="'Courier New',monospace" font-size="7.5" fill="#8896b0" text-anchor="middle">Intel NUC</text>
+      <text x="185" y="534" font-family="'Courier New',monospace" font-size="7" fill="#74c7ec" text-anchor="middle">Bronn · Docker · AI</text>
+      <circle cx="248" cy="521" r="3" fill="#74c7ec" filter="url(#glow-sap)">
+        <animate attributeName="opacity" values="0.7;1;0.7" dur="4s" repeatCount="indefinite"/>
+      </circle>
+
+      <!-- ───────────────────────────────────────────
+           U7 (right half): Intel NUC — Varys (CI / OPS)
+      ─────────────────────────────────────────────── -->
+      <polygon id="varys-front" points="280,510 440,510 440,536 280,536"
+               fill="#16202e" stroke="#243040" stroke-width="0.8"
+               class="hw-target" data-id="varys"/>
+      <polygon points="280,510 440,510 450,504 290,504" fill="#1c2838" stroke="#243040" stroke-width="0.5"/>
+      <polygon points="440,510 450,504 450,530 440,536" fill="#0e1720" stroke="#243040" stroke-width="0.5"/>
+      <rect x="288" y="515" width="30" height="16" rx="1" fill="url(#vent-v)" opacity="0.5"/>
+      <text x="365" y="524" font-family="'Courier New',monospace" font-size="7.5" fill="#8896b0" text-anchor="middle">Intel NUC</text>
+      <text x="365" y="534" font-family="'Courier New',monospace" font-size="7" fill="#a6e3a1" text-anchor="middle">Varys · CI / OPS</text>
+      <circle cx="428" cy="521" r="3" fill="#a6e3a1" filter="url(#glow-ok)">
+        <animate attributeName="opacity" values="0.8;1;0.8" dur="2.2s" repeatCount="indefinite"/>
+      </circle>
+
+      <!-- ───────────────────────────────────────────
+           U8: Raspberry Pi — Bran (DNS)
+      ─────────────────────────────────────────────── -->
+      <polygon id="bran-front" points="100,486 200,486 200,510 100,510"
+               fill="#141c28" stroke="#1e2a3c" stroke-width="0.8"
+               class="hw-target" data-id="bran"/>
+      <polygon points="100,486 200,486 210,480 110,480" fill="#192232" stroke="#1e2a3c" stroke-width="0.5"/>
+      <polygon points="200,486 210,480 210,504 200,510" fill="#0c1318" stroke="#1e2a3c" stroke-width="0.5"/>
+      <!-- Pi board texture -->
+      <rect x="106" y="490" width="5" height="5" rx="0.5" fill="#0a1520" stroke="#1e2a3c" stroke-width="0.3"/>
+      <rect x="114" y="490" width="5" height="5" rx="0.5" fill="#0a1520" stroke="#1e2a3c" stroke-width="0.3"/>
+      <text x="152" y="500" font-family="'Courier New',monospace" font-size="7" fill="#8896b0" text-anchor="middle">RPi 3B+</text>
+      <text x="152" y="509" font-family="'Courier New',monospace" font-size="6.5" fill="#f38ba8" text-anchor="middle">Bran · DNS</text>
+      <circle cx="190" cy="496" r="2.5" fill="#f38ba8" filter="url(#glow-mauve)">
+        <animate attributeName="opacity" values="0.7;1;0.7" dur="3.5s" repeatCount="indefinite"/>
+      </circle>
+
+      <!-- ───────────────────────────────────────────
+           U9 (top): APC UPS
+      ─────────────────────────────────────────────── -->
+      <polygon id="ups-front" points="100,460 500,460 500,486 100,486"
+               fill="#111820" stroke="#1e2836" stroke-width="0.8"
+               class="hw-target" data-id="ups"/>
+      <polygon points="100,460 500,460 510,454 110,454" fill="#161e2c" stroke="#1e2836" stroke-width="0.5"/>
+      <polygon points="500,460 510,454 510,480 500,486" fill="#0c1218" stroke="#1e2836" stroke-width="0.5"/>
+      <!-- UPS battery slots -->
+      <rect x="108" y="464" width="140" height="18" rx="2" fill="#0d1520" stroke="#1e2836" stroke-width="0.5"/>
+      <rect x="112" y="467" width="60" height="11" rx="1" fill="#e6b450" opacity="0.07"/>
+      <rect x="176" y="467" width="66" height="11" rx="1" fill="#e6b450" opacity="0.07"/>
+      <!-- Battery level indicator -->
+      <rect x="113" y="468" width="45" height="9" rx="0.5" fill="#e6b450" opacity="0.6"/>
+      <text x="280" y="475" font-family="'Courier New',monospace" font-size="7.5" fill="#6e7a9a" text-anchor="middle">APC Back-UPS Pro 650VA · 390W</text>
+      <text x="430" y="475" font-family="'Courier New',monospace" font-size="7" fill="#e6b450" text-anchor="middle">⚡ ~4min runtime</text>
+      <!-- UPS power LED -->
+      <circle cx="476" cy="472" r="3.5" fill="#e6b450" filter="url(#glow-gold)">
+        <animate attributeName="opacity" values="0.6;1;0.6" dur="1.5s" repeatCount="indefinite"/>
+      </circle>
+
+      <!-- ════════════════════════════════════════════════
+           CABLES — patch cables running down right side
+           Green = k3s LAN, Blue = management, Yellow = storage
+      ════════════════════════════════════════════════ -->
+      <!-- Tywin → switch -->
+      <path d="M 492 549 C 508 549 508 621 492 621" stroke="#a6e3a1" stroke-width="1.8" fill="none" stroke-opacity="0.6" stroke-linecap="round"/>
+      <!-- Jaime → switch -->
+      <path d="M 492 575 C 514 575 514 621 492 621" stroke="#a6e3a1" stroke-width="1.8" fill="none" stroke-opacity="0.5" stroke-linecap="round"/>
+      <!-- Tyrion → switch -->
+      <path d="M 492 601 C 520 601 520 621 492 621" stroke="#a6e3a1" stroke-width="1.8" fill="none" stroke-opacity="0.4" stroke-linecap="round"/>
+      <!-- Bronn → switch -->
+      <path d="M 258 523 C 280 523 280 600 370 621" stroke="#74c7ec" stroke-width="1.5" fill="none" stroke-opacity="0.5" stroke-linecap="round"/>
+      <!-- Ned power → UPS -->
+      <path d="M 480 634 C 486 634 486 480 486 480" stroke="#e6b450" stroke-width="1.5" fill="none" stroke-opacity="0.35" stroke-dasharray="4 3" stroke-linecap="round"/>
+
+      <!-- ════════════════════════════════════════════════
+           ANIMATED DATA PACKETS flowing through cables
+      ════════════════════════════════════════════════ -->
+      <!-- Packet on Tywin cable -->
+      <circle r="3" fill="#a6e3a1" opacity="0.9" filter="url(#glow-ok)">
+        <animateMotion dur="2.2s" repeatCount="indefinite" begin="0s">
+          <mpath href="#pkt-path-tywin"/>
+        </animateMotion>
+        <animate attributeName="opacity" values="0;0.9;0.9;0" dur="2.2s" repeatCount="indefinite"/>
+      </circle>
+      <path id="pkt-path-tywin" d="M 492 549 C 508 549 508 621 492 621" fill="none"/>
+
+      <!-- Packet on Jaime cable -->
+      <circle r="2.5" fill="#cba6f7" opacity="0.9" filter="url(#glow-mauve)">
+        <animateMotion dur="2.8s" repeatCount="indefinite" begin="0.8s">
+          <mpath href="#pkt-path-jaime"/>
+        </animateMotion>
+        <animate attributeName="opacity" values="0;0.9;0.9;0" dur="2.8s" repeatCount="indefinite" begin="0.8s"/>
+      </circle>
+      <path id="pkt-path-jaime" d="M 492 575 C 514 575 514 621 492 621" fill="none"/>
+
+      <!-- Packet on Tyrion cable (reverse) -->
+      <circle r="2.5" fill="#a6e3a1" opacity="0.9" filter="url(#glow-ok)">
+        <animateMotion dur="3.1s" repeatCount="indefinite" begin="1.5s" keyPoints="1;0" keyTimes="0;1" calcMode="linear">
+          <mpath href="#pkt-path-tyrion"/>
+        </animateMotion>
+        <animate attributeName="opacity" values="0;0.9;0.9;0" dur="3.1s" repeatCount="indefinite" begin="1.5s"/>
+      </circle>
+      <path id="pkt-path-tyrion" d="M 492 601 C 520 601 520 621 492 621" fill="none"/>
+
+      <!-- Packet on Bronn cable -->
+      <circle r="2" fill="#74c7ec" opacity="0.9" filter="url(#glow-sap)">
+        <animateMotion dur="3.8s" repeatCount="indefinite" begin="0.4s">
+          <mpath href="#pkt-path-bronn"/>
+        </animateMotion>
+        <animate attributeName="opacity" values="0;0.8;0.8;0" dur="3.8s" repeatCount="indefinite" begin="0.4s"/>
+      </circle>
+      <path id="pkt-path-bronn" d="M 258 523 C 280 523 280 600 370 621" fill="none"/>
+
+      <!-- ════════════════════════════════════════════════
+           FLOATING LABELS — service tags hovering above units
+      ════════════════════════════════════════════════ -->
+      <!-- Tywin services -->
+      <g transform="translate(360, 505)" opacity="0.85">
+        <rect x="-2" y="-10" width="88" height="13" rx="3" fill="#1c2535" stroke="#2e3a52" stroke-width="0.5"/>
+        <text font-family="'Courier New',monospace" font-size="7" fill="#cba6f7">Traefik · Flux · Authentik</text>
+      </g>
+      <!-- Jaime services -->
+      <g transform="translate(340, 530)" opacity="0.7">
+        <rect x="-2" y="-10" width="110" height="13" rx="3" fill="#1c2535" stroke="#2e3a52" stroke-width="0.5"/>
+        <text font-family="'Courier New',monospace" font-size="7" fill="#6e7a9a">Prometheus · Grafana · Loki</text>
+      </g>
+      <!-- Tyrion services -->
+      <g transform="translate(340, 556)" opacity="0.6">
+        <rect x="-2" y="-10" width="106" height="13" rx="3" fill="#1c2535" stroke="#2e3a52" stroke-width="0.5"/>
+        <text font-family="'Courier New',monospace" font-size="7" fill="#6e7a9a">CrowdSec · SOPS · Velero</text>
+      </g>
+
+      <!-- ════════════════════════════════════════════════
+           RACK RAIL MARKINGS — U numbers on left side
+      ════════════════════════════════════════════════ -->
+      <text x="86" y="476" font-family="'Courier New',monospace" font-size="7" fill="#2a3347" text-anchor="end">1U</text>
+      <text x="86" y="502" font-family="'Courier New',monospace" font-size="7" fill="#2a3347" text-anchor="end">2U</text>
+      <text x="86" y="528" font-family="'Courier New',monospace" font-size="7" fill="#2a3347" text-anchor="end">3U</text>
+      <text x="86" y="554" font-family="'Courier New',monospace" font-size="7" fill="#2a3347" text-anchor="end">4U</text>
+      <text x="86" y="580" font-family="'Courier New',monospace" font-size="7" fill="#2a3347" text-anchor="end">5U</text>
+      <text x="86" y="606" font-family="'Courier New',monospace" font-size="7" fill="#2a3347" text-anchor="end">6U</text>
+      <text x="86" y="632" font-family="'Courier New',monospace" font-size="7" fill="#2a3347" text-anchor="end">7U</text>
+      <text x="86" y="658" font-family="'Courier New',monospace" font-size="7" fill="#2a3347" text-anchor="end">8U</text>
+
+      <!-- Rack title plate -->
+      <rect x="200" y="428" width="200" height="16" rx="3" fill="#1a2232" stroke="#2e3a52" stroke-width="0.5"/>
+      <text x="300" y="439" font-family="'Courier New',monospace" font-size="7.5" fill="#e6b450" text-anchor="middle">KAGISO.ME · HOME RACK · JHB</text>
+
+      <!-- ════════════════════════════════════════════════
+           LED STATUS LEGEND (bottom of rack face)
+      ════════════════════════════════════════════════ -->
+    </svg>
+
+    <!-- Tooltip -->
+    <div class="hw-tooltip" id="tooltip">
+      <div class="hw-tooltip-name" id="tt-name"></div>
+      <div class="hw-tooltip-role" id="tt-role"></div>
+      <div class="hw-tooltip-specs" id="tt-specs"></div>
+    </div>
+
+    <!-- Legend -->
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#a6e3a1;box-shadow:0 0 6px #a6e3a1"></div>k3s LAN</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#74c7ec;box-shadow:0 0 6px #74c7ec"></div>Management</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#e6b450;box-shadow:0 0 6px #e6b450"></div>Storage / Power</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#cba6f7;box-shadow:0 0 6px #cba6f7"></div>Data packets</div>
+    </div>
+
+  </div><!-- /right -->
+</div><!-- /page -->
+
+<style>
+  .led-blink {
+    animation: led-blink 1.8s ease-in-out infinite;
+  }
+  @keyframes led-blink {
+    0%,100% { opacity: 0.9; }
+    45%     { opacity: 0.3; }
+    55%     { opacity: 0.3; }
+  }
+  .hw-target { cursor: pointer; transition: filter 0.2s; }
+  .hw-target:hover { filter: brightness(1.35); }
+</style>
+
+<script>
+// Hardware data
+const HW = {
+  tywin:  { name: 'Tywin',               role: 'k3s Control-plane ★',        specs: 'Lenovo ThinkCentre M93p\nIntel i5-4570T · 16GB DDR3 · 256GB SSD\nTraefik · Authentik · Flux · cert-manager · MetalLB' },
+  jaime:  { name: 'Jaime',               role: 'k3s Worker',                  specs: 'Lenovo ThinkCentre M93p\nIntel i5-4570T · 16GB DDR3 · 256GB SSD\nPrometheus · Grafana · Loki · Alertmanager' },
+  tyrion: { name: 'Tyrion',              role: 'k3s Worker',                  specs: 'Lenovo ThinkCentre M93p\nIntel i5-4570T · 16GB DDR3 · 256GB SSD\nCrowdSec · SOPS · Velero · NFS storage' },
+  bronn:  { name: 'Bronn',               role: 'Docker Host · Local AI',      specs: 'Intel NUC · i3-7100U · 32GB DDR4\nOllama (LLMs) · Open WebUI · Docker Compose' },
+  varys:  { name: 'Varys',               role: 'Control Node · CI Runner',    specs: 'Intel NUC · i3-5010U · 16GB DDR4\nGitHub Actions runner · SSH bastion · age keys' },
+  ned:    { name: 'Ned',                 role: 'NAS · TrueNAS SCALE',         specs: 'HP MicroServer Gen8\nXeon E3-1260L · 16GB ECC · LSI 9207-8i HBA\n1×8TB + 2×4TB SAS mirror + 2×480GB SSD' },
+  bran:   { name: 'Bran',               role: 'RPi 3B+ · DNS',               specs: 'BCM2837B0 Cortex-A53 @ 1.4GHz\n1GB LPDDR2 · 32GB microSD\nUnbound · Recursive DNS · DNSSEC' },
+  ups:    { name: 'APC Back-UPS Pro 650', role: 'UPS — Power Protection',     specs: '390W · ~2h rated / ~4min current\nUSB monitoring via NUT\nAlerts via Prometheus Alertmanager' },
+};
+
+const tooltip = document.getElementById('tooltip');
+const ttName  = document.getElementById('tt-name');
+const ttRole  = document.getElementById('tt-role');
+const ttSpecs = document.getElementById('tt-specs');
+const rackWrap = document.getElementById('rack-wrap');
+
+document.querySelectorAll('.hw-target').forEach(el => {
+  el.addEventListener('mouseenter', (e) => {
+    const id = el.getAttribute('data-id');
+    const hw = HW[id];
+    if (!hw) return;
+    ttName.textContent  = hw.name;
+    ttRole.textContent  = hw.role;
+    ttSpecs.textContent = hw.specs;
+    tooltip.classList.add('visible');
+  });
+
+  el.addEventListener('mousemove', (e) => {
+    const rect = rackWrap.getBoundingClientRect();
+    let x = e.clientX - rect.left + 16;
+    let y = e.clientY - rect.top  - 40;
+    // Keep tooltip in bounds
+    if (x + 230 > rect.width)  x = e.clientX - rect.left - 240;
+    if (y < 0) y = 10;
+    tooltip.style.left = x + 'px';
+    tooltip.style.top  = y + 'px';
+  });
+
+  el.addEventListener('mouseleave', () => {
+    tooltip.classList.remove('visible');
+  });
+});
+</script>
+
+</body>
+</html>

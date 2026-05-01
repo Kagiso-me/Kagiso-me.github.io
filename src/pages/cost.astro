@@ -16,7 +16,6 @@ const HARDWARE = [
   { item: 'Raspberry Pi 3B+ (Bran)',    cost: 800   },
   { item: 'Networking — switch, cables', cost: 600   },
 ];
-const HARDWARE_TOTAL = HARDWARE.reduce((s, h) => s + h.cost, 0);
 
 // Ongoing monthly costs (ZAR) — infrastructure only, what actually leaves the account
 const ONGOING = [
@@ -146,7 +145,7 @@ const CLOUD_SERVICES = [
 const FUTURE_CUTS = [
   {
     name:    'Adobe Lightroom',
-    cost:    219,
+    cost:    263,
     via:     'Darktable + Immich',
     note:    'Open-source RAW editing + self-hosted photo management. Feature parity for 90% of workflows.',
     emoji:   '📷',

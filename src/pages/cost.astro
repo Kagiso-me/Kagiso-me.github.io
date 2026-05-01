@@ -5,7 +5,8 @@ import Layout from '../layouts/Layout.astro';
 // When the cluster went live and cloud subscriptions were cancelled
 const SELF_HOSTED_SINCE = '2025-12-02';
 
-// Hardware — amortised over 36 months
+// Hardware — already owned, no monthly payments made
+// Shown for comparison context only — NOT included in actual monthly outgoings
 const HARDWARE = [
   { item: '3× Lenovo ThinkCentre M93p', cost: 4200  },
   { item: '2× Intel NUC (Bronn + Varys)', cost: 2400 },
@@ -16,14 +17,16 @@ const HARDWARE = [
   { item: 'Networking — switch, cables', cost: 600   },
 ];
 const HARDWARE_TOTAL   = HARDWARE.reduce((s, h) => s + h.cost, 0);
-const HARDWARE_MONTHLY = Math.round(HARDWARE_TOTAL / 36);
+const HARDWARE_MONTHLY = Math.round(HARDWARE_TOTAL / 36); // for display only
 
-// Ongoing monthly costs (ZAR)
+// Ongoing monthly costs (ZAR) — what actually leaves the account
 const ONGOING = [
-  { item: 'Backblaze B2 (offsite backup)', cost: 85 },
-  { item: 'Domain — kagiso.me',            cost: 15 },
-  { item: 'Cloudflare (free tier)',         cost: 0  },
-  { item: 'GitHub Actions (free tier)',     cost: 0  },
+  { item: 'Backblaze B2 (offsite backup)', cost: 85    },
+  { item: 'Domain — kagiso.me',            cost: 15    },
+  { item: 'Showmax',                        cost: 99    },
+  { item: 'Apple Music',                    cost: 69.99 },
+  { item: 'Cloudflare (free tier)',         cost: 0     },
+  { item: 'GitHub Actions (free tier)',     cost: 0     },
 ];
 const ONGOING_TOTAL = ONGOING.reduce((s, o) => s + o.cost, 0);
 
@@ -34,7 +37,8 @@ const ELECTRICITY_KWH  = 147;
 const ELECTRICITY_RATE = 3.50; // R/kWh — Johannesburg municipal tariff
 const ELECTRICITY_COST = Math.round(ELECTRICITY_KWH * ELECTRICITY_RATE);
 
-const MY_MONTHLY_TOTAL = HARDWARE_MONTHLY + ONGOING_TOTAL + ELECTRICITY_COST;
+// Actual cash outgoings — hardware excluded (already owned, no payments)
+const MY_MONTHLY_TOTAL = ONGOING_TOTAL + ELECTRICITY_COST;
 
 // ── Subscriptions actually cancelled ─────────────────────────────────────
 // These are real invoices that no longer arrive. Exact prices as billed.
@@ -94,30 +98,6 @@ const CLOUD_SERVICES = [
     selfCost:  0,
     note:     'Actually cancelled · exact price',
     actual:   true,
-  },
-  {
-    name:     'Grafana Cloud Pro',
-    replaces: 'Prometheus + Grafana + Loki',
-    cloudCost: 370,
-    selfCost:  0,
-    note:     'Grafana Cloud Pro ~$20/mo · equivalent metrics + logs retention',
-    actual:   false,
-  },
-  {
-    name:     'Auth0 / Okta',
-    replaces: 'Authentik',
-    cloudCost: 260,
-    selfCost:  0,
-    note:     'Auth0 B2C essential ~$14/mo for SSO + identity management',
-    actual:   false,
-  },
-  {
-    name:     'Backblaze Personal Backup',
-    replaces: 'Velero + B2 offsite',
-    cloudCost: 130,
-    selfCost:  85, // B2 already in ONGOING
-    note:     'Consumer backup equivalent — B2 offsite already paid',
-    actual:   false,
   },
 ];
 
@@ -213,7 +193,7 @@ const TICKER_RATE_PER_SEC = ACTUAL_SAVINGS / (30 * 24 * 3600); // R per second s
       <div class="privacy-body">
         <h2 class="privacy-title">The Real Reason</h2>
         <p class="privacy-text">
-          Saving R224 a month is nice. It's not why I spent weeks building this.
+          Saving R{CANCELLED_TOTAL.toFixed(0)} a month is nice. It's not why I spent weeks building this.
         </p>
         <p class="privacy-text">
           Every photo I took was living on Apple's servers. Every document I wrote
@@ -286,11 +266,11 @@ const TICKER_RATE_PER_SEC = ACTUAL_SAVINGS / (30 * 24 * 3600); // R per second s
           <div class="receipt-dashes" style="color:var(--color-muted)">─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─</div>
         </div>
         <div class="receipt-body">
-          <div class="receipt-section-label mono">Hardware (amortised over 3 years)</div>
+          <div class="receipt-section-label mono">Hardware (owned — no monthly payments)</div>
           {HARDWARE.map(h => (
             <div class="receipt-line">
               <span class="receipt-item">{h.item}</span>
-              <span class="receipt-price" style="color:var(--color-subtle)">R{Math.round(h.cost/36)}/mo</span>
+              <span class="receipt-price" style="color:var(--color-green)">paid off</span>
             </div>
           ))}
           <div class="receipt-section-label mono" style="margin-top:0.75rem">Electricity</div>
@@ -327,7 +307,7 @@ const TICKER_RATE_PER_SEC = ACTUAL_SAVINGS / (30 * 24 * 3600); // R per second s
         <span class="savings-callout-label mono">/month vs cloud equivalent</span>
       </div>
       <p class="savings-callout-note mono">
-        R{(MONTHLY_SAVINGS * 12).toLocaleString()} per year. The hardware paid for itself in under {Math.ceil(HARDWARE_TOTAL / (MONTHLY_SAVINGS * 12))} year{Math.ceil(HARDWARE_TOTAL / (MONTHLY_SAVINGS * 12)) !== 1 ? 's' : ''}.
+        R{(MONTHLY_SAVINGS * 12).toLocaleString()} per year. Hardware is already paid off — every month is pure savings.
       </p>
     </div>
   </section>
@@ -390,7 +370,7 @@ const TICKER_RATE_PER_SEC = ACTUAL_SAVINGS / (30 * 24 * 3600); // R per second s
           <p class="caveat-desc">
             Cancelled subscription prices are exact. Cloud equivalents converted at ~R18.50/USD.
             Electricity at R3.50/kWh (Johannesburg municipal). Power draw from UPS load readings.
-            Hardware amortised over 36 months.
+            Hardware is already owned — no monthly payments, shown for context only.
           </p>
         </div>
       </div>

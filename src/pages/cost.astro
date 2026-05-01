@@ -67,6 +67,22 @@ const CANCELLED = [
     note:     'Streaming → self-hosted Plex library. Own the content, own the server.',
     emoji:    '📺',
   },
+  {
+    name:     'Showmax',
+    replaces: 'Plex',
+    vendor:   'Showmax',
+    cost:     99,
+    note:     'Streaming → self-hosted Plex library.',
+    emoji:    '📺',
+  },
+  {
+    name:     'Apple Music',
+    replaces: 'Navidrome',
+    vendor:   'Apple',
+    cost:     69.99,
+    note:     'Music streaming → Navidrome self-hosted music server.',
+    emoji:    '🎵',
+  },
 ];
 
 const CANCELLED_TOTAL = CANCELLED.reduce((s, c) => s + c.cost, 0);
@@ -106,19 +122,19 @@ const CLOUD_SERVICES = [
     name:     'Showmax',
     replaces: 'Plex',
     cloudCost: 99,
-    selfCost:  99,
-    note:     'Still paying · Plex library can replace this',
-    actual:   false,
-    paying:   true,
+    selfCost:  0,
+    note:     'Actually cancelled · exact price',
+    actual:   true,
+    paying:   false,
   },
   {
     name:     'Apple Music',
     replaces: 'Navidrome',
     cloudCost: 69.99,
-    selfCost:  69.99,
-    note:     'Still paying · Navidrome self-hosted music server is the alternative',
-    actual:   false,
-    paying:   true,
+    selfCost:  0,
+    note:     'Actually cancelled · exact price',
+    actual:   true,
+    paying:   false,
   },
 ];
 

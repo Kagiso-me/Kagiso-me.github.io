@@ -26,76 +26,8 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </div>
 
-    <!-- ── Known Issues ── -->
-    <section class="section fade-up" id="known-issues-section" style="animation-delay:0.01s">
-      <h2 class="section-label">Known Issues</h2>
-      <div id="known-issues-list"></div>
-    </section>
-
-    <!-- ── Security ── -->
-    <section class="section fade-up" style="animation-delay:0.02s">
-      <h2 class="section-label">Security</h2>
-      <div id="cve-banner">
-        <div class="skeleton" style="height:56px; border-radius:10px"></div>
-      </div>
-    </section>
-
-    <!-- ── Network ── -->
-    <section class="section fade-up" style="animation-delay:0.05s">
-      <h2 class="section-label">Network</h2>
-      <div class="cards-grid" id="network-cards" style="margin-bottom:1.5rem">
-        <div class="card skeleton" style="height:100px"></div>
-        <div class="card skeleton" style="height:100px"></div>
-        <div class="card skeleton" style="height:100px"></div>
-      </div>
-      <div id="offenders-section">
-        <div class="skeleton" style="height:180px;border-radius:12px"></div>
-      </div>
-    </section>
-
-    <!-- ── Infrastructure ── -->
-    <section class="section fade-up" style="animation-delay:0.1s">
-      <h2 class="section-label">Infrastructure</h2>
-      <div id="infra-deploy" style="margin-bottom:1rem">
-        <div class="skeleton" style="height:56px;border-radius:10px"></div>
-      </div>
-      <div class="cards-grid" id="infra-cards">
-        <div class="card skeleton" style="height:120px"></div>
-        <div class="card skeleton" style="height:120px"></div>
-        <div class="card skeleton" style="height:120px"></div>
-        <div class="card skeleton" style="height:120px"></div>
-      </div>
-    </section>
-
-    <!-- ── Storage ── -->
-    <section class="section fade-up" style="animation-delay:0.13s">
-      <h2 class="section-label">Storage</h2>
-      <div id="storage-grid">
-        <div class="skeleton" style="height:120px;border-radius:12px"></div>
-      </div>
-    </section>
-
-    <!-- ── At a Glance ── -->
-    <section class="section fade-up" style="animation-delay:0.15s">
-      <h2 class="section-label">At a Glance</h2>
-      <div class="cards-grid" id="glance-cards">
-        <div class="card skeleton" style="height:100px"></div>
-        <div class="card skeleton" style="height:100px"></div>
-      </div>
-    </section>
-
-    <!-- ── Nodes ── -->
-    <section class="section fade-up" style="animation-delay:0.18s">
-      <h2 class="section-label">Nodes</h2>
-      <div class="nodes-grid" id="nodes-grid">
-        <div class="skeleton" style="height:160px; border-radius:12px"></div>
-        <div class="skeleton" style="height:160px; border-radius:12px"></div>
-        <div class="skeleton" style="height:160px; border-radius:12px"></div>
-      </div>
-    </section>
-
     <!-- ── Network Topology Map ── -->
-    <section class="section fade-up" style="animation-delay:0.18s">
+    <section class="section fade-up" style="animation-delay:0.05s">
       <h2 class="section-label">Network Topology</h2>
 
       <div class="netmap-wrap" id="netmap-wrap">
@@ -271,6 +203,74 @@ import Layout from '../layouts/Layout.astro';
           <div class="nm-tt-divider"></div>
           <div class="nm-tt-services" id="nm-tt-services"></div>
         </div>
+      </div>
+    </section>
+
+    <!-- ── Known Issues ── -->
+    <section class="section fade-up" id="known-issues-section" style="animation-delay:0.01s">
+      <h2 class="section-label">Known Issues</h2>
+      <div id="known-issues-list"></div>
+    </section>
+
+    <!-- ── Security ── -->
+    <section class="section fade-up" style="animation-delay:0.02s">
+      <h2 class="section-label">Security</h2>
+      <div id="cve-banner">
+        <div class="skeleton" style="height:56px; border-radius:10px"></div>
+      </div>
+    </section>
+
+    <!-- ── Network ── -->
+    <section class="section fade-up" style="animation-delay:0.05s">
+      <h2 class="section-label">Network</h2>
+      <div class="cards-grid" id="network-cards" style="margin-bottom:1.5rem">
+        <div class="card skeleton" style="height:100px"></div>
+        <div class="card skeleton" style="height:100px"></div>
+        <div class="card skeleton" style="height:100px"></div>
+      </div>
+      <div id="offenders-section">
+        <div class="skeleton" style="height:180px;border-radius:12px"></div>
+      </div>
+    </section>
+
+    <!-- ── Infrastructure ── -->
+    <section class="section fade-up" style="animation-delay:0.1s">
+      <h2 class="section-label">Infrastructure</h2>
+      <div id="infra-deploy" style="margin-bottom:1rem">
+        <div class="skeleton" style="height:56px;border-radius:10px"></div>
+      </div>
+      <div class="cards-grid" id="infra-cards">
+        <div class="card skeleton" style="height:120px"></div>
+        <div class="card skeleton" style="height:120px"></div>
+        <div class="card skeleton" style="height:120px"></div>
+        <div class="card skeleton" style="height:120px"></div>
+      </div>
+    </section>
+
+    <!-- ── Storage ── -->
+    <section class="section fade-up" style="animation-delay:0.13s">
+      <h2 class="section-label">Storage</h2>
+      <div id="storage-grid">
+        <div class="skeleton" style="height:120px;border-radius:12px"></div>
+      </div>
+    </section>
+
+    <!-- ── At a Glance ── -->
+    <section class="section fade-up" style="animation-delay:0.15s">
+      <h2 class="section-label">At a Glance</h2>
+      <div class="cards-grid" id="glance-cards">
+        <div class="card skeleton" style="height:100px"></div>
+        <div class="card skeleton" style="height:100px"></div>
+      </div>
+    </section>
+
+    <!-- ── Nodes ── -->
+    <section class="section fade-up" style="animation-delay:0.18s">
+      <h2 class="section-label">Nodes</h2>
+      <div class="nodes-grid" id="nodes-grid">
+        <div class="skeleton" style="height:160px; border-radius:12px"></div>
+        <div class="skeleton" style="height:160px; border-radius:12px"></div>
+        <div class="skeleton" style="height:160px; border-radius:12px"></div>
       </div>
     </section>
 

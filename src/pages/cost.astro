@@ -19,21 +19,21 @@ const HARDWARE = [
 const HARDWARE_TOTAL   = HARDWARE.reduce((s, h) => s + h.cost, 0);
 const HARDWARE_MONTHLY = Math.round(HARDWARE_TOTAL / 36); // for display only
 
-// Ongoing monthly costs (ZAR) — what actually leaves the account
+// Ongoing monthly costs (ZAR) — infrastructure only, what actually leaves the account
 const ONGOING = [
-  { item: 'Backblaze B2 (offsite backup)', cost: 85    },
-  { item: 'Domain — kagiso.me',            cost: 15    },
-  { item: 'Showmax',                        cost: 99    },
-  { item: 'Apple Music',                    cost: 69.99 },
-  { item: 'Cloudflare (free tier)',         cost: 0     },
-  { item: 'GitHub Actions (free tier)',     cost: 0     },
+  { item: 'Backblaze B2 (offsite backup)', cost: 85 },
+  { item: 'Domain — kagiso.me',            cost: 15 },
+  { item: 'Cloudflare (free tier)',         cost: 0  },
+  { item: 'GitHub Actions (free tier)',     cost: 0  },
 ];
 const ONGOING_TOTAL = ONGOING.reduce((s, o) => s + o.cost, 0);
 
-// Electricity — derived from UPS load readings + device power draw
-// 5 mini PCs ~25W avg + NAS ~60W + RPi ~5W + networking ~15W ≈ 205W continuous
-// 205W × 24h × 30d = 147 kWh/month @ R3.50/kWh
-const ELECTRICITY_KWH  = 147;
+// Electricity — measured from actual device configuration
+// Always-on: 1× NUC ~15W, 3× ThinkCentre ~20W ea (60W), HP MicroServer ~30W (SAS spun down),
+//            RPi ~3W, networking ~10W, UPS overhead ~5W = 123W base
+// Docker NUC: 15W × (2/7 days) ≈ 4W average
+// Total ≈ 127W continuous × 24h × 30d ≈ 91 kWh/month
+const ELECTRICITY_KWH  = 91;
 const ELECTRICITY_RATE = 3.50; // R/kWh — Johannesburg municipal tariff
 const ELECTRICITY_COST = Math.round(ELECTRICITY_KWH * ELECTRICITY_RATE);
 
@@ -82,6 +82,7 @@ const CLOUD_SERVICES = [
     selfCost:  0,
     note:     'Actually cancelled · exact price',
     actual:   true,
+    paying:   false,
   },
   {
     name:     'Microsoft 365 Basic',
@@ -90,6 +91,7 @@ const CLOUD_SERVICES = [
     selfCost:  0,
     note:     'Actually cancelled · exact price',
     actual:   true,
+    paying:   false,
   },
   {
     name:     'Apple TV+',
@@ -98,8 +100,53 @@ const CLOUD_SERVICES = [
     selfCost:  0,
     note:     'Actually cancelled · exact price',
     actual:   true,
+    paying:   false,
+  },
+  {
+    name:     'Showmax',
+    replaces: 'Plex',
+    cloudCost: 99,
+    selfCost:  99,
+    note:     'Still paying · Plex library can replace this',
+    actual:   false,
+    paying:   true,
+  },
+  {
+    name:     'Apple Music',
+    replaces: 'Navidrome',
+    cloudCost: 69.99,
+    selfCost:  69.99,
+    note:     'Still paying · Navidrome self-hosted music server is the alternative',
+    actual:   false,
+    paying:   true,
   },
 ];
+
+// ── Subscriptions not yet cancelled but on the radar ─────────────────────
+const FUTURE_CUTS = [
+  {
+    name:    'Adobe Lightroom',
+    cost:    219,
+    via:     'Darktable + Immich',
+    note:    'Open-source RAW editing + self-hosted photo management. Feature parity for 90% of workflows.',
+    emoji:   '📷',
+  },
+  {
+    name:    'YouTube Premium',
+    cost:    89,
+    via:     'Invidious + SponsorBlock',
+    note:    'Self-hosted YouTube frontend with no ads, no tracking. Downloads via yt-dlp to Plex.',
+    emoji:   '▶',
+  },
+  {
+    name:    'ChatGPT',
+    cost:    339,
+    via:     'Ollama (local LLM)',
+    note:    'Ollama on Bronn already running. Upgrade to 32B model after RAM expansion.',
+    emoji:   '🤖',
+  },
+];
+const FUTURE_CUTS_TOTAL = FUTURE_CUTS.reduce((s, f) => s + f.cost, 0);
 
 const CLOUD_TOTAL        = CLOUD_SERVICES.reduce((s, c) => s + c.cloudCost, 0);
 const SELF_CLOUD_EQUIV   = CLOUD_SERVICES.reduce((s, c) => s + c.selfCost, 0) + MY_MONTHLY_TOTAL;
@@ -231,9 +278,10 @@ const TICKER_RATE_PER_SEC = ACTUAL_SAVINGS / (30 * 24 * 3600); // R per second s
         </div>
         <div class="receipt-body">
           {CLOUD_SERVICES.map(s => (
-            <div class={`receipt-line${s.actual ? ' receipt-line-actual' : ''}`}>
+            <div class={`receipt-line${s.actual ? ' receipt-line-actual' : s.paying ? ' receipt-line-paying' : ''}`}>
               <span class="receipt-item">
-                {s.actual && <span class="receipt-actual-dot" title="Actually cancelled">●</span>}
+                {s.actual && <span class="receipt-actual-dot" title="Cancelled">●</span>}
+                {s.paying && <span class="receipt-paying-dot" title="Still paying">◐</span>}
                 {s.name}
               </span>
               <span class="receipt-price cloud-price">R{s.cloudCost % 1 === 0 ? s.cloudCost : s.cloudCost.toFixed(2)}</span>
@@ -246,7 +294,7 @@ const TICKER_RATE_PER_SEC = ACTUAL_SAVINGS / (30 * 24 * 3600); // R per second s
           <span class="receipt-total-price cloud-total">R{CLOUD_TOTAL.toFixed(0)}</span>
         </div>
         <div class="receipt-dashes">- - - - - - - - - - - - - - - - -</div>
-        <div class="receipt-footer mono">● = actually cancelled · rest = avoided</div>
+        <div class="receipt-footer mono">● = cancelled · ◐ = still paying · rest = avoided</div>
         <div class="receipt-footer mono" style="margin-top:0.25rem;color:var(--color-crit)">and they own your data</div>
       </div>
 
@@ -322,23 +370,59 @@ const TICKER_RATE_PER_SEC = ACTUAL_SAVINGS / (30 * 24 * 3600); // R per second s
         const savings = s.cloudCost - s.selfCost;
         const pct = Math.round((savings / CLOUD_TOTAL) * 100);
         return (
-          <div class={`breakdown-row${s.actual ? ' breakdown-actual' : ''}`}>
+          <div class={`breakdown-row${s.actual ? ' breakdown-actual' : s.paying ? ' breakdown-paying' : ''}`}>
             <div class="breakdown-names">
               {s.actual && <span class="breakdown-actual-badge mono">cancelled</span>}
+              {s.paying && <span class="breakdown-paying-badge mono">still paying</span>}
               <span class="breakdown-cloud-name">{s.name}</span>
               <span class="breakdown-arrow mono">→</span>
               <span class="breakdown-self-name">{s.replaces}</span>
             </div>
             <div class="breakdown-bar-wrap">
               <div class="breakdown-bar">
-                <div class="breakdown-bar-fill" style={`width:${pct}%`}></div>
+                <div class={`breakdown-bar-fill${s.paying ? ' breakdown-bar-paying' : ''}`} style={`width:${pct}%`}></div>
               </div>
-              <span class="breakdown-pct mono">−R{savings % 1 === 0 ? savings : savings.toFixed(2)}/mo</span>
+              <span class="breakdown-pct mono" style={s.paying ? 'color:var(--color-gold)' : ''}>
+                {s.paying ? 'not yet' : `−R${savings % 1 === 0 ? savings : savings.toFixed(2)}/mo`}
+              </span>
             </div>
             <span class="breakdown-note mono">{s.note}</span>
           </div>
         );
       })}
+    </div>
+  </section>
+
+  <!-- ── Next to cut ── -->
+  <section class="section fade-up" style="animation-delay:0.19s">
+    <div class="section-header">
+      <h2 class="section-title">Next to Cut</h2>
+      <span class="mono" style="color:var(--color-subtle);font-size:0.72rem">subscriptions on the chopping block · R{FUTURE_CUTS_TOTAL}/mo combined</span>
+    </div>
+    <div class="future-grid">
+      {FUTURE_CUTS.map(f => (
+        <div class="future-card">
+          <div class="future-top">
+            <span class="future-emoji">{f.emoji}</span>
+            <div class="future-meta">
+              <span class="future-name">{f.name}</span>
+              <span class="future-cost mono">R{f.cost}/mo</span>
+            </div>
+          </div>
+          <div class="future-arrow">
+            <span class="future-arrow-line"></span>
+            <span class="future-arrow-label mono">replace with</span>
+            <span class="future-arrow-line"></span>
+          </div>
+          <div class="future-via mono">{f.via}</div>
+          <p class="future-note mono">{f.note}</p>
+        </div>
+      ))}
+    </div>
+    <div class="future-total-row">
+      <span class="mono" style="color:var(--color-subtle)">Potential additional savings</span>
+      <span class="future-total-amount">R{FUTURE_CUTS_TOTAL}<span class="mono" style="font-size:1rem;color:var(--color-subtle)">/mo</span></span>
+      <span class="mono" style="color:var(--color-subtle)">= R{(FUTURE_CUTS_TOTAL * 12).toLocaleString()}/year</span>
     </div>
   </section>
 
@@ -1040,6 +1124,156 @@ const TICKER_RATE_PER_SEC = ACTUAL_SAVINGS / (30 * 24 * 3600); // R per second s
     color: var(--color-subtle);
     line-height: 1.7;
     margin: 0;
+  }
+
+  /* ── Still-paying receipt lines ── */
+  .receipt-line-paying {
+    background: color-mix(in srgb, var(--color-gold) 5%, transparent);
+    margin: 0 -0.25rem;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+    border-radius: 3px;
+  }
+
+  .receipt-paying-dot {
+    color: var(--color-gold);
+    font-size: 0.5rem;
+    margin-right: 0.3rem;
+    vertical-align: middle;
+  }
+
+  /* ── Still-paying breakdown rows ── */
+  .breakdown-paying {
+    background: color-mix(in srgb, var(--color-gold) 3%, transparent);
+    border-radius: 8px;
+    margin: 0 -0.5rem;
+    padding: 0 0.5rem;
+  }
+
+  .breakdown-paying-badge {
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+    background: color-mix(in srgb, var(--color-gold) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-gold) 30%, transparent);
+    border-radius: 4px;
+    padding: 0.1rem 0.4rem;
+    flex-shrink: 0;
+  }
+
+  .breakdown-bar-paying {
+    background: linear-gradient(90deg, var(--color-gold), color-mix(in srgb, var(--color-gold) 40%, var(--color-muted)));
+  }
+
+  /* ── Next to Cut section ── */
+  .future-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .future-card {
+    background: color-mix(in srgb, var(--color-gold) 3%, var(--color-surface));
+    border: 1px solid color-mix(in srgb, var(--color-gold) 20%, var(--color-muted));
+    border-radius: 14px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .future-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .future-emoji {
+    font-size: 1.6rem;
+    line-height: 1;
+    flex-shrink: 0;
+    opacity: 0.75;
+  }
+
+  .future-meta {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .future-name {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-heading);
+    letter-spacing: -0.01em;
+  }
+
+  .future-cost {
+    font-size: 0.75rem;
+    color: var(--color-gold);
+    font-weight: 600;
+  }
+
+  .future-arrow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .future-arrow-line {
+    flex: 1;
+    height: 1px;
+    background: color-mix(in srgb, var(--color-gold) 30%, var(--color-muted));
+  }
+
+  .future-arrow-label {
+    font-size: 0.6rem;
+    color: var(--color-gold);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+  }
+
+  .future-via {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-gold);
+    letter-spacing: 0.02em;
+  }
+
+  .future-note {
+    font-size: 0.72rem;
+    color: var(--color-subtle);
+    line-height: 1.5;
+    margin: 0;
+    border-top: 1px solid color-mix(in srgb, var(--color-muted) 40%, transparent);
+    padding-top: 0.5rem;
+  }
+
+  .future-total-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: color-mix(in srgb, var(--color-gold) 5%, var(--color-surface));
+    border: 1px solid color-mix(in srgb, var(--color-gold) 20%, var(--color-muted));
+    border-radius: 12px;
+    flex-wrap: wrap;
+  }
+
+  .future-total-amount {
+    font-family: var(--font-display);
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: var(--color-gold);
+    letter-spacing: -0.04em;
+    line-height: 1;
   }
 </style>
 

@@ -107,6 +107,80 @@ const recentPosts = (await getCollection('blog'))
     </div>
   </section>
 
+  <!-- ── Network Teaser ── -->
+  <section class="section fade-up topo-teaser-section" style="animation-delay: 0.22s">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2 class="section-title">Live Network</h2>
+        <a href="/status#netmap" class="mono link-subtle">Full topology →</a>
+      </div>
+      <a href="/status" class="topo-teaser" aria-label="View live network topology">
+        <div class="topo-teaser-inner" id="topo-teaser-inner">
+          <!-- Mirrored mini-map: rendered by JS from live.json node states -->
+          <svg class="topo-mini-svg" id="topo-mini-svg" aria-hidden="true">
+            <defs>
+              <pattern id="tt-grid" width="24" height="24" patternUnits="userSpaceOnUse">
+                <path d="M 24 0 L 0 0 0 24" fill="none" stroke="rgba(203,166,247,0.05)" stroke-width="1"/>
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#tt-grid)"/>
+            <g id="tt-lines"></g>
+            <g id="tt-packets"></g>
+          </svg>
+          <!-- Static node glyphs — JS colours them from live data -->
+          <div class="tt-nodes">
+            <div class="tt-node tt-internet" id="tt-internet">
+              <div class="tt-node-dot" id="tt-dot-internet"></div>
+              <span>WAN</span>
+            </div>
+            <div class="tt-arrow">↓</div>
+            <div class="tt-node tt-router" id="tt-router">
+              <div class="tt-node-dot" id="tt-dot-mikrotik"></div>
+              <span>MikroTik</span>
+            </div>
+            <div class="tt-arrow">↓</div>
+            <div class="tt-cluster">
+              <div class="tt-cluster-label">k3s cluster</div>
+              <div class="tt-cluster-nodes">
+                <div class="tt-node tt-k3s" id="tt-tywin">
+                  <div class="tt-node-dot" id="tt-dot-tywin"></div>
+                  <span>Tywin</span>
+                </div>
+                <div class="tt-node tt-k3s" id="tt-jaime">
+                  <div class="tt-node-dot" id="tt-dot-jaime"></div>
+                  <span>Jaime</span>
+                </div>
+                <div class="tt-node tt-k3s" id="tt-tyrion">
+                  <div class="tt-node-dot" id="tt-dot-tyrion"></div>
+                  <span>Tyrion</span>
+                </div>
+              </div>
+            </div>
+            <div class="tt-edge-nodes">
+              <div class="tt-node tt-edge" id="tt-bronn">
+                <div class="tt-node-dot" id="tt-dot-bronn"></div>
+                <span>Bronn</span>
+              </div>
+              <div class="tt-node tt-edge" id="tt-varys">
+                <div class="tt-node-dot" id="tt-dot-varys"></div>
+                <span>Varys</span>
+              </div>
+              <div class="tt-node tt-edge" id="tt-ned">
+                <div class="tt-node-dot" id="tt-dot-ned"></div>
+                <span>Ned</span>
+              </div>
+            </div>
+          </div>
+          <div class="topo-teaser-cta">
+            <span class="topo-cta-text">Explore the live network</span>
+            <span class="topo-cta-arrow">→</span>
+          </div>
+          <div class="topo-teaser-fade"></div>
+        </div>
+      </a>
+    </div>
+  </section>
+
   <!-- ── Stack ── -->
   <section class="section fade-up" style="animation-delay: 0.25s">
     <div class="section-inner">
@@ -1422,6 +1496,138 @@ const recentPosts = (await getCollection('blog'))
     color: var(--color-gold);
     margin-top: 0.25rem;
   }
+
+  /* ── Network topology teaser ── */
+  .topo-teaser {
+    display: block;
+    text-decoration: none;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--color-muted);
+    background: var(--color-mantle);
+    position: relative;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .topo-teaser:hover {
+    border-color: color-mix(in srgb, var(--color-gold) 40%, transparent);
+    box-shadow: 0 0 24px color-mix(in srgb, var(--color-gold) 12%, transparent);
+  }
+  .topo-teaser-inner {
+    position: relative;
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .topo-mini-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .tt-nodes {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    pointer-events: none;
+  }
+  .tt-node {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: color-mix(in srgb, var(--color-base) 80%, transparent);
+    border: 1px solid var(--color-muted);
+    border-radius: 8px;
+    padding: 0.35rem 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--color-subtle);
+    backdrop-filter: blur(4px);
+    transition: border-color 0.3s;
+  }
+  .tt-node-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--color-ok);
+    box-shadow: 0 0 6px var(--color-ok);
+    flex-shrink: 0;
+    animation: tt-pulse 2.2s ease-in-out infinite;
+  }
+  .tt-node-dot.warn { background: var(--color-warn); box-shadow: 0 0 6px var(--color-warn); animation: none; }
+  .tt-node-dot.crit { background: var(--color-crit); box-shadow: 0 0 6px var(--color-crit); animation: none; }
+  .tt-node-dot.off  { background: var(--color-muted); box-shadow: none; animation: none; }
+  @keyframes tt-pulse {
+    0%, 100% { transform: scale(1);   opacity: 0.9; }
+    50%       { transform: scale(1.4); opacity: 1; }
+  }
+  .tt-arrow {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-muted);
+    line-height: 1;
+  }
+  .tt-cluster {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    border: 1px dashed color-mix(in srgb, var(--color-mauve) 30%, transparent);
+    border-radius: 10px;
+    padding: 0.5rem 0.75rem;
+  }
+  .tt-cluster-label {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--color-muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .tt-cluster-nodes, .tt-edge-nodes {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .topo-teaser-fade {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 72px;
+    background: linear-gradient(to bottom, transparent, var(--color-mantle));
+    z-index: 3;
+    pointer-events: none;
+  }
+  .topo-teaser-cta {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-gold);
+    pointer-events: none;
+  }
+  .topo-cta-arrow {
+    transition: transform 0.2s;
+  }
+  .topo-teaser:hover .topo-cta-arrow { transform: translateX(4px); }
+
+  @media (max-width: 640px) {
+    .topo-teaser-inner { height: 180px; }
+    .tt-cluster-nodes, .tt-edge-nodes { gap: 0.35rem; }
+  }
 </style>
 
 <script>
@@ -1537,6 +1743,56 @@ const recentPosts = (await getCollection('blog'))
       if (typeof (window as any).__termSetData === 'function') {
         (window as any).__termSetData(data);
       }
+
+      // ── Topology teaser node colouring ──────────────────────────────────────
+      const nodeMap: Record<string, string> = {
+        'tt-dot-internet': 'ok',
+        'tt-dot-mikrotik':  data.nodes?.find((n: any) => n.name?.toLowerCase().includes('tywin')) ? 'ok' : 'off',
+        'tt-dot-tywin':  data.nodes?.find((n: any) => n.name?.toLowerCase() === 'tywin')?.ready ? 'ok' : 'crit',
+        'tt-dot-jaime':  data.nodes?.find((n: any) => n.name?.toLowerCase() === 'jaime')?.ready ? 'ok' : 'crit',
+        'tt-dot-tyrion': data.nodes?.find((n: any) => n.name?.toLowerCase() === 'tyrion')?.ready ? 'ok' : 'crit',
+        'tt-dot-bronn':  'ok',
+        'tt-dot-varys':  'ok',
+        'tt-dot-ned':    data.storage ? 'ok' : 'off',
+      };
+      for (const [id, state] of Object.entries(nodeMap)) {
+        const dot = document.getElementById(id);
+        if (dot) { dot.className = `tt-node-dot ${state === 'ok' ? '' : state}`.trim(); }
+      }
+
+      // ── Topology mini packet animation ──────────────────────────────────────
+      (function animateTeaser() {
+        const svg = document.getElementById('tt-lines');
+        if (!svg) return;
+        // Draw a simple vertical beam from internet → router → cluster
+        const wrap = document.getElementById('topo-teaser-inner');
+        if (!wrap) return;
+        const W = wrap.offsetWidth, H = wrap.offsetHeight;
+        const cx = W / 2;
+        const beam = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        beam.setAttribute('x1', String(cx)); beam.setAttribute('y1', '0');
+        beam.setAttribute('x2', String(cx)); beam.setAttribute('y2', String(H * 0.55));
+        beam.setAttribute('stroke', 'rgba(166,227,161,0.12)');
+        beam.setAttribute('stroke-width', '1.5');
+        svg.appendChild(beam);
+
+        let packetY = 0;
+        const pktSvg = document.getElementById('tt-packets');
+        if (!pktSvg) return;
+        const pkt = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        pkt.setAttribute('r', '3');
+        pkt.setAttribute('fill', '#a6e3a1');
+        pkt.setAttribute('opacity', '0.8');
+        pktSvg.appendChild(pkt);
+        const maxY = H * 0.55;
+        function tick() {
+          packetY = (packetY + 1.2) % maxY;
+          pkt.setAttribute('cx', String(cx));
+          pkt.setAttribute('cy', String(packetY));
+          requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      })();
 
       // Hero stat strip — count-up animation
       function countUp(el: HTMLElement, target: string, duration = 650) {

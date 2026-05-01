@@ -1,6 +1,6 @@
 {
   "_comment": "App versions for CVE tracking via OSV.dev. Running app versions, not Helm chart versions. Update when pods are upgraded.",
-  "_updated": "2026-04-18",
+  "_updated": "2026-05-01",
   "components": [
     {
       "name": "k3s",
@@ -12,7 +12,7 @@
     {
       "name": "traefik",
       "display": "Traefik",
-      "version": "3.4.0",
+      "version": "3.6.13",
       "ecosystem": "Go",
       "package": "github.com/traefik/traefik/v3"
     },
@@ -33,21 +33,21 @@
     {
       "name": "flux-helm-controller",
       "display": "Flux helm-controller",
-      "version": "1.5.3",
+      "version": "1.5.4",
       "ecosystem": "Go",
       "package": "github.com/fluxcd/helm-controller"
     },
     {
       "name": "flux-kustomize-controller",
       "display": "Flux kustomize-controller",
-      "version": "1.8.3",
+      "version": "1.8.4",
       "ecosystem": "Go",
       "package": "github.com/fluxcd/kustomize-controller"
     },
     {
       "name": "flux-notification-controller",
       "display": "Flux notification-controller",
-      "version": "1.8.3",
+      "version": "1.8.4",
       "ecosystem": "Go",
       "package": "github.com/fluxcd/notification-controller"
     },
@@ -68,7 +68,7 @@
     {
       "name": "vaultwarden",
       "display": "Vaultwarden",
-      "version": "1.35.4",
+      "version": "1.35.8",
       "ecosystem": "crates.io",
       "package": "vaultwarden"
     },

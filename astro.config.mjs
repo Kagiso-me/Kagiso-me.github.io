@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://kagiso-me.github.io',
+  site: 'https://kagiso.me',
   integrations: [
     sitemap(),
   ],

@@ -1,0 +1,763 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="About"
+  description="Corporate exec by day. Self-taught engineer by night. Chief of Staff at a telco, running a k3s homelab in Johannesburg."
+>
+
+<!-- ════════════════════════════
+     PHASE 1 — TERMINAL
+════════════════════════════ -->
+<div id="terminal-phase">
+  <div class="term-window">
+    <div class="term-bar">
+      <div class="term-dot r"></div>
+      <div class="term-dot y"></div>
+      <div class="term-dot g"></div>
+      <div class="term-title">kagiso@homelab — zsh — 80×30</div>
+    </div>
+    <div class="term-body" id="term-body"></div>
+  </div>
+</div>
+
+<button id="skip-btn">skip intro ↓</button>
+
+<!-- ════════════════════════════
+     PHASE 2 — MANIFESTO
+════════════════════════════ -->
+<div id="manifesto-phase">
+
+  <!-- HERO -->
+  <section class="mf-hero">
+    <div class="mf-orb mf-orb-1"></div>
+    <div class="mf-orb mf-orb-2"></div>
+    <div class="mf-hero-inner">
+
+      <div class="mf-text-col">
+        <div class="mf-pre">whoami</div>
+        <h1 class="mf-h1">
+          Executive<br>
+          by day.<br>
+          <span class="line-gold">Engineer by choice.</span>
+        </h1>
+        <p class="mf-body">
+          I didn't learn to code to change careers.<br>
+          I learned because <strong>I refused to stay illiterate</strong>
+          in the language that runs the industry I help lead.<br><br>
+          <em>This cluster is proof it's working.</em>
+        </p>
+        <div class="mf-actions">
+          <a href="/decisions" class="btn-p">Architecture Decisions →</a>
+          <a href="/cost" class="btn-g">See the Cost</a>
+          <a href="/status" class="btn-g">Live Status</a>
+        </div>
+      </div>
+
+      <div class="mf-photo-col">
+        <div class="mf-photo-wrap">
+          <div class="mf-photo-frame">
+            <!--
+              TO ADD YOUR PHOTO:
+              Replace the div below with:
+              <img src="/img/kagiso.jpg" alt="Kagiso" />
+              and add your photo to /public/img/
+            -->
+            <div class="mf-photo-placeholder">
+              <div class="mf-photo-placeholder-icon">◈</div>
+              <span>photo coming soon</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="mf-divider"></div>
+
+  <!-- DUALITY -->
+  <section class="mf-section">
+    <div class="mf-section-label"><span>// </span>identity</div>
+    <h2 class="mf-section-title">One person. Two worlds.</h2>
+    <p class="mf-section-sub">
+      Most executives in a telco don't run Kubernetes clusters at home.
+      Most people running Kubernetes clusters aren't in the C-suite by morning.
+      I decided I wasn't going to pick a side.
+    </p>
+    <div class="dual-grid">
+      <div class="dual-card dc-exec">
+        <div class="dc-glow"></div>
+        <span class="dc-icon">◈</span>
+        <div class="dc-title">The Executive</div>
+        <div class="dc-sub">telco · monday → friday · 08:00–18:00</div>
+        <div class="dc-trait"><span class="dc-arr">→</span>Force multiplier to executive leadership</div>
+        <div class="dc-trait"><span class="dc-arr">→</span>Owns the agenda — strategy, cadence, decisions</div>
+        <div class="dc-trait"><span class="dc-arr">→</span>Bridges commercial and technical in an industry being rebuilt by software</div>
+        <div class="dc-trait"><span class="dc-arr">→</span>Makes other people's best thinking possible</div>
+        <div class="dc-trait"><span class="dc-arr">→</span>Manages complexity so others can move faster</div>
+      </div>
+      <div class="dual-card dc-eng">
+        <div class="dc-glow"></div>
+        <span class="dc-icon">⬡</span>
+        <div class="dc-title">The Engineer</div>
+        <div class="dc-sub">evenings · weekends · 22:00–02:00</div>
+        <div class="dc-trait"><span class="dc-arr">→</span>Runs a real k3s cluster on owned hardware</div>
+        <div class="dc-trait"><span class="dc-arr">→</span>GitOps with Flux CD and Helm</div>
+        <div class="dc-trait"><span class="dc-arr">→</span>Full observability: Prometheus + Loki</div>
+        <div class="dc-trait"><span class="dc-arr">→</span>Writes Ansible, YAML, the odd bash crime</div>
+        <div class="dc-trait"><span class="dc-arr">→</span>Learning in public — incidents and all</div>
+      </div>
+    </div>
+
+    <div style="margin-top:3rem">
+      <div class="mf-section-label" style="margin-bottom:.75rem"><span>// </span>away from the terminal</div>
+      <div class="personal-grid">
+        <div class="personal-card">
+          <span class="pc-icon">♡</span>
+          <div class="pc-title">Husband & Father</div>
+          <div class="pc-sub">the most important role</div>
+          <p class="pc-body">
+            Everything I build — the cluster, the self-hosting, the
+            data sovereignty — is ultimately for <strong>the people at home.</strong>
+            Their photos are on my Immich. Their privacy matters more than my convenience.
+          </p>
+        </div>
+        <div class="personal-card">
+          <span class="pc-icon">📷</span>
+          <div class="pc-title">Photographer</div>
+          <div class="pc-sub">stills · canon ecosystem</div>
+          <p class="pc-body">
+            I shoot our family's story — moments that deserve better than
+            a compressed thumbnail on someone else's server.
+            <em>Immich stores every frame.</em> I own the archive.
+          </p>
+        </div>
+        <div class="personal-card">
+          <span class="pc-icon">🎬</span>
+          <div class="pc-title">Videographer</div>
+          <div class="pc-sub">video · blackmagic · colour · storytelling</div>
+          <p class="pc-body">
+            Video is photography with a timeline.
+            <strong>The same eye for composition,</strong> the same obsession
+            with getting the detail right — just with more storage
+            requirements and a reason to upgrade the NAS.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="mf-divider"></div>
+
+  <!-- PHILOSOPHY -->
+  <section class="mf-section">
+    <div class="mf-section-label"><span>// </span>philosophy</div>
+    <h2 class="mf-section-title">How I think.</h2>
+    <div class="pull-list">
+      <div class="pull-item">
+        <div class="pull-num">01</div>
+        <div>
+          <div class="pull-text">
+            Build it broken first. <strong>A thing that runs badly and teaches you
+            something beats a perfect plan that never ships.</strong>
+            The cluster has had incidents. That's not failure — that's curriculum.
+          </div>
+          <div class="pull-attr">on learning</div>
+        </div>
+      </div>
+      <div class="pull-item">
+        <div class="pull-num">02</div>
+        <div>
+          <div class="pull-text">
+            I don't self-host out of paranoia. I self-host because
+            <strong>dependency on someone else's infrastructure
+            is a liability I can actually reduce.</strong>
+            My data lives on my hardware. That's not ideology. It's just correct.
+          </div>
+          <div class="pull-attr">on self-hosting</div>
+        </div>
+      </div>
+      <div class="pull-item">
+        <div class="pull-num">03</div>
+        <div>
+          <div class="pull-text">
+            <strong>Write it down while it hurts.</strong>
+            That's when the detail is most honest.
+            Every post-mortem, every ops log entry, every decision record —
+            future me is the intended reader.
+          </div>
+          <div class="pull-attr">on documentation</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="mf-divider"></div>
+
+  <!-- STACK -->
+  <section class="mf-section">
+    <div class="mf-section-label"><span>// </span>ps aux | grep running</div>
+    <h2 class="mf-section-title">What's actually running.</h2>
+    <p class="mf-section-sub">Not a list of things I've heard of. Every row below is live in production.</p>
+    <div class="stack-table">
+      <div class="st-head">
+        <span>PID</span><span>STAT</span><span>NAME</span><span>DESCRIPTION</span>
+      </div>
+      <div class="st-row"><span class="st-pid">1001</span><span class="st-stat run">S+</span><span class="st-name">k3s</span><span class="st-desc">Lightweight Kubernetes — 3 control nodes</span></div>
+      <div class="st-row"><span class="st-pid">1002</span><span class="st-stat run">S+</span><span class="st-name">flux-cd</span><span class="st-desc">GitOps operator — git is the source of truth</span></div>
+      <div class="st-row"><span class="st-pid">1003</span><span class="st-stat run">S+</span><span class="st-name">prometheus</span><span class="st-desc">Metrics — every node, every pod</span></div>
+      <div class="st-row"><span class="st-pid">1004</span><span class="st-stat run">S+</span><span class="st-name">grafana</span><span class="st-desc">Dashboards — the thing I check every morning</span></div>
+      <div class="st-row"><span class="st-pid">1005</span><span class="st-stat run">S+</span><span class="st-name">loki</span><span class="st-desc">Log aggregation — correlate, don't grep</span></div>
+      <div class="st-row"><span class="st-pid">1006</span><span class="st-stat run">S+</span><span class="st-name">traefik</span><span class="st-desc">Ingress — TLS, routing, the front door</span></div>
+      <div class="st-row"><span class="st-pid">1007</span><span class="st-stat run">S+</span><span class="st-name">authentik</span><span class="st-desc">SSO — one login for everything</span></div>
+      <div class="st-row"><span class="st-pid">1008</span><span class="st-stat run">S+</span><span class="st-name">immich</span><span class="st-desc">Photo library — 100% off Apple's servers</span></div>
+      <div class="st-row"><span class="st-pid">1009</span><span class="st-stat run">S+</span><span class="st-name">nextcloud</span><span class="st-desc">Files, calendar, contacts — off Microsoft's</span></div>
+      <div class="st-row"><span class="st-pid">1010</span><span class="st-stat run">S+</span><span class="st-name">plex</span><span class="st-desc">Media — own the content, own the server</span></div>
+      <div class="st-row"><span class="st-pid">1011</span><span class="st-stat run">S+</span><span class="st-name">ollama</span><span class="st-desc">Local LLM — AI that stays on my hardware</span></div>
+      <div class="st-row"><span class="st-pid">1012</span><span class="st-stat run">S+</span><span class="st-name">n8n</span><span class="st-desc">Automation — Beesly AI agent lives here</span></div>
+    </div>
+  </section>
+
+  <div class="mf-divider"></div>
+
+  <!-- CLOSE -->
+  <section class="mf-close">
+    <div class="mf-close-inner">
+      <h2 class="mf-close-h">
+        This isn't a hobby.<br>
+        It's a <span class="gradient-text">commitment.</span>
+      </h2>
+      <p class="mf-close-p">
+        Every incident documented. Every decision recorded. Every rand saved published.<br><br>
+        <strong>You don't need to choose between executive and engineer.</strong>
+        You just need to be willing to start badly — and keep going.
+      </p>
+      <div class="mf-actions" style="justify-content:center">
+        <a href="/decisions" class="btn-p">Architecture Decisions →</a>
+        <a href="/cost" class="btn-g">The Cost</a>
+        <a href="/photos" class="btn-g">The Archive</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</Layout>
+
+<style>
+/* ── TERMINAL PHASE ── */
+#terminal-phase {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 5rem 1rem 2rem;
+}
+
+.term-window {
+  width: 100%; max-width: 780px;
+  background: #0a0c12;
+  border: 1px solid var(--color-muted);
+  border-radius: 14px; overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.04), 0 32px 80px rgba(0,0,0,.7);
+  position: relative;
+}
+.term-window::before {
+  content: ''; position: absolute; inset: 0; z-index: 10; pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgba(0,0,0,.06) 0px, rgba(0,0,0,.06) 1px, transparent 1px, transparent 3px);
+  border-radius: inherit;
+}
+.term-window::after {
+  content: ''; position: absolute; inset: 0; z-index: 9; pointer-events: none;
+  background: radial-gradient(ellipse 80% 60% at 50% 30%, rgba(230,180,80,.025) 0%, transparent 70%);
+  border-radius: inherit;
+}
+
+.term-bar {
+  display: flex; align-items: center; gap: .6rem;
+  padding: .8rem 1.1rem; background: #0d0f17;
+  border-bottom: 1px solid var(--color-muted);
+}
+.term-dot { width: 12px; height: 12px; border-radius: 50%; }
+.term-dot.r { background: #ff5f57; }
+.term-dot.y { background: #ffbd2e; }
+.term-dot.g { background: #28c840; }
+.term-title { flex: 1; text-align: center; font-size: .7rem; color: var(--color-subtle); letter-spacing: .06em; font-family: var(--font-mono); }
+
+.term-body {
+  padding: 1.5rem 1.75rem 2rem; min-height: 520px;
+  position: relative; z-index: 1;
+  font-size: clamp(.72rem, 1.5vw, .82rem);
+  line-height: 1.7; font-family: var(--font-mono);
+}
+
+.prompt { display: flex; align-items: baseline; }
+.p-user { color: var(--color-green); font-weight: 700; }
+.p-at, .p-sep { color: var(--color-subtle); }
+.p-host { color: var(--color-sapphire); }
+.p-path { color: var(--color-gold); }
+.p-sym  { color: var(--color-subtle); margin-right: .45em; }
+.p-cmd  { color: var(--color-heading); }
+
+.cursor {
+  display: inline-block; width: .55em; height: 1.1em;
+  background: var(--color-gold); vertical-align: text-bottom;
+  animation: blink .9s step-end infinite; margin-left: 1px; opacity: .9;
+}
+@keyframes blink { 0%,100%{opacity:.9} 50%{opacity:0} }
+
+.out      { color: var(--color-text); }
+.out-dim  { color: var(--color-subtle); }
+.out-gold { color: var(--color-gold); font-weight: 500; }
+.out-green{ color: var(--color-green); }
+.blank    { height: .6rem; }
+.lvl-info { color: var(--color-sapphire); }
+.lvl-ok   { color: var(--color-green); }
+.lvl-event{ color: var(--color-gold); }
+.log-ts   { color: var(--color-subtle); }
+
+#skip-btn {
+  position: fixed; bottom: 2rem; right: 2rem; z-index: 200;
+  background: rgba(14,16,23,.85); border: 1px solid var(--color-muted);
+  border-radius: 99px; color: var(--color-subtle);
+  font-family: var(--font-mono); font-size: .68rem;
+  padding: .45rem 1.1rem; cursor: pointer;
+  transition: border-color .2s, color .2s;
+  backdrop-filter: blur(8px); letter-spacing: .06em;
+}
+#skip-btn:hover { border-color: var(--color-gold); color: var(--color-gold); }
+
+/* ── MANIFESTO PHASE ── */
+#manifesto-phase { display: none; opacity: 0; min-height: 100vh; }
+#manifesto-phase.show { display: flex; flex-direction: column; }
+#manifesto-phase.fade-in { animation: mfade 1.2s cubic-bezier(.16,1,.3,1) forwards; }
+@keyframes mfade { from{opacity:0} to{opacity:1} }
+
+.mf-hero {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden; padding: 6rem 2rem 4rem;
+}
+
+.mf-orb { position: absolute; border-radius: 50%; pointer-events: none; filter: blur(100px); }
+.mf-orb-1 {
+  width: 700px; height: 700px;
+  background: color-mix(in srgb, var(--color-gold) 9%, transparent);
+  top: -200px; left: -200px;
+  animation: drift 20s ease-in-out infinite;
+}
+.mf-orb-2 {
+  width: 500px; height: 500px;
+  background: color-mix(in srgb, var(--color-mauve) 7%, transparent);
+  bottom: -150px; right: -100px;
+  animation: drift 26s ease-in-out infinite reverse;
+}
+@keyframes drift {
+  0%,100%{transform:translate(0,0)}
+  33%{transform:translate(30px,20px)}
+  66%{transform:translate(-20px,30px)}
+}
+
+.mf-hero-inner {
+  display: grid; grid-template-columns: 1fr 340px;
+  gap: 5rem; align-items: center;
+  max-width: 960px; width: 100%; position: relative; z-index: 1;
+}
+@media(max-width:780px){
+  .mf-hero-inner { grid-template-columns: 1fr; gap: 3rem; }
+  .mf-photo-col { order: -1; display: flex; justify-content: center; }
+}
+
+.mf-pre {
+  font-family: var(--font-mono); font-size: .68rem;
+  color: var(--color-subtle); text-transform: uppercase;
+  letter-spacing: .18em; margin-bottom: 2rem;
+  display: flex; align-items: center; gap: .75rem;
+}
+.mf-pre::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--color-muted), transparent); }
+
+.mf-h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 8vw, 6rem);
+  font-weight: 800; line-height: 1.05;
+  letter-spacing: -.04em; color: var(--color-heading); margin-bottom: 2.5rem;
+}
+.mf-h1 .line-gold {
+  background: linear-gradient(120deg, var(--color-gold) 0%, #f7c76b 50%, var(--color-green) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+.mf-body {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 2.2vw, 1.2rem);
+  font-weight: 300; color: var(--color-subtle);
+  line-height: 1.85; max-width: 620px; margin-bottom: 3rem;
+}
+.mf-body strong { color: var(--color-text); font-weight: 500; }
+.mf-body em { color: var(--color-gold); font-style: normal; font-weight: 400; }
+
+.mf-actions { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
+
+/* Photo frame */
+.mf-photo-wrap { position: relative; }
+.mf-photo-frame {
+  width: 300px; height: 380px; border-radius: 24px; overflow: hidden;
+  border: 1px solid var(--color-muted);
+  box-shadow: 0 0 0 1px rgba(255,255,255,.04), 0 32px 80px rgba(0,0,0,.6),
+              0 0 80px color-mix(in srgb, var(--color-gold) 10%, transparent);
+}
+@media(max-width:780px){ .mf-photo-frame { width: 240px; height: 300px; } }
+
+.mf-photo-frame img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(15%) contrast(1.05); transition: filter .4s ease; }
+.mf-photo-frame:hover img { filter: grayscale(0%) contrast(1.05); }
+
+.mf-photo-placeholder {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem;
+  background: var(--color-surface);
+  color: var(--color-subtle); font-family: var(--font-mono); font-size: .7rem;
+  letter-spacing: .08em; text-align: center; padding: 1.5rem;
+}
+.mf-photo-placeholder-icon { font-size: 2.5rem; opacity: .3; }
+
+.mf-photo-wrap::before {
+  content: ''; position: absolute; bottom: -12px; right: -12px;
+  width: 100px; height: 100px;
+  border-bottom: 2px solid var(--color-gold); border-right: 2px solid var(--color-gold);
+  border-radius: 0 0 12px 0; pointer-events: none; opacity: .5;
+}
+.mf-photo-wrap::after {
+  content: ''; position: absolute; top: -12px; left: -12px;
+  width: 100px; height: 100px;
+  border-top: 2px solid color-mix(in srgb, var(--color-mauve) 60%, transparent);
+  border-left: 2px solid color-mix(in srgb, var(--color-mauve) 60%, transparent);
+  border-radius: 12px 0 0 0; pointer-events: none;
+}
+
+/* Section */
+.mf-section { padding: 5rem 2rem; max-width: 960px; margin: 0 auto; }
+.mf-divider {
+  width: 100%; height: 1px; max-width: 960px; margin: 0 auto;
+  background: linear-gradient(90deg, transparent, var(--color-muted), transparent);
+}
+
+.mf-section-label {
+  font-family: var(--font-mono); font-size: .63rem;
+  color: var(--color-subtle); letter-spacing: .18em; text-transform: uppercase; margin-bottom: .75rem;
+}
+.mf-section-label span { color: var(--color-gold); }
+
+.mf-section-title {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+  color: var(--color-heading); margin-bottom: .75rem; letter-spacing: -.03em;
+}
+
+.mf-section-sub {
+  font-family: var(--font-display); font-size: .95rem;
+  color: var(--color-subtle); line-height: 1.8;
+  max-width: 540px; margin-bottom: 2.5rem;
+}
+
+/* Dual cards */
+.dual-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+@media(max-width:680px){ .dual-grid { grid-template-columns: 1fr; } }
+
+.dual-card {
+  border-radius: 20px; padding: 2.25rem 2rem;
+  position: relative; overflow: hidden;
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+.dual-card:hover { transform: translateY(-5px); }
+
+.dc-exec {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--color-gold) 6%, var(--color-surface)), color-mix(in srgb, var(--color-gold) 2%, var(--color-overlay)));
+  border: 1px solid color-mix(in srgb, var(--color-gold) 18%, var(--color-muted));
+}
+.dc-exec:hover { box-shadow: 0 20px 60px color-mix(in srgb, var(--color-gold) 14%, transparent); }
+
+.dc-eng {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--color-green) 6%, var(--color-surface)), color-mix(in srgb, var(--color-green) 2%, var(--color-overlay)));
+  border: 1px solid color-mix(in srgb, var(--color-green) 18%, var(--color-muted));
+}
+.dc-eng:hover { box-shadow: 0 20px 60px color-mix(in srgb, var(--color-green) 14%, transparent); }
+
+.dc-glow {
+  position: absolute; border-radius: 50%; pointer-events: none;
+  width: 260px; height: 260px; top: -80px; right: -80px; filter: blur(70px); opacity: .2;
+}
+.dc-exec .dc-glow { background: var(--color-gold); }
+.dc-eng  .dc-glow { background: var(--color-green); }
+
+.dc-icon { font-size: 2rem; margin-bottom: 1.1rem; display: block; line-height: 1; }
+.dc-title { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; margin-bottom: .25rem; letter-spacing: -.02em; }
+.dc-exec .dc-title { color: var(--color-gold); }
+.dc-eng  .dc-title { color: var(--color-green); }
+
+.dc-sub { font-size: .68rem; color: var(--color-subtle); letter-spacing: .06em; font-family: var(--font-mono); margin-bottom: 1.5rem; }
+
+.dc-trait {
+  display: flex; align-items: flex-start; gap: .6rem;
+  font-family: var(--font-display); font-size: .875rem;
+  color: var(--color-text); padding: .4rem 0;
+  border-bottom: 1px solid rgba(255,255,255,.04); line-height: 1.5;
+}
+.dc-trait:last-child { border-bottom: none; }
+.dc-arr { flex-shrink: 0; font-family: var(--font-mono); font-size: .65rem; margin-top: .15rem; }
+.dc-exec .dc-arr { color: var(--color-gold); }
+.dc-eng  .dc-arr { color: var(--color-green); }
+
+/* Personal cards */
+.personal-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; margin-top: 2rem; }
+@media(max-width:680px){ .personal-grid { grid-template-columns: 1fr; } }
+
+.personal-card {
+  background: var(--color-surface); border: 1px solid var(--color-muted);
+  border-radius: 16px; padding: 1.75rem 1.5rem;
+  position: relative; overflow: hidden;
+  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+.personal-card:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--color-mauve) 40%, var(--color-muted)); box-shadow: 0 16px 48px rgba(0,0,0,.4); }
+.personal-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--color-mauve), var(--color-sapphire), transparent);
+  opacity: 0; transition: opacity .25s ease;
+}
+.personal-card:hover::before { opacity: 1; }
+
+.pc-icon { font-size: 1.8rem; margin-bottom: 1rem; display: block; line-height: 1; }
+.pc-title { font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: var(--color-heading); margin-bottom: .4rem; letter-spacing: -.01em; }
+.pc-sub { font-family: var(--font-mono); font-size: .65rem; color: var(--color-subtle); letter-spacing: .06em; margin-bottom: 1rem; }
+.pc-body { font-family: var(--font-display); font-size: .875rem; color: var(--color-subtle); line-height: 1.7; }
+.pc-body strong { color: var(--color-text); font-weight: 500; }
+.pc-body em { color: var(--color-mauve); font-style: normal; }
+
+/* Philosophy */
+.pull-list { display: flex; flex-direction: column; gap: 1px; margin-top: 2.5rem; }
+.pull-item {
+  display: grid; grid-template-columns: 3rem 1fr;
+  gap: 1.5rem; align-items: start; padding: 2rem 1.5rem;
+  border-radius: 14px; transition: background .2s ease; cursor: default;
+}
+.pull-item:hover { background: color-mix(in srgb, var(--color-mauve) 4%, transparent); }
+
+.pull-num {
+  font-family: var(--font-mono); font-size: 2rem; font-weight: 700;
+  color: color-mix(in srgb, var(--color-mauve) 30%, transparent);
+  line-height: 1; text-align: right; padding-top: .1rem;
+}
+.pull-text { font-family: var(--font-display); font-size: clamp(.95rem, 2vw, 1.1rem); font-weight: 400; color: var(--color-text); line-height: 1.75; }
+.pull-text strong { color: var(--color-heading); font-weight: 600; }
+.pull-attr { font-family: var(--font-mono); font-size: .63rem; color: var(--color-subtle); letter-spacing: .1em; text-transform: uppercase; margin-top: .5rem; }
+.pull-attr::before { content: '— '; color: var(--color-mauve); }
+
+/* Stack table */
+.stack-table { margin-top: 2rem; border: 1px solid var(--color-muted); border-radius: 12px; overflow: hidden; font-family: var(--font-mono); font-size: .75rem; }
+.st-head {
+  display: grid; grid-template-columns: 4rem 5rem 1fr 1fr;
+  padding: .6rem 1.25rem; background: color-mix(in srgb, var(--color-muted) 40%, transparent);
+  color: var(--color-subtle); font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; gap: 1rem;
+}
+.st-row {
+  display: grid; grid-template-columns: 4rem 5rem 1fr 1fr;
+  padding: .55rem 1.25rem; gap: 1rem;
+  border-top: 1px solid color-mix(in srgb, var(--color-muted) 40%, transparent);
+  transition: background .15s ease;
+}
+@media(max-width:600px){ .st-head, .st-row { grid-template-columns: 4rem 1fr; } .st-stat, .st-desc { display: none; } }
+.st-row:hover { background: color-mix(in srgb, var(--color-gold) 3%, transparent); }
+.st-pid  { color: var(--color-subtle); }
+.st-stat.run { color: var(--color-green); }
+.st-name { color: var(--color-gold); font-weight: 500; }
+.st-desc { color: var(--color-text); }
+
+/* Closing */
+.mf-close { padding: 7rem 2rem 8rem; text-align: center; position: relative; overflow: hidden; }
+.mf-close::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 70% 60% at 50% 50%, color-mix(in srgb, var(--color-gold) 6%, transparent), transparent 65%);
+}
+.mf-close-inner { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; }
+.mf-close-h { font-family: var(--font-display); font-size: clamp(2.2rem, 6vw, 4rem); font-weight: 800; letter-spacing: -.04em; line-height: 1.1; color: var(--color-heading); margin-bottom: 1.75rem; }
+.mf-close-p { font-family: var(--font-display); font-size: 1rem; color: var(--color-subtle); line-height: 1.9; margin-bottom: 2.5rem; }
+.mf-close-p strong { color: var(--color-text); }
+
+/* Buttons */
+.btn-p {
+  display: inline-flex; align-items: center; gap: .5rem;
+  background: linear-gradient(135deg, var(--color-gold), #c9923d);
+  color: var(--color-base); font-family: var(--font-mono); font-size: .75rem; font-weight: 700;
+  padding: .8rem 2rem; border-radius: 99px; text-decoration: none; letter-spacing: .04em;
+  box-shadow: 0 4px 24px rgba(230,180,80,.3);
+  transition: transform .2s, box-shadow .2s;
+}
+.btn-p:hover { transform: translateY(-2px); box-shadow: 0 8px 36px rgba(230,180,80,.4); color: var(--color-base); }
+
+.btn-g {
+  display: inline-flex; align-items: center; gap: .5rem;
+  background: transparent; color: var(--color-subtle);
+  font-family: var(--font-mono); font-size: .75rem;
+  padding: .8rem 2rem; border-radius: 99px;
+  border: 1px solid var(--color-muted); text-decoration: none;
+  transition: border-color .2s, color .2s, transform .2s;
+}
+.btn-g:hover { border-color: var(--color-gold); color: var(--color-gold); transform: translateY(-2px); }
+
+.gradient-text {
+  background: linear-gradient(120deg, var(--color-gold), var(--color-green));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+</style>
+
+<script is:inline>
+const termBody = document.getElementById('term-body');
+const PROMPT = `<span class="p-user">kagiso</span><span class="p-at">@</span><span class="p-host">homelab</span><span class="p-sep">:</span><span class="p-path">~</span><span class="p-sym"> $</span> `;
+let aborted = false;
+
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+function el(tag, cls, html) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (html) e.innerHTML = html;
+  return e;
+}
+
+function append(node) {
+  termBody.appendChild(node);
+  termBody.scrollTop = termBody.scrollHeight;
+}
+
+async function typeCmd(text, speed = 48) {
+  const row = el('div', 'prompt');
+  row.innerHTML = PROMPT;
+  const span = el('span', 'p-cmd');
+  const cur = el('span', 'cursor');
+  row.appendChild(span); row.appendChild(cur); append(row);
+  for (const ch of text) {
+    if (aborted) return;
+    span.textContent += ch;
+    termBody.scrollTop = termBody.scrollHeight;
+    await sleep(speed + Math.random() * 30);
+  }
+  cur.remove();
+}
+
+async function printLines(lines, delay = 28) {
+  for (const line of lines) {
+    if (aborted) return;
+    const d = el('div'); d.innerHTML = line; append(d);
+    await sleep(delay);
+  }
+}
+
+async function blank() { append(el('div', 'blank')); }
+
+async function run() {
+  await sleep(600);
+
+  await typeCmd('whoami');
+  await sleep(120);
+  await printLines([`<span class="out-gold">kagiso</span>`], 0);
+  await blank();
+
+  await typeCmd('cat identity.txt');
+  await sleep(120);
+  await printLines([
+    `<span class="out-dim">╭──────────────────────────────────────────────────╮</span>`,
+    `<span class="out-dim">│</span>  <span class="out-gold">Name   </span>  Kagiso                                  <span class="out-dim">│</span>`,
+    `<span class="out-dim">│</span>  <span class="out-gold">Role   </span>  Chief of Staff, Telco + Self-taught Eng <span class="out-dim">│</span>`,
+    `<span class="out-dim">│</span>  <span class="out-gold">Base   </span>  Johannesburg, South Africa              <span class="out-dim">│</span>`,
+    `<span class="out-dim">│</span>  <span class="out-gold">Shell  </span>  zsh — but also the boardroom            <span class="out-dim">│</span>`,
+    `<span class="out-dim">│</span>  <span class="out-gold">Status </span>  <span class="out-green">learning in public · cluster is live</span>    <span class="out-dim">│</span>`,
+    `<span class="out-dim">╰──────────────────────────────────────────────────╯</span>`,
+  ], 40);
+  await blank();
+
+  await typeCmd('cat life.log | tail -n 20');
+  await sleep(120);
+  await printLines([
+    `<span class="log-ts">[early career]</span>   <span class="lvl-info">INFO</span>   <span class="out">entered corporate — smart spreadsheets, polished decks</span>`,
+    `<span class="log-ts">[early career]</span>   <span class="lvl-info">INFO</span>   <span class="out">started leading teams, managing strategy</span>`,
+    `<span class="log-ts">[the question]</span>   <span class="lvl-event">WARN</span>   <span class="out">why do I nod along without actually understanding the tech?</span>`,
+    `<span class="log-ts">[turning point]</span>  <span class="lvl-event">EVNT</span>   <span class="out-gold">decided to learn — not for a new job. pure stubbornness.</span>`,
+    `<span class="log-ts">[2023]         </span>   <span class="lvl-info">INFO</span>   <span class="out">python. broke a lot of things. kept going.</span>`,
+    `<span class="log-ts">[2024-Q1]      </span>   <span class="lvl-info">INFO</span>   <span class="out">bought 3x Lenovo ThinkCentres. second-hand. R4200.</span>`,
+    `<span class="log-ts">[2024-Q2]      </span>   <span class="lvl-info">INFO</span>   <span class="out">installed Proxmox. broke it. installed it again.</span>`,
+    `<span class="log-ts">[2024-Q3]      </span>   <span class="lvl-event">EVNT</span>   <span class="out-gold">k3s cluster goes live. 3 nodes. real GitOps. real workloads.</span>`,
+    `<span class="log-ts">[2024-Q4]      </span>   <span class="lvl-ok"> OK  </span>   <span class="out-green">cancelled iCloud, Microsoft 365, Apple TV+, Showmax, Apple Music</span>`,
+    `<span class="log-ts">[2025-Q1]      </span>   <span class="lvl-ok"> OK  </span>   <span class="out-green">kagiso.me launched — building in public</span>`,
+    `<span class="log-ts">[now]          </span>   <span class="lvl-event">EVNT</span>   <span class="out-gold">cluster live · ops log honest · learning never stops</span>`,
+  ], 55);
+  await blank();
+
+  await typeCmd('ps aux | grep passion');
+  await sleep(120);
+  await printLines([
+    `<span class="out-dim">USER       PID  STAT  COMMAND</span>`,
+    `<span class="out-gold">kagiso</span>    1001  <span class="out-green">S+</span>    k3s — lightweight Kubernetes on owned hardware`,
+    `<span class="out-gold">kagiso</span>    1002  <span class="out-green">S+</span>    flux-cd — git is the source of truth`,
+    `<span class="out-gold">kagiso</span>    1003  <span class="out-green">S+</span>    immich — 100% off Apple's servers`,
+    `<span class="out-gold">kagiso</span>    1004  <span class="out-green">S+</span>    ollama — local AI, stays on my hardware`,
+    `<span class="out-gold">kagiso</span>    1005  <span class="out-green">S+</span>    canon + blackmagic — the archive keeps growing`,
+    `<span class="out-gold">kagiso</span>    1006  <span class="out-green">S+</span>    self-teaching — no signs of stopping`,
+  ], 45);
+  await blank();
+
+  await typeCmd('echo "why does this exist?"');
+  await sleep(120);
+  await printLines([
+    `<span class="out-dim">I built this cluster because I was tired of understanding</span>`,
+    `<span class="out-dim">technology only at the level of a customer.</span>`,
+    ``,
+    `<span class="out">I wanted to understand it at the level of</span> <span class="out-gold">a builder.</span>`,
+    ``,
+    `<span class="out-green">You just need to be willing to start badly. And keep going.</span>`,
+  ], 38);
+  await blank();
+
+  await sleep(500);
+  await typeCmd('exit', 80);
+  await sleep(300);
+  append(el('div', 'out-dim', 'logout'));
+  await sleep(900);
+
+  if (!aborted) showManifesto();
+}
+
+function showManifesto() {
+  const tp = document.getElementById('terminal-phase');
+  const mp = document.getElementById('manifesto-phase');
+  const skip = document.getElementById('skip-btn');
+  skip.style.display = 'none';
+  tp.style.transition = 'opacity .8s ease';
+  tp.style.opacity = '0';
+  setTimeout(() => {
+    tp.style.display = 'none';
+    mp.classList.add('show');
+    requestAnimationFrame(() => mp.classList.add('fade-in'));
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'none';
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    mp.querySelectorAll('.dual-card, .pull-item, .st-row, .personal-card').forEach((el, i) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = `opacity .6s ease ${i * 60}ms, transform .6s ease ${i * 60}ms`;
+      obs.observe(el);
+    });
+  }, 820);
+}
+
+document.getElementById('skip-btn').addEventListener('click', () => {
+  aborted = true;
+  showManifesto();
+});
+
+run();
+</script>

@@ -9,9 +9,17 @@ The alert came through on a Saturday morning. Tywin — one of my three Kubernet
 
 My first reaction wasn't panic. It was closer to: "OK, let's see if what I built actually works."
 
+## How the lab was built
+
+When I set up the cluster, running three control plane nodes was a deliberate choice, not the path of least resistance. A single control plane is simpler to set up. It's also a single point of failure — and I knew from the start that hardware in a homelab is cheap, second-hand, and eventually going to let you down.
+
+The three nodes — tywin, tyrion, and jaime — all run both the control plane and workloads. On top of that, kube-vip runs as a DaemonSet across all three and holds a virtual IP at `10.0.10.100`. That's the address everything uses to talk to the Kubernetes API. No single node owns it — kube-vip elects a leader and the VIP moves if that node goes down.
+
+The Ansible playbooks encode how all of this is set up, step by step. The assumption baked into that work was: at some point, I'll need to rebuild a node. That assumption paid off sooner than expected.
+
 ## The hardware that failed
 
-Tywin runs a Rougeware SSD. R590 for a 256GB drive — one of those moments where the cheaper option seemed fine. I bought it about two years ago, before this cluster even existed. The other nodes (tyrion and jaime) are running Intel SSDs. Also bought second-hand, also older. Both fine.
+Tywin runs a Rougeware SSD. R590 for a 256GB drive — I bought it about two years ago, before this cluster even existed. The other nodes (tyrion and jaime) are running Intel SSDs. Both fine.
 
 I won't buy Rougeware again.
 
@@ -37,30 +45,36 @@ The SMART data showed a high `Reallocated_Sector_Ct` count and pending uncorrect
 
 ## Why there was no downtime
 
-Kubernetes control plane HA is one of those things that feels theoretical until it isn't.
+With tywin down, the VIP moved. Tyrion picked up `10.0.10.100`. kubectl kept working. Flux kept reconciling. Every workload running on tywin was rescheduled onto the remaining nodes automatically.
 
-I run three control plane nodes — tywin, tyrion, and jaime. etcd (the cluster's state store) requires a quorum of nodes to be available to keep operating. With three nodes, you need two. Tywin going offline meant I still had two. The cluster kept running.
+The etcd state store is where it gets interesting. etcd requires a quorum to keep operating — with three nodes, you need two. Tywin going offline left me with two. The cluster stayed writable, stayed healthy, and nothing paged.
 
-While tywin was sitting there with a dying drive, the other two nodes were serving the API server, the workloads kept running, Flux kept reconciling, nothing paged. The failure was entirely contained to the hardware that failed.
-
-This is exactly the scenario HA is designed for. It's just easy to forget that until a drive actually dies on you.
+This is exactly the scenario HA is designed for. The failure was contained entirely to the node with the dying drive.
 
 ## The recovery
 
 New SSD arrived. Swapped it in. Then:
 
 ```bash
-ansible-playbook -i inventory/homelab site.yml --limit tywin
+ansible-playbook -i inventory/homelab playbooks/lifecycle/rejoin-server.yml --limit tywin
 ```
 
-That's it. The Ansible playbook handles everything — base OS config, Kubernetes dependencies, joining the node back to the cluster. No wiki page to follow. No mental reconstruction of "what did I install on this thing a few months ago." The playbook is the source of truth and it doesn't forget.
+One command. Here's what it actually does:
 
-Tywin was back in the cluster within the hour.
+**Purge.** It deletes the node object from Kubernetes, kills any remaining k3s processes, runs the uninstall script, and wipes all k3s directories. The node is cleaned to bare metal state.
+
+**Rejoin.** It reads the join token from a healthy node automatically, installs k3s, and rejoins tywin as an additional control plane server. It verifies the etcd peer port and API port are reachable before attempting the join, and waits for the node to show `Ready` before moving on.
+
+**Restore config.** It recreates the etcd snapshot configuration — snapshots run every 6 hours to MinIO on TrueNAS (10.0.10.80), with 7 snapshots retained. This gets restored because it lives in a config file that doesn't survive the wipe.
+
+**Verify.** It prints final cluster node status. You know it worked before the playbook exits.
+
+Tywin was back in the cluster within 7 hours of the drive failing — most of that was waiting for a new SSD to be delivered. The actual rebuild took under an hour. No wiki page to follow. No manual reconstruction of what was installed. The playbook is the operational knowledge — written down once, executable on demand.
 
 ## The actual lesson
 
 The lab has only been live for a few months and already the honest reflection is: the value of the automation isn't obvious until you need it under pressure. When the drive failed on a Saturday morning, I wasn't scrambling to remember package names or node-join tokens. I ran a playbook.
 
-The HA control plane and the Ansible setup weren't expensive to build relative to the complexity of the cluster overall. They were just deliberate choices made early. Those two things turned what should have been a stressful incident into an inconvenience that cost me an hour and a new SSD.
+The HA setup and the Ansible work weren't expensive to build relative to the overall complexity of the cluster. They were deliberate choices made early. And because the etcd snapshots go to MinIO, even a total loss of all three nodes isn't unrecoverable — the SSD failure was the easy case, but the harder case is covered too.
 
 Buy better SSDs. Build for failure anyway.

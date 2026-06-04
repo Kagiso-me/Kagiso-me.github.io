@@ -1,14 +1,14 @@
 {
-  "fetched_at": "2026-05-23T08:19:33Z",
+  "fetched_at": "2026-06-04T12:32:10Z",
   "status": "warn",
   "counts": {
     "CRITICAL": 0,
-    "HIGH": 3,
-    "MEDIUM": 4,
+    "HIGH": 4,
+    "MEDIUM": 5,
     "LOW": 0,
     "UNKNOWN": 2
   },
-  "total": 9,
+  "total": 11,
   "tracked": 17,
   "vulnerabilities": [
     {
@@ -58,6 +58,21 @@
       ],
       "component": "Traefik",
       "component_version": "3.6.13"
+    },
+    {
+      "id": "GHSA-rw47-hm26-6wr7",
+      "cve_id": "CVE-2026-44982",
+      "summary": "CrowdSec AppSec silently drops request body for chunked / HTTP-2 requests",
+      "severity": "HIGH",
+      "cvss": 6.7,
+      "published": "2026-05-27T19:58:15Z",
+      "modified": "2026-05-27T20:00:10.359721908Z",
+      "refs": [
+        "https://github.com/crowdsecurity/crowdsec/security/advisories/GHSA-rw47-hm26-6wr7",
+        "https://github.com/crowdsecurity/crowdsec"
+      ],
+      "component": "CrowdSec",
+      "component_version": "1.7.7"
     },
     {
       "id": "GHSA-xhjw-95fp-8vgq",
@@ -122,6 +137,21 @@
       ],
       "component": "Traefik",
       "component_version": "3.6.13"
+    },
+    {
+      "id": "GHSA-273h-gvwr-c3qj",
+      "cve_id": "CVE-2026-44981",
+      "summary": "CrowdSec LAPI: Denial of Service via Unbounded Gzip Decompression",
+      "severity": "MEDIUM",
+      "cvss": null,
+      "published": "2026-05-27T19:57:28Z",
+      "modified": "2026-05-27T20:00:10.245585880Z",
+      "refs": [
+        "https://github.com/crowdsecurity/crowdsec/security/advisories/GHSA-273h-gvwr-c3qj",
+        "https://github.com/crowdsecurity/crowdsec"
+      ],
+      "component": "CrowdSec",
+      "component_version": "1.7.7"
     },
     {
       "id": "GO-2025-3646",

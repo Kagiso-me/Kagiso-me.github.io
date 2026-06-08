@@ -1,14 +1,14 @@
 {
-  "fetched_at": "2026-06-04T12:32:10Z",
+  "fetched_at": "2026-06-08T17:59:01Z",
   "status": "warn",
   "counts": {
     "CRITICAL": 0,
     "HIGH": 4,
-    "MEDIUM": 5,
+    "MEDIUM": 6,
     "LOW": 0,
     "UNKNOWN": 2
   },
-  "total": 11,
+  "total": 12,
   "tracked": 17,
   "vulnerabilities": [
     {
@@ -137,6 +137,22 @@
       ],
       "component": "Traefik",
       "component_version": "3.6.13"
+    },
+    {
+      "id": "GHSA-jjrm-hr5f-673x",
+      "cve_id": "CVE-2026-47680",
+      "summary": "Source controller: Improper path handling allows traversal",
+      "severity": "MEDIUM",
+      "cvss": null,
+      "published": "2026-06-05T16:32:51Z",
+      "modified": "2026-06-05T16:45:18.604140889Z",
+      "refs": [
+        "https://github.com/fluxcd/source-controller/security/advisories/GHSA-jjrm-hr5f-673x",
+        "https://github.com/fluxcd/source-controller/pull/2054",
+        "https://github.com/fluxcd/source-controller/commit/759bd6c451e7cc4327b38f42c8b671980165cb0e"
+      ],
+      "component": "Flux source-controller",
+      "component_version": "1.8.2"
     },
     {
       "id": "GHSA-273h-gvwr-c3qj",

@@ -12,20 +12,15 @@ const recentPosts = (await getCollection('blog'))
 
   <!-- ── Hero ── -->
   <section class="hero fade-up">
-    <!-- Aurora background layers -->
-    <div class="aurora" aria-hidden="true">
-      <div class="aurora-orb aurora-orb-1"></div>
-      <div class="aurora-orb aurora-orb-2"></div>
-      <div class="aurora-orb aurora-orb-3"></div>
-    </div>
-    <!-- Particle network canvas -->
+    <!-- Editorial backdrop: dot-grid + quieted particle network -->
+    <div class="aurora" aria-hidden="true"></div>
     <canvas id="hero-grid" aria-hidden="true"></canvas>
     <div class="hero-inner">
 
       <!-- Left: identity + stats -->
       <div class="hero-left">
-        <div class="hero-accent" aria-hidden="true"></div>
         <div class="hero-content">
+          <p class="hero-kicker mono"><span class="hero-kicker-no">01</span><span class="hero-kicker-rule" aria-hidden="true"></span>Built in public · k3s on three mini-PCs</p>
           <h1><span id="h1-line1"></span><br><span id="h1-line2"></span><span class="h1-cursor" aria-hidden="true">▌</span></h1>
           <p class="hero-identity">Corporate exec by day. Self-taught engineer by night.</p>
           <p class="hero-sub">
@@ -378,13 +373,13 @@ const recentPosts = (await getCollection('blog'))
 <style is:global>
   /* ── Hero ── */
   .hero {
-    padding: 4rem 1.5rem 3rem;
+    padding: 6.5rem 1.5rem 5rem;
     position: relative;
     overflow: hidden;
     border-bottom: 1px solid var(--color-muted);
   }
 
-  /* ── Circuit-grid background — the site's visual signature ── */
+  /* ── Editorial backdrop ── */
   .aurora {
     position: absolute;
     inset: 0;
@@ -393,70 +388,34 @@ const recentPosts = (await getCollection('blog'))
     z-index: 0;
   }
 
-  /* Dot-grid: a PCB/oscilloscope-style graph paper pattern */
+  /* Dot-grid: a quiet graph-paper texture, faded so type leads */
   .aurora::before {
     content: '';
     position: absolute;
     inset: 0;
     background-image:
-      radial-gradient(circle, color-mix(in srgb, var(--color-muted) 35%, transparent) 1px, transparent 1px);
-    background-size: 32px 32px;
-    opacity: 0.45;
-    mask-image: radial-gradient(ellipse 80% 100% at 50% 0%, black 40%, transparent 100%);
-    -webkit-mask-image: radial-gradient(ellipse 80% 100% at 50% 0%, black 40%, transparent 100%);
+      radial-gradient(circle, color-mix(in srgb, var(--color-muted) 30%, transparent) 1px, transparent 1px);
+    background-size: 34px 34px;
+    opacity: 0.3;
+    mask-image: radial-gradient(ellipse 70% 90% at 8% 0%, black 35%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 90% at 8% 0%, black 35%, transparent 100%);
   }
 
-  /* Warm gold bloom — top-left origin, like a sunrise */
-  .aurora-orb {
+  /* One restrained directional bloom — anchors the top-left, no drifting orbs */
+  .aurora::after {
+    content: '';
     position: absolute;
-    border-radius: 50%;
-    filter: blur(90px);
+    top: -30%; left: -15%;
+    width: 55vw; height: 55vw;
+    background: radial-gradient(ellipse, color-mix(in srgb, var(--color-gold) 11%, transparent), transparent 68%);
+    filter: blur(80px);
     mix-blend-mode: screen;
-    will-change: transform;
+    pointer-events: none;
   }
 
-  .aurora-orb-1 {
-    width: 50vw; height: 50vw;
-    top: -25%; left: -8%;
-    background: radial-gradient(ellipse, color-mix(in srgb, var(--color-gold) 20%, transparent), transparent 70%);
-    animation: aurora-drift-1 20s ease-in-out infinite alternate;
-  }
-
-  .aurora-orb-2 {
-    width: 40vw; height: 40vw;
-    bottom: -15%; right: 5%;
-    background: radial-gradient(ellipse, color-mix(in srgb, var(--color-green) 13%, transparent), transparent 70%);
-    animation: aurora-drift-2 25s ease-in-out infinite alternate;
-  }
-
-  .aurora-orb-3 {
-    width: 30vw; height: 30vw;
-    top: 30%; left: 55%;
-    background: radial-gradient(ellipse, color-mix(in srgb, var(--color-sapphire) 8%, transparent), transparent 70%);
-    animation: aurora-drift-3 28s ease-in-out infinite alternate;
-  }
-
-  @keyframes aurora-drift-1 {
-    from { transform: translate(0, 0) scale(1); }
-    to   { transform: translate(6%, 14%) scale(1.1); }
-  }
-  @keyframes aurora-drift-2 {
-    from { transform: translate(0, 0) scale(1); }
-    to   { transform: translate(-8%, -10%) scale(1.15); }
-  }
-  @keyframes aurora-drift-3 {
-    from { transform: translate(0, 0) scale(1); }
-    to   { transform: translate(-12%, 8%) scale(1.08); }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .aurora-orb { animation: none; }
-  }
-
-  /* Disable expensive aurora on mobile */
   @media (max-width: 768px) {
-    .aurora-orb { display: none; }
-    .aurora::before { opacity: 0.25; }
+    .aurora::after { opacity: 0.5; }
+    .aurora::before { opacity: 0.18; }
   }
 
   #hero-grid {
@@ -465,8 +424,12 @@ const recentPosts = (await getCollection('blog'))
     width: 100%;
     height: 100%;
     pointer-events: none;
-    opacity: 0.7;
+    opacity: 0.32;
     z-index: 1;
+  }
+
+  @media (max-width: 768px) {
+    #hero-grid { display: none; }
   }
 
   @media (max-width: 768px) {
@@ -491,24 +454,20 @@ const recentPosts = (await getCollection('blog'))
     max-width: 1200px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-    align-items: start;
+    grid-template-columns: 1.15fr 0.95fr;
+    gap: 4.5rem;
+    align-items: center;
     position: relative;
   }
 
   .hero-left {
-    display: flex;
-    align-items: flex-start;
-    gap: 0;
-    padding-bottom: 3rem;
+    min-width: 0;
   }
 
   .hero-right {
     display: flex;
     flex-direction: column;
     gap: 0.6rem;
-    padding-top: 0.5rem;
   }
 
   .hero-term-label {
@@ -518,87 +477,102 @@ const recentPosts = (await getCollection('blog'))
     padding: 0 0.25rem;
   }
 
-  /* The vertical accent line — the visual signature */
-  .hero-accent {
-    width: 4px;
-    align-self: stretch;
-    background: linear-gradient(to bottom, var(--color-gold), var(--color-green) 65%, transparent);
-    border-radius: 4px;
-    flex-shrink: 0;
-    margin-right: 2.5rem;
-    min-height: 200px;
-    box-shadow: 0 0 16px color-mix(in srgb, var(--color-gold) 50%, transparent);
-  }
-
   .hero-content {
-    flex: 1;
     min-width: 0;
   }
 
-  h1 {
-    font-size: clamp(3.75rem, 8vw, 6.5rem);
-    letter-spacing: -0.045em;
-    line-height: 0.92;
+  /* Editorial kicker — numbered section label, magazine-style */
+  .hero-kicker {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--color-subtle);
     margin: 0 0 1.5rem;
+  }
+
+  .hero-kicker-no {
+    color: var(--color-gold);
+    font-weight: 600;
+  }
+
+  .hero-kicker-rule {
+    width: 2rem;
+    height: 1px;
+    background: color-mix(in srgb, var(--color-gold) 55%, var(--color-muted));
+    flex-shrink: 0;
+  }
+
+  h1 {
+    font-size: clamp(4rem, 9.5vw, 7.5rem);
+    font-weight: 700;
+    letter-spacing: -0.055em;
+    line-height: 0.88;
+    margin: 0 0 1.75rem;
     color: var(--color-heading);
   }
 
   .hero-identity {
-    font-size: clamp(1rem, 2vw, 1.1rem);
+    font-size: clamp(1.15rem, 2.2vw, 1.4rem);
     font-weight: 600;
-    color: var(--color-gold);
-    margin: 0 0 0.75rem;
-    letter-spacing: -0.01em;
+    color: var(--color-heading);
+    margin: 0 0 1rem;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
   }
 
   .hero-sub {
-    font-size: 1rem;
+    font-size: 1.05rem;
     color: var(--color-subtle);
-    max-width: 540px;
-    margin: 0 0 2rem;
-    line-height: 1.7;
+    max-width: 480px;
+    margin: 0 0 2.5rem;
+    line-height: 1.75;
   }
 
-  /* Live stat strip — three numbers rendered immediately from skeleton, filled by JS */
+  /* Live stats — open editorial row, hairline-divided, big numerals */
   .hero-stats {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     gap: 0;
-    margin-bottom: 2.25rem;
-    border: 1px solid var(--color-muted);
-    border-radius: 10px;
-    overflow: hidden;
+    margin-bottom: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid color-mix(in srgb, var(--color-muted) 70%, transparent);
     width: fit-content;
+    max-width: 100%;
   }
 
   .hero-stat {
     display: flex;
     flex-direction: column;
-    gap: 0.15rem;
-    padding: 0.75rem 1.5rem;
-    background: var(--color-surface);
+    gap: 0.3rem;
+    padding: 0 1.75rem;
   }
+
+  .hero-stat:first-child { padding-left: 0; }
 
   .hero-stat-div {
     width: 1px;
     align-self: stretch;
-    background: var(--color-muted);
+    background: color-mix(in srgb, var(--color-muted) 60%, transparent);
   }
 
   .hero-stat-val {
-    font-size: 1.75rem;
+    font-family: var(--font-display);
+    font-size: 2.5rem;
     font-weight: 700;
     color: var(--color-heading);
-    letter-spacing: -0.04em;
+    letter-spacing: -0.05em;
     line-height: 1;
   }
 
   .hero-stat-label {
     font-family: var(--font-mono);
-    font-size: 0.65rem;
+    font-size: 0.66rem;
     color: var(--color-subtle);
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.1em;
   }
 
   .hero-actions {
@@ -858,27 +832,23 @@ const recentPosts = (await getCollection('blog'))
   }
 
   @media (max-width: 900px) {
-    .hero-inner { grid-template-columns: 1fr; gap: 2rem; }
-    .hero-left { padding-bottom: 0; }
+    .hero-inner { grid-template-columns: 1fr; gap: 2.5rem; }
   }
 
   @media (max-width: 768px) {
     .two-col { grid-template-columns: 1fr; gap: 2rem; }
-    .hero { padding: 2.5rem 1.25rem 2rem; }
-    .hero-accent { margin-right: 1.5rem; min-height: 160px; }
-    .hero-stats { flex-wrap: wrap; width: 100%; }
-    .hero-stat { flex: 1; min-width: 80px; }
+    .hero { padding: 3.5rem 1.25rem 3rem; }
+    h1 { font-size: clamp(3rem, 14vw, 4.5rem); }
+    .hero-stats { width: 100%; }
     .stack-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 0.5rem; }
     .contrib-grid { gap: 1.5px; }
     .contrib-cell { width: 8px; height: 8px; }
-    /* Terminal: keep it compact but usable on mobile */
-    .hero-right { padding-top: 0; }
   }
 
   @media (max-width: 480px) {
     .stack-grid { grid-template-columns: repeat(2, 1fr); }
-    .hero-accent { display: none; }
-    .hero-stat-val { font-size: 1.4rem; }
+    .hero-stat { padding: 0 1.1rem; }
+    .hero-stat-val { font-size: 1.9rem; }
     /* Reduce terminal height on small phones so it doesn't dominate */
     .hero-right .term-wrap { border-radius: 8px; }
   }

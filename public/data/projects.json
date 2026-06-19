@@ -19,14 +19,15 @@
   {
     "title": "Beesly",
     "status": "active",
-    "timeline": "Apr 2026",
-    "description": "Discord-native AI assistant with full infra awareness, persistent memory, and a skill system. Ask about pod health, disk usage, or your calendar — no SSH, no dashboards.",
+    "timeline": "Jun 2026",
+    "description": "Self-healing homelab ops, rebuilt as a deterministic engine. Known failures — crashloop, OOM, stuck upgrade, Flux drift — are fixed by tested runbooks (detect → guard → fix → verify) with circuit-breakers that make restart-storms impossible. A watcher that lives outside the cluster catches outages the cluster can't report on itself. Claude is the fallback for novel cases only. Push-only via ntfy.",
     "milestones": [
-      { "label": "OpenClaw scaffold",             "done": true  },
-      { "label": "Claude API integration",        "done": true  },
-      { "label": "Infra awareness (k8s skills)",  "done": false },
-      { "label": "Memory / persistence",          "done": false },
-      { "label": "Deploy to k3s",                 "done": false }
+      { "label": "v3 architecture + ADRs",          "done": true  },
+      { "label": "Independent watcher (bran)",       "done": true  },
+      { "label": "Harden control-hub access",        "done": false },
+      { "label": "Deterministic runbook engine",     "done": false },
+      { "label": "Incident journal + ntfy",          "done": false },
+      { "label": "Retire n8n relay",                 "done": false }
     ]
   },
   {
@@ -43,28 +44,16 @@
     ]
   },
   {
-    "title": "Canvas",
-    "status": "planned",
-    "timeline": "Late May 2026",
-    "description": "Self-hosted freeform project board. Notes, tasks, images, links, and checklists on a spatial canvas — built for planning that doesn't fit neatly into a list.",
+    "title": "Forge",
+    "status": "active",
+    "timeline": "Jun 2026",
+    "description": "Personal MTB training command board for a 6-month periodised plan to the Bosveld Classic. A plan engine resolves the right session for 'today', logs completions and weigh-ins, and tracks FTP, W/kg, weight vs phase target, and weekly load. Dark athletic editorial UI, hand-rolled SVG charts — self-hosted and Authentik-gated.",
     "milestones": [
-      { "label": "Design spec",          "done": false },
-      { "label": "SvelteKit scaffold",   "done": false },
-      { "label": "Canvas drag & drop",   "done": false },
-      { "label": "Fastify + SQLite API", "done": false },
-      { "label": "Deploy to k3s",        "done": false }
-    ]
-  },
-  {
-    "title": "FitLog",
-    "status": "planned",
-    "timeline": "Jul 2026",
-    "description": "Self-hosted fitness and calorie tracker. Full data ownership, built to actually fit the way I train and eat — not a generic clone of MyFitnessPal.",
-    "milestones": [
-      { "label": "Feature scoping",       "done": false },
-      { "label": "Data model design",     "done": false },
-      { "label": "API + frontend build",  "done": false },
-      { "label": "Deploy to k3s",         "done": false }
+      { "label": "Plan engine (phases & weeks)",   "done": true },
+      { "label": "Training board + session logging","done": true },
+      { "label": "Progress charts (FTP/weight/load)","done": true },
+      { "label": "Nutrition + race calendar",       "done": true },
+      { "label": "Deployed to k3s (Authentik-gated)","done": true }
     ]
   }
 ]

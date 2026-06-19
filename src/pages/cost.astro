@@ -86,6 +86,24 @@ const CANCELLED = [
     logo:     '/logos/apple.svg',
     invert:   true,
   },
+  {
+    name:     'YouTube Premium',
+    replaces: 'Invidious + SponsorBlock',
+    vendor:   'Google',
+    cost:     189,
+    note:     'Ad-free YouTube → self-hosted frontend, no tracking. Saves via yt-dlp to Plex.',
+    logo:     '/logos/youtube.svg',
+    invert:   false,
+  },
+  {
+    name:     'ChatGPT',
+    replaces: 'Ollama (local LLM)',
+    vendor:   'OpenAI',
+    cost:     149,
+    note:     'Local LLM on Bronn. Upgrade to a 32B model after the RAM expansion.',
+    logo:     '/logos/openai.svg',
+    invert:   true,
+  },
 ];
 
 const CANCELLED_TOTAL = CANCELLED.reduce((s, c) => s + c.cost, 0);
@@ -139,6 +157,24 @@ const CLOUD_SERVICES = [
     actual:   true,
     paying:   false,
   },
+  {
+    name:     'YouTube Premium',
+    replaces: 'Invidious + SponsorBlock',
+    cloudCost: 189,
+    selfCost:  0,
+    note:     'Actually cancelled · exact price',
+    actual:   true,
+    paying:   false,
+  },
+  {
+    name:     'ChatGPT',
+    replaces: 'Ollama (local LLM)',
+    cloudCost: 149,
+    selfCost:  0,
+    note:     'Actually cancelled · exact price',
+    actual:   true,
+    paying:   false,
+  },
 ];
 
 // ── Subscriptions not yet cancelled but on the radar ─────────────────────
@@ -149,20 +185,6 @@ const FUTURE_CUTS = [
     via:     'Darktable + Immich',
     note:    'Open-source RAW editing + self-hosted photo management. Feature parity for 90% of workflows.',
     emoji:   '📷',
-  },
-  {
-    name:    'YouTube Premium',
-    cost:    89,
-    via:     'Invidious + SponsorBlock',
-    note:    'Self-hosted YouTube frontend with no ads, no tracking. Downloads via yt-dlp to Plex.',
-    emoji:   '▶',
-  },
-  {
-    name:    'ChatGPT',
-    cost:    339,
-    via:     'Ollama (local LLM)',
-    note:    'Ollama on Bronn already running. Upgrade to 32B model after RAM expansion.',
-    emoji:   '🤖',
   },
 ];
 const FUTURE_CUTS_TOTAL = FUTURE_CUTS.reduce((s, f) => s + f.cost, 0);

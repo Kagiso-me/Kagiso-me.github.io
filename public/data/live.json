@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-21T21:51:29Z",
-  "fetched_at": "2026-06-21T21:51:29Z",
+  "updated": "2026-06-21T23:06:53Z",
+  "fetched_at": "2026-06-21T23:06:53Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -17,27 +17,27 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "\u2014",
+      "value": "21h 3m ago",
       "sub": "last backup",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "\u2014",
+      "value": "11h 7m ago",
       "sub": "last snapshot",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "2h 52m ago",
+      "value": "4h 6m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "\u2014",
+      "value": "22h 5m ago",
       "sub": "age keys \u00b7 varys",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "Backblaze B2",
@@ -215,25 +215,25 @@
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: \u2014 series",
+      "tag": "Sonarr: 60 series",
       "status": "ok"
     },
     {
       "name": "Radarr",
-      "tag": "Radarr: \u2014 movies",
+      "tag": "Radarr: 17 movies",
       "status": "ok"
     },
     {
       "name": "Lidarr",
-      "tag": "Lidarr: \u2014 artists",
-      "status": "unknown"
+      "tag": "Lidarr: 36 artists",
+      "status": "ok"
     }
   ],
   "media": [
     {
       "name": "Plex",
       "label": "idle",
-      "status": "unknown",
+      "status": "ok",
       "playing": false
     },
     {
@@ -244,29 +244,29 @@
     }
   ],
   "network": {
-    "fw_hits": 1022569,
-    "latency_ms": 3.2,
+    "fw_hits": 1023408,
+    "latency_ms": 3.3,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 43.5,
+    "temp_c": 45.1,
     "temp_status": "ok",
-    "load": 0.38,
-    "mem_pct": 41.2
+    "load": 0.91,
+    "mem_pct": 42.0
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 672,
+    "runtime_s": 692,
     "runtime_str": "11m",
-    "load_pct": 28,
+    "load_pct": 27,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "1h ago",
+    "age": "2h ago",
     "message": "fix(observability): repair 'No data' panels (Backups + Services) (#543)",
     "sha": "30225ff"
   },
@@ -282,7 +282,7 @@
     },
     {
       "name": "archive",
-      "used": "702.9 GB",
+      "used": "703.0 GB",
       "total": "4.0 TB",
       "pct": 17.6,
       "status": "ok",
@@ -291,7 +291,7 @@
     },
     {
       "name": "core",
-      "used": "100.1 GB",
+      "used": "100.0 GB",
       "total": "476.7 GB",
       "pct": 21.0,
       "status": "ok",

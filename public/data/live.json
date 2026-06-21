@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-21T20:00:01Z",
-  "fetched_at": "2026-06-21T20:00:01Z",
+  "updated": "2026-06-21T20:25:27Z",
+  "fetched_at": "2026-06-21T20:25:27Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -17,27 +17,27 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "17h 57m ago",
+      "value": "\u2014",
       "sub": "last backup",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "etcd Snapshot",
-      "value": "8h 0m ago",
+      "value": "\u2014",
       "sub": "last snapshot",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "Velero",
-      "value": "59m ago",
+      "value": "1h 25m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "18h 59m ago",
+      "value": "\u2014",
       "sub": "age keys \u00b7 varys",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "Backblaze B2",
@@ -51,7 +51,7 @@
       "name": "jaime",
       "role": "control-plane",
       "status": "ok",
-      "pods": "18/110",
+      "pods": "17/110",
       "cpu": "41%",
       "memory": "25%",
       "pressure": []
@@ -60,9 +60,9 @@
       "name": "tyrion",
       "role": "control-plane",
       "status": "ok",
-      "pods": "28/110",
+      "pods": "27/110",
       "cpu": "27%",
-      "memory": "14%",
+      "memory": "13%",
       "pressure": []
     },
     {
@@ -215,17 +215,17 @@
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: 61 series",
+      "tag": "Sonarr: \u2014 series",
       "status": "ok"
     },
     {
       "name": "Radarr",
-      "tag": "Radarr: 17 movies",
-      "status": "ok"
+      "tag": "Radarr: \u2014 movies",
+      "status": "unknown"
     },
     {
       "name": "Lidarr",
-      "tag": "Lidarr: 36 artists",
+      "tag": "Lidarr: \u2014 artists",
       "status": "ok"
     }
   ],
@@ -244,38 +244,38 @@
     }
   ],
   "network": {
-    "fw_hits": 1020262,
-    "latency_ms": 5.9,
+    "fw_hits": 1020878,
+    "latency_ms": 3.1,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 45.1,
+    "temp_c": 45.6,
     "temp_status": "ok",
-    "load": 0.67,
-    "mem_pct": 47.3
+    "load": 0.28,
+    "mem_pct": 39.9
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 672,
+    "runtime_s": 692,
     "runtime_str": "11m",
-    "load_pct": 28,
+    "load_pct": 27,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "2d ago",
-    "message": "chore(observability): consolidate Grafana dashboards (36 \u2192 5) (#540)",
-    "sha": "46beb02"
+    "age": "14m ago",
+    "message": "fix(observability): repair 'No data' panels (Backups + Services) (#543)",
+    "sha": "30225ff"
   },
   "storage": [
     {
       "name": "tera",
-      "used": "5.8 TB",
+      "used": "5.7 TB",
       "total": "7.9 TB",
-      "pct": 73.8,
+      "pct": 72.5,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -291,7 +291,7 @@
     },
     {
       "name": "core",
-      "used": "100.0 GB",
+      "used": "100.1 GB",
       "total": "476.7 GB",
       "pct": 21.0,
       "status": "ok",
@@ -301,7 +301,7 @@
   ],
   "contribs": {
     "days": {
-      "2026-06-21": 4,
+      "2026-06-21": 13,
       "2026-06-20": 0,
       "2026-06-19": 23,
       "2026-06-18": 0,
@@ -319,7 +319,7 @@
       "2026-05-24": 30,
       "2026-05-23": 0
     },
-    "total": 132,
+    "total": 141,
     "active_days": 17
   }
 }

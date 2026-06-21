@@ -1793,11 +1793,16 @@ const recentPosts = (await getCollection('blog'))
         if (statFlux) countUp(statFlux, String(data.flux.ready ?? data.flux.total ?? '—'));
       }
 
-      // "Updated X min ago" label
+      // Freshness badge — fetch cadence is 30m, so flag a stalled pipeline loudly
       if (data.updated) {
-        const mins = Math.round((Date.now() - new Date(data.updated).getTime()) / 60000);
         const badge = document.getElementById('live-updated');
-        if (badge) badge.textContent = `updated ${mins}m ago`;
+        if (badge) {
+          const mins = Math.round((Date.now() - new Date(data.updated).getTime()) / 60000);
+          const ago = mins < 60 ? `${mins}m` : mins < 1440 ? `${Math.round(mins / 60)}h` : `${Math.round(mins / 1440)}d`;
+          badge.textContent = `updated ${ago} ago`;
+          badge.style.color = mins > 180 ? 'var(--color-crit)' : mins > 60 ? 'var(--color-warn)' : '';
+          badge.title = mins > 60 ? 'live-data pipeline may be stalled' : '';
+        }
       }
 
       // Build the ops panel from live data
@@ -1859,37 +1864,36 @@ const recentPosts = (await getCollection('blog'))
 
   async function loadProject() {
     try {
-      const res = await fetch('/data/roadmap.json');
+      const res = await fetch('/data/projects.json');
       if (!res.ok) throw new Error('no data');
-      const data = await res.json();
-      const active = data.active?.[0];
+      const items: any[] = await res.json();
+      const active = items.find(p => p.status === 'active');
       if (!active) return;
       const el = document.getElementById('active-project');
       if (el) {
-        const progressHtml = active.progress != null ? `
+        const done  = (active.milestones ?? []).filter((m: any) => m.done).length;
+        const total = (active.milestones ?? []).length;
+        const progress = total > 0 ? Math.round((done / total) * 100) : null;
+        const progressHtml = progress != null ? `
           <div style="margin:1rem 0">
             <div style="display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:0.68rem;color:var(--color-subtle);margin-bottom:0.35rem">
-              <span>progress</span><span>${active.progress}%</span>
+              <span>milestones</span><span>${done} / ${total}</span>
             </div>
             <div style="height:4px;background:var(--color-overlay);border-radius:2px;overflow:hidden">
-              <div style="height:100%;width:${active.progress}%;background:var(--color-ok);border-radius:2px"></div>
+              <div style="height:100%;width:${progress}%;background:var(--color-ok);border-radius:2px"></div>
             </div>
           </div>` : '';
-        const stackHtml = active.stack?.length
-          ? `<div style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:1rem">${active.stack.map((s: string) => `<span style="font-family:var(--font-mono);font-size:0.68rem;padding:0.2rem 0.55rem;border-radius:4px;background:var(--color-overlay);color:var(--color-subtle);border:1px solid var(--color-muted)">${s}</span>`).join('')}</div>`
-          : '';
         el.innerHTML = `
           <a href="/projects" style="display:block;text-decoration:none">
             <div class="card" style="transition:border-color 0.15s">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
                 <span class="mono" style="color:var(--color-ok);font-size:0.75rem;display:flex;align-items:center;gap:0.35rem">● active</span>
-                <span class="mono" style="color:var(--color-subtle);font-size:0.72rem">→ roadmap</span>
+                <span class="mono" style="color:var(--color-subtle);font-size:0.72rem">→ projects</span>
               </div>
               <h3 style="margin:0 0 0.2rem;font-size:1.1rem">${active.title}</h3>
-              <div class="mono" style="color:var(--color-subtle);font-size:0.75rem;margin-bottom:0.75rem">${active.subtitle}</div>
+              <div class="mono" style="color:var(--color-subtle);font-size:0.75rem;margin-bottom:0.75rem">${active.timeline ?? ''}</div>
               <p style="color:var(--color-subtle);font-size:0.875rem;margin:0;line-height:1.6">${active.description}</p>
               ${progressHtml}
-              ${stackHtml}
             </div>
           </a>
         `;

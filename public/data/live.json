@@ -1,41 +1,41 @@
 {
-  "updated": "2026-04-30T22:48:40Z",
-  "fetched_at": "2026-04-30T22:48:40Z",
+  "updated": "2026-06-21T20:00:01Z",
+  "fetched_at": "2026-06-21T20:00:01Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "63/66",
+      "value": "73/122",
       "sub": "pods running",
       "status": "warn"
     },
     {
       "label": "Flux",
       "value": "19/19 synced",
-      "sub": "22d",
+      "sub": "74d",
       "status": "ok"
     },
     {
       "label": "Docker Appdata",
-      "value": "\u2014",
+      "value": "17h 57m ago",
       "sub": "last backup",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "10h 48m ago",
+      "value": "8h 0m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 48m ago",
+      "value": "59m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "21h 48m ago",
+      "value": "18h 59m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -51,148 +51,148 @@
       "name": "jaime",
       "role": "control-plane",
       "status": "ok",
-      "pods": "20/110",
-      "cpu": "31%",
-      "memory": "9%",
+      "pods": "18/110",
+      "cpu": "41%",
+      "memory": "25%",
       "pressure": []
     },
     {
       "name": "tyrion",
       "role": "control-plane",
       "status": "ok",
-      "pods": "25/110",
-      "cpu": "31%",
-      "memory": "6%",
+      "pods": "28/110",
+      "cpu": "27%",
+      "memory": "14%",
       "pressure": []
     },
     {
       "name": "tywin",
       "role": "control-plane",
       "status": "ok",
-      "pods": "18/110",
+      "pods": "31/110",
       "cpu": "35%",
-      "memory": "9%",
+      "memory": "15%",
       "pressure": []
     }
   ],
   "flux": {
     "ready": 19,
     "total": 19,
-    "last_sync": "22d",
+    "last_sync": "74d",
     "status": "ok",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
-        "age": "22d",
+        "age": "74d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "22d",
+        "age": "74d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-authentik",
-        "age": "22d",
+        "age": "74d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
-        "age": "22d",
+        "age": "74d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
-        "age": "22d",
+        "age": "74d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
-        "age": "22d",
+        "age": "74d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
-        "age": "22d",
+        "age": "74d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-namespaces",
-        "age": "22d",
+        "age": "74d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking",
-        "age": "22d",
+        "age": "74d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-config",
-        "age": "22d",
+        "age": "74d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-tls",
-        "age": "22d",
+        "age": "74d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability",
-        "age": "22d",
+        "age": "74d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
-        "age": "22d",
+        "age": "74d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
-        "age": "22d",
+        "age": "74d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security",
-        "age": "22d",
+        "age": "74d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security-issuers",
-        "age": "22d",
+        "age": "74d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-storage",
-        "age": "22d",
+        "age": "74d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade",
-        "age": "22d",
+        "age": "74d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade-plans",
-        "age": "22d",
+        "age": "74d",
         "ready": true
       }
     ]
@@ -200,40 +200,40 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 789 photos \u00b7 22 videos",
+      "tag": "Immich: 808 photos \u00b7 22 videos",
       "status": "ok"
     },
     {
       "name": "Nextcloud",
-      "tag": "Nextcloud: 60.9 MB used",
-      "status": "ok"
+      "tag": "Nextcloud: offline",
+      "status": "crit"
     },
     {
       "name": "SABnzbd",
       "tag": "SABnzbd: idle",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: \u2014 series",
-      "status": "unknown"
+      "tag": "Sonarr: 61 series",
+      "status": "ok"
     },
     {
       "name": "Radarr",
-      "tag": "Radarr: \u2014 movies",
-      "status": "unknown"
+      "tag": "Radarr: 17 movies",
+      "status": "ok"
     },
     {
       "name": "Lidarr",
-      "tag": "Lidarr: \u2014 artists",
-      "status": "unknown"
+      "tag": "Lidarr: 36 artists",
+      "status": "ok"
     }
   ],
   "media": [
     {
       "name": "Plex",
       "label": "idle",
-      "status": "unknown",
+      "status": "ok",
       "playing": false
     },
     {
@@ -244,56 +244,56 @@
     }
   ],
   "network": {
-    "fw_hits": 101975,
-    "latency_ms": 4.4,
+    "fw_hits": 1020262,
+    "latency_ms": 5.9,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 52.1,
+    "temp_c": 45.1,
     "temp_status": "ok",
-    "load": 0.49,
-    "mem_pct": 42.2
+    "load": 0.67,
+    "mem_pct": 47.3
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 88,
-    "runtime_str": "1m",
-    "load_pct": 36,
-    "status": "OL LB",
+    "runtime_s": 672,
+    "runtime_str": "11m",
+    "load_pct": 28,
+    "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "4h ago",
-    "message": "chore(deps): update helm release velero to v12.0.1 (#238)",
-    "sha": "3ca604a"
+    "age": "2d ago",
+    "message": "chore(observability): consolidate Grafana dashboards (36 \u2192 5) (#540)",
+    "sha": "46beb02"
   },
   "storage": [
     {
       "name": "tera",
-      "used": "6.0 TB",
+      "used": "5.8 TB",
       "total": "7.9 TB",
-      "pct": 76.8,
-      "status": "warn",
+      "pct": 73.8,
+      "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
     },
     {
       "name": "archive",
-      "used": "464.8 GB",
+      "used": "702.9 GB",
       "total": "4.0 TB",
-      "pct": 11.7,
+      "pct": 17.6,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
     },
     {
       "name": "core",
-      "used": "44.8 GB",
+      "used": "100.0 GB",
       "total": "476.7 GB",
-      "pct": 9.4,
+      "pct": 21.0,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -301,12 +301,25 @@
   ],
   "contribs": {
     "days": {
-      "2026-04-22": 18,
-      "2026-04-21": 6,
-      "2026-04-20": 20,
-      "2026-04-19": 56
+      "2026-06-21": 4,
+      "2026-06-20": 0,
+      "2026-06-19": 23,
+      "2026-06-18": 0,
+      "2026-06-17": 0,
+      "2026-06-14": 5,
+      "2026-06-11": 5,
+      "2026-06-10": 5,
+      "2026-06-09": 7,
+      "2026-06-08": 0,
+      "2026-06-04": 0,
+      "2026-06-03": 9,
+      "2026-05-29": 26,
+      "2026-05-28": 17,
+      "2026-05-26": 1,
+      "2026-05-24": 30,
+      "2026-05-23": 0
     },
-    "total": 100,
-    "active_days": 4
+    "total": 132,
+    "active_days": 17
   }
 }

@@ -11,9 +11,9 @@ import Layout from '../layouts/Layout.astro';
       <div>
         <p class="mono" style="color:var(--color-peach); margin-bottom:0.25rem">~/status</p>
         <h1 style="margin:0">Cluster Status</h1>
-        <!-- Live cluster uptime counter -->
+        <!-- Live cluster age counter (time since earliest node joined; survives reboots) -->
         <div class="uptime-counter" id="uptime-counter">
-          <span class="uptime-label mono">cluster uptime</span>
+          <span class="uptime-label mono">cluster age</span>
           <span class="uptime-value mono" id="uptime-value">—</span>
         </div>
       </div>

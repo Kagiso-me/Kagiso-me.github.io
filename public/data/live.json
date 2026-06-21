@@ -1,11 +1,11 @@
 {
-  "updated": "2026-06-21T20:25:27Z",
-  "fetched_at": "2026-06-21T20:25:27Z",
+  "updated": "2026-06-21T21:51:29Z",
+  "fetched_at": "2026-06-21T21:51:29Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "73/122",
+      "value": "74/122",
       "sub": "pods running",
       "status": "warn"
     },
@@ -29,7 +29,7 @@
     },
     {
       "label": "Velero",
-      "value": "1h 25m ago",
+      "value": "2h 52m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
@@ -221,19 +221,19 @@
     {
       "name": "Radarr",
       "tag": "Radarr: \u2014 movies",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "name": "Lidarr",
       "tag": "Lidarr: \u2014 artists",
-      "status": "ok"
+      "status": "unknown"
     }
   ],
   "media": [
     {
       "name": "Plex",
       "label": "idle",
-      "status": "ok",
+      "status": "unknown",
       "playing": false
     },
     {
@@ -244,29 +244,29 @@
     }
   ],
   "network": {
-    "fw_hits": 1020878,
-    "latency_ms": 3.1,
+    "fw_hits": 1022569,
+    "latency_ms": 3.2,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 45.6,
+    "temp_c": 43.5,
     "temp_status": "ok",
-    "load": 0.28,
-    "mem_pct": 39.9
+    "load": 0.38,
+    "mem_pct": 41.2
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 692,
+    "runtime_s": 672,
     "runtime_str": "11m",
-    "load_pct": 27,
+    "load_pct": 28,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "14m ago",
+    "age": "1h ago",
     "message": "fix(observability): repair 'No data' panels (Backups + Services) (#543)",
     "sha": "30225ff"
   },

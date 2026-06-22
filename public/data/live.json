@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-21T23:06:53Z",
-  "fetched_at": "2026-06-21T23:06:53Z",
+  "updated": "2026-06-22T02:00:05Z",
+  "fetched_at": "2026-06-22T02:00:05Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -17,25 +17,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "21h 3m ago",
+      "value": "23h 57m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "11h 7m ago",
+      "value": "2h 0m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "4h 6m ago",
+      "value": "1h 0m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "22h 5m ago",
+      "value": "59m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -51,7 +51,7 @@
       "name": "jaime",
       "role": "control-plane",
       "status": "ok",
-      "pods": "17/110",
+      "pods": "18/110",
       "cpu": "41%",
       "memory": "25%",
       "pressure": []
@@ -244,29 +244,29 @@
     }
   ],
   "network": {
-    "fw_hits": 1023408,
-    "latency_ms": 3.3,
+    "fw_hits": 1025351,
+    "latency_ms": 3.2,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
     "temp_c": 45.1,
     "temp_status": "ok",
-    "load": 0.91,
-    "mem_pct": 42.0
+    "load": 0.82,
+    "mem_pct": 43.4
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 692,
-    "runtime_str": "11m",
-    "load_pct": 27,
+    "runtime_s": 548,
+    "runtime_str": "9m",
+    "load_pct": 32,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "2h ago",
+    "age": "5h ago",
     "message": "fix(observability): repair 'No data' panels (Backups + Services) (#543)",
     "sha": "30225ff"
   },
@@ -282,16 +282,16 @@
     },
     {
       "name": "archive",
-      "used": "703.0 GB",
+      "used": "703.8 GB",
       "total": "4.0 TB",
-      "pct": 17.6,
+      "pct": 17.7,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
     },
     {
       "name": "core",
-      "used": "100.0 GB",
+      "used": "100.2 GB",
       "total": "476.7 GB",
       "pct": 21.0,
       "status": "ok",

@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-22T21:19:05Z",
-  "fetched_at": "2026-06-22T21:19:05Z",
+  "updated": "2026-06-22T23:00:02Z",
+  "fetched_at": "2026-06-22T23:00:02Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -17,27 +17,27 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "19h 16m ago",
+      "value": "\u2014",
       "sub": "last backup",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "etcd Snapshot",
-      "value": "9h 19m ago",
+      "value": "\u2014",
       "sub": "last snapshot",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "Velero",
-      "value": "2h 18m ago",
+      "value": "4h 0m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "20h 18m ago",
+      "value": "\u2014",
       "sub": "age keys \u00b7 varys",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "Backblaze B2",
@@ -60,9 +60,9 @@
       "name": "tyrion",
       "role": "control-plane",
       "status": "ok",
-      "pods": "25/110",
+      "pods": "27/110",
       "cpu": "27%",
-      "memory": "13%",
+      "memory": "14%",
       "pressure": []
     },
     {
@@ -210,22 +210,22 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 37.5 GB left",
+      "tag": "SABnzbd: downloading \u00b7 114.3 GB left",
       "status": "ok"
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: 59 series",
+      "tag": "Sonarr: \u2014 series",
       "status": "ok"
     },
     {
       "name": "Radarr",
-      "tag": "Radarr: 15 movies",
-      "status": "ok"
+      "tag": "Radarr: \u2014 movies",
+      "status": "unknown"
     },
     {
       "name": "Lidarr",
-      "tag": "Lidarr: 36 artists",
+      "tag": "Lidarr: \u2014 artists",
       "status": "ok"
     }
   ],
@@ -233,7 +233,7 @@
     {
       "name": "Plex",
       "label": "idle",
-      "status": "ok",
+      "status": "unknown",
       "playing": false
     },
     {
@@ -244,29 +244,29 @@
     }
   ],
   "network": {
-    "fw_hits": 1056779,
-    "latency_ms": 3.1,
+    "fw_hits": 1058598,
+    "latency_ms": 72.1,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
     "temp_c": 47.2,
     "temp_status": "ok",
-    "load": 0.69,
-    "mem_pct": 47.8
+    "load": 1.18,
+    "mem_pct": 49.1
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 568,
-    "runtime_str": "9m",
-    "load_pct": 31,
+    "runtime_s": 648,
+    "runtime_str": "10m",
+    "load_pct": 29,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "2h ago",
+    "age": "4h ago",
     "message": "chore(security): rotate CrowdSec bouncer API key off placeholder (#559)",
     "sha": "b80958f"
   },

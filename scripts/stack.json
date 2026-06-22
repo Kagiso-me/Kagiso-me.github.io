@@ -1,90 +1,102 @@
 {
-  "_comment": "App versions for CVE tracking via OSV.dev. Running app versions, not Helm chart versions. Update when pods are upgraded.",
-  "_updated": "2026-05-01",
+  "_comment": "App versions for CVE tracking via OSV.dev. The 'version' of any component with an 'image' field is auto-synced from the live cluster by sync-stack-versions.py (runs before fetch-cves.py). Components without 'image' (Docker-host apps not in k3s) are still hand-maintained \u2014 update their version when upgraded.",
+  "_updated": "2026-06-22",
   "components": [
     {
       "name": "k3s",
       "display": "k3s",
       "version": "1.34.6",
       "ecosystem": "Go",
-      "package": "github.com/k3s-io/k3s"
+      "package": "github.com/k3s-io/k3s",
+      "image": "k3s-node-version"
     },
     {
       "name": "traefik",
       "display": "Traefik",
-      "version": "3.6.13",
+      "version": "3.6.15",
       "ecosystem": "Go",
-      "package": "github.com/traefik/traefik/v3"
+      "package": "github.com/traefik/traefik/v3",
+      "image": "traefik"
     },
     {
       "name": "cert-manager",
       "display": "cert-manager",
       "version": "1.20.2",
       "ecosystem": "Go",
-      "package": "github.com/cert-manager/cert-manager"
+      "package": "github.com/cert-manager/cert-manager",
+      "image": "jetstack/cert-manager-controller"
     },
     {
       "name": "flux-source-controller",
       "display": "Flux source-controller",
-      "version": "1.8.2",
+      "version": "1.8.3",
       "ecosystem": "Go",
-      "package": "github.com/fluxcd/source-controller"
+      "package": "github.com/fluxcd/source-controller",
+      "image": "fluxcd/source-controller"
     },
     {
       "name": "flux-helm-controller",
       "display": "Flux helm-controller",
       "version": "1.5.4",
       "ecosystem": "Go",
-      "package": "github.com/fluxcd/helm-controller"
+      "package": "github.com/fluxcd/helm-controller",
+      "image": "fluxcd/helm-controller"
     },
     {
       "name": "flux-kustomize-controller",
       "display": "Flux kustomize-controller",
       "version": "1.8.4",
       "ecosystem": "Go",
-      "package": "github.com/fluxcd/kustomize-controller"
+      "package": "github.com/fluxcd/kustomize-controller",
+      "image": "fluxcd/kustomize-controller"
     },
     {
       "name": "flux-notification-controller",
       "display": "Flux notification-controller",
       "version": "1.8.4",
       "ecosystem": "Go",
-      "package": "github.com/fluxcd/notification-controller"
+      "package": "github.com/fluxcd/notification-controller",
+      "image": "fluxcd/notification-controller"
     },
     {
       "name": "crowdsec",
       "display": "CrowdSec",
-      "version": "1.7.7",
+      "version": "1.7.8",
       "ecosystem": "Go",
-      "package": "github.com/crowdsecurity/crowdsec"
+      "package": "github.com/crowdsecurity/crowdsec",
+      "image": "crowdsecurity/crowdsec"
     },
     {
       "name": "authentik",
       "display": "Authentik",
       "version": "2026.2.2",
       "ecosystem": "PyPI",
-      "package": "authentik"
+      "package": "authentik",
+      "image": "goauthentik/server"
     },
     {
       "name": "vaultwarden",
       "display": "Vaultwarden",
-      "version": "1.35.8",
+      "version": "1.36.0",
       "ecosystem": "crates.io",
-      "package": "vaultwarden"
+      "package": "vaultwarden",
+      "image": "vaultwarden/server"
     },
     {
       "name": "immich",
       "display": "Immich",
       "version": "2.6.3",
       "ecosystem": "npm",
-      "package": "immich"
+      "package": "immich",
+      "image": "immich-app/immich-server"
     },
     {
       "name": "nextcloud",
       "display": "Nextcloud",
-      "version": "33.0.2",
+      "version": "33.0.5",
       "ecosystem": "Packagist",
-      "package": "nextcloud/server"
+      "package": "nextcloud/server",
+      "image": "library/nextcloud"
     },
     {
       "name": "sonarr",

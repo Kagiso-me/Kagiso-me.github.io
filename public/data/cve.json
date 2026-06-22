@@ -1,79 +1,16 @@
 {
-  "fetched_at": "2026-06-22T11:53:22Z",
+  "fetched_at": "2026-06-22T17:47:18Z",
   "status": "warn",
   "counts": {
     "CRITICAL": 0,
-    "HIGH": 5,
-    "MEDIUM": 7,
+    "HIGH": 1,
+    "MEDIUM": 3,
     "LOW": 0,
     "UNKNOWN": 2
   },
-  "total": 14,
+  "total": 6,
   "tracked": 17,
   "vulnerabilities": [
-    {
-      "id": "GHSA-5m6w-wvh7-57vm",
-      "cve_id": "CVE-2026-39858",
-      "summary": "Traefik: Pre-authentication decision bypass due to forwarded alias spoofing",
-      "severity": "HIGH",
-      "cvss": 9.7,
-      "published": "2026-04-24T16:32:34Z",
-      "modified": "2026-05-06T21:35:06.111060Z",
-      "refs": [
-        "https://github.com/traefik/traefik/security/advisories/GHSA-5m6w-wvh7-57vm",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-39858",
-        "https://github.com/traefik/traefik"
-      ],
-      "component": "Traefik",
-      "component_version": "3.6.13"
-    },
-    {
-      "id": "GHSA-6384-m2mw-rf54",
-      "cve_id": "CVE-2026-35051",
-      "summary": "Traefik's ForwardAuth trustForwardHeader=false allows spoofed X-Forwarded-Prefix to bypass authentication",
-      "severity": "HIGH",
-      "cvss": 9.7,
-      "published": "2026-04-24T16:31:24Z",
-      "modified": "2026-05-06T21:33:10.152045Z",
-      "refs": [
-        "https://github.com/traefik/traefik/security/advisories/GHSA-6384-m2mw-rf54",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-35051",
-        "https://github.com/traefik/traefik"
-      ],
-      "component": "Traefik",
-      "component_version": "3.6.13"
-    },
-    {
-      "id": "GHSA-6jwx-7vp4-9847",
-      "cve_id": "CVE-2026-40912",
-      "summary": "Traefik has an StripPrefixRegex Middleware Authorization Bypass via Path/RawPath Desync",
-      "severity": "HIGH",
-      "cvss": 8.2,
-      "published": "2026-04-24T16:37:53Z",
-      "modified": "2026-05-06T21:35:04.645779Z",
-      "refs": [
-        "https://github.com/traefik/traefik/security/advisories/GHSA-6jwx-7vp4-9847",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-40912",
-        "https://github.com/traefik/traefik"
-      ],
-      "component": "Traefik",
-      "component_version": "3.6.13"
-    },
-    {
-      "id": "GHSA-rw47-hm26-6wr7",
-      "cve_id": "CVE-2026-44982",
-      "summary": "CrowdSec AppSec silently drops request body for chunked / HTTP-2 requests",
-      "severity": "HIGH",
-      "cvss": 6.7,
-      "published": "2026-05-27T19:58:15Z",
-      "modified": "2026-05-27T20:00:10.359721908Z",
-      "refs": [
-        "https://github.com/crowdsecurity/crowdsec/security/advisories/GHSA-rw47-hm26-6wr7",
-        "https://github.com/crowdsecurity/crowdsec"
-      ],
-      "component": "CrowdSec",
-      "component_version": "1.7.7"
-    },
     {
       "id": "GHSA-xf64-8mw2-4gr2",
       "cve_id": "CVE-2026-48020",
@@ -88,39 +25,7 @@
         "https://github.com/traefik/traefik/releases/tag/v2.11.48"
       ],
       "component": "Traefik",
-      "component_version": "3.6.13"
-    },
-    {
-      "id": "GHSA-xhjw-95fp-8vgq",
-      "cve_id": "CVE-2026-41174",
-      "summary": "Traefik Kubernetes CRD allows unauthorized cross-namespace middleware binding",
-      "severity": "MEDIUM",
-      "cvss": 5.1,
-      "published": "2026-04-24T20:12:10Z",
-      "modified": "2026-05-06T21:38:46.390094Z",
-      "refs": [
-        "https://github.com/traefik/traefik/security/advisories/GHSA-xhjw-95fp-8vgq",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-41174",
-        "https://github.com/traefik/traefik/commit/df00d82fc7f12e07199551832b54de6d0e55414d"
-      ],
-      "component": "Traefik",
-      "component_version": "3.6.13"
-    },
-    {
-      "id": "GHSA-6x2q-h3cr-8j2h",
-      "cve_id": "CVE-2026-41263",
-      "summary": "Traefik: A timing side-channel vulnerability allows for valid username enumeration via BasicAuth middleware",
-      "severity": "MEDIUM",
-      "cvss": 3.7,
-      "published": "2026-04-24T20:36:41Z",
-      "modified": "2026-05-06T21:37:20.786589Z",
-      "refs": [
-        "https://github.com/traefik/traefik/security/advisories/GHSA-6x2q-h3cr-8j2h",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-41263",
-        "https://github.com/traefik/traefik"
-      ],
-      "component": "Traefik",
-      "component_version": "3.6.13"
+      "component_version": "3.6.15"
     },
     {
       "id": "GHSA-3g6v-2r68-prfc",
@@ -136,7 +41,7 @@
         "https://github.com/traefik/traefik/releases/tag/v3.6.21"
       ],
       "component": "Traefik",
-      "component_version": "3.6.13"
+      "component_version": "3.6.15"
     },
     {
       "id": "GHSA-96qj-4jj5-wcjc",
@@ -152,23 +57,7 @@
         "https://github.com/traefik/traefik"
       ],
       "component": "Traefik",
-      "component_version": "3.6.13"
-    },
-    {
-      "id": "GHSA-p6hg-qh38-555r",
-      "cve_id": "CVE-2026-41181",
-      "summary": "Traefik's errors middleware forwards Authorization and Cookie headers to separate error page service",
-      "severity": "MEDIUM",
-      "cvss": null,
-      "published": "2026-05-04T19:26:33Z",
-      "modified": "2026-05-16T00:10:07.569074Z",
-      "refs": [
-        "https://github.com/traefik/traefik/security/advisories/GHSA-p6hg-qh38-555r",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-41181",
-        "https://github.com/traefik/traefik"
-      ],
-      "component": "Traefik",
-      "component_version": "3.6.13"
+      "component_version": "3.6.15"
     },
     {
       "id": "GHSA-jjrm-hr5f-673x",
@@ -184,23 +73,7 @@
         "https://github.com/fluxcd/source-controller/commit/759bd6c451e7cc4327b38f42c8b671980165cb0e"
       ],
       "component": "Flux source-controller",
-      "component_version": "1.8.2"
-    },
-    {
-      "id": "GHSA-273h-gvwr-c3qj",
-      "cve_id": "CVE-2026-44981",
-      "summary": "CrowdSec LAPI: Denial of Service via Unbounded Gzip Decompression",
-      "severity": "MEDIUM",
-      "cvss": null,
-      "published": "2026-05-27T19:57:28Z",
-      "modified": "2026-06-17T00:26:11.609038661Z",
-      "refs": [
-        "https://github.com/crowdsecurity/crowdsec/security/advisories/GHSA-273h-gvwr-c3qj",
-        "https://github.com/crowdsecurity/crowdsec",
-        "https://github.com/crowdsecurity/crowdsec/releases/tag/v1.7.8"
-      ],
-      "component": "CrowdSec",
-      "component_version": "1.7.7"
+      "component_version": "1.8.3"
     },
     {
       "id": "GO-2025-3646",

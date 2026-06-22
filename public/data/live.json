@@ -1,11 +1,11 @@
 {
-  "updated": "2026-06-22T18:10:03Z",
-  "fetched_at": "2026-06-22T18:10:03Z",
+  "updated": "2026-06-22T21:19:05Z",
+  "fetched_at": "2026-06-22T21:19:05Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "75/122",
+      "value": "74/121",
       "sub": "pods running",
       "status": "warn"
     },
@@ -17,25 +17,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "16h 7m ago",
+      "value": "19h 16m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "6h 10m ago",
+      "value": "9h 19m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "5h 9m ago",
+      "value": "2h 18m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "17h 9m ago",
+      "value": "20h 18m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -60,16 +60,16 @@
       "name": "tyrion",
       "role": "control-plane",
       "status": "ok",
-      "pods": "27/110",
+      "pods": "25/110",
       "cpu": "27%",
-      "memory": "14%",
+      "memory": "13%",
       "pressure": []
     },
     {
       "name": "tywin",
       "role": "control-plane",
       "status": "ok",
-      "pods": "31/110",
+      "pods": "30/110",
       "cpu": "35%",
       "memory": "15%",
       "pressure": []
@@ -200,7 +200,7 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 808 photos \u00b7 22 videos",
+      "tag": "Immich: 813 photos \u00b7 22 videos",
       "status": "ok"
     },
     {
@@ -210,17 +210,17 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: idle",
+      "tag": "SABnzbd: downloading \u00b7 37.5 GB left",
       "status": "ok"
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: 60 series",
+      "tag": "Sonarr: 59 series",
       "status": "ok"
     },
     {
       "name": "Radarr",
-      "tag": "Radarr: 17 movies",
+      "tag": "Radarr: 15 movies",
       "status": "ok"
     },
     {
@@ -244,45 +244,45 @@
     }
   ],
   "network": {
-    "fw_hits": 1054194,
-    "latency_ms": 3.4,
+    "fw_hits": 1056779,
+    "latency_ms": 3.1,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 49.9,
+    "temp_c": 47.2,
     "temp_status": "ok",
-    "load": 1.23,
-    "mem_pct": 52.3
+    "load": 0.69,
+    "mem_pct": 47.8
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 608,
-    "runtime_str": "10m",
-    "load_pct": 30,
+    "runtime_s": 568,
+    "runtime_str": "9m",
+    "load_pct": 31,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "0m ago",
-    "message": "fix(security): migrate CrowdSec bouncer to in-process Traefik plugin (#553)",
-    "sha": "c62d0bf"
+    "age": "2h ago",
+    "message": "chore(security): rotate CrowdSec bouncer API key off placeholder (#559)",
+    "sha": "b80958f"
   },
   "storage": [
     {
       "name": "tera",
       "used": "5.7 TB",
       "total": "7.9 TB",
-      "pct": 72.6,
+      "pct": 72.4,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
     },
     {
       "name": "archive",
-      "used": "707.0 GB",
+      "used": "707.2 GB",
       "total": "4.0 TB",
       "pct": 17.7,
       "status": "ok",
@@ -301,7 +301,7 @@
   ],
   "contribs": {
     "days": {
-      "2026-06-22": 23,
+      "2026-06-22": 41,
       "2026-06-21": 13,
       "2026-06-20": 0,
       "2026-06-19": 23,
@@ -319,7 +319,7 @@
       "2026-05-26": 1,
       "2026-05-24": 30
     },
-    "total": 164,
+    "total": 182,
     "active_days": 17
   }
 }

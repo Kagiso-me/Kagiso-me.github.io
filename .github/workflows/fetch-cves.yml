@@ -16,6 +16,9 @@ jobs:
         with:
           token: ${{ secrets.SITE_DEPLOY_TOKEN }}
 
+      - name: Sync stack.json to live cluster versions
+        run: python3 scripts/sync-stack-versions.py
+
       - name: Fetch CVE data
         env:
           DISCORD_CVE_WEBHOOK: "https://discord.com/api/webhooks/1495109691393577131/oqu26VRzLkNSIMop7VwoodHyI81WxqzF_GhkL01I0UIRYC8ioXcGn0mCcWO3b7n7J1bO"
@@ -25,8 +28,8 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add public/data/cve.json
+          git add public/data/cve.json scripts/stack.json
           git diff --staged --quiet && exit 0
-          git commit -m "chore(data): update CVE feed"
+          git commit -m "chore(data): update CVE feed + sync stack versions"
           git pull --rebase
           git push

@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-22T23:00:02Z",
-  "fetched_at": "2026-06-22T23:00:02Z",
+  "updated": "2026-06-23T00:15:36Z",
+  "fetched_at": "2026-06-23T00:15:36Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -17,27 +17,27 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "\u2014",
+      "value": "22h 12m ago",
       "sub": "last backup",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "\u2014",
+      "value": "15m ago",
       "sub": "last snapshot",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "4h 0m ago",
+      "value": "5h 15m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "\u2014",
+      "value": "23h 15m ago",
       "sub": "age keys \u00b7 varys",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "Backblaze B2",
@@ -60,9 +60,9 @@
       "name": "tyrion",
       "role": "control-plane",
       "status": "ok",
-      "pods": "27/110",
+      "pods": "25/110",
       "cpu": "27%",
-      "memory": "14%",
+      "memory": "13%",
       "pressure": []
     },
     {
@@ -205,27 +205,27 @@
     },
     {
       "name": "Nextcloud",
-      "tag": "Nextcloud: 60.9 MB used",
+      "tag": "Nextcloud: online",
       "status": "ok"
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 114.3 GB left",
+      "tag": "SABnzbd: downloading \u00b7 98.1 GB left",
       "status": "ok"
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: \u2014 series",
+      "tag": "Sonarr: 59 series",
       "status": "ok"
     },
     {
       "name": "Radarr",
-      "tag": "Radarr: \u2014 movies",
-      "status": "unknown"
+      "tag": "Radarr: 15 movies",
+      "status": "ok"
     },
     {
       "name": "Lidarr",
-      "tag": "Lidarr: \u2014 artists",
+      "tag": "Lidarr: 36 artists",
       "status": "ok"
     }
   ],
@@ -233,7 +233,7 @@
     {
       "name": "Plex",
       "label": "idle",
-      "status": "unknown",
+      "status": "ok",
       "playing": false
     },
     {
@@ -244,29 +244,29 @@
     }
   ],
   "network": {
-    "fw_hits": 1058598,
-    "latency_ms": 72.1,
+    "fw_hits": 1059344,
+    "latency_ms": 3.4,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 47.2,
+    "temp_c": 46.2,
     "temp_status": "ok",
-    "load": 1.18,
-    "mem_pct": 49.1
+    "load": 0.83,
+    "mem_pct": 50.3
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 648,
+    "runtime_s": 608,
     "runtime_str": "10m",
-    "load_pct": 29,
+    "load_pct": 30,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "4h ago",
+    "age": "5h ago",
     "message": "chore(security): rotate CrowdSec bouncer API key off placeholder (#559)",
     "sha": "b80958f"
   },
@@ -275,14 +275,14 @@
       "name": "tera",
       "used": "5.7 TB",
       "total": "7.9 TB",
-      "pct": 72.4,
+      "pct": 72.7,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
     },
     {
       "name": "archive",
-      "used": "707.2 GB",
+      "used": "707.4 GB",
       "total": "4.0 TB",
       "pct": 17.7,
       "status": "ok",
@@ -291,7 +291,7 @@
     },
     {
       "name": "core",
-      "used": "101.4 GB",
+      "used": "101.6 GB",
       "total": "476.7 GB",
       "pct": 21.3,
       "status": "ok",

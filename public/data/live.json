@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-23T04:38:58Z",
-  "fetched_at": "2026-06-23T04:38:58Z",
+  "updated": "2026-06-23T08:26:06Z",
+  "fetched_at": "2026-06-23T08:26:06Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -17,25 +17,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "2h 36m ago",
+      "value": "6h 23m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "4h 39m ago",
+      "value": "8h 26m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "1h 38m ago",
+      "value": "1h 25m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "3h 38m ago",
+      "value": "7h 25m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -210,7 +210,7 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 21.8 GB left",
+      "tag": "SABnzbd: idle",
       "status": "ok"
     },
     {
@@ -244,29 +244,29 @@
     }
   ],
   "network": {
-    "fw_hits": 1063294,
-    "latency_ms": 79.2,
+    "fw_hits": 1065854,
+    "latency_ms": 3.1,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
     "temp_c": 44.0,
     "temp_status": "ok",
-    "load": 0.72,
-    "mem_pct": 50.0
+    "load": 0.84,
+    "mem_pct": 51.7
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 588,
-    "runtime_str": "9m",
-    "load_pct": 30,
+    "runtime_s": 672,
+    "runtime_str": "11m",
+    "load_pct": 28,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "9h ago",
+    "age": "13h ago",
     "message": "chore(security): rotate CrowdSec bouncer API key off placeholder (#559)",
     "sha": "b80958f"
   },
@@ -282,7 +282,7 @@
     },
     {
       "name": "archive",
-      "used": "714.3 GB",
+      "used": "714.5 GB",
       "total": "4.0 TB",
       "pct": 17.9,
       "status": "ok",
@@ -291,7 +291,7 @@
     },
     {
       "name": "core",
-      "used": "101.8 GB",
+      "used": "102.2 GB",
       "total": "476.7 GB",
       "pct": 21.4,
       "status": "ok",
@@ -301,8 +301,8 @@
   ],
   "contribs": {
     "days": {
+      "2026-06-22": 42,
       "2026-06-23": 0,
-      "2026-06-22": 41,
       "2026-06-21": 13,
       "2026-06-20": 0,
       "2026-06-19": 23,
@@ -320,7 +320,7 @@
       "2026-05-26": 1,
       "2026-05-24": 30
     },
-    "total": 182,
+    "total": 183,
     "active_days": 18
   }
 }

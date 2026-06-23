@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-23T17:13:05Z",
-  "fetched_at": "2026-06-23T17:13:05Z",
+  "updated": "2026-06-23T19:24:25Z",
+  "fetched_at": "2026-06-23T19:24:25Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -17,27 +17,27 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "15h 10m ago",
+      "value": "\u2014",
       "sub": "last backup",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "etcd Snapshot",
-      "value": "5h 13m ago",
+      "value": "\u2014",
       "sub": "last snapshot",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "Velero",
-      "value": "4h 12m ago",
+      "value": "24m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "16h 12m ago",
+      "value": "\u2014",
       "sub": "age keys \u00b7 varys",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "Backblaze B2",
@@ -200,7 +200,7 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 813 photos \u00b7 22 videos",
+      "tag": "Immich: 821 photos \u00b7 22 videos",
       "status": "ok"
     },
     {
@@ -215,25 +215,25 @@
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: 59 series",
+      "tag": "Sonarr: \u2014 series",
       "status": "ok"
     },
     {
       "name": "Radarr",
-      "tag": "Radarr: 15 movies",
-      "status": "ok"
+      "tag": "Radarr: \u2014 movies",
+      "status": "unknown"
     },
     {
       "name": "Lidarr",
-      "tag": "Lidarr: 36 artists",
-      "status": "ok"
+      "tag": "Lidarr: \u2014 artists",
+      "status": "unknown"
     }
   ],
   "media": [
     {
       "name": "Plex",
       "label": "idle",
-      "status": "ok",
+      "status": "unknown",
       "playing": false
     },
     {
@@ -244,20 +244,20 @@
     }
   ],
   "network": {
-    "fw_hits": 1072005,
-    "latency_ms": 4.8,
+    "fw_hits": 1073853,
+    "latency_ms": 3.4,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 46.7,
+    "temp_c": 45.1,
     "temp_status": "ok",
-    "load": 1.11,
-    "mem_pct": 53.2
+    "load": 0.49,
+    "mem_pct": 54.7
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 672,
+    "runtime_s": 692,
     "runtime_str": "11m",
     "load_pct": 28,
     "status": "OL",
@@ -266,7 +266,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "22h ago",
+    "age": "1d ago",
     "message": "chore(security): rotate CrowdSec bouncer API key off placeholder (#559)",
     "sha": "b80958f"
   },
@@ -282,7 +282,7 @@
     },
     {
       "name": "archive",
-      "used": "714.9 GB",
+      "used": "715.3 GB",
       "total": "4.0 TB",
       "pct": 17.9,
       "status": "ok",
@@ -291,9 +291,9 @@
     },
     {
       "name": "core",
-      "used": "102.8 GB",
+      "used": "103.3 GB",
       "total": "476.7 GB",
-      "pct": 21.6,
+      "pct": 21.7,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true

@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-23T08:26:06Z",
-  "fetched_at": "2026-06-23T08:26:06Z",
+  "updated": "2026-06-23T11:37:49Z",
+  "fetched_at": "2026-06-23T11:37:49Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -17,25 +17,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "6h 23m ago",
+      "value": "9h 35m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "8h 26m ago",
+      "value": "11h 38m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "1h 25m ago",
+      "value": "4h 37m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "7h 25m ago",
+      "value": "10h 37m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -90,7 +90,7 @@
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "75d",
+        "age": "76d",
         "ready": true
       },
       {
@@ -244,29 +244,29 @@
     }
   ],
   "network": {
-    "fw_hits": 1065854,
-    "latency_ms": 3.1,
+    "fw_hits": 1067905,
+    "latency_ms": 3.3,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 44.0,
+    "temp_c": 45.1,
     "temp_status": "ok",
-    "load": 0.84,
-    "mem_pct": 51.7
+    "load": 0.71,
+    "mem_pct": 51.0
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 672,
-    "runtime_str": "11m",
-    "load_pct": 28,
+    "runtime_s": 608,
+    "runtime_str": "10m",
+    "load_pct": 30,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "13h ago",
+    "age": "16h ago",
     "message": "chore(security): rotate CrowdSec bouncer API key off placeholder (#559)",
     "sha": "b80958f"
   },
@@ -291,9 +291,9 @@
     },
     {
       "name": "core",
-      "used": "102.2 GB",
+      "used": "102.7 GB",
       "total": "476.7 GB",
-      "pct": 21.4,
+      "pct": 21.5,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -301,8 +301,8 @@
   ],
   "contribs": {
     "days": {
-      "2026-06-22": 42,
       "2026-06-23": 0,
+      "2026-06-22": 42,
       "2026-06-21": 13,
       "2026-06-20": 0,
       "2026-06-19": 23,

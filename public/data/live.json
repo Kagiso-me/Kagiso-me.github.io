@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-23T19:24:25Z",
-  "fetched_at": "2026-06-23T19:24:25Z",
+  "updated": "2026-06-23T21:13:07Z",
+  "fetched_at": "2026-06-23T21:13:07Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -29,7 +29,7 @@
     },
     {
       "label": "Velero",
-      "value": "24m ago",
+      "value": "2h 13m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
@@ -221,7 +221,7 @@
     {
       "name": "Radarr",
       "tag": "Radarr: \u2014 movies",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "name": "Lidarr",
@@ -233,7 +233,7 @@
     {
       "name": "Plex",
       "label": "idle",
-      "status": "unknown",
+      "status": "ok",
       "playing": false
     },
     {
@@ -244,22 +244,22 @@
     }
   ],
   "network": {
-    "fw_hits": 1073853,
-    "latency_ms": 3.4,
+    "fw_hits": 1075848,
+    "latency_ms": 5.0,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 45.1,
+    "temp_c": 45.6,
     "temp_status": "ok",
-    "load": 0.49,
-    "mem_pct": 54.7
+    "load": 0.45,
+    "mem_pct": 55.0
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 692,
-    "runtime_str": "11m",
-    "load_pct": 28,
+    "runtime_s": 648,
+    "runtime_str": "10m",
+    "load_pct": 29,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,

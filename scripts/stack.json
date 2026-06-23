@@ -1,6 +1,6 @@
 {
   "_comment": "App versions for CVE tracking via OSV.dev. The 'version' of any component with an 'image' field is auto-synced from the live cluster by sync-stack-versions.py (runs before fetch-cves.py). Components without 'image' (Docker-host apps not in k3s) are still hand-maintained \u2014 update their version when upgraded.",
-  "_updated": "2026-06-22",
+  "_updated": "2026-06-23",
   "components": [
     {
       "name": "k3s",
@@ -13,7 +13,7 @@
     {
       "name": "traefik",
       "display": "Traefik",
-      "version": "3.6.15",
+      "version": "3.6.19",
       "ecosystem": "Go",
       "package": "github.com/traefik/traefik/v3",
       "image": "traefik"

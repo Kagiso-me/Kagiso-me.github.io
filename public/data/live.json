@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-23T14:37:00Z",
-  "fetched_at": "2026-06-23T14:37:00Z",
+  "updated": "2026-06-23T17:13:05Z",
+  "fetched_at": "2026-06-23T17:13:05Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -17,27 +17,27 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "\u2014",
+      "value": "15h 10m ago",
       "sub": "last backup",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "2h 38m ago",
+      "value": "5h 13m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "1h 38m ago",
+      "value": "4h 12m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "\u2014",
+      "value": "16h 12m ago",
       "sub": "age keys \u00b7 varys",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "Backblaze B2",
@@ -215,17 +215,17 @@
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: \u2014 series",
+      "tag": "Sonarr: 59 series",
       "status": "ok"
     },
     {
       "name": "Radarr",
-      "tag": "Radarr: \u2014 movies",
-      "status": "unknown"
+      "tag": "Radarr: 15 movies",
+      "status": "ok"
     },
     {
       "name": "Lidarr",
-      "tag": "Lidarr: \u2014 artists",
+      "tag": "Lidarr: 36 artists",
       "status": "ok"
     }
   ],
@@ -244,16 +244,16 @@
     }
   ],
   "network": {
-    "fw_hits": 1069968,
-    "latency_ms": 3.4,
+    "fw_hits": 1072005,
+    "latency_ms": 4.8,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 44.0,
+    "temp_c": 46.7,
     "temp_status": "ok",
-    "load": 0.24,
-    "mem_pct": 53.8
+    "load": 1.11,
+    "mem_pct": 53.2
   },
   "ups": {
     "charge": 100,
@@ -266,7 +266,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "19h ago",
+    "age": "22h ago",
     "message": "chore(security): rotate CrowdSec bouncer API key off placeholder (#559)",
     "sha": "b80958f"
   },
@@ -291,7 +291,7 @@
     },
     {
       "name": "core",
-      "used": "102.9 GB",
+      "used": "102.8 GB",
       "total": "476.7 GB",
       "pct": 21.6,
       "status": "ok",

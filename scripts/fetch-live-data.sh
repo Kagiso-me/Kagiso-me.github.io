@@ -12,6 +12,10 @@ set -euo pipefail
 
 NOW=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
+# Previously-published data, still on disk from the last run. Used to turn the
+# cumulative firewall packet counter into a meaningful per-hour drop rate.
+PREV_LIVE="${PREV_LIVE:-public/data/live.json}"
+
 # ── Nodes ─────────────────────────────────────────────────────────────────────
 # All metrics derived from a single kubectl get nodes -o json call.
 # No node-exporter, no port-forwarding needed.
@@ -654,10 +658,17 @@ build_network() {
   fi
 
   # ── CrowdSec ────────────────────────────────────────────────────────────────
-  local cs_bans=0
-  cs_bans=$(cscli decisions list -o json 2>/dev/null \
-    | python3 -c "import json,sys; d=json.load(sys.stdin); print(len(d) if isinstance(d,list) else 0)" \
-    2>/dev/null || echo "0")
+  # CrowdSec runs in-cluster (crowdsec ns), not on this host — query the LAPI pod.
+  # "null" (not 0) on failure so the UI shows "unknown", never a fake-safe zero.
+  local cs_bans="null"
+  local cs_json
+  cs_json=$(kubectl exec -n crowdsec deploy/crowdsec-lapi -- \
+    cscli decisions list -o json 2>/dev/null)
+  if [[ -n "$cs_json" ]]; then
+    cs_bans=$(printf '%s' "$cs_json" \
+      | python3 -c "import json,sys; d=json.load(sys.stdin); print(len(d) if isinstance(d,list) else 0)" \
+      2>/dev/null || echo "null")
+  fi
 
   local tmp_fw tmp_ping tmp_log tmp_cs
   tmp_fw=$(mktemp); tmp_ping=$(mktemp); tmp_log=$(mktemp); tmp_cs=$(mktemp)
@@ -666,8 +677,9 @@ build_network() {
   echo "$log_json"  > "$tmp_log"
   echo "$cs_bans"   > "$tmp_cs"
 
-  python3 - "$tmp_fw" "$tmp_ping" "$tmp_log" "$tmp_cs" <<'PYEOF'
+  python3 - "$tmp_fw" "$tmp_ping" "$tmp_log" "$tmp_cs" "$PREV_LIVE" "$NOW" <<'PYEOF'
 import json, collections, re, sys
+from datetime import datetime
 
 def load(path):
   try:
@@ -679,14 +691,33 @@ pings   = load(sys.argv[2]) or []
 logs    = load(sys.argv[3]) or []
 try:
   with open(sys.argv[4]) as f: cs_bans = int(f.read().strip())
-except: cs_bans = 0
+except: cs_bans = None
 
-# Firewall: sum packets on drop rules
+# Firewall: sum packets on drop rules. This is a CUMULATIVE counter (since the
+# router's counters were last reset), so the raw total is not a useful signal —
+# what matters is how fast it climbs. Derive a per-hour rate from the delta vs.
+# the previously-published live.json.
 fw_hits = 0
 for rule in fw:
   if rule.get('action') == 'drop':
     try: fw_hits += int(rule.get('packets', '0').replace(' ', ''))
     except: pass
+
+fw_rate_per_hour = None
+prev = load(sys.argv[5]) or {}
+prev_net = (prev.get('network') or {}) if isinstance(prev, dict) else {}
+prev_hits = prev_net.get('fw_hits')
+prev_ts   = prev.get('fetched_at') or prev.get('updated')
+if prev_hits is not None and prev_ts:
+  try:
+    t0 = datetime.fromisoformat(prev_ts.replace('Z', '+00:00'))
+    t1 = datetime.fromisoformat(sys.argv[6].replace('Z', '+00:00'))
+    hours = (t1 - t0).total_seconds() / 3600
+    delta = fw_hits - int(prev_hits)
+    # Ignore counter resets (negative delta) and degenerate intervals.
+    if hours > 0 and delta >= 0:
+      fw_rate_per_hour = round(delta / hours)
+  except: pass
 
 # WAN latency: avg-rtt format is "4ms544us" — parse ms + us components
 def parse_rtt(s):
@@ -733,10 +764,11 @@ except:
   pass
 
 print(json.dumps({
-  'fw_hits':       fw_hits,
-  'latency_ms':    latency_ms,
-  'offenders':     offenders,
-  'crowdsec_bans': cs_bans,
+  'fw_hits':          fw_hits,
+  'fw_rate_per_hour': fw_rate_per_hour,
+  'latency_ms':       latency_ms,
+  'offenders':        offenders,
+  'crowdsec_bans':    cs_bans,
 }))
 PYEOF
   rm -f "$tmp_fw" "$tmp_ping" "$tmp_log" "$tmp_cs"

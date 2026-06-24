@@ -14,7 +14,7 @@ set -euo pipefail
 OPS_LOG_DIR="${1:-../homelab-infrastructure/docs/ops-log}"
 OUTPUT="public/data/digest.json"
 
-python3 - <<'PYEOF'
+python3 - "$OPS_LOG_DIR" <<'PYEOF'
 import os, sys, re, json
 
 ops_log_dir = sys.argv[1] if len(sys.argv) > 1 else "../homelab-infrastructure/docs/ops-log"
@@ -29,14 +29,14 @@ for fname in sorted(os.listdir(ops_log_dir), reverse=True):
     with open(fpath) as f:
         content = f.read()
 
-    # Extract date from filename: YYYY-MM-DD-slug.md
-    m = re.match(r"(\d{4}-\d{2}-\d{2})-(.+)\.md", fname)
+    # Extract date from filename: YYYY-MM-DD-slug.md or YYYY-MM-slug.md
+    m = re.match(r"(\d{4}-\d{2}(?:-\d{2})?)-(.+)\.md", fname)
     if not m:
         continue
     date, slug = m.group(1), fname[:-3]
 
     # Extract title from first H1
-    title_m = re.search(r"^#\s+\d{4}-\d{2}-\d{2}\s+[—–-]+\s+(.+)$", content, re.MULTILINE)
+    title_m = re.search(r"^#\s+\d{4}-\d{2}(?:-\d{2})?\s+[—–-]+\s+(.+)$", content, re.MULTILINE)
     title = title_m.group(1).strip() if title_m else slug.replace("-", " ").title()
 
     # Extract type

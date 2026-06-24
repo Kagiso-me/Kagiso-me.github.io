@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-24T19:29:32Z",
-  "fetched_at": "2026-06-24T19:29:32Z",
+  "updated": "2026-06-24T21:10:27Z",
+  "fetched_at": "2026-06-24T21:10:27Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -17,27 +17,27 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "17h 26m ago",
+      "value": "19h 7m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "7h 29m ago",
+      "value": "9h 12m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "29m ago",
+      "value": "2h 12m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "18h 29m ago",
+      "value": "\u2014",
       "sub": "age keys \u00b7 varys",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "Backblaze B2",
@@ -200,7 +200,7 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 860 photos \u00b7 22 videos",
+      "tag": "Immich: 874 photos \u00b7 22 videos",
       "status": "ok"
     },
     {
@@ -211,7 +211,7 @@
     {
       "name": "SABnzbd",
       "tag": "SABnzbd: idle",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "name": "Sonarr",
@@ -220,7 +220,7 @@
     },
     {
       "name": "Radarr",
-      "tag": "Radarr: 16 movies",
+      "tag": "Radarr: 15 movies",
       "status": "ok"
     },
     {
@@ -244,22 +244,22 @@
     }
   ],
   "network": {
-    "fw_hits": 1097011,
-    "latency_ms": 3.3,
+    "fw_hits": 1098780,
+    "latency_ms": 3.7,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 47.2,
+    "temp_c": 46.2,
     "temp_status": "ok",
-    "load": 0.82,
-    "mem_pct": 45.1
+    "load": 0.13,
+    "mem_pct": 47.1
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 568,
-    "runtime_str": "9m",
-    "load_pct": 31,
+    "runtime_s": 648,
+    "runtime_str": "10m",
+    "load_pct": 29,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
@@ -273,9 +273,9 @@
   "storage": [
     {
       "name": "tera",
-      "used": "5.7 TB",
+      "used": "5.8 TB",
       "total": "7.9 TB",
-      "pct": 72.9,
+      "pct": 73.8,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -291,9 +291,9 @@
     },
     {
       "name": "core",
-      "used": "105.5 GB",
+      "used": "106.0 GB",
       "total": "476.7 GB",
-      "pct": 22.1,
+      "pct": 22.2,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -301,7 +301,7 @@
   ],
   "contribs": {
     "days": {
-      "2026-06-24": 2,
+      "2026-06-24": 6,
       "2026-06-23": 0,
       "2026-06-22": 42,
       "2026-06-21": 13,
@@ -320,7 +320,7 @@
       "2026-05-28": 17,
       "2026-05-26": 1
     },
-    "total": 155,
+    "total": 159,
     "active_days": 18
   }
 }

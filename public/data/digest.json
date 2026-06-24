@@ -344,14 +344,6 @@
     "excerpt": ""
   },
   {
-    "slug": "2026-03-encrypt-immich-and-n8n-secrets",
-    "date": "2026-03",
-    "title": "DEPLOY: Encrypt Immich and n8n secrets",
-    "tag": "DEPLOY",
-    "components": "SOPS \u00b7 age \u00b7 Immich \u00b7 n8n \u00b7 GitOps",
-    "excerpt": ""
-  },
-  {
     "slug": "2026-03-deploy-crowdsec-with-traefik-forwardauth-bouncer",
     "date": "2026-03",
     "title": "DEPLOY: Deploy CrowdSec with Traefik ForwardAuth bouncer",
@@ -397,14 +389,6 @@
     "title": "DEPLOY: Add ops-log, staging environment, and GitOps promotion pipeline",
     "tag": "DEPLOY",
     "components": "GitHub Actions \u00b7 Flux \u00b7 staging \u00b7 production \u00b7 promotion pipeline",
-    "excerpt": ""
-  },
-  {
-    "slug": "2026-03-add-oidc-client-credentials-to-secret",
-    "date": "2026-03",
-    "title": "DEPLOY: Add OIDC client credentials to secret",
-    "tag": "DEPLOY",
-    "components": "Authentik \u00b7 OIDC \u00b7 Nextcloud \u00b7 secrets \u00b7 SOPS",
     "excerpt": ""
   },
   {
@@ -557,14 +541,6 @@
     "title": "DEPLOY: Add app-health rules and Authentik dashboard",
     "tag": "DEPLOY",
     "components": "Prometheus \u00b7 Alertmanager \u00b7 Grafana \u00b7 Authentik",
-    "excerpt": ""
-  },
-  {
-    "slug": "2026-03-add-ansible-vault-with-flux-github-ssh-credentials",
-    "date": "2026-03",
-    "title": "DEPLOY: Add Ansible vault with Flux GitHub SSH credentials",
-    "tag": "DEPLOY",
-    "components": "Ansible \u00b7 Ansible Vault \u00b7 Flux \u00b7 GitHub SSH",
     "excerpt": ""
   },
   {

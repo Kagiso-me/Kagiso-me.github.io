@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-24T17:49:58Z",
-  "fetched_at": "2026-06-24T17:49:58Z",
+  "updated": "2026-06-24T19:29:32Z",
+  "fetched_at": "2026-06-24T19:29:32Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -17,27 +17,27 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "\u2014",
+      "value": "17h 26m ago",
       "sub": "last backup",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "\u2014",
+      "value": "7h 29m ago",
       "sub": "last snapshot",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "4h 50m ago",
+      "value": "29m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "\u2014",
+      "value": "18h 29m ago",
       "sub": "age keys \u00b7 varys",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "Backblaze B2",
@@ -200,7 +200,7 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 843 photos \u00b7 22 videos",
+      "tag": "Immich: 860 photos \u00b7 22 videos",
       "status": "ok"
     },
     {
@@ -211,22 +211,22 @@
     {
       "name": "SABnzbd",
       "tag": "SABnzbd: idle",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: \u2014 series",
+      "tag": "Sonarr: 59 series",
       "status": "ok"
     },
     {
       "name": "Radarr",
-      "tag": "Radarr: \u2014 movies",
-      "status": "unknown"
+      "tag": "Radarr: 16 movies",
+      "status": "ok"
     },
     {
       "name": "Lidarr",
-      "tag": "Lidarr: \u2014 artists",
-      "status": "unknown"
+      "tag": "Lidarr: 36 artists",
+      "status": "ok"
     }
   ],
   "media": [
@@ -244,20 +244,20 @@
     }
   ],
   "network": {
-    "fw_hits": 1094599,
-    "latency_ms": 3.4,
+    "fw_hits": 1097011,
+    "latency_ms": 3.3,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 45.1,
+    "temp_c": 47.2,
     "temp_status": "ok",
-    "load": 0.44,
-    "mem_pct": 45.0
+    "load": 0.82,
+    "mem_pct": 45.1
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 588,
+    "runtime_s": 568,
     "runtime_str": "9m",
     "load_pct": 31,
     "status": "OL",
@@ -266,7 +266,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "1d ago",
+    "age": "2d ago",
     "message": "chore(security): rotate CrowdSec bouncer API key off placeholder (#559)",
     "sha": "b80958f"
   },
@@ -275,14 +275,14 @@
       "name": "tera",
       "used": "5.7 TB",
       "total": "7.9 TB",
-      "pct": 72.8,
+      "pct": 72.9,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
     },
     {
       "name": "archive",
-      "used": "715.6 GB",
+      "used": "716.0 GB",
       "total": "4.0 TB",
       "pct": 18.0,
       "status": "ok",
@@ -291,7 +291,7 @@
     },
     {
       "name": "core",
-      "used": "105.2 GB",
+      "used": "105.5 GB",
       "total": "476.7 GB",
       "pct": 22.1,
       "status": "ok",

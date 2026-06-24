@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-24T21:10:27Z",
-  "fetched_at": "2026-06-24T21:10:27Z",
+  "updated": "2026-06-24T21:31:26Z",
+  "fetched_at": "2026-06-24T21:31:26Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -17,19 +17,19 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "19h 7m ago",
+      "value": "19h 28m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "9h 12m ago",
+      "value": "9h 31m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "2h 12m ago",
+      "value": "2h 31m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
@@ -211,7 +211,7 @@
     {
       "name": "SABnzbd",
       "tag": "SABnzbd: idle",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "name": "Sonarr",
@@ -244,20 +244,21 @@
     }
   ],
   "network": {
-    "fw_hits": 1098780,
-    "latency_ms": 3.7,
+    "fw_hits": 1099097,
+    "fw_rate_per_hour": null,
+    "latency_ms": 3.2,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 46.2,
+    "temp_c": 46.7,
     "temp_status": "ok",
-    "load": 0.13,
-    "mem_pct": 47.1
+    "load": 0.62,
+    "mem_pct": 44.9
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 648,
+    "runtime_s": 628,
     "runtime_str": "10m",
     "load_pct": 29,
     "status": "OL",
@@ -275,7 +276,7 @@
       "name": "tera",
       "used": "5.8 TB",
       "total": "7.9 TB",
-      "pct": 73.8,
+      "pct": 74.0,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -301,7 +302,7 @@
   ],
   "contribs": {
     "days": {
-      "2026-06-24": 6,
+      "2026-06-24": 8,
       "2026-06-23": 0,
       "2026-06-22": 42,
       "2026-06-21": 13,
@@ -320,7 +321,7 @@
       "2026-05-28": 17,
       "2026-05-26": 1
     },
-    "total": 159,
+    "total": 161,
     "active_days": 18
   }
 }

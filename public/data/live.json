@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-24T06:42:20Z",
-  "fetched_at": "2026-06-24T06:42:20Z",
+  "updated": "2026-06-24T10:18:03Z",
+  "fetched_at": "2026-06-24T10:18:03Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -17,27 +17,27 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "4h 39m ago",
+      "value": "\u2014",
       "sub": "last backup",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "etcd Snapshot",
-      "value": "6h 42m ago",
+      "value": "10h 19m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 42m ago",
+      "value": "3h 19m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "5h 41m ago",
+      "value": "\u2014",
       "sub": "age keys \u00b7 varys",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "Backblaze B2",
@@ -211,22 +211,22 @@
     {
       "name": "SABnzbd",
       "tag": "SABnzbd: idle",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: 59 series",
+      "tag": "Sonarr: \u2014 series",
       "status": "ok"
     },
     {
       "name": "Radarr",
-      "tag": "Radarr: 15 movies",
+      "tag": "Radarr: \u2014 movies",
       "status": "ok"
     },
     {
       "name": "Lidarr",
-      "tag": "Lidarr: 36 artists",
-      "status": "ok"
+      "tag": "Lidarr: \u2014 artists",
+      "status": "unknown"
     }
   ],
   "media": [
@@ -244,22 +244,22 @@
     }
   ],
   "network": {
-    "fw_hits": 1082271,
-    "latency_ms": 2.8,
+    "fw_hits": 1085997,
+    "latency_ms": 3.5,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
     "temp_c": 46.2,
     "temp_status": "ok",
-    "load": 0.73,
-    "mem_pct": 55.3
+    "load": 0.15,
+    "mem_pct": 55.6
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 628,
-    "runtime_str": "10m",
-    "load_pct": 29,
+    "runtime_s": 672,
+    "runtime_str": "11m",
+    "load_pct": 28,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
@@ -282,18 +282,18 @@
     },
     {
       "name": "archive",
-      "used": "725.4 GB",
+      "used": "715.2 GB",
       "total": "4.0 TB",
-      "pct": 18.2,
+      "pct": 17.9,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
     },
     {
       "name": "core",
-      "used": "104.0 GB",
+      "used": "104.7 GB",
       "total": "476.7 GB",
-      "pct": 21.8,
+      "pct": 22.0,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true

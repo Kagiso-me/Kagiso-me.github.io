@@ -122,8 +122,15 @@ PYEOF
 
 # ── Flux sync status ───────────────────────────────────────────────────────────
 build_flux() {
-  local ks_raw
-  ks_raw=$(kubectl get kustomizations -A --no-headers 2>/dev/null || echo "")
+  # Distinguish "API unreachable" from "reachable, zero kustomizations" by the
+  # exit code — without this an outage degrades to a green "0/0 synced" card.
+  local ks_raw kubectl_ok=1
+  ks_raw=$(kubectl get kustomizations -A --no-headers 2>/dev/null) || kubectl_ok=0
+
+  if [[ "$kubectl_ok" -eq 0 ]]; then
+    echo '{"ready":null,"total":null,"last_sync":"—","status":"unknown","kustomizations":[]}'
+    return
+  fi
 
   # Column order: NAMESPACE NAME AGE READY STATUS
   # parts[0]=namespace parts[1]=name parts[2]=age parts[3]=ready parts[4..]=status
@@ -996,7 +1003,7 @@ LAST_DEPLOY=$(build_last_deployment)
 STORAGE=$(build_storage)
 
 FLUX_STATUS=$(echo "$FLUX" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['status'])")
-FLUX_LABEL=$(echo "$FLUX" | python3 -c "import sys,json; d=json.load(sys.stdin); print(f\"{d['ready']}/{d['total']} synced\")")
+FLUX_LABEL=$(echo "$FLUX" | python3 -c "import sys,json; d=json.load(sys.stdin); print('—' if d['ready'] is None else f\"{d['ready']}/{d['total']} synced\")")
 FLUX_SYNC=$(echo "$FLUX" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['last_sync'])")
 
 BRONN_BACKUP_AGE=$(echo    "$BACKUP" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['bronn']['age'])")
@@ -1088,7 +1095,7 @@ data = {
   'fetched_at':    '${NOW}',
   'cluster_start': '${CLUSTER_START}' or None,
   'cards': [
-    {'label': 'Workloads',      'value': f'{running}/{total}',   'sub': 'pods running',       'status': 'ok' if running == total else 'warn'},
+    {'label': 'Workloads',      'value': '—' if total == 0 else f'{running}/{total}', 'sub': 'pods running', 'status': 'unknown' if total == 0 else ('ok' if running == total else 'warn')},
     {'label': 'Flux',           'value': '${FLUX_LABEL}',        'sub': '${FLUX_SYNC}',       'status': '${FLUX_STATUS}'},
     {'label': 'Docker Appdata', 'value': '${BRONN_BACKUP_AGE}',  'sub': 'last backup',        'status': '${BRONN_BACKUP_STATUS}'},
     {'label': 'etcd Snapshot',  'value': '${ETCD_BACKUP_AGE}',   'sub': 'last snapshot',      'status': '${ETCD_BACKUP_STATUS}'},

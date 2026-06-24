@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-24T21:46:26Z",
-  "fetched_at": "2026-06-24T21:46:26Z",
+  "updated": "2026-06-24T22:45:12Z",
+  "fetched_at": "2026-06-24T22:45:12Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -17,19 +17,19 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "19h 43m ago",
+      "value": "20h 42m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "9h 46m ago",
+      "value": "10h 45m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "2h 46m ago",
+      "value": "3h 45m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
@@ -200,8 +200,8 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 874 photos \u00b7 22 videos",
-      "status": "ok"
+      "tag": "Immich: offline",
+      "status": "crit"
     },
     {
       "name": "Nextcloud",
@@ -244,23 +244,23 @@
     }
   ],
   "network": {
-    "fw_hits": 1099263,
+    "fw_hits": 1099929,
     "fw_rate_per_hour": null,
-    "latency_ms": 3.1,
+    "latency_ms": 3.3,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
     "temp_c": 47.2,
     "temp_status": "ok",
-    "load": 0.74,
-    "mem_pct": 46.3
+    "load": 0.68,
+    "mem_pct": 47.1
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 588,
-    "runtime_str": "9m",
-    "load_pct": 31,
+    "runtime_s": 608,
+    "runtime_str": "10m",
+    "load_pct": 30,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
@@ -292,9 +292,9 @@
     },
     {
       "name": "core",
-      "used": "106.0 GB",
+      "used": "106.2 GB",
       "total": "476.7 GB",
-      "pct": 22.2,
+      "pct": 22.3,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true

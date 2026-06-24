@@ -1,11 +1,11 @@
 {
-  "updated": "2026-06-23T23:52:12Z",
-  "fetched_at": "2026-06-23T23:52:12Z",
+  "updated": "2026-06-24T02:44:25Z",
+  "fetched_at": "2026-06-24T02:44:25Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "74/121",
+      "value": "74/122",
       "sub": "pods running",
       "status": "warn"
     },
@@ -17,19 +17,19 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "21h 49m ago",
+      "value": "41m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "11h 53m ago",
+      "value": "\u2014",
       "sub": "last snapshot",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "Velero",
-      "value": "4h 53m ago",
+      "value": "1h 44m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
@@ -200,7 +200,7 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 825 photos \u00b7 22 videos",
+      "tag": "Immich: 828 photos \u00b7 22 videos",
       "status": "ok"
     },
     {
@@ -244,16 +244,16 @@
     }
   ],
   "network": {
-    "fw_hits": 1077799,
+    "fw_hits": 1079444,
     "latency_ms": 3.1,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 45.6,
+    "temp_c": 46.2,
     "temp_status": "ok",
-    "load": 0.2,
-    "mem_pct": 54.5
+    "load": 0.72,
+    "mem_pct": 53.3
   },
   "ups": {
     "charge": 100,
@@ -282,18 +282,18 @@
     },
     {
       "name": "archive",
-      "used": "715.4 GB",
+      "used": "718.0 GB",
       "total": "4.0 TB",
-      "pct": 17.9,
+      "pct": 18.0,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
     },
     {
       "name": "core",
-      "used": "103.6 GB",
+      "used": "103.9 GB",
       "total": "476.7 GB",
-      "pct": 21.7,
+      "pct": 21.8,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -317,10 +317,9 @@
       "2026-06-03": 9,
       "2026-05-29": 26,
       "2026-05-28": 17,
-      "2026-05-26": 1,
-      "2026-05-24": 30
+      "2026-05-26": 1
     },
-    "total": 183,
-    "active_days": 18
+    "total": 153,
+    "active_days": 17
   }
 }

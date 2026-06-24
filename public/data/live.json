@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-24T12:32:38Z",
-  "fetched_at": "2026-06-24T12:32:38Z",
+  "updated": "2026-06-24T15:31:13Z",
+  "fetched_at": "2026-06-24T15:31:13Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -12,7 +12,7 @@
     {
       "label": "Flux",
       "value": "19/19 synced",
-      "sub": "76d",
+      "sub": "77d",
       "status": "ok"
     },
     {
@@ -23,13 +23,13 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "33m ago",
+      "value": "\u2014",
       "sub": "last snapshot",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "Velero",
-      "value": "5h 33m ago",
+      "value": "2h 31m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
@@ -78,13 +78,13 @@
   "flux": {
     "ready": 19,
     "total": 19,
-    "last_sync": "76d",
+    "last_sync": "77d",
     "status": "ok",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
-        "age": "76d",
+        "age": "77d",
         "ready": true
       },
       {
@@ -96,103 +96,103 @@
       {
         "namespace": "flux-system",
         "name": "platform-authentik",
-        "age": "76d",
+        "age": "77d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
-        "age": "76d",
+        "age": "77d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
-        "age": "76d",
+        "age": "77d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
-        "age": "76d",
+        "age": "77d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
-        "age": "76d",
+        "age": "77d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-namespaces",
-        "age": "76d",
+        "age": "77d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking",
-        "age": "76d",
+        "age": "77d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-config",
-        "age": "76d",
+        "age": "77d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-tls",
-        "age": "76d",
+        "age": "77d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability",
-        "age": "76d",
+        "age": "77d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
-        "age": "76d",
+        "age": "77d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
-        "age": "76d",
+        "age": "77d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security",
-        "age": "76d",
+        "age": "77d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security-issuers",
-        "age": "76d",
+        "age": "77d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-storage",
-        "age": "76d",
+        "age": "77d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade",
-        "age": "76d",
+        "age": "77d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade-plans",
-        "age": "76d",
+        "age": "77d",
         "ready": true
       }
     ]
@@ -226,14 +226,14 @@
     {
       "name": "Lidarr",
       "tag": "Lidarr: \u2014 artists",
-      "status": "ok"
+      "status": "unknown"
     }
   ],
   "media": [
     {
       "name": "Plex",
       "label": "idle",
-      "status": "ok",
+      "status": "unknown",
       "playing": false
     },
     {
@@ -244,21 +244,21 @@
     }
   ],
   "network": {
-    "fw_hits": 1087854,
-    "latency_ms": 3.0,
+    "fw_hits": 1091231,
+    "latency_ms": 63.0,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
     "temp_c": 45.6,
     "temp_status": "ok",
-    "load": 0.09,
-    "mem_pct": 51.2
+    "load": 0.65,
+    "mem_pct": 43.8
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 692,
-    "runtime_str": "11m",
+    "runtime_s": 720,
+    "runtime_str": "12m",
     "load_pct": 27,
     "status": "OL",
     "nominal_w": 390,
@@ -282,9 +282,9 @@
     },
     {
       "name": "archive",
-      "used": "715.4 GB",
+      "used": "715.6 GB",
       "total": "4.0 TB",
-      "pct": 17.9,
+      "pct": 18.0,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -301,7 +301,7 @@
   ],
   "contribs": {
     "days": {
-      "2026-06-24": 0,
+      "2026-06-24": 2,
       "2026-06-23": 0,
       "2026-06-22": 42,
       "2026-06-21": 13,
@@ -320,7 +320,7 @@
       "2026-05-28": 17,
       "2026-05-26": 1
     },
-    "total": 153,
+    "total": 155,
     "active_days": 18
   }
 }

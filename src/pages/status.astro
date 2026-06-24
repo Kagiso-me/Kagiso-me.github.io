@@ -1579,23 +1579,36 @@ import Layout from '../layouts/Layout.astro';
           : net.latency_ms < 30 ? 'ok'
           : net.latency_ms < 80 ? 'warn' : 'crit';
 
+        // CrowdSec: null means the LAPI query failed — show "unknown", never a
+        // fake-safe zero. A real 0 (no active bans) is a healthy, accurate state.
         const bans = net.crowdsec_bans;
-        const crowdsecCard = bans != null ? `
-          <div class="card" style="border-left:3px solid var(--color-crit)">
+        const bansUnknown = bans == null;
+        const crowdsecCard = `
+          <div class="card" style="border-left:3px solid ${bansUnknown ? 'var(--color-subtle)' : 'var(--color-crit)'}">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
               <span class="mono" style="color:var(--color-subtle);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em">CrowdSec Bans</span>
-              <span class="status-dot ok"></span>
+              <span class="status-dot ${bansUnknown ? 'unknown' : 'ok'}"></span>
             </div>
-            <div style="font-size:1.25rem;font-weight:700;color:var(--color-crit);font-family:var(--font-mono);margin-bottom:0.25rem"
-                 data-count-to="${bans}" data-count-suffix="">0</div>
-            <div class="mono" style="font-size:0.85rem">active IP bans · threat intelligence</div>
-          </div>` : '';
+            <div style="font-size:1.25rem;font-weight:700;color:${bansUnknown ? 'var(--color-subtle)' : 'var(--color-crit)'};font-family:var(--font-mono);margin-bottom:0.25rem"
+                 ${bansUnknown ? '' : `data-count-to="${bans}" data-count-suffix=""`}>${bansUnknown ? '—' : '0'}</div>
+            <div class="mono" style="font-size:0.85rem">${bansUnknown ? 'IDS unreachable' : 'active IP bans · threat intelligence'}</div>
+          </div>`;
+
+        // Firewall: the raw counter is cumulative since the router's last reset,
+        // so headline the drop RATE (a real signal of unusual activity) and keep
+        // the lifetime total as the subtitle for context.
+        const rate = net.fw_rate_per_hour;
+        const fwDisplay = rate != null ? rate.toLocaleString() + '/hr'
+          : net.fw_hits != null ? net.fw_hits.toLocaleString() : '—';
+        const fwSub = rate != null && net.fw_hits != null
+          ? `packets dropped/hr · ${net.fw_hits.toLocaleString()} total`
+          : 'packets dropped at router';
 
         const netCards = document.getElementById('network-cards');
         if (netCards) {
           netCards.innerHTML = crowdsecCard + [
-            { label: 'Firewall Blocks', raw: net.fw_hits,    suffix: '',    display: net.fw_hits != null ? net.fw_hits.toLocaleString() : '—', sub: 'packets dropped at router', status: 'ok' },
-            { label: 'WAN Latency',     raw: net.latency_ms, suffix: ' ms', display: net.latency_ms != null ? net.latency_ms + ' ms' : '—',    sub: 'avg RTT to 8.8.8.8',       status: latencyStatus },
+            { label: 'Firewall Blocks', raw: rate,           suffix: rate != null ? '/hr' : '', display: fwDisplay,                                                            sub: fwSub,               status: 'ok' },
+            { label: 'WAN Latency',     raw: net.latency_ms, suffix: ' ms',                     display: net.latency_ms != null ? net.latency_ms + ' ms' : '—',               sub: 'avg RTT to 8.8.8.8', status: latencyStatus },
           ].map(c => `
             <div class="card">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">

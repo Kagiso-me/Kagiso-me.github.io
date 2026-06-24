@@ -1,11 +1,11 @@
 {
-  "updated": "2026-06-24T02:44:25Z",
-  "fetched_at": "2026-06-24T02:44:25Z",
+  "updated": "2026-06-24T06:42:20Z",
+  "fetched_at": "2026-06-24T06:42:20Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "74/122",
+      "value": "74/121",
       "sub": "pods running",
       "status": "warn"
     },
@@ -17,27 +17,27 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "41m ago",
+      "value": "4h 39m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "\u2014",
+      "value": "6h 42m ago",
       "sub": "last snapshot",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "1h 44m ago",
+      "value": "3h 42m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "\u2014",
+      "value": "5h 41m ago",
       "sub": "age keys \u00b7 varys",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "Backblaze B2",
@@ -244,22 +244,22 @@
     }
   ],
   "network": {
-    "fw_hits": 1079444,
-    "latency_ms": 3.1,
+    "fw_hits": 1082271,
+    "latency_ms": 2.8,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
     "temp_c": 46.2,
     "temp_status": "ok",
-    "load": 0.72,
-    "mem_pct": 53.3
+    "load": 0.73,
+    "mem_pct": 55.3
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 568,
-    "runtime_str": "9m",
-    "load_pct": 31,
+    "runtime_s": 628,
+    "runtime_str": "10m",
+    "load_pct": 29,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
@@ -282,16 +282,16 @@
     },
     {
       "name": "archive",
-      "used": "718.0 GB",
+      "used": "725.4 GB",
       "total": "4.0 TB",
-      "pct": 18.0,
+      "pct": 18.2,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
     },
     {
       "name": "core",
-      "used": "103.9 GB",
+      "used": "104.0 GB",
       "total": "476.7 GB",
       "pct": 21.8,
       "status": "ok",
@@ -301,6 +301,7 @@
   ],
   "contribs": {
     "days": {
+      "2026-06-24": 0,
       "2026-06-23": 0,
       "2026-06-22": 42,
       "2026-06-21": 13,
@@ -320,6 +321,6 @@
       "2026-05-26": 1
     },
     "total": 153,
-    "active_days": 17
+    "active_days": 18
   }
 }

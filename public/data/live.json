@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-24T10:18:03Z",
-  "fetched_at": "2026-06-24T10:18:03Z",
+  "updated": "2026-06-24T12:32:38Z",
+  "fetched_at": "2026-06-24T12:32:38Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -23,13 +23,13 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "10h 19m ago",
+      "value": "33m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 19m ago",
+      "value": "5h 33m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
@@ -90,7 +90,7 @@
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "76d",
+        "age": "77d",
         "ready": true
       },
       {
@@ -221,12 +221,12 @@
     {
       "name": "Radarr",
       "tag": "Radarr: \u2014 movies",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "name": "Lidarr",
       "tag": "Lidarr: \u2014 artists",
-      "status": "unknown"
+      "status": "ok"
     }
   ],
   "media": [
@@ -244,22 +244,22 @@
     }
   ],
   "network": {
-    "fw_hits": 1085997,
-    "latency_ms": 3.5,
+    "fw_hits": 1087854,
+    "latency_ms": 3.0,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 46.2,
+    "temp_c": 45.6,
     "temp_status": "ok",
-    "load": 0.15,
-    "mem_pct": 55.6
+    "load": 0.09,
+    "mem_pct": 51.2
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 672,
+    "runtime_s": 692,
     "runtime_str": "11m",
-    "load_pct": 28,
+    "load_pct": 27,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
@@ -282,7 +282,7 @@
     },
     {
       "name": "archive",
-      "used": "715.2 GB",
+      "used": "715.4 GB",
       "total": "4.0 TB",
       "pct": 17.9,
       "status": "ok",
@@ -291,7 +291,7 @@
     },
     {
       "name": "core",
-      "used": "104.7 GB",
+      "used": "104.8 GB",
       "total": "476.7 GB",
       "pct": 22.0,
       "status": "ok",

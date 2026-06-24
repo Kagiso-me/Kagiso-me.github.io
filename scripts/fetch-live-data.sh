@@ -1020,8 +1020,24 @@ VELERO_AGE=$(echo    "$VELERO" | python3 -c "import sys,json; d=json.load(sys.st
 VELERO_STATUS=$(echo "$VELERO" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['status'])")
 
 # Count running k8s workloads
-RUNNING_PODS=$(kubectl get pods -A --no-headers 2>/dev/null | grep -c "Running" || echo "0")
-TOTAL_PODS=$(kubectl get pods -A --no-headers 2>/dev/null | wc -l | tr -d ' ' || echo "0")
+# Workload health = Running / (pods that should be up). Terminal pods
+# (Succeeded = completed cronjobs, Failed = finished job pods) are excluded
+# from the denominator so the ratio isn't perpetually dragged down by jobs.
+# Failed pods are surfaced separately so a nonzero count still warns.
+POD_COUNTS=$(kubectl get pods -A -o json 2>/dev/null | python3 -c "
+import sys, json
+try:
+  pods = json.load(sys.stdin)['items']
+except Exception:
+  print('0 0 0'); sys.exit()
+nonterm = [p for p in pods if p['status'].get('phase') not in ('Succeeded','Failed')]
+running = sum(1 for p in nonterm if p['status'].get('phase') == 'Running')
+failed  = sum(1 for p in pods if p['status'].get('phase') == 'Failed')
+print(running, len(nonterm), failed)
+" 2>/dev/null || echo "0 0 0")
+RUNNING_PODS=$(echo "$POD_COUNTS" | awk '{print $1}')
+TOTAL_PODS=$(echo "$POD_COUNTS"   | awk '{print $2}')
+FAILED_PODS=$(echo "$POD_COUNTS"  | awk '{print $3}')
 
 # ── GitHub contribution graph (server-side, cached every 30 min) ──────────────
 CONTRIBS=$(python3 - <<'PYEOF'
@@ -1089,13 +1105,23 @@ with open(sys.argv[9]) as f: contribs    = json.load(f)
 
 running = int('${RUNNING_PODS}')
 total   = int('${TOTAL_PODS}')
+failed  = int('${FAILED_PODS}')
+
+if total == 0:
+  wl_status, wl_sub = 'unknown', 'pods running'
+elif running < total:
+  wl_status, wl_sub = 'warn', 'pods running'
+elif failed > 0:
+  wl_status, wl_sub = 'warn', f'{failed} failed job{"s" if failed != 1 else ""}'
+else:
+  wl_status, wl_sub = 'ok', 'pods running'
 
 data = {
   'updated':       '${NOW}',
   'fetched_at':    '${NOW}',
   'cluster_start': '${CLUSTER_START}' or None,
   'cards': [
-    {'label': 'Workloads',      'value': '—' if total == 0 else f'{running}/{total}', 'sub': 'pods running', 'status': 'unknown' if total == 0 else ('ok' if running == total else 'warn')},
+    {'label': 'Workloads',      'value': '—' if total == 0 else f'{running}/{total}', 'sub': wl_sub, 'status': wl_status},
     {'label': 'Flux',           'value': '${FLUX_LABEL}',        'sub': '${FLUX_SYNC}',       'status': '${FLUX_STATUS}'},
     {'label': 'Docker Appdata', 'value': '${BRONN_BACKUP_AGE}',  'sub': 'last backup',        'status': '${BRONN_BACKUP_STATUS}'},
     {'label': 'etcd Snapshot',  'value': '${ETCD_BACKUP_AGE}',   'sub': 'last snapshot',      'status': '${ETCD_BACKUP_STATUS}'},

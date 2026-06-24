@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-24T15:31:13Z",
-  "fetched_at": "2026-06-24T15:31:13Z",
+  "updated": "2026-06-24T17:49:58Z",
+  "fetched_at": "2026-06-24T17:49:58Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -29,7 +29,7 @@
     },
     {
       "label": "Velero",
-      "value": "2h 31m ago",
+      "value": "4h 50m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
@@ -200,7 +200,7 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 828 photos \u00b7 22 videos",
+      "tag": "Immich: 843 photos \u00b7 22 videos",
       "status": "ok"
     },
     {
@@ -233,7 +233,7 @@
     {
       "name": "Plex",
       "label": "idle",
-      "status": "unknown",
+      "status": "ok",
       "playing": false
     },
     {
@@ -244,22 +244,22 @@
     }
   ],
   "network": {
-    "fw_hits": 1091231,
-    "latency_ms": 63.0,
+    "fw_hits": 1094599,
+    "latency_ms": 3.4,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 45.6,
+    "temp_c": 45.1,
     "temp_status": "ok",
-    "load": 0.65,
-    "mem_pct": 43.8
+    "load": 0.44,
+    "mem_pct": 45.0
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 720,
-    "runtime_str": "12m",
-    "load_pct": 27,
+    "runtime_s": 588,
+    "runtime_str": "9m",
+    "load_pct": 31,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
@@ -291,9 +291,9 @@
     },
     {
       "name": "core",
-      "used": "104.8 GB",
+      "used": "105.2 GB",
       "total": "476.7 GB",
-      "pct": 22.0,
+      "pct": 22.1,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true

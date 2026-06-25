@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-25T22:09:49Z",
-  "fetched_at": "2026-06-25T22:09:49Z",
+  "updated": "2026-06-25T22:17:38Z",
+  "fetched_at": "2026-06-25T22:17:38Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -11,31 +11,31 @@
     },
     {
       "label": "Flux",
-      "value": "19/19 synced",
+      "value": "6/19 synced",
       "sub": "78d",
-      "status": "ok"
+      "status": "warn"
     },
     {
       "label": "Docker Appdata",
-      "value": "20h 5m ago",
+      "value": "20h 13m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "10h 10m ago",
+      "value": "10h 17m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 9m ago",
+      "value": "3h 17m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "21h 9m ago",
+      "value": "21h 17m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -76,16 +76,16 @@
     }
   ],
   "flux": {
-    "ready": 19,
+    "ready": 6,
     "total": 19,
     "last_sync": "78d",
-    "status": "ok",
+    "status": "warn",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
         "age": "78d",
-        "ready": true
+        "ready": false
       },
       {
         "namespace": "flux-system",
@@ -97,31 +97,31 @@
         "namespace": "flux-system",
         "name": "platform-authentik",
         "age": "78d",
-        "ready": true
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
         "age": "78d",
-        "ready": true
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
         "age": "78d",
-        "ready": true
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
         "age": "78d",
-        "ready": true
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
         "age": "78d",
-        "ready": true
+        "ready": false
       },
       {
         "namespace": "flux-system",
@@ -145,25 +145,25 @@
         "namespace": "flux-system",
         "name": "platform-networking-tls",
         "age": "78d",
-        "ready": true
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability",
         "age": "78d",
-        "ready": true
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
         "age": "78d",
-        "ready": true
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
         "age": "78d",
-        "ready": true
+        "ready": false
       },
       {
         "namespace": "flux-system",
@@ -175,13 +175,13 @@
         "namespace": "flux-system",
         "name": "platform-security-issuers",
         "age": "78d",
-        "ready": true
+        "ready": false
       },
       {
         "namespace": "flux-system",
         "name": "platform-storage",
         "age": "78d",
-        "ready": true
+        "ready": false
       },
       {
         "namespace": "flux-system",
@@ -193,7 +193,7 @@
         "namespace": "flux-system",
         "name": "platform-upgrade-plans",
         "age": "78d",
-        "ready": true
+        "ready": false
       }
     ]
   },
@@ -210,7 +210,7 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 97.8 GB left",
+      "tag": "SABnzbd: downloading \u00b7 106.9 GB left",
       "status": "ok"
     },
     {
@@ -244,32 +244,32 @@
     }
   ],
   "network": {
-    "fw_hits": 1122474,
+    "fw_hits": 1122561,
     "fw_rate_per_hour": null,
-    "latency_ms": 4.2,
+    "latency_ms": 3.2,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 48.3,
+    "temp_c": 50.5,
     "temp_status": "ok",
-    "load": 1.31,
-    "mem_pct": 47.0
+    "load": 1.88,
+    "mem_pct": 52.8
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 608,
-    "runtime_str": "10m",
-    "load_pct": 30,
+    "runtime_s": 692,
+    "runtime_str": "11m",
+    "load_pct": 27,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "3d ago",
-    "message": "chore(security): rotate CrowdSec bouncer API key off placeholder (#559)",
-    "sha": "b80958f"
+    "age": "1m ago",
+    "message": "fix(immich): raise immich-server memory limit 2Gi \u2192 6Gi (OOM crashloop) (#561)",
+    "sha": "51b534e"
   },
   "storage": [
     {
@@ -292,7 +292,7 @@
     },
     {
       "name": "core",
-      "used": "107.7 GB",
+      "used": "107.8 GB",
       "total": "476.7 GB",
       "pct": 22.6,
       "status": "ok",
@@ -302,7 +302,7 @@
   ],
   "contribs": {
     "days": {
-      "2026-06-25": 0,
+      "2026-06-25": 6,
       "2026-06-24": 15,
       "2026-06-23": 0,
       "2026-06-22": 42,
@@ -322,7 +322,7 @@
       "2026-05-28": 17,
       "2026-05-26": 1
     },
-    "total": 168,
+    "total": 174,
     "active_days": 19
   }
 }

@@ -1,13 +1,13 @@
 {
-  "updated": "2026-06-25T20:52:35Z",
-  "fetched_at": "2026-06-25T20:52:35Z",
+  "updated": "2026-06-25T20:57:39Z",
+  "fetched_at": "2026-06-25T20:57:39Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
       "label": "Workloads",
       "value": "74/74",
-      "sub": "4 failed jobs",
-      "status": "warn"
+      "sub": "pods running",
+      "status": "ok"
     },
     {
       "label": "Flux",
@@ -23,13 +23,13 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "\u2014",
+      "value": "8h 59m ago",
       "sub": "last snapshot",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "1h 52m ago",
+      "value": "1h 58m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
@@ -226,14 +226,14 @@
     {
       "name": "Lidarr",
       "tag": "Lidarr: \u2014 artists",
-      "status": "ok"
+      "status": "unknown"
     }
   ],
   "media": [
     {
       "name": "Plex",
       "label": "idle",
-      "status": "ok",
+      "status": "unknown",
       "playing": false
     },
     {
@@ -244,23 +244,23 @@
     }
   ],
   "network": {
-    "fw_hits": 1121226,
+    "fw_hits": 1121319,
     "fw_rate_per_hour": null,
-    "latency_ms": 3.9,
+    "latency_ms": 3.8,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 47.2,
+    "temp_c": 47.8,
     "temp_status": "ok",
-    "load": 0.28,
-    "mem_pct": 52.2
+    "load": 0.25,
+    "mem_pct": 53.5
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 692,
-    "runtime_str": "11m",
-    "load_pct": 27,
+    "runtime_s": 648,
+    "runtime_str": "10m",
+    "load_pct": 29,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
@@ -283,7 +283,7 @@
     },
     {
       "name": "archive",
-      "used": "726.9 GB",
+      "used": "727.0 GB",
       "total": "4.0 TB",
       "pct": 18.2,
       "status": "ok",
@@ -292,7 +292,7 @@
     },
     {
       "name": "core",
-      "used": "107.8 GB",
+      "used": "107.9 GB",
       "total": "476.7 GB",
       "pct": 22.6,
       "status": "ok",

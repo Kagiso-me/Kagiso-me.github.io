@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-25T20:57:39Z",
-  "fetched_at": "2026-06-25T20:57:39Z",
+  "updated": "2026-06-25T22:09:49Z",
+  "fetched_at": "2026-06-25T22:09:49Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -17,27 +17,27 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "\u2014",
+      "value": "20h 5m ago",
       "sub": "last backup",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "8h 59m ago",
+      "value": "10h 10m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "1h 58m ago",
+      "value": "3h 9m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "\u2014",
+      "value": "21h 9m ago",
       "sub": "age keys \u00b7 varys",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "Backblaze B2",
@@ -200,8 +200,8 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 889 photos \u00b7 22 videos",
-      "status": "ok"
+      "tag": "Immich: offline",
+      "status": "crit"
     },
     {
       "name": "Nextcloud",
@@ -210,30 +210,30 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: idle",
-      "status": "unknown"
+      "tag": "SABnzbd: downloading \u00b7 97.8 GB left",
+      "status": "ok"
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: \u2014 series",
+      "tag": "Sonarr: 59 series",
       "status": "ok"
     },
     {
       "name": "Radarr",
-      "tag": "Radarr: \u2014 movies",
-      "status": "unknown"
+      "tag": "Radarr: 15 movies",
+      "status": "ok"
     },
     {
       "name": "Lidarr",
-      "tag": "Lidarr: \u2014 artists",
-      "status": "unknown"
+      "tag": "Lidarr: 36 artists",
+      "status": "ok"
     }
   ],
   "media": [
     {
       "name": "Plex",
       "label": "idle",
-      "status": "unknown",
+      "status": "ok",
       "playing": false
     },
     {
@@ -244,23 +244,23 @@
     }
   ],
   "network": {
-    "fw_hits": 1121319,
+    "fw_hits": 1122474,
     "fw_rate_per_hour": null,
-    "latency_ms": 3.8,
+    "latency_ms": 4.2,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 47.8,
+    "temp_c": 48.3,
     "temp_status": "ok",
-    "load": 0.25,
-    "mem_pct": 53.5
+    "load": 1.31,
+    "mem_pct": 47.0
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 648,
+    "runtime_s": 608,
     "runtime_str": "10m",
-    "load_pct": 29,
+    "load_pct": 30,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
@@ -292,7 +292,7 @@
     },
     {
       "name": "core",
-      "used": "107.9 GB",
+      "used": "107.7 GB",
       "total": "476.7 GB",
       "pct": 22.6,
       "status": "ok",

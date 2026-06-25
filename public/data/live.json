@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-25T08:19:32Z",
-  "fetched_at": "2026-06-25T08:19:32Z",
+  "updated": "2026-06-25T11:13:12Z",
+  "fetched_at": "2026-06-25T11:13:12Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -17,19 +17,19 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "6h 15m ago",
+      "value": "9h 8m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "8h 19m ago",
+      "value": "11h 13m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "1h 19m ago",
+      "value": "4h 13m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
@@ -90,7 +90,7 @@
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "77d",
+        "age": "78d",
         "ready": true
       },
       {
@@ -200,7 +200,7 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 874 photos \u00b7 22 videos",
+      "tag": "Immich: 878 photos \u00b7 22 videos",
       "status": "ok"
     },
     {
@@ -210,12 +210,12 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: idle",
+      "tag": "SABnzbd: downloading \u00b7 10.9 GB left",
       "status": "ok"
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: 59 series",
+      "tag": "Sonarr: 58 series",
       "status": "ok"
     },
     {
@@ -244,23 +244,23 @@
     }
   ],
   "network": {
-    "fw_hits": 1107816,
+    "fw_hits": 1110575,
     "fw_rate_per_hour": null,
-    "latency_ms": 3.5,
+    "latency_ms": 97.3,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 46.7,
+    "temp_c": 46.2,
     "temp_status": "ok",
-    "load": 1.02,
-    "mem_pct": 47.5
+    "load": 0.72,
+    "mem_pct": 48.4
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 692,
+    "runtime_s": 672,
     "runtime_str": "11m",
-    "load_pct": 27,
+    "load_pct": 28,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
@@ -276,7 +276,7 @@
       "name": "tera",
       "used": "5.8 TB",
       "total": "7.9 TB",
-      "pct": 74.0,
+      "pct": 73.9,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -292,7 +292,7 @@
     },
     {
       "name": "core",
-      "used": "106.7 GB",
+      "used": "107.0 GB",
       "total": "476.7 GB",
       "pct": 22.4,
       "status": "ok",

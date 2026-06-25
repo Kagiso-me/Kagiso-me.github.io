@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-25T00:04:39Z",
-  "fetched_at": "2026-06-25T00:04:39Z",
+  "updated": "2026-06-25T04:42:11Z",
+  "fetched_at": "2026-06-25T04:42:11Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -17,19 +17,19 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "22h 1m ago",
+      "value": "2h 37m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "4m ago",
+      "value": "4h 42m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "5h 4m ago",
+      "value": "1h 42m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
@@ -200,12 +200,12 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: offline",
-      "status": "crit"
+      "tag": "Immich: 874 photos \u00b7 22 videos",
+      "status": "ok"
     },
     {
       "name": "Nextcloud",
-      "tag": "Nextcloud: online",
+      "tag": "Nextcloud: 60.9 MB used",
       "status": "ok"
     },
     {
@@ -244,22 +244,22 @@
     }
   ],
   "network": {
-    "fw_hits": 1100988,
+    "fw_hits": 1104873,
     "fw_rate_per_hour": null,
-    "latency_ms": 3.2,
+    "latency_ms": 3.3,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 46.2,
+    "temp_c": 47.2,
     "temp_status": "ok",
-    "load": 0.42,
-    "mem_pct": 46.0
+    "load": 0.67,
+    "mem_pct": 45.6
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 608,
-    "runtime_str": "10m",
+    "runtime_s": 588,
+    "runtime_str": "9m",
     "load_pct": 30,
     "status": "OL",
     "nominal_w": 390,
@@ -283,16 +283,16 @@
     },
     {
       "name": "archive",
-      "used": "716.1 GB",
+      "used": "726.0 GB",
       "total": "4.0 TB",
-      "pct": 18.0,
+      "pct": 18.2,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
     },
     {
       "name": "core",
-      "used": "106.1 GB",
+      "used": "106.3 GB",
       "total": "476.7 GB",
       "pct": 22.3,
       "status": "ok",
@@ -302,6 +302,7 @@
   ],
   "contribs": {
     "days": {
+      "2026-06-25": 0,
       "2026-06-24": 15,
       "2026-06-23": 0,
       "2026-06-22": 42,
@@ -322,6 +323,6 @@
       "2026-05-26": 1
     },
     "total": 168,
-    "active_days": 18
+    "active_days": 19
   }
 }

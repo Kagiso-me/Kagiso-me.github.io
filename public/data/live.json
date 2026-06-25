@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-24T22:45:12Z",
-  "fetched_at": "2026-06-24T22:45:12Z",
+  "updated": "2026-06-25T00:04:39Z",
+  "fetched_at": "2026-06-25T00:04:39Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -17,19 +17,19 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "20h 42m ago",
+      "value": "22h 1m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "10h 45m ago",
+      "value": "4m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 45m ago",
+      "value": "5h 4m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
@@ -205,7 +205,7 @@
     },
     {
       "name": "Nextcloud",
-      "tag": "Nextcloud: 60.9 MB used",
+      "tag": "Nextcloud: online",
       "status": "ok"
     },
     {
@@ -244,17 +244,17 @@
     }
   ],
   "network": {
-    "fw_hits": 1099929,
+    "fw_hits": 1100988,
     "fw_rate_per_hour": null,
-    "latency_ms": 3.3,
+    "latency_ms": 3.2,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 47.2,
+    "temp_c": 46.2,
     "temp_status": "ok",
-    "load": 0.68,
-    "mem_pct": 47.1
+    "load": 0.42,
+    "mem_pct": 46.0
   },
   "ups": {
     "charge": 100,
@@ -283,7 +283,7 @@
     },
     {
       "name": "archive",
-      "used": "716.0 GB",
+      "used": "716.1 GB",
       "total": "4.0 TB",
       "pct": 18.0,
       "status": "ok",
@@ -292,7 +292,7 @@
     },
     {
       "name": "core",
-      "used": "106.2 GB",
+      "used": "106.1 GB",
       "total": "476.7 GB",
       "pct": 22.3,
       "status": "ok",

@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-26T10:19:29Z",
-  "fetched_at": "2026-06-26T10:19:29Z",
+  "updated": "2026-06-26T12:30:24Z",
+  "fetched_at": "2026-06-26T12:30:24Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -17,25 +17,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "8h 14m ago",
+      "value": "10h 25m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "10h 19m ago",
+      "value": "30m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 19m ago",
+      "value": "5h 30m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "9h 19m ago",
+      "value": "11h 29m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -90,7 +90,7 @@
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "78d",
+        "age": "79d",
         "ready": true
       },
       {
@@ -205,12 +205,12 @@
     },
     {
       "name": "Nextcloud",
-      "tag": "Nextcloud: online",
+      "tag": "Nextcloud: 60.9 MB used",
       "status": "ok"
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 40.5 GB left",
+      "tag": "SABnzbd: downloading \u00b7 16.5 GB left",
       "status": "ok"
     },
     {
@@ -244,46 +244,46 @@
     }
   ],
   "network": {
-    "fw_hits": 1136803,
+    "fw_hits": 1139640,
     "fw_rate_per_hour": null,
-    "latency_ms": 103.3,
+    "latency_ms": 3.7,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 45.6,
+    "temp_c": 46.2,
     "temp_status": "ok",
-    "load": 0.77,
-    "mem_pct": 51.0
+    "load": 0.75,
+    "mem_pct": 50.1
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 628,
-    "runtime_str": "10m",
-    "load_pct": 29,
+    "runtime_s": 548,
+    "runtime_str": "9m",
+    "load_pct": 32,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "11h ago",
-    "message": "feat(beesly): add R8 \u2014 escalate OOMKilled offenders off R2's allowlist (#563)",
-    "sha": "4f52868"
+    "age": "\u2014",
+    "message": "unavailable",
+    "sha": "\u2014"
   },
   "storage": [
     {
       "name": "tera",
-      "used": "5.9 TB",
+      "used": "6.0 TB",
       "total": "7.9 TB",
-      "pct": 75.7,
+      "pct": 75.9,
       "status": "warn",
       "pool_status": "ONLINE",
       "healthy": true
     },
     {
       "name": "archive",
-      "used": "729.3 GB",
+      "used": "729.4 GB",
       "total": "4.0 TB",
       "pct": 18.3,
       "status": "ok",
@@ -292,9 +292,9 @@
     },
     {
       "name": "core",
-      "used": "108.7 GB",
+      "used": "109.1 GB",
       "total": "476.7 GB",
-      "pct": 22.8,
+      "pct": 22.9,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -303,26 +303,21 @@
   "contribs": {
     "days": {
       "2026-06-26": 0,
-      "2026-06-25": 12,
+      "2026-06-25": 0,
       "2026-06-24": 15,
       "2026-06-23": 0,
-      "2026-06-22": 42,
-      "2026-06-21": 13,
+      "2026-06-22": 3,
+      "2026-06-21": 8,
       "2026-06-20": 0,
-      "2026-06-19": 23,
+      "2026-06-19": 12,
       "2026-06-18": 0,
       "2026-06-17": 0,
-      "2026-06-14": 5,
-      "2026-06-11": 5,
-      "2026-06-10": 5,
-      "2026-06-09": 7,
+      "2026-06-10": 0,
+      "2026-06-09": 0,
       "2026-06-08": 0,
-      "2026-06-04": 0,
-      "2026-06-03": 9,
-      "2026-05-29": 26,
-      "2026-05-28": 17
+      "2026-06-04": 0
     },
-    "total": 179,
-    "active_days": 19
+    "total": 38,
+    "active_days": 14
   }
 }

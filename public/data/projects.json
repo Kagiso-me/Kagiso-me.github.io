@@ -55,5 +55,20 @@
       { "label": "Nutrition + race calendar",       "done": true },
       { "label": "Deployed to k3s (Authentik-gated)","done": true }
     ]
+  },
+  {
+    "title": "FinForge",
+    "status": "active",
+    "timeline": "Jun 2026",
+    "description": "Personal finance command board — the Forge pattern applied to money. Imports FNB bank statements into a transaction ledger, auto-categorises with a rules engine, and tracks budgets, cashflow, and net worth over time. Dark editorial UI, hand-rolled SVG charts, self-hosted and Authentik-gated. AI-assisted categorisation and natural-language queries land in phase 2.",
+    "milestones": [
+      { "label": "FNB CSV import + dedup",            "done": false },
+      { "label": "Accounts + transaction ledger",     "done": false },
+      { "label": "Category rules engine",             "done": false },
+      { "label": "Budgets + cashflow dashboards",     "done": false },
+      { "label": "Net worth over time",               "done": false },
+      { "label": "Deployed to k3s (Authentik-gated)", "done": false },
+      { "label": "AI categorisation + NL query (p2)", "done": false }
+    ]
   }
 ]

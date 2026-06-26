@@ -1,13 +1,13 @@
 {
-  "updated": "2026-06-26T17:14:24Z",
-  "fetched_at": "2026-06-26T17:14:24Z",
+  "updated": "2026-06-26T19:16:26Z",
+  "fetched_at": "2026-06-26T19:16:26Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "67/67",
+      "value": "67/68",
       "sub": "pods running",
-      "status": "ok"
+      "status": "warn"
     },
     {
       "label": "Flux",
@@ -17,25 +17,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "15h 9m ago",
+      "value": "17h 11m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "5h 14m ago",
+      "value": "7h 16m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "4h 14m ago",
+      "value": "16m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "16h 13m ago",
+      "value": "18h 15m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -51,9 +51,9 @@
       "name": "jaime",
       "role": "control-plane",
       "status": "ok",
-      "pods": "16/110",
+      "pods": "17/110",
       "cpu": "30%",
-      "memory": "18%",
+      "memory": "19%",
       "pressure": []
     },
     {
@@ -244,21 +244,21 @@
     }
   ],
   "network": {
-    "fw_hits": 1145959,
+    "fw_hits": 1148258,
     "fw_rate_per_hour": null,
-    "latency_ms": 3.5,
+    "latency_ms": 7.8,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 47.2,
+    "temp_c": 46.7,
     "temp_status": "ok",
-    "load": 0.57,
-    "mem_pct": 48.6
+    "load": 0.4,
+    "mem_pct": 49.7
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 588,
+    "runtime_s": 568,
     "runtime_str": "9m",
     "load_pct": 31,
     "status": "OL",
@@ -283,7 +283,7 @@
     },
     {
       "name": "archive",
-      "used": "729.7 GB",
+      "used": "730.0 GB",
       "total": "4.0 TB",
       "pct": 18.3,
       "status": "ok",
@@ -302,7 +302,7 @@
   ],
   "contribs": {
     "days": {
-      "2026-06-26": 2,
+      "2026-06-26": 7,
       "2026-06-25": 0,
       "2026-06-24": 15,
       "2026-06-23": 0,
@@ -317,7 +317,7 @@
       "2026-06-08": 0,
       "2026-06-04": 0
     },
-    "total": 40,
+    "total": 45,
     "active_days": 14
   }
 }

@@ -1,41 +1,41 @@
 {
-  "updated": "2026-06-26T12:30:24Z",
-  "fetched_at": "2026-06-26T12:30:24Z",
+  "updated": "2026-06-26T15:13:06Z",
+  "fetched_at": "2026-06-26T15:13:06Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "74/74",
+      "value": "67/67",
       "sub": "pods running",
       "status": "ok"
     },
     {
       "label": "Flux",
       "value": "19/19 synced",
-      "sub": "78d",
+      "sub": "79d",
       "status": "ok"
     },
     {
       "label": "Docker Appdata",
-      "value": "10h 25m ago",
+      "value": "13h 8m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "30m ago",
+      "value": "3h 13m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "5h 30m ago",
+      "value": "2h 12m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "11h 29m ago",
+      "value": "14h 12m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -51,40 +51,40 @@
       "name": "jaime",
       "role": "control-plane",
       "status": "ok",
-      "pods": "18/110",
-      "cpu": "36%",
-      "memory": "22%",
+      "pods": "16/110",
+      "cpu": "30%",
+      "memory": "18%",
       "pressure": []
     },
     {
       "name": "tyrion",
       "role": "control-plane",
       "status": "ok",
-      "pods": "26/110",
-      "cpu": "32%",
-      "memory": "20%",
+      "pods": "25/110",
+      "cpu": "31%",
+      "memory": "19%",
       "pressure": []
     },
     {
       "name": "tywin",
       "role": "control-plane",
       "status": "ok",
-      "pods": "30/110",
-      "cpu": "35%",
-      "memory": "15%",
+      "pods": "26/110",
+      "cpu": "28%",
+      "memory": "10%",
       "pressure": []
     }
   ],
   "flux": {
     "ready": 19,
     "total": 19,
-    "last_sync": "78d",
+    "last_sync": "79d",
     "status": "ok",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
-        "age": "78d",
+        "age": "79d",
         "ready": true
       },
       {
@@ -96,103 +96,103 @@
       {
         "namespace": "flux-system",
         "name": "platform-authentik",
-        "age": "78d",
+        "age": "79d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
-        "age": "78d",
+        "age": "79d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
-        "age": "78d",
+        "age": "79d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
-        "age": "78d",
+        "age": "79d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
-        "age": "78d",
+        "age": "79d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-namespaces",
-        "age": "78d",
+        "age": "79d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking",
-        "age": "78d",
+        "age": "79d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-config",
-        "age": "78d",
+        "age": "79d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-tls",
-        "age": "78d",
+        "age": "79d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability",
-        "age": "78d",
+        "age": "79d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
-        "age": "78d",
+        "age": "79d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
-        "age": "78d",
+        "age": "79d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security",
-        "age": "78d",
+        "age": "79d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security-issuers",
-        "age": "78d",
+        "age": "79d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-storage",
-        "age": "78d",
+        "age": "79d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade",
-        "age": "78d",
+        "age": "79d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade-plans",
-        "age": "78d",
+        "age": "79d",
         "ready": true
       }
     ]
@@ -210,8 +210,8 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 16.5 GB left",
-      "status": "ok"
+      "tag": "SABnzbd: idle",
+      "status": "unknown"
     },
     {
       "name": "Sonarr",
@@ -225,8 +225,8 @@
     },
     {
       "name": "Lidarr",
-      "tag": "Lidarr: 36 artists",
-      "status": "ok"
+      "tag": "Lidarr: \u2014 artists",
+      "status": "unknown"
     }
   ],
   "media": [
@@ -244,23 +244,23 @@
     }
   ],
   "network": {
-    "fw_hits": 1139640,
+    "fw_hits": 1143249,
     "fw_rate_per_hour": null,
-    "latency_ms": 3.7,
+    "latency_ms": 3.0,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 46.2,
+    "temp_c": 47.8,
     "temp_status": "ok",
-    "load": 0.75,
-    "mem_pct": 50.1
+    "load": 1.83,
+    "mem_pct": 58.8
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 548,
+    "runtime_s": 568,
     "runtime_str": "9m",
-    "load_pct": 32,
+    "load_pct": 31,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
@@ -276,14 +276,14 @@
       "name": "tera",
       "used": "6.0 TB",
       "total": "7.9 TB",
-      "pct": 75.9,
+      "pct": 76.0,
       "status": "warn",
       "pool_status": "ONLINE",
       "healthy": true
     },
     {
       "name": "archive",
-      "used": "729.4 GB",
+      "used": "729.6 GB",
       "total": "4.0 TB",
       "pct": 18.3,
       "status": "ok",
@@ -292,7 +292,7 @@
     },
     {
       "name": "core",
-      "used": "109.1 GB",
+      "used": "109.0 GB",
       "total": "476.7 GB",
       "pct": 22.9,
       "status": "ok",

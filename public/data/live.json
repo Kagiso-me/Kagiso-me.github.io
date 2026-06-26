@@ -1,13 +1,13 @@
 {
-  "updated": "2026-06-26T19:16:26Z",
-  "fetched_at": "2026-06-26T19:16:26Z",
+  "updated": "2026-06-26T21:04:21Z",
+  "fetched_at": "2026-06-26T21:04:21Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
       "label": "Workloads",
-      "value": "67/68",
+      "value": "68/68",
       "sub": "pods running",
-      "status": "warn"
+      "status": "ok"
     },
     {
       "label": "Flux",
@@ -17,25 +17,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "17h 11m ago",
+      "value": "18h 59m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "7h 16m ago",
+      "value": "9h 4m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "16m ago",
+      "value": "2h 4m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "18h 15m ago",
+      "value": "20h 3m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -244,23 +244,23 @@
     }
   ],
   "network": {
-    "fw_hits": 1148258,
+    "fw_hits": 1150561,
     "fw_rate_per_hour": null,
-    "latency_ms": 7.8,
+    "latency_ms": 3.2,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 46.7,
+    "temp_c": 46.2,
     "temp_status": "ok",
-    "load": 0.4,
-    "mem_pct": 49.7
+    "load": 0.58,
+    "mem_pct": 50.2
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 568,
-    "runtime_str": "9m",
-    "load_pct": 31,
+    "runtime_s": 628,
+    "runtime_str": "10m",
+    "load_pct": 29,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
@@ -292,7 +292,7 @@
     },
     {
       "name": "core",
-      "used": "109.1 GB",
+      "used": "109.2 GB",
       "total": "476.7 GB",
       "pct": 22.9,
       "status": "ok",
@@ -302,7 +302,7 @@
   ],
   "contribs": {
     "days": {
-      "2026-06-26": 7,
+      "2026-06-26": 12,
       "2026-06-25": 0,
       "2026-06-24": 15,
       "2026-06-23": 0,
@@ -317,7 +317,7 @@
       "2026-06-08": 0,
       "2026-06-04": 0
     },
-    "total": 45,
+    "total": 50,
     "active_days": 14
   }
 }

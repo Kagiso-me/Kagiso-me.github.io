@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-26T02:49:13Z",
-  "fetched_at": "2026-06-26T02:49:13Z",
+  "updated": "2026-06-26T06:50:52Z",
+  "fetched_at": "2026-06-26T06:50:52Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -17,19 +17,19 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "\u2014",
+      "value": "4h 46m ago",
       "sub": "last backup",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "2h 49m ago",
+      "value": "6h 51m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "1h 49m ago",
+      "value": "3h 50m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
@@ -210,30 +210,30 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 151.5 GB left",
+      "tag": "SABnzbd: downloading \u00b7 91.3 GB left",
       "status": "ok"
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: \u2014 series",
-      "status": "unknown"
+      "tag": "Sonarr: 59 series",
+      "status": "ok"
     },
     {
       "name": "Radarr",
-      "tag": "Radarr: \u2014 movies",
-      "status": "unknown"
+      "tag": "Radarr: 15 movies",
+      "status": "ok"
     },
     {
       "name": "Lidarr",
-      "tag": "Lidarr: \u2014 artists",
-      "status": "unknown"
+      "tag": "Lidarr: 36 artists",
+      "status": "ok"
     }
   ],
   "media": [
     {
       "name": "Plex",
       "label": "idle",
-      "status": "unknown",
+      "status": "ok",
       "playing": false
     },
     {
@@ -244,17 +244,17 @@
     }
   ],
   "network": {
-    "fw_hits": 1126507,
+    "fw_hits": 1130180,
     "fw_rate_per_hour": null,
-    "latency_ms": 86.2,
+    "latency_ms": 139.7,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 46.7,
+    "temp_c": 46.2,
     "temp_status": "ok",
-    "load": 0.45,
-    "mem_pct": 47.5
+    "load": 0.64,
+    "mem_pct": 49.4
   },
   "ups": {
     "charge": 100,
@@ -267,7 +267,7 @@
     "dot": "ok"
   },
   "last_deploy": {
-    "age": "4h ago",
+    "age": "8h ago",
     "message": "feat(beesly): add R8 \u2014 escalate OOMKilled offenders off R2's allowlist (#563)",
     "sha": "4f52868"
   },
@@ -276,16 +276,16 @@
       "name": "tera",
       "used": "5.9 TB",
       "total": "7.9 TB",
-      "pct": 74.6,
-      "status": "ok",
+      "pct": 75.3,
+      "status": "warn",
       "pool_status": "ONLINE",
       "healthy": true
     },
     {
       "name": "archive",
-      "used": "729.6 GB",
+      "used": "734.8 GB",
       "total": "4.0 TB",
-      "pct": 18.3,
+      "pct": 18.4,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -294,7 +294,7 @@
       "name": "core",
       "used": "108.0 GB",
       "total": "476.7 GB",
-      "pct": 22.6,
+      "pct": 22.7,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -302,6 +302,7 @@
   ],
   "contribs": {
     "days": {
+      "2026-06-26": 0,
       "2026-06-25": 12,
       "2026-06-24": 15,
       "2026-06-23": 0,
@@ -322,6 +323,6 @@
       "2026-05-28": 17
     },
     "total": 179,
-    "active_days": 18
+    "active_days": 19
   }
 }

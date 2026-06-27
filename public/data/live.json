@@ -1,13 +1,13 @@
 {
-  "updated": "2026-06-27T10:00:06Z",
-  "fetched_at": "2026-06-27T10:00:06Z",
+  "updated": "2026-06-27T11:41:08Z",
+  "fetched_at": "2026-06-27T11:41:08Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
       "label": "Workloads",
       "value": "68/68",
-      "sub": "1 failed job",
-      "status": "warn"
+      "sub": "pods running",
+      "status": "ok"
     },
     {
       "label": "Flux",
@@ -17,25 +17,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "7h 55m ago",
+      "value": "9h 36m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "10h 0m ago",
+      "value": "11h 41m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "2h 59m ago",
+      "value": "4h 40m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "8h 59m ago",
+      "value": "10h 40m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -90,7 +90,7 @@
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "79d",
+        "age": "80d",
         "ready": true
       },
       {
@@ -244,7 +244,7 @@
     }
   ],
   "network": {
-    "fw_hits": 1168200,
+    "fw_hits": 1170176,
     "fw_rate_per_hour": null,
     "latency_ms": 3.3,
     "offenders": [],
@@ -253,14 +253,14 @@
   "bran": {
     "temp_c": 46.2,
     "temp_status": "ok",
-    "load": 0.74,
+    "load": 0.5,
     "mem_pct": 46.9
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 588,
-    "runtime_str": "9m",
-    "load_pct": 31,
+    "runtime_s": 692,
+    "runtime_str": "11m",
+    "load_pct": 27,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
@@ -292,7 +292,7 @@
     },
     {
       "name": "core",
-      "used": "110.9 GB",
+      "used": "111.1 GB",
       "total": "476.7 GB",
       "pct": 23.3,
       "status": "ok",

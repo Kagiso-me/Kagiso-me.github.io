@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-27T04:10:05Z",
-  "fetched_at": "2026-06-27T04:10:05Z",
+  "updated": "2026-06-27T07:34:13Z",
+  "fetched_at": "2026-06-27T07:34:13Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -17,25 +17,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "2h 5m ago",
+      "value": "5h 29m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "4h 10m ago",
+      "value": "7h 34m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "1h 9m ago",
+      "value": "33m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "3h 9m ago",
+      "value": "6h 34m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -244,23 +244,23 @@
     }
   ],
   "network": {
-    "fw_hits": 1161708,
+    "fw_hits": 1165765,
     "fw_rate_per_hour": null,
-    "latency_ms": 3.3,
+    "latency_ms": 3.2,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 47.2,
+    "temp_c": 46.2,
     "temp_status": "ok",
-    "load": 1.15,
-    "mem_pct": 44.3
+    "load": 1.01,
+    "mem_pct": 45.9
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 648,
-    "runtime_str": "10m",
-    "load_pct": 29,
+    "runtime_s": 588,
+    "runtime_str": "9m",
+    "load_pct": 31,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
@@ -283,7 +283,7 @@
     },
     {
       "name": "archive",
-      "used": "738.8 GB",
+      "used": "738.3 GB",
       "total": "4.0 TB",
       "pct": 18.5,
       "status": "ok",
@@ -292,9 +292,9 @@
     },
     {
       "name": "core",
-      "used": "110.2 GB",
+      "used": "110.5 GB",
       "total": "476.7 GB",
-      "pct": 23.1,
+      "pct": 23.2,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true

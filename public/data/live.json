@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-27T21:59:04Z",
-  "fetched_at": "2026-06-27T21:59:04Z",
+  "updated": "2026-06-27T23:06:44Z",
+  "fetched_at": "2026-06-27T23:06:44Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -17,25 +17,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "19h 54m ago",
+      "value": "21h 1m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "9h 59m ago",
+      "value": "11h 6m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "2h 58m ago",
+      "value": "4h 6m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "20h 58m ago",
+      "value": "22h 6m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -205,12 +205,12 @@
     },
     {
       "name": "Nextcloud",
-      "tag": "Nextcloud: offline",
-      "status": "crit"
+      "tag": "Nextcloud: 60.9 MB used",
+      "status": "ok"
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 12.3 GB left",
+      "tag": "SABnzbd: idle",
       "status": "ok"
     },
     {
@@ -244,21 +244,21 @@
     }
   ],
   "network": {
-    "fw_hits": 1179780,
+    "fw_hits": 1180676,
     "fw_rate_per_hour": null,
-    "latency_ms": 22.6,
+    "latency_ms": 3.0,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 45.6,
+    "temp_c": 46.7,
     "temp_status": "ok",
-    "load": 0.48,
-    "mem_pct": 51.9
+    "load": 0.53,
+    "mem_pct": 51.0
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 648,
+    "runtime_s": 628,
     "runtime_str": "10m",
     "load_pct": 29,
     "status": "OL",
@@ -276,7 +276,7 @@
       "name": "tera",
       "used": "6.0 TB",
       "total": "7.9 TB",
-      "pct": 76.6,
+      "pct": 76.7,
       "status": "warn",
       "pool_status": "ONLINE",
       "healthy": true
@@ -292,7 +292,7 @@
     },
     {
       "name": "core",
-      "used": "111.3 GB",
+      "used": "111.2 GB",
       "total": "476.7 GB",
       "pct": 23.3,
       "status": "ok",

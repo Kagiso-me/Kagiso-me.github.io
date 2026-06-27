@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-27T14:58:49Z",
-  "fetched_at": "2026-06-27T14:58:49Z",
+  "updated": "2026-06-27T16:08:11Z",
+  "fetched_at": "2026-06-27T16:08:11Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -17,25 +17,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "12h 54m ago",
+      "value": "14h 3m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "2h 58m ago",
+      "value": "4h 8m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "1h 58m ago",
+      "value": "3h 7m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "13h 58m ago",
+      "value": "15h 8m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -244,23 +244,23 @@
     }
   ],
   "network": {
-    "fw_hits": 1173635,
+    "fw_hits": 1174497,
     "fw_rate_per_hour": null,
-    "latency_ms": 3.2,
+    "latency_ms": 3.5,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 46.2,
+    "temp_c": 46.7,
     "temp_status": "ok",
-    "load": 0.72,
-    "mem_pct": 52.0
+    "load": 0.78,
+    "mem_pct": 50.9
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 588,
-    "runtime_str": "9m",
-    "load_pct": 31,
+    "runtime_s": 692,
+    "runtime_str": "11m",
+    "load_pct": 27,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
@@ -292,7 +292,7 @@
     },
     {
       "name": "core",
-      "used": "111.3 GB",
+      "used": "111.2 GB",
       "total": "476.7 GB",
       "pct": 23.3,
       "status": "ok",
@@ -302,16 +302,16 @@
   ],
   "contribs": {
     "days": {
-      "2026-06-27": 16,
+      "2026-06-27": 20,
       "2026-06-26": 12,
       "2026-06-25": 0,
       "2026-06-24": 15,
       "2026-06-23": 0,
       "2026-06-22": 3,
-      "2026-06-21": 7,
+      "2026-06-21": 6,
       "2026-06-19": 6
     },
-    "total": 59,
+    "total": 62,
     "active_days": 8
   }
 }

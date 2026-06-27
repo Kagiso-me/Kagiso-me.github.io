@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-27T00:00:27Z",
-  "fetched_at": "2026-06-27T00:00:27Z",
+  "updated": "2026-06-27T04:10:05Z",
+  "fetched_at": "2026-06-27T04:10:05Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -17,25 +17,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "21h 55m ago",
+      "value": "2h 5m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "0m ago",
+      "value": "4h 10m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "5h 0m ago",
+      "value": "1h 9m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "23h 0m ago",
+      "value": "3h 9m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -210,7 +210,7 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 5.5 GB left",
+      "tag": "SABnzbd: idle",
       "status": "ok"
     },
     {
@@ -244,23 +244,23 @@
     }
   ],
   "network": {
-    "fw_hits": 1155450,
+    "fw_hits": 1161708,
     "fw_rate_per_hour": null,
-    "latency_ms": 38.2,
+    "latency_ms": 3.3,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 47.8,
+    "temp_c": 47.2,
     "temp_status": "ok",
-    "load": 1.0,
-    "mem_pct": 50.3
+    "load": 1.15,
+    "mem_pct": 44.3
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 588,
-    "runtime_str": "9m",
-    "load_pct": 31,
+    "runtime_s": 648,
+    "runtime_str": "10m",
+    "load_pct": 29,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
@@ -276,23 +276,23 @@
       "name": "tera",
       "used": "6.0 TB",
       "total": "7.9 TB",
-      "pct": 76.1,
+      "pct": 76.6,
       "status": "warn",
       "pool_status": "ONLINE",
       "healthy": true
     },
     {
       "name": "archive",
-      "used": "730.2 GB",
+      "used": "738.8 GB",
       "total": "4.0 TB",
-      "pct": 18.3,
+      "pct": 18.5,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
     },
     {
       "name": "core",
-      "used": "110.0 GB",
+      "used": "110.2 GB",
       "total": "476.7 GB",
       "pct": 23.1,
       "status": "ok",
@@ -302,6 +302,7 @@
   ],
   "contribs": {
     "days": {
+      "2026-06-27": 0,
       "2026-06-26": 12,
       "2026-06-25": 0,
       "2026-06-24": 15,
@@ -312,8 +313,7 @@
       "2026-06-19": 12,
       "2026-06-18": 0,
       "2026-06-17": 0,
-      "2026-06-10": 0,
-      "2026-06-09": 0
+      "2026-06-10": 0
     },
     "total": 50,
     "active_days": 12

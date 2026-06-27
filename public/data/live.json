@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-27T20:36:30Z",
-  "fetched_at": "2026-06-27T20:36:30Z",
+  "updated": "2026-06-27T21:59:04Z",
+  "fetched_at": "2026-06-27T21:59:04Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "cards": [
     {
@@ -17,27 +17,27 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "18h 31m ago",
+      "value": "19h 54m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "8h 36m ago",
+      "value": "9h 59m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "1h 36m ago",
+      "value": "2h 58m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "\u2014",
+      "value": "20h 58m ago",
       "sub": "age keys \u00b7 varys",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "Backblaze B2",
@@ -200,8 +200,8 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: offline",
-      "status": "crit"
+      "tag": "Immich: 906 photos \u00b7 22 videos",
+      "status": "ok"
     },
     {
       "name": "Nextcloud",
@@ -210,7 +210,7 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: idle",
+      "tag": "SABnzbd: downloading \u00b7 12.3 GB left",
       "status": "ok"
     },
     {
@@ -244,23 +244,23 @@
     }
   ],
   "network": {
-    "fw_hits": 1178710,
+    "fw_hits": 1179780,
     "fw_rate_per_hour": null,
-    "latency_ms": 16.3,
+    "latency_ms": 22.6,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 46.2,
+    "temp_c": 45.6,
     "temp_status": "ok",
-    "load": 0.93,
-    "mem_pct": 51.1
+    "load": 0.48,
+    "mem_pct": 51.9
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 720,
-    "runtime_str": "12m",
-    "load_pct": 27,
+    "runtime_s": 648,
+    "runtime_str": "10m",
+    "load_pct": 29,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
@@ -292,9 +292,9 @@
     },
     {
       "name": "core",
-      "used": "111.4 GB",
+      "used": "111.3 GB",
       "total": "476.7 GB",
-      "pct": 23.4,
+      "pct": 23.3,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -307,11 +307,11 @@
       "2026-06-25": 0,
       "2026-06-24": 15,
       "2026-06-23": 0,
-      "2026-06-22": 2,
+      "2026-06-22": 1,
       "2026-06-21": 4,
       "2026-06-19": 6
     },
-    "total": 59,
+    "total": 58,
     "active_days": 8
   }
 }

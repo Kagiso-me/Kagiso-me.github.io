@@ -86,8 +86,3 @@ sudo systemctl disable pihole-FTL unbound
 Updated the MikroTik DHCP server to hand out `10.0.10.1` as DNS Server 1 and `1.1.1.1` as DNS Server 2. DNS resolution has been stable since.
 
 `bran` keeps its other roles: Tailscale exit node, WOL proxy, GitHub Actions runners. It's a fine machine for those jobs. DNS server wasn't one of them.
-
-## Related
-
-- [ADR-018: MikroTik DNS replacing Pi-hole](/decisions)
-- [ADR-011: Pi-hole + Unbound (superseded)](/decisions)

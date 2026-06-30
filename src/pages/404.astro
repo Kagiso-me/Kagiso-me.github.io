@@ -209,7 +209,7 @@ import Layout from '../layouts/Layout.astro';
 
   async function runSequence() {
     // Suggest the closest page
-    const pages = [['/', 'home'], ['/status', 'status'], ['/blog', 'blog'], ['/decisions', 'decisions'], ['/digest', 'digest'], ['/projects', 'projects']];
+    const pages = [['/', 'home'], ['/status', 'status'], ['/blog', 'blog'], ['/digest', 'digest'], ['/projects', 'projects']];
     const best = pages.find(([p]) => slug.startsWith(p) && p !== '/') ?? pages[0];
 
     await delay(200);
@@ -234,7 +234,6 @@ import Layout from '../layouts/Layout.astro';
     line(`<span class="nf-ok">route/home</span>`);
     line(`<span class="nf-ok">route/status</span>`);
     line(`<span class="nf-ok">route/blog</span>`);
-    line(`<span class="nf-ok">route/decisions</span>`);
     line(`<span class="nf-ok">route/digest</span>`);
     line(`<span class="nf-ok">route/projects</span>`);
     blankLine();

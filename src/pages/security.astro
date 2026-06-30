@@ -2,68 +2,99 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="Security" description="Live CVE feed scoped to exact component versions running in the homelab cluster, sourced from OSV.dev.">
+<Layout title="Security" description="Live security posture — CVE feed scoped to exact running versions (OSV.dev), real CrowdSec + firewall telemetry, and the honest known gaps.">
 
   <div class="page-wrap">
 
     <!-- ── Header ── -->
     <div class="page-header fade-up">
       <div>
-        <p class="mono" style="color:var(--color-peach); margin-bottom:0.25rem">~/security</p>
-        <h1 style="margin:0">CVE Feed</h1>
+        <p class="mono" style="color:var(--accent); margin-bottom:0.25rem">~/security</p>
+        <h1 style="margin:0">Security posture</h1>
         <p class="hero-sub">
-          Every service running in this homelab is tracked against
-          <a href="https://osv.dev" target="_blank" rel="noopener" style="color:var(--color-peach)">OSV.dev</a>
-          — the Open Source Vulnerability database — using the exact versions
-          deployed in the cluster. This isn't a generic advisory feed; it's scoped
-          to what's actually running. When a CVE lands that affects this stack,
-          it shows up here and triggers a Discord alert. Fixing it means upgrading
-          the component — closing the loop between awareness and action.
+          A single home network, treated like it matters. Defence in depth,
+          encrypted secrets, one identity provider, and a CVE feed scoped to the
+          exact versions running — sourced from
+          <a href="https://osv.dev" target="_blank" rel="noopener" style="color:var(--accent)">OSV.dev</a>,
+          not a generic advisory list. Shown honestly, gaps included.
         </p>
       </div>
       <div style="text-align:right; flex-shrink:0">
         <div class="mono" id="last-checked" style="color:var(--color-subtle)">—</div>
         <div class="mono" style="color:var(--color-subtle); font-size:0.78rem; margin-top:0.25rem">
-          refreshed daily · sourced from OSV.dev
+          refreshed daily · OSV.dev + cluster telemetry
         </div>
       </div>
     </div>
 
-    <!-- ── Summary chips ── -->
-    <div id="summary-section" style="display:none; margin-bottom:2rem">
-      <div class="summary-chips">
-        <div class="summary-chip crit">
-          <span class="chip-count" id="count-critical">0</span>
-          <span class="chip-label">Critical</span>
-        </div>
-        <div class="summary-chip high">
-          <span class="chip-count" id="count-high">0</span>
-          <span class="chip-label">High</span>
-        </div>
-        <div class="summary-chip medium">
-          <span class="chip-count" id="count-medium">0</span>
-          <span class="chip-label">Medium</span>
-        </div>
-        <div class="summary-chip low">
-          <span class="chip-count" id="count-low">0</span>
-          <span class="chip-label">Low</span>
-        </div>
+    <!-- ── Posture cards ── -->
+    <section class="posture-grid fade-up" style="animation-delay:0.03s">
+      <div class="posture-card">
+        <div class="posture-top"><span class="posture-label mono">OPEN CVEs</span><span class="posture-dot" id="posture-cve-dot"></span></div>
+        <div class="posture-value mono" id="posture-cve-value">—</div>
+        <div class="posture-note" id="posture-cve-note">High/Critical · scoped to running versions</div>
       </div>
-    </div>
-
-    <!-- ── CVE list ── -->
-    <section class="section fade-up" style="animation-delay:0.05s">
-      <h2 class="section-label">Vulnerabilities</h2>
-      <div id="cve-list">
-        <div class="skeleton" style="height:64px; border-radius:10px; margin-bottom:0.5rem"></div>
-        <div class="skeleton" style="height:64px; border-radius:10px; margin-bottom:0.5rem"></div>
-        <div class="skeleton" style="height:64px; border-radius:10px; margin-bottom:0.5rem"></div>
+      <div class="posture-card">
+        <div class="posture-top"><span class="posture-label mono">SECRETS</span><span class="posture-dot ok"></span></div>
+        <div class="posture-value mono">SOPS</div>
+        <div class="posture-note">age-encrypted in git · decrypted in-cluster</div>
+      </div>
+      <div class="posture-card">
+        <div class="posture-top"><span class="posture-label mono">IDENTITY</span><span class="posture-dot ok"></span></div>
+        <div class="posture-value mono">Authentik</div>
+        <div class="posture-note">SSO + MFA · forward-auth on every app</div>
+      </div>
+      <div class="posture-card">
+        <div class="posture-top"><span class="posture-label mono">EDGE</span><span class="posture-dot" id="posture-edge-dot"></span></div>
+        <div class="posture-value mono" id="posture-edge-value">—</div>
+        <div class="posture-note" id="posture-edge-note">firewall hits · CrowdSec bans</div>
       </div>
     </section>
 
-    <!-- ── Footer ── -->
-    <div id="cve-footer" style="display:none" class="mono" style="color:var(--color-subtle); font-size:0.75rem; margin-top:-1rem; margin-bottom:2rem">
-    </div>
+    <!-- ── CVE list + defence-in-depth ── -->
+    <section class="sec-split fade-up" style="animation-delay:0.06s">
+      <div class="sec-col">
+        <div class="sec-panel-head">
+          <h2 class="section-label" style="margin:0">Vulnerabilities</h2>
+          <div class="summary-chips" id="summary-section" style="display:none">
+            <span class="summary-chip crit"><span class="chip-count" id="count-critical">0</span>C</span>
+            <span class="summary-chip high"><span class="chip-count" id="count-high">0</span>H</span>
+            <span class="summary-chip medium"><span class="chip-count" id="count-medium">0</span>M</span>
+            <span class="summary-chip low"><span class="chip-count" id="count-low">0</span>L</span>
+          </div>
+        </div>
+        <div id="cve-list">
+          <div class="skeleton" style="height:64px; border-radius:10px; margin-bottom:0.5rem"></div>
+          <div class="skeleton" style="height:64px; border-radius:10px; margin-bottom:0.5rem"></div>
+          <div class="skeleton" style="height:64px; border-radius:10px; margin-bottom:0.5rem"></div>
+        </div>
+        <div id="cve-footer" style="display:none" class="mono"></div>
+      </div>
+
+      <div class="sec-col">
+        <div class="layers-panel">
+          <div class="layers-head">Defence in depth</div>
+          <div class="layers-body">
+            <div class="layer-row"><span class="layer-check">✓</span><div><div class="layer-name">Perimeter firewall</div><div class="layer-detail">MikroTik · default-deny inbound, VLAN segmentation</div></div></div>
+            <div class="layer-row"><span class="layer-check">✓</span><div><div class="layer-name">CrowdSec</div><div class="layer-detail">Behavioural blocking + community threat intel</div></div></div>
+            <div class="layer-row"><span class="layer-check">✓</span><div><div class="layer-name">No exposed node IPs</div><div class="layer-detail">Ingress only via Traefik VIP (.110)</div></div></div>
+            <div class="layer-row"><span class="layer-check">✓</span><div><div class="layer-name">SSO + MFA everywhere</div><div class="layer-detail">Authentik forward-auth, no per-app logins</div></div></div>
+            <div class="layer-row"><span class="layer-check">✓</span><div><div class="layer-name">Encrypted secrets</div><div class="layer-detail">SOPS + age · nothing in plaintext, ever</div></div></div>
+            <div class="layer-row"><span class="layer-check">✓</span><div><div class="layer-name">Image scanning in CI</div><div class="layer-detail">Trivy gate · block on HIGH</div></div></div>
+            <div class="layer-row"><span class="layer-check">✓</span><div><div class="layer-name">Off-site encrypted backups</div><div class="layer-detail">Velero → MinIO → Backblaze B2 · tested restores</div></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Honest gaps ── -->
+    <section class="gaps-panel fade-up" style="animation-delay:0.09s">
+      <div class="mono gaps-kicker">KNOWN GAPS · honest</div>
+      <div class="gaps-grid">
+        <p>bronn (media) sits <span style="color:var(--accent)">outside</span> the monitoring and identity stack by design — convenient, but a deliberate soft spot, isolated on its own path.</p>
+        <p>The SOPS age key is the crown jewel. It lives only on varys and bran; losing both would mean re-keying every secret. Custody, not encryption, is the real risk.</p>
+      </div>
+    </section>
 
   </div>
 
@@ -158,6 +189,101 @@ import Layout from '../layouts/Layout.astro';
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: var(--color-subtle);
+  }
+
+  /* ── Posture cards ── */
+  .posture-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.875rem;
+    margin-bottom: 1.75rem;
+  }
+  .posture-card {
+    background: rgba(255, 255, 255, 0.022);
+    border: 1px solid var(--color-muted);
+    border-radius: 14px;
+    padding: 1.1rem 1.25rem;
+    transition: border-color 0.2s ease;
+  }
+  .posture-card:hover { border-color: color-mix(in srgb, var(--color-text) 16%, transparent); }
+  .posture-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+  }
+  .posture-label { font-size: 0.7rem; letter-spacing: 0.05em; color: var(--color-subtle); }
+  .posture-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--color-unknown); box-shadow: 0 0 8px var(--color-unknown);
+  }
+  .posture-dot.ok   { background: var(--color-ok);   box-shadow: 0 0 8px var(--color-ok); }
+  .posture-dot.warn { background: var(--color-warn); box-shadow: 0 0 8px var(--color-warn); }
+  .posture-dot.crit { background: var(--color-crit); box-shadow: 0 0 8px var(--color-crit); }
+  .posture-value { font-size: 1.55rem; font-weight: 600; color: var(--color-heading); line-height: 1; }
+  .posture-note { font-size: 0.74rem; color: var(--color-subtle); margin-top: 0.5rem; line-height: 1.5; }
+
+  /* ── Split: CVE list + layers ── */
+  .sec-split {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 1.75rem;
+    align-items: start;
+  }
+  .sec-panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+  .sec-panel-head .summary-chip { padding: 0.25rem 0.6rem; gap: 0.3rem; font-size: 0.72rem; }
+  .sec-panel-head .chip-count { font-size: 0.9rem; }
+
+  .layers-panel {
+    background: rgba(255, 255, 255, 0.012);
+    border: 1px solid var(--color-muted);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .layers-head {
+    padding: 0.9rem 1.25rem;
+    border-bottom: 1px solid var(--color-muted);
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--color-heading);
+  }
+  .layers-body { padding: 0.4rem 0.75rem; }
+  .layer-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    padding: 0.7rem 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  }
+  .layer-row:last-child { border-bottom: none; }
+  .layer-check { color: var(--color-ok); font-family: var(--font-mono); font-size: 0.85rem; flex-shrink: 0; line-height: 1.4; }
+  .layer-name { font-size: 0.9rem; color: var(--color-text); font-weight: 500; }
+  .layer-detail { font-size: 0.74rem; color: var(--color-subtle); margin-top: 0.1rem; }
+
+  /* ── Honest gaps ── */
+  .gaps-panel {
+    border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+    border-radius: 16px;
+    padding: 1.5rem 1.75rem;
+    background: linear-gradient(120deg, color-mix(in srgb, var(--accent) 7%, transparent), transparent);
+    margin-bottom: 2.5rem;
+  }
+  .gaps-kicker { font-size: 0.72rem; color: var(--accent); letter-spacing: 0.1em; margin-bottom: 0.9rem; }
+  .gaps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+  .gaps-grid p { margin: 0; font-size: 0.9rem; line-height: 1.7; color: var(--color-text); }
+
+  @media (max-width: 820px) {
+    .sec-split { grid-template-columns: 1fr; }
+    .gaps-grid { grid-template-columns: 1fr; }
   }
 
   /* ── CVE table ── */
@@ -345,6 +471,15 @@ import Layout from '../layouts/Layout.astro';
         if (data.total > 0) summaryEl.style.display = '';
       }
 
+      // CVE posture card — headline is High+Critical, the figures that page you
+      const hi = (counts.CRITICAL ?? 0) + (counts.HIGH ?? 0);
+      const cveVal = document.getElementById('posture-cve-value');
+      const cveDot = document.getElementById('posture-cve-dot');
+      const cveNote = document.getElementById('posture-cve-note');
+      if (cveVal) cveVal.textContent = String(hi);
+      if (cveDot) cveDot.className = 'posture-dot ' + (hi > 0 ? 'crit' : 'ok');
+      if (cveNote) cveNote.textContent = `High/Critical · ${data.tracked ?? '?'} components tracked`;
+
       if (footerEl) {
         footerEl.style.display = '';
         footerEl.textContent = `Sourced from OSV.dev · ${data.tracked ?? '?'} components tracked`;
@@ -415,8 +550,35 @@ import Layout from '../layouts/Layout.astro';
       if (listEl) {
         listEl.innerHTML = `<div style="color:var(--color-subtle); font-family:var(--font-mono); font-size:0.85rem; padding:1.5rem; text-align:center">Failed to load CVE data</div>`;
       }
+      const cveVal = document.getElementById('posture-cve-value');
+      const cveDot = document.getElementById('posture-cve-dot');
+      if (cveVal) cveVal.textContent = 'unknown';
+      if (cveDot) cveDot.className = 'posture-dot';
     }
   }
 
-  document.addEventListener('astro:page-load', loadCVEs);
+  async function loadEdge() {
+    const valEl  = document.getElementById('posture-edge-value');
+    const dotEl  = document.getElementById('posture-edge-dot');
+    const noteEl = document.getElementById('posture-edge-note');
+    try {
+      const res = await fetch('/data/live.json', { cache: 'no-store' });
+      if (!res.ok) throw new Error('no data');
+      const d = await res.json();
+      const net = d.network ?? {};
+      const bans = net.crowdsec_bans ?? 0;
+      const hits = net.fw_hits;
+      if (valEl) valEl.textContent = bans > 0 ? `${bans} banned` : (typeof hits === 'number' ? `${hits.toLocaleString()} hits` : 'unknown');
+      if (dotEl) dotEl.className = 'posture-dot ' + (typeof hits === 'number' ? 'ok' : '');
+      if (noteEl) noteEl.textContent = typeof hits === 'number'
+        ? `firewall blocks · ${bans} active CrowdSec bans`
+        : 'firewall hits · CrowdSec bans';
+    } catch {
+      if (valEl) valEl.textContent = 'unknown';
+      if (dotEl) dotEl.className = 'posture-dot';
+    }
+  }
+
+  function initSecurity() { loadCVEs(); loadEdge(); }
+  document.addEventListener('astro:page-load', initSecurity);
 </script>

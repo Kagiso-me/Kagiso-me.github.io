@@ -1,0 +1,138 @@
+---
+import { MONTHLY_LABEL } from '../lib/cost';
+---
+
+<div class="spine" role="status" aria-label="Live cluster vitals">
+  <div class="spine-inner">
+    <span class="spine-live"><span class="spine-dot" id="spine-dot" aria-hidden="true"></span>LIVE</span>
+    <span class="spine-sep" aria-hidden="true">·</span>
+    <span class="spine-item">nodes <span class="spine-val" id="spine-nodes">—</span></span>
+    <span class="spine-item">pods <span class="spine-val" id="spine-pods">—</span></span>
+    <span class="spine-item">flux <span class="spine-val" id="spine-flux">—</span></span>
+    <span class="spine-item">uptime <span class="spine-val" id="spine-uptime">—</span></span>
+    <span class="spine-item">cost <span class="spine-val">{MONTHLY_LABEL}</span></span>
+    <span class="spine-clock mono" id="spine-clock"></span>
+  </div>
+</div>
+
+<style>
+  .spine {
+    position: relative;
+    z-index: 60;
+    background: color-mix(in srgb, var(--color-base) 82%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-muted);
+  }
+  .spine-inner {
+    max-width: 1220px;
+    margin: 0 auto;
+    padding: 7px 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+  }
+  .spine-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--color-ok);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+  }
+  .spine-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--color-ok);
+    box-shadow: 0 0 8px var(--color-ok);
+    animation: spinePulse 2.4s infinite;
+  }
+  .spine-dot.stale { background: var(--color-warn); box-shadow: 0 0 8px var(--color-warn); animation: none; }
+  .spine-dot.offline { background: var(--color-crit); box-shadow: 0 0 8px var(--color-crit); animation: none; }
+  @keyframes spinePulse {
+    0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-ok) 50%, transparent); }
+    70%  { box-shadow: 0 0 0 7px transparent; }
+    100% { box-shadow: 0 0 0 0 transparent; }
+  }
+  .spine-sep { color: var(--color-subtle); }
+  .spine-item { color: var(--color-subtle); }
+  .spine-val { color: var(--color-text); }
+  .spine-clock { margin-left: auto; color: var(--color-sapphire); }
+  @media (prefers-reduced-motion: reduce) { .spine-dot { animation: none; } }
+  @media (max-width: 560px) { .spine { display: none; } }
+</style>
+
+<script>
+  const STALE_MS = 90 * 60 * 1000;
+
+  function fmtUptime(startIso: string): string {
+    const start = new Date(startIso).getTime();
+    if (!start) return '—';
+    const days = Math.floor((Date.now() - start) / 86400000);
+    return days + 'd';
+  }
+
+  function setText(id: string, text: string) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = text;
+  }
+
+  async function hydrateSpine() {
+    const dot = document.getElementById('spine-dot');
+    try {
+      const r = await fetch('/data/live.json', { cache: 'no-store' });
+      if (!r.ok) throw new Error('bad status');
+      const d = await r.json();
+
+      const age = Date.now() - new Date(d.updated ?? 0).getTime();
+      if (dot) dot.className = 'spine-dot' + (age > STALE_MS ? ' stale' : '');
+
+      const nodes = Array.isArray(d.nodes) ? d.nodes : [];
+      const ready = nodes.filter((n: any) => n.status === 'ok').length;
+      setText('spine-nodes', nodes.length ? `${ready}/${nodes.length}` : 'unknown');
+
+      // pods is "running/capacity" per node — sum the running side
+      const running = nodes.reduce((sum: number, n: any) => {
+        const m = /^(\d+)/.exec(String(n.pods ?? ''));
+        return sum + (m ? Number(m[1]) : 0);
+      }, 0);
+      setText('spine-pods', running ? String(running) : 'unknown');
+
+      const flux = d.flux;
+      if (flux && typeof flux === 'object') {
+        const fluxReady = flux.ready ?? flux.synced;
+        setText('spine-flux', fluxReady != null && flux.total != null ? `${fluxReady}/${flux.total}` : (flux.status ?? 'unknown'));
+      } else if (typeof flux === 'string') {
+        setText('spine-flux', flux);
+      } else {
+        setText('spine-flux', 'unknown');
+      }
+
+      setText('spine-uptime', d.cluster_start ? fmtUptime(d.cluster_start) : 'unknown');
+    } catch {
+      if (dot) dot.className = 'spine-dot offline';
+      for (const id of ['spine-nodes', 'spine-pods', 'spine-flux', 'spine-uptime']) setText(id, 'unknown');
+    }
+  }
+
+  let clockTimer: number | undefined;
+  function startClock() {
+    const tick = () => setText('spine-clock', new Date().toTimeString().slice(0, 8));
+    tick();
+    clearInterval(clockTimer);
+    clockTimer = window.setInterval(tick, 1000);
+  }
+
+  function initSpine() {
+    hydrateSpine();
+    startClock();
+  }
+
+  document.addEventListener('astro:page-load', initSpine);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initSpine);
+  else initSpine();
+</script>

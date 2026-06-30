@@ -27,6 +27,10 @@
   --color-crit:       #f38ba8;
   --color-unknown:    #6b7280;
 
+  /* Semantic aliases — "you/control-plane/GitOps" vs "machine/live-data/storage" */
+  --accent: var(--color-peach);
+  --signal: var(--color-sapphire);
+
   /* Typography */
   --font-display: 'Space Grotesk', 'Inter', -apple-system, sans-serif;
   --font-sans:  'Inter', -apple-system, BlinkMacSystemFont, sans-serif;

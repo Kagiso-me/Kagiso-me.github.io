@@ -1,5 +1,6 @@
 ---
 import Nav from '../components/Nav.astro';
+import LiveSpine from '../components/LiveSpine.astro';
 import ClientRouter from 'astro/components/ClientRouter.astro';
 import '../styles/global.css';
 
@@ -52,6 +53,7 @@ const umamiSiteId = import.meta.env.PUBLIC_UMAMI_SITE_ID;
   <body>
     <div id="cursor-glow" aria-hidden="true"></div>
     <div id="maintenance-banner" style="display:none"></div>
+    <LiveSpine />
     <Nav />
     <main>
       <slot />

@@ -45,7 +45,6 @@ const recentPosts = (await getCollection('blog'))
           </div>
           <div class="hero-actions">
             <a href="/status" class="btn-primary">Live Status</a>
-            <a href="/decisions" class="btn-ghost">Architecture Decisions</a>
             <a href="/blog" class="btn-ghost">Blog</a>
           </div>
         </div>
@@ -181,7 +180,7 @@ const recentPosts = (await getCollection('blog'))
     <div class="section-inner">
       <div class="section-header">
         <h2 class="section-title">Stack</h2>
-        <a href="/decisions" class="mono link-subtle">ADRs →</a>
+        <a href="/blog" class="mono link-subtle">ADRs →</a>
       </div>
       <div class="stack-grid">
         {[
@@ -303,14 +302,14 @@ const recentPosts = (await getCollection('blog'))
           </p>
           <p style="color:var(--color-subtle);line-height:1.8;margin-bottom:1.75rem">
             Everything here is real. The data is live, the ops log is the actual changelog,
-            the ADRs document decisions I've genuinely wrestled with. No demos, no staging, no hand-waving.
+            the blog documents decisions I've genuinely wrestled with. No demos, no staging, no hand-waving.
           </p>
           <div class="about-links">
             <a href="https://github.com/Kagiso-me" target="_blank" rel="noopener" class="about-link">
               <span class="about-link-icon">⌥</span> GitHub
             </a>
-            <a href="/decisions" class="about-link">
-              <span class="about-link-icon">⎇</span> ADRs
+            <a href="/blog" class="about-link">
+              <span class="about-link-icon">⎇</span> Blog
             </a>
             <a href="/digest" class="about-link">
               <span class="about-link-icon">◎</span> Ops Log

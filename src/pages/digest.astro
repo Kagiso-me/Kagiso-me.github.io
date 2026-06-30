@@ -205,7 +205,7 @@ import Layout from '../layouts/Layout.astro';
   .entry-card[data-type="SECURITY"]::before { background: var(--color-warn); }
   .entry-card[data-type="NETWORK"]::before  { background: var(--color-gold); }
   .entry-card[data-type="INCIDENT"]::before { background: var(--color-crit); }
-  .entry-card[data-type="DECISION"]::before { background: #a6e3a1; }
+  .entry-card[data-type="DECISION"]::before { background: var(--color-green); }
 
   .entry-card.no-detail { cursor: default; }
   .entry-card.no-detail:hover { transform: none; border-color: var(--color-muted); box-shadow: none; }
@@ -251,7 +251,7 @@ import Layout from '../layouts/Layout.astro';
   .type-SECURITY { background: color-mix(in srgb, var(--color-warn)     12%, transparent); color: var(--color-warn); }
   .type-NETWORK  { background: color-mix(in srgb, var(--color-gold)     12%, transparent); color: var(--color-gold); }
   .type-INCIDENT { background: color-mix(in srgb, var(--color-crit)     12%, transparent); color: var(--color-crit); }
-  .type-DECISION { background: color-mix(in srgb, #a6e3a1               12%, transparent); color: #a6e3a1; }
+  .type-DECISION { background: color-mix(in srgb, var(--color-green) 12%, transparent); color: var(--color-green); }
   .type-default  { background: color-mix(in srgb, var(--color-subtle)   12%, transparent); color: var(--color-subtle); }
 
   .entry-body { flex: 1; min-width: 0; }

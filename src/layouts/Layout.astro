@@ -35,10 +35,11 @@ const umamiSiteId = import.meta.env.PUBLIC_UMAMI_SITE_ID;
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content={ogImageUrl} />
 
-    <!-- Fonts — self-hosted, no external DNS round-trip -->
-    <link rel="preload" as="font" type="font/woff2" href="/fonts/space-grotesk-latin.woff2" crossorigin />
-    <link rel="preload" as="font" type="font/woff2" href="/fonts/inter-latin.woff2" crossorigin />
-    <link rel="preload" as="font" type="font/woff2" href="/fonts/jetbrains-mono-latin.woff2" crossorigin />
+    <!-- Fonts — self-hosted, no external DNS round-trip (mockup design system) -->
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/bricolage-var-latin.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/plexsans-var-latin.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/plexmono-400-latin.woff2" crossorigin />
+    <link rel="stylesheet" href="/fonts/mockup-fonts.css" />
     <link rel="stylesheet" href="/fonts/fonts.css" />
 
     <link rel="preload" as="fetch" href="/data/live.json" crossorigin="anonymous" />

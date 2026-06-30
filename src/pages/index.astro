@@ -10,56 +10,116 @@ const recentPosts = (await getCollection('blog'))
 
 <Layout title="Command Center" description="Living Homelab — built in public by Kagiso." ogImage="https://kagiso-me.github.io/og/home.svg">
 
-  <!-- ── Hero ── -->
-  <section class="hero fade-up">
-    <!-- Editorial backdrop: dot-grid + quieted particle network -->
-    <div class="aurora" aria-hidden="true"></div>
-    <canvas id="hero-grid" aria-hidden="true"></canvas>
-    <div class="hero-inner">
-
-      <!-- Left: identity + stats -->
-      <div class="hero-left">
-        <div class="hero-content">
-          <p class="hero-kicker mono"><span class="hero-kicker-no">01</span><span class="hero-kicker-rule" aria-hidden="true"></span>Built in public · k3s on three mini-PCs</p>
-          <h1><span id="h1-line1"></span><br><span id="h1-line2"></span><span class="h1-cursor" aria-hidden="true">▌</span></h1>
-          <p class="hero-identity">Corporate exec by day. Self-taught engineer by night.</p>
-          <p class="hero-sub">
-            A real k3s cluster built and operated in public — live metrics, honest decisions,
-            and an ops log that documents what actually happened.
-          </p>
-          <div class="hero-stats" id="hero-stats">
-            <div class="hero-stat">
-              <span class="hero-stat-val mono" id="stat-nodes">—</span>
-              <span class="hero-stat-label">nodes ready</span>
-            </div>
-            <div class="hero-stat-div" aria-hidden="true"></div>
-            <div class="hero-stat">
-              <span class="hero-stat-val mono" id="stat-pods">—</span>
-              <span class="hero-stat-label">pods running</span>
-            </div>
-            <div class="hero-stat-div" aria-hidden="true"></div>
-            <div class="hero-stat">
-              <span class="hero-stat-val mono" id="stat-flux">—</span>
-              <span class="hero-stat-label">Flux releases</span>
-            </div>
-          </div>
-          <div class="hero-actions">
-            <a href="/status" class="btn-primary">Live Status</a>
-            <a href="/blog" class="btn-ghost">Blog</a>
-          </div>
-        </div>
+  <!-- ── Hero + live cluster map ── -->
+  <header class="cc-hero fade-up">
+    <div class="cc-hero-text">
+      <div class="cc-kicker mono">
+        <span class="cc-kicker-dot" aria-hidden="true"></span>
+        live · k3s HA · 10.0.10.0/24 · built in public
       </div>
-
-      <!-- Right: terminal -->
-      <div class="hero-right">
-        <div class="hero-term-label">
-          <span class="mono">cluster · read-only · live</span>
-          <span class="status-dot ok"></span>
-        </div>
-        <ClusterTerminal />
+      <h1 class="cc-h1">
+        The homelab,<br>running where<br>you can <span class="cc-accent">watch it.</span>
+      </h1>
+      <p class="cc-lede">
+        Not a diagram. Not a demo. A real three-node Kubernetes cluster — every
+        metric on this page is read straight off the hardware on my shelf.
+      </p>
+      <div class="cc-actions">
+        <a href="/status" class="cc-btn-primary">Open live status →</a>
+        <a href="/blog" class="cc-btn-ghost">Read the blog</a>
       </div>
-
     </div>
+
+    <!-- LIVE TOPOLOGY (signature visual) -->
+    <div class="cc-map">
+      <div class="cc-map-head mono">
+        <span>cluster.architecture · live</span>
+        <span class="cc-map-clock"><span class="cc-map-dot" aria-hidden="true"></span><span id="cc-map-clock">—</span></span>
+      </div>
+      <div class="cc-map-stage">
+        <svg viewBox="0 0 500 470" class="cc-map-svg" aria-hidden="true">
+          <defs>
+            <marker id="cc-arC" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#4cc9e8"/></marker>
+            <marker id="cc-arA" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#f3b34d"/></marker>
+            <marker id="cc-arG" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5a6573"/></marker>
+            <filter id="cc-glow" x="-70%" y="-70%" width="240%" height="240%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          </defs>
+          <rect class="cc-perim" x="8" y="8" width="484" height="454" rx="16" fill="none" stroke="rgba(255,255,255,.06)" stroke-dasharray="2 7"/>
+          <path d="M250,52 V90" fill="none" stroke="rgba(76,201,232,.45)" stroke-width="1.4" marker-end="url(#cc-arC)"/>
+          <path d="M152,150 H178" fill="none" stroke="rgba(243,179,77,.5)" stroke-width="1.4" marker-end="url(#cc-arA)"/>
+          <path d="M265,290 V305" fill="none" stroke="rgba(76,201,232,.45)" stroke-width="1.4" marker-end="url(#cc-arC)" marker-start="url(#cc-arC)"/>
+          <path d="M368,152 L352,164" fill="none" stroke="rgba(120,135,155,.55)" stroke-width="1.2" stroke-dasharray="3 4" marker-end="url(#cc-arG)"/>
+          <path d="M188,52 C120,130 83,200 83,296" fill="none" stroke="rgba(120,135,155,.4)" stroke-width="1.2" stroke-dasharray="3 4" marker-end="url(#cc-arG)"/>
+          <g filter="url(#cc-glow)">
+            <circle r="3.3" fill="#9fe8f7"><animateMotion dur="1.7s" repeatCount="indefinite" path="M250,52 V90"/></circle>
+            <circle r="2.2" fill="#4cc9e8" opacity=".65"><animateMotion dur="1.7s" begin="-.07s" repeatCount="indefinite" path="M250,52 V90"/></circle>
+            <circle r="3.3" fill="#9fe8f7"><animateMotion dur="1.7s" begin="-.85s" repeatCount="indefinite" path="M250,52 V90"/></circle>
+            <circle r="3.3" fill="#ffd58a"><animateMotion dur="1.3s" repeatCount="indefinite" path="M152,150 H178"/></circle>
+            <circle r="2.2" fill="#f3b34d" opacity=".6"><animateMotion dur="1.3s" begin="-.65s" repeatCount="indefinite" path="M152,150 H178"/></circle>
+            <circle r="3.1" fill="#9fe8f7"><animateMotion dur="1.8s" repeatCount="indefinite" path="M265,288 V306"/></circle>
+            <circle r="2.6" fill="#aeb8c6"><animateMotion dur="3.6s" repeatCount="indefinite" path="M188,52 C120,130 83,200 83,296"/></circle>
+            <circle r="2.2" fill="#aeb8c6" opacity=".7"><animateMotion dur="2.2s" repeatCount="indefinite" path="M368,152 L352,164"/></circle>
+          </g>
+          <text x="257" y="76" font-size="8" fill="rgba(76,201,232,.75)">serve</text>
+          <text x="150" y="142" font-size="8" fill="rgba(243,179,77,.85)">flux ⸱ deploy</text>
+          <text x="272" y="301" font-size="8" fill="rgba(76,201,232,.75)">NFS PVCs</text>
+          <text x="356" y="158" font-size="7.5" fill="rgba(150,165,185,.8)">watch</text>
+          <text x="20" y="24" font-size="8" fill="rgba(255,255,255,.28)">10.0.10.0/24</text>
+        </svg>
+
+        <div class="cc-host cc-host-router" style="left:30%;top:1.4%;width:40%;height:8.6%">
+          <span class="cc-host-dot ok"></span>
+          <div class="cc-host-l"><div class="cc-host-name">mikrotik <span class="cc-host-ip">.1</span></div><div class="cc-host-sub">router · DNS · gateway</div></div>
+          <span class="cc-host-tag cc-tag-signal">ROUTES</span>
+        </div>
+
+        <div class="cc-host cc-host-varys" style="left:2.6%;top:23%;width:28%;height:16.5%">
+          <div class="cc-host-row"><span class="cc-host-dot" data-node="varys"></span><span class="cc-host-name">varys</span><span class="cc-host-ip">.10</span><span class="cc-host-tag cc-tag-accent">DRIVES</span></div>
+          <div class="cc-host-sub cc-accent">the brain · GitOps origin</div>
+          <div class="cc-host-sub">kubectl · flux · ansible<br><span class="cc-faint">hosts nothing</span></div>
+        </div>
+
+        <div class="cc-host cc-host-bran" style="left:73.4%;top:23%;width:24%;height:16.5%">
+          <div class="cc-host-row"><span class="cc-host-dot" data-node="bran"></span><span class="cc-host-name">bran</span><span class="cc-host-ip">.9</span></div>
+          <div class="cc-host-sub cc-signal">the watcher · Pi</div>
+          <div class="cc-host-sub">UPS · CI · paging<br><span class="cc-faint">survives full outage</span></div>
+        </div>
+
+        <div class="cc-cluster" style="left:36%;top:17.5%;width:33.6%;height:43%">
+          <div class="cc-cluster-head"><span class="cc-accent">k3s · HA cluster</span><span class="cc-tag-accent">SERVES</span></div>
+          <div class="cc-cluster-vip cc-signal">vip · api .100 · traefik .110</div>
+          <div class="cc-cluster-nodes">
+            <div class="cc-cluster-node"><span class="cc-host-dot" data-node="tywin"></span><span>tywin</span><span class="cc-host-ip">.11</span></div>
+            <div class="cc-cluster-node"><span class="cc-host-dot" data-node="jaime"></span><span>jaime</span><span class="cc-host-ip">.12</span></div>
+            <div class="cc-cluster-node"><span class="cc-host-dot" data-node="tyrion"></span><span>tyrion</span><span class="cc-host-ip">.13</span></div>
+          </div>
+          <div class="cc-cluster-quorum"><span class="cc-host-dot ok"></span><span id="cc-quorum">etcd quorum · runs all workloads</span></div>
+        </div>
+
+        <div class="cc-host cc-host-truenas" style="left:36%;top:65%;width:33.6%;height:12%">
+          <div class="cc-host-row"><span class="cc-host-dot ok"></span><span class="cc-host-name">truenas</span><span class="cc-host-ip">.80</span><span class="cc-host-tag cc-tag-signal">PERSISTS</span></div>
+          <div class="cc-host-sub">NFS-backed PVCs · MinIO backup target</div>
+        </div>
+
+        <div class="cc-host cc-host-bronn cc-island" style="left:2.6%;top:64.5%;width:28%;height:13.6%">
+          <div class="cc-host-row"><span class="cc-host-dot ok"></span><span class="cc-host-name cc-muted">bronn</span><span class="cc-host-ip">.20</span><span class="cc-host-tag cc-tag-muted">MEDIA</span></div>
+          <div class="cc-host-sub">standalone docker compose</div>
+          <div class="cc-host-sub cc-faint">not in cluster · no monitoring</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Interactive shell ── -->
+  <section class="cc-shell-section fade-up">
+    <div class="cc-shell-head">
+      <div>
+        <div class="cc-shell-kicker mono">~/shell</div>
+        <h2 class="cc-shell-title">A real shell into the cluster.</h2>
+      </div>
+      <span class="cc-shell-note mono">read-only · runs against live state · no, you can't <span class="cc-accent">rm -rf</span> it</span>
+    </div>
+    <ClusterTerminal />
   </section>
 
   <!-- ── Stack Dashboard ── -->
@@ -370,7 +430,139 @@ const recentPosts = (await getCollection('blog'))
 </Layout>
 
 <style is:global>
-  /* ── Hero ── */
+  /* ════ Command-center hero + live cluster map (mockup) ════ */
+  .cc-hero {
+    display: grid;
+    grid-template-columns: 0.92fr 1.08fr;
+    gap: 40px;
+    align-items: center;
+    max-width: 1220px;
+    margin: 0 auto;
+    padding: 64px 1.5rem 40px;
+  }
+  .cc-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--signal);
+    margin-bottom: 26px;
+  }
+  .cc-kicker-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--signal); box-shadow: 0 0 10px var(--signal); }
+  .cc-h1 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2.2rem, 5vw, 60px);
+    line-height: 0.98;
+    letter-spacing: -0.02em;
+    margin: 0 0 22px;
+    color: var(--color-heading);
+  }
+  .cc-accent { color: var(--accent); }
+  .cc-signal { color: var(--signal); }
+  .cc-muted { color: var(--color-text); }
+  .cc-faint { color: var(--color-faint); }
+  .cc-lede { max-width: 40ch; font-size: 17px; line-height: 1.62; color: var(--color-text); margin: 0 0 30px; }
+  .cc-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .cc-btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 13px 20px; border-radius: 9px;
+    background: var(--accent); color: #1a1206;
+    text-decoration: none; font-weight: 600; font-size: 14.5px;
+    box-shadow: 0 10px 34px color-mix(in srgb, var(--accent) 14%, transparent);
+    transition: filter 0.16s ease;
+  }
+  .cc-btn-primary:hover { filter: brightness(1.07); }
+  .cc-btn-ghost {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 13px 20px; border-radius: 9px;
+    background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1);
+    color: #dfe4ec; text-decoration: none; font-weight: 500; font-size: 14.5px;
+    transition: border-color 0.16s ease, background 0.16s ease;
+  }
+  .cc-btn-ghost:hover { border-color: rgba(255,255,255,.22); background: rgba(255,255,255,.06); }
+
+  /* ── map shell ── */
+  .cc-map {
+    position: relative;
+    background:
+      radial-gradient(120% 120% at 50% 30%, rgba(76,201,232,.06), transparent 60%),
+      linear-gradient(#0d111a, #0b0e15);
+    border: 1px solid var(--color-muted);
+    border-radius: 18px;
+    padding: 14px 16px 8px;
+    box-shadow: 0 36px 90px -36px rgba(0,0,0,.8), inset 0 1px 0 rgba(255,255,255,.04);
+  }
+  .cc-map-head {
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 11.5px; color: var(--color-subtle); padding: 2px 4px 8px;
+  }
+  .cc-map-clock { display: inline-flex; align-items: center; gap: 6px; color: var(--color-ok); }
+  .cc-map-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--color-ok); box-shadow: 0 0 6px var(--color-ok); }
+  .cc-map-stage { position: relative; width: 100%; aspect-ratio: 500 / 470; font-family: var(--font-mono); margin-top: 2px; }
+  .cc-map-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .cc-perim { animation: ccDash 9s linear infinite; }
+  @keyframes ccDash { to { stroke-dashoffset: -18; } }
+
+  .cc-host, .cc-cluster {
+    position: absolute; box-sizing: border-box; border-radius: 10px;
+    transition: transform 0.2s cubic-bezier(.2,.7,.2,1), border-color 0.2s ease;
+  }
+  .cc-host { display: flex; flex-direction: column; justify-content: center; gap: 3px; padding: 8px 10px;
+    background: rgba(255,255,255,.025); border: 1px solid var(--color-muted); }
+  .cc-host:hover { transform: translateY(-2px); border-color: rgba(255,255,255,.22); }
+  .cc-host-router { flex-direction: row; align-items: center; gap: 8px; border-radius: 9px; padding: 0 11px;
+    background: rgba(76,201,232,.06); border-color: rgba(76,201,232,.3); }
+  .cc-host-varys { background: linear-gradient(rgba(243,179,77,.07), transparent); border-color: rgba(243,179,77,.32); }
+  .cc-host-truenas { gap: 2px; background: rgba(76,201,232,.05); border-color: rgba(76,201,232,.26); }
+  .cc-island { border-style: dashed; border-color: rgba(255,255,255,.16); background: rgba(255,255,255,.02); }
+  .cc-host-row { display: flex; align-items: center; gap: 6px; }
+  .cc-host-name { font-size: 11.5px; color: var(--color-heading); font-weight: 600; }
+  .cc-host-router .cc-host-name { font-size: 11px; font-weight: 500; }
+  .cc-host-ip { color: var(--color-faint); font-size: 9px; }
+  .cc-host-sub { font-size: 8px; color: var(--color-subtle); line-height: 1.4; }
+  .cc-host-tag { margin-left: auto; font-size: 7px; letter-spacing: .1em; }
+  .cc-tag-signal { color: var(--signal); }
+  .cc-tag-accent { color: var(--accent); }
+  .cc-tag-muted { color: var(--color-subtle); }
+  .cc-host-l { line-height: 1.25; }
+  .cc-host-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--color-unknown); box-shadow: 0 0 6px var(--color-unknown); flex: none; }
+  .cc-host-dot.ok { background: var(--color-ok); box-shadow: 0 0 6px var(--color-ok); }
+  .cc-host-dot.warn { background: var(--color-warn); box-shadow: 0 0 6px var(--color-warn); }
+  .cc-host-dot.crit { background: var(--color-crit); box-shadow: 0 0 6px var(--color-crit); }
+
+  .cc-cluster {
+    display: flex; flex-direction: column; gap: 4px; padding: 7px 9px; border-radius: 12px;
+    background: linear-gradient(rgba(243,179,77,.06), rgba(243,179,77,.02));
+    border: 1px solid rgba(243,179,77,.34);
+    animation: ccBoxGlow 3.8s ease-in-out infinite;
+  }
+  @keyframes ccBoxGlow {
+    0%, 100% { box-shadow: 0 0 16px -8px rgba(243,179,77,.3); }
+    50%      { box-shadow: 0 0 30px -3px rgba(243,179,77,.5); }
+  }
+  .cc-cluster-head { display: flex; align-items: center; justify-content: space-between; font-size: 9px; letter-spacing: .07em; text-transform: uppercase; }
+  .cc-cluster-vip { font-size: 7.5px; background: rgba(76,201,232,.08); border-radius: 5px; padding: 2px 6px; }
+  .cc-cluster-nodes { display: flex; flex-direction: column; gap: 3px; flex: 1; justify-content: center; }
+  .cc-cluster-node { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,.03); border: 1px solid var(--color-muted); border-radius: 6px; padding: 3px 7px; font-size: 10px; color: var(--color-heading); }
+  .cc-cluster-quorum { display: flex; align-items: center; gap: 5px; font-size: 8px; color: var(--color-ok); }
+
+  @media (prefers-reduced-motion: reduce) { .cc-perim, .cc-cluster { animation: none; } }
+  @media (max-width: 860px) {
+    .cc-hero { grid-template-columns: 1fr; }
+    .cc-h1 { font-size: 34px; line-height: 1.06; }
+  }
+
+  /* ── Shell section ── */
+  .cc-shell-section { max-width: 1220px; margin: 0 auto; padding: 30px 1.5rem 8px; }
+  .cc-shell-head { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 18px; flex-wrap: wrap; gap: 10px; }
+  .cc-shell-kicker { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--signal); margin-bottom: 8px; }
+  .cc-shell-title { font-family: var(--font-display); font-size: clamp(1.5rem, 3.5vw, 34px); font-weight: 600; margin: 0; color: var(--color-heading); letter-spacing: -.01em; }
+  .cc-shell-note { font-size: 12px; color: var(--color-subtle); max-width: 36ch; text-align: right; line-height: 1.5; }
+
+  /* ── Hero (legacy, unused) ── */
   .hero {
     padding: 6.5rem 1.5rem 5rem;
     position: relative;
@@ -1713,6 +1905,20 @@ const recentPosts = (await getCollection('blog'))
         (window as any).__termSetData(data);
       }
 
+      // ── Live cluster map: colour node dots + quorum from real status ──────────
+      const ccNodes: any[] = Array.isArray(data.nodes) ? data.nodes : [];
+      const byName: Record<string, any> = {};
+      for (const n of ccNodes) byName[String(n.name).toLowerCase()] = n;
+      document.querySelectorAll<HTMLElement>('.cc-host-dot[data-node]').forEach((dot) => {
+        const node = byName[dot.dataset.node ?? ''];
+        const s = node?.status;
+        dot.className = 'cc-host-dot ' + (s === 'ok' ? 'ok' : s === 'warn' ? 'warn' : s ? 'crit' : '');
+      });
+      const k3s = ['tywin', 'jaime', 'tyrion'].map((n) => byName[n]).filter(Boolean);
+      const readyCount = k3s.filter((n) => n.status === 'ok').length;
+      const quorumEl = document.getElementById('cc-quorum');
+      if (quorumEl && k3s.length) quorumEl.textContent = `etcd quorum ${readyCount}/${k3s.length} · runs all workloads`;
+
       // ── Topology teaser node colouring ──────────────────────────────────────
       const nodeMap: Record<string, string> = {
         'tt-dot-internet': 'ok',
@@ -1902,15 +2108,27 @@ const recentPosts = (await getCollection('blog'))
 
   // Fire on both first load and Astro view-transition navigations
   let _pageInited = false;
+  let _ccClock: number | undefined;
+  function startMapClock() {
+    const el = document.getElementById('cc-map-clock');
+    if (!el) return;
+    const tick = () => { el.textContent = new Date().toTimeString().slice(0, 8); };
+    tick();
+    clearInterval(_ccClock);
+    _ccClock = window.setInterval(tick, 1000);
+  }
+
   function initPage() {
     if (_pageInited) return;
     _pageInited = true;
     loadLiveData();
     loadDigest();
     loadProject();
+    startMapClock();
     // Reset for next navigation
     setTimeout(() => { _pageInited = false; }, 500);
   }
+  document.addEventListener('astro:before-swap', () => { if (_ccClock) clearInterval(_ccClock); });
 
   document.addEventListener('astro:page-load', initPage);
   if (document.readyState === 'loading') {

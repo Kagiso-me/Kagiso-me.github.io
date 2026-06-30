@@ -1,40 +1,42 @@
 @import "tailwindcss";
 
 @theme {
-  /* ── Colour palette ── Ayu Dark base + Catppuccin accents ── */
-  --color-base:       #09090e;
+  /* ── Colour palette ── matches the .dc.html mockup design system ── */
+  --color-base:       #0a0c11;  /* ink */
   --color-mantle:     #0f1118;
-  --color-crust:      #161b27;
-  --color-surface:    #1e2534;
-  --color-overlay:    #242936;
-  --color-muted:      #3d4663;
-  --color-subtle:     #6b7280;
-  --color-text:       #bfbdb6;
-  --color-heading:    #e6e1cf;
+  --color-crust:      #10141c;
+  --color-surface:    #10141c;  /* raised panels */
+  --color-overlay:    #1a1f2b;
+  --color-muted:      rgba(255, 255, 255, 0.07);  /* line / hairline */
+  --color-subtle:     #7e8a9c;  /* muted-2 / secondary labels */
+  --color-text:       #a6b0c0;  /* muted / body prose */
+  --color-heading:    #f6f8fc;  /* bright / headlines */
+  --color-faint:      #566173;
 
-  /* Accents */
-  --color-peach:      #fab387;
+  /* Accents — amber = you/control-plane/GitOps · cyan = machine/live/storage */
+  --color-peach:      #f3b34d;  /* amber */
   --color-mauve:      #cba6f7;
-  --color-gold:       #e6b450;
-  --color-green:      #a6e3a1;
-  --color-red:        #f38ba8;
-  --color-amber:      #f9e2af;
-  --color-sapphire:   #74c7ec;
+  --color-gold:       #f3b34d;
+  --color-green:      #52e0a0;
+  --color-red:        #f8736b;
+  --color-amber:      #f3b34d;
+  --color-sapphire:   #4cc9e8;  /* cyan / signal */
 
   /* Status */
-  --color-ok:         #a6e3a1;
-  --color-warn:       #f9e2af;
-  --color-crit:       #f38ba8;
-  --color-unknown:    #6b7280;
+  --color-ok:         #52e0a0;
+  --color-warn:       #f3b34d;
+  --color-crit:       #f8736b;
+  --color-unknown:    #566173;
 
   /* Semantic aliases — "you/control-plane/GitOps" vs "machine/live-data/storage" */
   --accent: var(--color-peach);
   --signal: var(--color-sapphire);
 
-  /* Typography */
-  --font-display: 'Space Grotesk', 'Inter', -apple-system, sans-serif;
-  --font-sans:  'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono:  'JetBrains Mono', 'Fira Code', 'Iosevka', monospace;
+  /* Typography — mockup design system */
+  --font-display: 'Bricolage Grotesque', 'Space Grotesk', -apple-system, sans-serif;
+  --font-serif: 'Spectral', Georgia, serif;
+  --font-sans:  'IBM Plex Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:  'IBM Plex Mono', 'JetBrains Mono', 'Fira Code', monospace;
 }
 
 /* ── Base ── */

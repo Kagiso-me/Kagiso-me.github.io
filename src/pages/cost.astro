@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { ONGOING, ONGOING_TOTAL, ELECTRICITY_KWH, ELECTRICITY_RATE, ELECTRICITY_COST, MONTHLY_TOTAL } from '../lib/cost';
 
 // ── Cost data ──────────────────────────────────────────────────────────────
 // When the cluster went live and cloud subscriptions were cancelled
@@ -17,26 +18,8 @@ const HARDWARE = [
   { item: 'Networking — switch, cables', cost: 600   },
 ];
 
-// Ongoing monthly costs (ZAR) — infrastructure only, what actually leaves the account
-const ONGOING = [
-  { item: 'Backblaze B2 (offsite backup)', cost: 85 },
-  { item: 'Domain — kagiso.me',            cost: 15 },
-  { item: 'Cloudflare (free tier)',         cost: 0  },
-  { item: 'GitHub Actions (free tier)',     cost: 0  },
-];
-const ONGOING_TOTAL = ONGOING.reduce((s, o) => s + o.cost, 0);
-
-// Electricity — measured from actual device configuration
-// Always-on: 1× NUC ~15W, 3× ThinkCentre ~20W ea (60W), HP MicroServer ~30W (SAS spun down),
-//            RPi ~3W, networking ~10W, UPS overhead ~5W = 123W base
-// Docker NUC: 15W × (2/7 days) ≈ 4W average
-// Total ≈ 127W continuous × 24h × 30d ≈ 91 kWh/month
-const ELECTRICITY_KWH  = 91;
-const ELECTRICITY_RATE = 3.50; // R/kWh — Johannesburg municipal tariff
-const ELECTRICITY_COST = Math.round(ELECTRICITY_KWH * ELECTRICITY_RATE);
-
-// Actual cash outgoings — hardware excluded (already owned, no payments)
-const MY_MONTHLY_TOTAL = ONGOING_TOTAL + ELECTRICITY_COST;
+// Ongoing + electricity now sourced from src/lib/cost.ts (shared with the live spine).
+const MY_MONTHLY_TOTAL = MONTHLY_TOTAL;
 
 // ── Subscriptions actually cancelled ─────────────────────────────────────
 // These are real invoices that no longer arrive. Exact prices as billed.

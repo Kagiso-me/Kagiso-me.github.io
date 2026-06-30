@@ -26,6 +26,19 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </div>
 
+    <!-- ── Recent activity (real event stream from digest) ── -->
+    <section class="section fade-up" style="animation-delay:0.04s">
+      <div class="evstream-head">
+        <h2 class="section-label" style="margin:0">Recent activity</h2>
+        <span class="mono evstream-meta">from the ops digest · <a href="/digest" style="color:var(--signal)">full log →</a></span>
+      </div>
+      <div class="evstream" id="evstream">
+        <div class="skeleton" style="height:38px; border-radius:8px; margin-bottom:0.4rem"></div>
+        <div class="skeleton" style="height:38px; border-radius:8px; margin-bottom:0.4rem"></div>
+        <div class="skeleton" style="height:38px; border-radius:8px; margin-bottom:0.4rem"></div>
+      </div>
+    </section>
+
     <!-- ── Network Topology Map ── -->
     <section class="section fade-up" style="animation-delay:0.05s">
       <h2 class="section-label">Network Topology</h2>
@@ -415,6 +428,62 @@ import Layout from '../layouts/Layout.astro';
   }
 
   .section { margin-bottom: 5.5rem; }
+
+  /* ── Recent activity event stream ── */
+  .evstream-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+  .evstream-meta { font-size: 0.75rem; color: var(--color-subtle); }
+  .evstream {
+    background: rgba(255, 255, 255, 0.012);
+    border: 1px solid var(--color-muted);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .ev-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.85rem;
+    padding: 0.6rem 1.1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    font-family: var(--font-mono);
+  }
+  .ev-row:last-child { border-bottom: none; }
+  .ev-date { color: var(--color-subtle); font-size: 0.72rem; flex-shrink: 0; min-width: 4.5rem; }
+  .ev-type {
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    padding: 0.12rem 0.45rem;
+    border-radius: 4px;
+    flex-shrink: 0;
+    min-width: 5.2rem;
+    text-align: center;
+  }
+  .ev-title {
+    font-size: 0.82rem;
+    color: var(--color-text);
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: var(--font-sans);
+  }
+  .ev-type.DEPLOY   { color: var(--color-ok);       background: color-mix(in srgb, var(--color-ok)       12%, transparent); }
+  .ev-type.FIX      { color: var(--color-peach);    background: color-mix(in srgb, var(--color-peach)    12%, transparent); }
+  .ev-type.SECURITY { color: var(--color-warn);     background: color-mix(in srgb, var(--color-warn)     12%, transparent); }
+  .ev-type.INCIDENT { color: var(--color-crit);     background: color-mix(in srgb, var(--color-crit)     12%, transparent); }
+  .ev-type.CONFIG   { color: var(--color-sapphire); background: color-mix(in srgb, var(--color-sapphire) 12%, transparent); }
+  .ev-type.NETWORK  { color: var(--color-gold);     background: color-mix(in srgb, var(--color-gold)     12%, transparent); }
+  .ev-type.DECISION,
+  .ev-type.OPS      { color: var(--color-mauve);    background: color-mix(in srgb, var(--color-mauve)    12%, transparent); }
+  .ev-type.default  { color: var(--color-subtle);   background: color-mix(in srgb, var(--color-subtle)   12%, transparent); }
+  @media (max-width: 560px) { .ev-title { white-space: normal; } }
 
   .section-label {
     font-size: 0.72rem;
@@ -1845,7 +1914,36 @@ import Layout from '../layouts/Layout.astro';
 
   document.addEventListener('astro:before-swap', () => { if (_uptimeTimer) clearInterval(_uptimeTimer); });
 
-  document.addEventListener('astro:page-load', () => { startPolling(); loadCVEBanner(); initNetMap(); });
+  // ── Recent activity — real events from the ops digest ──────────────────────
+  const EV_TYPES = ['DEPLOY','FIX','SECURITY','INCIDENT','CONFIG','NETWORK','DECISION','OPS'];
+  function evDate(d: string) {
+    const date = new Date(d.length === 7 ? d + '-01' : d);
+    if (isNaN(+date)) return d;
+    return date.toLocaleDateString('en-ZA', { day: '2-digit', month: 'short' });
+  }
+  async function loadEventStream() {
+    const el = document.getElementById('evstream');
+    if (!el) return;
+    try {
+      const res = await fetch('/data/digest.json', { cache: 'no-store' });
+      if (!res.ok) throw new Error('no data');
+      const all = await res.json();
+      const rows = (Array.isArray(all) ? all : []).slice(0, 12);
+      if (!rows.length) { el.innerHTML = `<div class="ev-row"><span class="ev-title" style="color:var(--color-subtle)">No recent activity</span></div>`; return; }
+      el.innerHTML = rows.map((e: any) => {
+        const type = EV_TYPES.includes(e.type) ? e.type : 'default';
+        const href = e.hasDetail ? `/digest/entry?slug=${e.slug}` : '';
+        const title = href
+          ? `<a class="ev-title" href="${href}" style="text-decoration:none">${e.title}</a>`
+          : `<span class="ev-title">${e.title}</span>`;
+        return `<div class="ev-row"><span class="ev-date">${evDate(e.date)}</span><span class="ev-type ${type}">${e.type}</span>${title}</div>`;
+      }).join('');
+    } catch {
+      el.innerHTML = `<div class="ev-row"><span class="ev-title" style="color:var(--color-subtle)">Activity log unavailable</span></div>`;
+    }
+  }
+
+  document.addEventListener('astro:page-load', () => { startPolling(); loadCVEBanner(); initNetMap(); loadEventStream(); });
   document.addEventListener('astro:before-swap', stopPolling);
 
   // ── Network Diagram ─────────────────────────────────────────────────────────

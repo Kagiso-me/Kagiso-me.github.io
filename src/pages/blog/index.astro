@@ -24,14 +24,14 @@ const posts = (await getCollection('blog'))
 const allTags = [...new Set(posts.flatMap(p => p.tags))].sort();
 ---
 
-<Layout title="Blog" description="Architecture decisions, homelab learnings, and the honest retrospective.">
+<Layout title="Journal" description="Architecture decisions, homelab learnings, and the honest retrospective.">
 
   <div class="page-wrap">
 
     <div class="page-header fade-up">
       <div>
-        <p class="mono" style="color:var(--color-gold);margin-bottom:0.25rem">~/blog</p>
-        <h1 style="margin:0">Blog</h1>
+        <p class="mono" style="color:var(--color-gold);margin-bottom:0.25rem">~/journal</p>
+        <h1 style="margin:0">Journal</h1>
       </div>
       <p class="hero-sub">
         Architecture decisions, homelab learnings, and honest retrospectives.

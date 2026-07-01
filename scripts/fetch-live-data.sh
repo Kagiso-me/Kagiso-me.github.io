@@ -256,16 +256,39 @@ host_util_json() {
   fi
 }
 
+# k3s node CPU/mem via `kubectl top nodes` — real kubelet-reported utilisation,
+# needs no SSH key (the runner already has kubectl). Emits {"name":{"cpu","mem"}}.
+k3s_top_json() {
+  kubectl top nodes --no-headers 2>/dev/null | python3 -c '
+import sys, json
+out = {}
+for line in sys.stdin:
+    f = line.split()
+    # NAME CPU(cores) CPU% MEM(bytes) MEM%
+    if len(f) >= 5 and f[2].endswith("%") and f[4].endswith("%"):
+        out[f[0]] = {"cpu": f[2], "mem": f[4]}
+print(json.dumps(out))
+' 2>/dev/null || echo "{}"
+}
+
 build_host_metrics() {
-  local tywin jaime tyrion varys truenas bronn bran
-  tywin=$(host_util_json 10.0.10.11)
-  jaime=$(host_util_json 10.0.10.12)
-  tyrion=$(host_util_json 10.0.10.13)
+  # k3s nodes: prefer real utilisation from kubectl top; SSH /proc only as fallback.
+  local top; top=$(k3s_top_json)
+  local tywin jaime tyrion varys bronn bran
+  for n in tywin jaime tyrion; do
+    local ip; case "$n" in tywin) ip=10.0.10.11;; jaime) ip=10.0.10.12;; tyrion) ip=10.0.10.13;; esac
+    local from_top; from_top=$(echo "$top" | python3 -c "import sys,json;d=json.load(sys.stdin);print(json.dumps(d.get('$n',{})) if d.get('$n') else '')" 2>/dev/null)
+    if [[ -n "$from_top" && "$from_top" != "{}" ]]; then
+      printf -v "$n" '%s' "$from_top"
+    else
+      printf -v "$n" '%s' "$(host_util_json "$ip")"
+    fi
+  done
+  # non-cluster hosts: SSH /proc (bran reads locally). truenas intentionally omitted.
   varys=$(host_util_json 10.0.10.10)
-  truenas=$(host_util_json 10.0.10.80)
   bronn=$(host_util_json 10.0.10.20)
   bran=$(host_util_json 10.0.10.9)
-  echo "{\"tywin\":${tywin},\"jaime\":${jaime},\"tyrion\":${tyrion},\"varys\":${varys},\"truenas\":${truenas},\"bronn\":${bronn},\"bran\":${bran}}"
+  echo "{\"tywin\":${tywin},\"jaime\":${jaime},\"tyrion\":${tyrion},\"varys\":${varys},\"bronn\":${bronn},\"bran\":${bran}}"
 }
 
 # ── Outage history (real, from the Beesly incident journal) ────────────────────

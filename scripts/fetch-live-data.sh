@@ -2,10 +2,13 @@
 # =============================================================================
 # fetch-live-data.sh — Collect live cluster data and write JSON files
 #
-# Runs on varys (10.0.10.10) via SSH from the GitHub Actions pipeline.
+# Runs on the bran-site self-hosted GitHub Actions runner (bran, 10.0.10.9).
 # Outputs JSON to stdout which the Action writes to public/data/live.json.
 #
-# Requirements on varys: kubectl, curl
+# Requirements on the runner: kubectl (kubeconfig for the cluster), curl, and
+# SSH access (bran runner key) to the fleet hosts it reads /proc from. Hosts
+# without a working key degrade to "—" via per-host guards — they never break
+# the run.
 # =============================================================================
 
 set -euo pipefail
@@ -259,6 +262,12 @@ build_host_metrics() {
 # uptime band can render real downtime instead of a fabricated series.
 # Emits an array of {date, severity, minutes}. Empty [] on any failure — the
 # band then falls back to the honest cluster-age view.
+#
+# IMPORTANT: excludes auto_remediated incidents. The Beesly engine self-heals
+# routine blips (Flux reconciles, transient crashloops) — those are NOT
+# outages, they're the automation working. Counting them would make a healthy
+# cluster look badly degraded. Only incidents that needed real intervention
+# (auto_remediated = false) count against uptime here.
 build_outages() {
   local raw
   raw=$(kubectl exec -n databases postgresql-primary-0 -c postgresql -- \
@@ -269,6 +278,7 @@ build_outages() {
                      EXTRACT(EPOCH FROM (resolved_at - fired_at))::int, 0)
      FROM incidents
      WHERE fired_at IS NOT NULL
+       AND COALESCE(auto_remediated, false) = false
      ORDER BY fired_at DESC
      LIMIT 200;" 2>/dev/null) || raw=""
 
@@ -292,8 +302,9 @@ for line in sys.stdin:
         minutes = max(0, round(int(float(secs)) / 60))
     except Exception:
         minutes = 0
-    # normalise severity to the band vocabulary
-    sev = "critical" if sev in ("critical","crit","page","high") else ("warning" if sev in ("warning","warn","degraded") else "info")
+    # normalise severity to the band vocabulary — only a true page is red;
+    # high/degraded are amber (they needed attention but were not a full outage).
+    sev = "critical" if sev in ("critical","crit","page") else ("warning" if sev in ("high","warning","warn","degraded","error") else "info")
     out.append({"date": date, "severity": sev, "minutes": minutes})
 print(json.dumps(out))
 ' 2>/dev/null || echo "[]"
@@ -425,7 +436,7 @@ VAULTWARDEN_URL="https://vault.local.kagiso.me"
 NEXTCLOUD_URL="https://cloud.kagiso.me"
 IMMICH_URL="https://photos.kagiso.me"
 # API keys injected as environment variables from GitHub Actions secrets
-# Set locally on varys via ~/.bashrc if running the script manually:
+# Set locally on the bran-site runner via ~/.bashrc if running the script manually:
 #   export SONARR_API_KEY=...   export RADARR_API_KEY=...
 #   export SABNZBD_API_KEY=...  export LIDARR_API_KEY=...
 : "${SONARR_API_KEY:?SONARR_API_KEY env var not set}"

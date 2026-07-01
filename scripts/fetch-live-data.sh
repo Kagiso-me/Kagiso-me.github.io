@@ -473,13 +473,17 @@ IMMICH_URL="https://photos.kagiso.me"
 # Set locally on the bran-site runner via ~/.bashrc if running the script manually:
 #   export SONARR_API_KEY=...   export RADARR_API_KEY=...
 #   export SABNZBD_API_KEY=...  export LIDARR_API_KEY=...
-: "${SONARR_API_KEY:?SONARR_API_KEY env var not set}"
-: "${RADARR_API_KEY:?RADARR_API_KEY env var not set}"
-: "${SABNZBD_API_KEY:?SABNZBD_API_KEY env var not set}"
-: "${LIDARR_API_KEY:?LIDARR_API_KEY env var not set}"
+# Missing key → that service is skipped (card degrades to "unknown"), never
+# aborts the run and never sends a bogus key to the live service. Do NOT set
+# dummy values to satisfy these — an empty key is the correct "no data" signal.
+: "${SONARR_API_KEY:=}"
+: "${RADARR_API_KEY:=}"
+: "${SABNZBD_API_KEY:=}"
+: "${LIDARR_API_KEY:=}"
 
 # ── Sonarr: series count ───────────────────────────────────────────────────────
 build_sonarr() {
+  [[ -z "$SONARR_API_KEY" ]] && { echo '{"count":"—","label":"Sonarr","status":"unknown"}'; return; }
   local raw
   raw=$(curl -sf --max-time 5 \
     -H "X-Api-Key: ${SONARR_API_KEY}" \
@@ -496,6 +500,7 @@ build_sonarr() {
 
 # ── Radarr: movie count ────────────────────────────────────────────────────────
 build_radarr() {
+  [[ -z "$RADARR_API_KEY" ]] && { echo '{"count":"—","label":"Radarr","status":"unknown"}'; return; }
   local raw
   raw=$(curl -sf --max-time 5 \
     -H "X-Api-Key: ${RADARR_API_KEY}" \
@@ -512,6 +517,7 @@ build_radarr() {
 
 # ── SABnzbd: queue size remaining ─────────────────────────────────────────────
 build_sabnzbd() {
+  [[ -z "$SABNZBD_API_KEY" ]] && { echo '{"label":"idle","status":"unknown"}'; return; }
   local raw
   raw=$(curl -sf --max-time 5 \
     "${SABNZBD_URL}/api?mode=queue&output=json&limit=1&apikey=${SABNZBD_API_KEY}" 2>/dev/null || echo "")
@@ -589,6 +595,7 @@ except:
 
 # ── Lidarr: artist count ──────────────────────────────────────────────────────
 build_lidarr() {
+  [[ -z "$LIDARR_API_KEY" ]] && { echo '{"label":"Lidarr","status":"unknown"}'; return; }
   local raw
   raw=$(curl -sf --max-time 5 \
     -H "X-Api-Key: ${LIDARR_API_KEY}" \

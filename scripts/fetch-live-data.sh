@@ -214,6 +214,46 @@ build_backup() {
   echo "{\"bronn\":${bronn_json},\"etcd\":${etcd_json},\"varys\":${varys_json}}"
 }
 
+# ── Per-host CPU/mem utilisation ───────────────────────────────────────────────
+# Real utilisation for every fleet host, read straight from /proc over SSH
+# (no node_exporter parsing, works identically on k3s nodes, varys, truenas,
+# bronn, bran). CPU% = load1 / nproc capped at 100; mem% = 1 - MemAvailable/MemTotal.
+# Every host is independently guarded — a single unreachable host degrades to an
+# empty entry, never breaks the run.
+host_util_json() {
+  # $1 = ip. Emits {"cpu":"NN%","mem":"NN%"} or {} on any failure.
+  local ip="$1" out
+  out=$(ssh -o ConnectTimeout=5 -o BatchMode=yes "$ip" '
+    read -r l1 _ < /proc/loadavg
+    ncpu=$(nproc 2>/dev/null || echo 1)
+    memt=$(awk "/^MemTotal:/{print \$2}" /proc/meminfo)
+    mema=$(awk "/^MemAvailable:/{print \$2}" /proc/meminfo)
+    cpu=$(awk -v l="$l1" -v n="$ncpu" "BEGIN{p=l/n*100; if(p>100)p=100; printf \"%d\", p}")
+    mem=$(awk -v t="$memt" -v a="$mema" "BEGIN{ if(t>0) printf \"%d\", (t-a)*100/t; else print \"\" }")
+    echo "$cpu $mem"
+  ' 2>/dev/null || echo "")
+  local cpu mem
+  cpu=$(echo "$out" | awk '{print $1}')
+  mem=$(echo "$out" | awk '{print $2}')
+  if [[ -n "$cpu" && -n "$mem" ]]; then
+    echo "{\"cpu\":\"${cpu}%\",\"mem\":\"${mem}%\"}"
+  else
+    echo "{}"
+  fi
+}
+
+build_host_metrics() {
+  local tywin jaime tyrion varys truenas bronn bran
+  tywin=$(host_util_json 10.0.10.11)
+  jaime=$(host_util_json 10.0.10.12)
+  tyrion=$(host_util_json 10.0.10.13)
+  varys=$(host_util_json 10.0.10.10)
+  truenas=$(host_util_json 10.0.10.80)
+  bronn=$(host_util_json 10.0.10.20)
+  bran=$(host_util_json 10.0.10.9)
+  echo "{\"tywin\":${tywin},\"jaime\":${jaime},\"tyrion\":${tyrion},\"varys\":${varys},\"truenas\":${truenas},\"bronn\":${bronn},\"bran\":${bran}}"
+}
+
 # ── Backblaze B2 cloud sync (TrueNAS cloudsync.query via WebSocket) ───────────
 build_b2() {
   local api_key="${TRUENAS_API_KEY:-}"
@@ -990,6 +1030,7 @@ except:
 
 # ── Assemble live cards ────────────────────────────────────────────────────────
 NODES=$(build_nodes)
+HOST_METRICS=$(build_host_metrics)
 CLUSTER_START=$(build_cluster_start)
 FLUX=$(build_flux)
 BACKUP=$(build_backup)
@@ -1079,18 +1120,19 @@ fi
 # Write JSON via temp files to avoid shell quoting issues
 TMP_NODES=$(mktemp); TMP_FLUX=$(mktemp); TMP_SVC_DATA=$(mktemp); TMP_NETWORK=$(mktemp)
 TMP_BRAN=$(mktemp); TMP_UPS=$(mktemp); TMP_DEPLOY=$(mktemp); TMP_STORAGE=$(mktemp)
-TMP_CONTRIBS=$(mktemp)
-echo "$NODES"       > "$TMP_NODES"
-echo "$FLUX"        > "$TMP_FLUX"
-echo "$SERVICES"    > "$TMP_SVC_DATA"
-echo "$NETWORK"     > "$TMP_NETWORK"
-echo "$BRAN"        > "$TMP_BRAN"
-echo "$UPS"         > "$TMP_UPS"
-echo "$LAST_DEPLOY" > "$TMP_DEPLOY"
-echo "$STORAGE"     > "$TMP_STORAGE"
-echo "$CONTRIBS"    > "$TMP_CONTRIBS"
+TMP_CONTRIBS=$(mktemp); TMP_HOSTMETRICS=$(mktemp)
+echo "$NODES"        > "$TMP_NODES"
+echo "$FLUX"         > "$TMP_FLUX"
+echo "$SERVICES"     > "$TMP_SVC_DATA"
+echo "$NETWORK"      > "$TMP_NETWORK"
+echo "$BRAN"         > "$TMP_BRAN"
+echo "$UPS"          > "$TMP_UPS"
+echo "$LAST_DEPLOY"  > "$TMP_DEPLOY"
+echo "$STORAGE"      > "$TMP_STORAGE"
+echo "$CONTRIBS"     > "$TMP_CONTRIBS"
+echo "$HOST_METRICS" > "$TMP_HOSTMETRICS"
 
-python3 - "$TMP_NODES" "$TMP_FLUX" "$TMP_SVC_DATA" "$TMP_NETWORK" "$TMP_BRAN" "$TMP_UPS" "$TMP_DEPLOY" "$TMP_STORAGE" "$TMP_CONTRIBS" <<PYEOF
+python3 - "$TMP_NODES" "$TMP_FLUX" "$TMP_SVC_DATA" "$TMP_NETWORK" "$TMP_BRAN" "$TMP_UPS" "$TMP_DEPLOY" "$TMP_STORAGE" "$TMP_CONTRIBS" "$TMP_HOSTMETRICS" <<PYEOF
 import json, sys
 
 with open(sys.argv[1]) as f: nodes       = json.load(f)
@@ -1102,6 +1144,13 @@ with open(sys.argv[6]) as f: ups         = json.load(f)
 with open(sys.argv[7]) as f: last_deploy = json.load(f)
 with open(sys.argv[8]) as f: storage     = json.load(f)
 with open(sys.argv[9]) as f: contribs    = json.load(f)
+with open(sys.argv[10]) as f: host_metrics = json.load(f)
+
+# Prefer real utilisation (from /proc over SSH) over request-based % for k3s nodes
+for n in nodes:
+  hm = host_metrics.get(n.get('name', ''), {})
+  if hm.get('cpu'): n['cpu'] = hm['cpu']
+  if hm.get('mem'): n['memory'] = hm['mem']
 
 running = int('${RUNNING_PODS}')
 total   = int('${TOTAL_PODS}')
@@ -1130,6 +1179,7 @@ data = {
     {'label': 'Backblaze B2',   'value': '${B2_AGE}',            'sub': 'offsite · TrueNAS',  'status': '${B2_STATUS}'},
   ],
   'nodes':       nodes,
+  'host_metrics': host_metrics,
   'flux':        flux,
   'services':    svc_data['services'],
   'media':       svc_data['media'],
@@ -1143,7 +1193,7 @@ data = {
 print(json.dumps(data, indent=2))
 PYEOF
 
-rm -f "$TMP_NODES" "$TMP_FLUX" "$TMP_SVC_DATA" "$TMP_NETWORK" "$TMP_BRAN" "$TMP_UPS" "$TMP_DEPLOY" "$TMP_STORAGE" "$TMP_CONTRIBS"
+rm -f "$TMP_NODES" "$TMP_FLUX" "$TMP_SVC_DATA" "$TMP_NETWORK" "$TMP_BRAN" "$TMP_UPS" "$TMP_DEPLOY" "$TMP_STORAGE" "$TMP_CONTRIBS" "$TMP_HOSTMETRICS"
 
 # ── Write maintenance.json — active only when no nodes are ready ──────────────
 READY_NODES=$(echo "$NODES" | python3 -c "

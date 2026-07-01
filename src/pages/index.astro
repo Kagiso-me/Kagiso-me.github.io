@@ -1,11 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ClusterTerminal from '../components/ClusterTerminal.astro';
-import { getCollection } from 'astro:content';
+import { MONTHLY_LABEL, ELECTRICITY_COST, ELECTRICITY_KWH } from '../lib/cost';
 
-const recentPosts = (await getCollection('blog'))
-  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
-  .slice(0, 3);
+const RACK_WATTS = Math.round((ELECTRICITY_KWH * 1000) / (30 * 24));
 ---
 
 <Layout title="Command Center" description="Living Homelab — built in public by Kagiso." ogImage="https://kagiso-me.github.io/og/home.svg">
@@ -110,6 +108,17 @@ const recentPosts = (await getCollection('blog'))
     </div>
   </header>
 
+  <!-- ── Tagline divider ── -->
+  <section class="cc-tagline fade-up" aria-hidden="true">
+    <span class="cc-tagline-rule"></span>
+    <span class="cc-tagline-word">No demos.</span>
+    <span class="cc-tagline-dot"></span>
+    <span class="cc-tagline-word">No staging.</span>
+    <span class="cc-tagline-dot"></span>
+    <span class="cc-tagline-word cc-tagline-grad">Built in public.</span>
+    <span class="cc-tagline-rule"></span>
+  </section>
+
   <!-- ── Interactive shell ── -->
   <section class="cc-shell-section fade-up">
     <div class="cc-shell-head">
@@ -152,228 +161,57 @@ const recentPosts = (await getCollection('blog'))
     </div>
   </section>
 
-  <!-- ── Stack Dashboard ── -->
-  <section class="section fade-up" style="animation-delay: 0.1s">
-    <div class="section-inner">
-      <div class="section-header">
-        <h2 class="section-title">Stack · Live</h2>
-        <span class="mono live-badge">
-          <span class="status-dot ok"></span>
-          Live
-          <span class="live-updated-label mono" id="live-updated"></span>
-        </span>
-      </div>
-
-      <div class="ops-panel" id="ops-panel">
-        <!-- Skeleton rows while loading -->
-        <div class="ops-skeleton-row"></div>
-        <div class="ops-skeleton-row"></div>
-        <div class="ops-skeleton-row"></div>
-        <div class="ops-skeleton-row"></div>
-        <div class="ops-skeleton-row"></div>
-        <div class="ops-skeleton-row"></div>
+  <!-- ── Incident log + cost (two-up) ── -->
+  <section class="cc-twoup fade-up">
+    <div class="cc-twoup-col">
+      <h2 class="cc-col-title">Incident log</h2>
+      <div class="cc-timeline" id="cc-incidents">
+        <div class="skeleton" style="height:70px;border-radius:8px;margin-bottom:1rem"></div>
+        <div class="skeleton" style="height:70px;border-radius:8px"></div>
       </div>
     </div>
-  </section>
-
-  <!-- ── Cluster Status Strip ── -->
-  <section class="section fade-up" style="animation-delay: 0.2s">
-    <div class="section-inner">
-      <div class="section-header">
-        <h2 class="section-title">Cluster Health</h2>
-        <a href="/status" class="mono link-subtle">Full dashboard →</a>
+    <div class="cc-twoup-col">
+      <div class="cc-cost-head">
+        <h2 class="cc-col-title" style="margin:0">What it costs to run</h2>
+        <span class="mono cc-cost-fig">{MONTHLY_LABEL}</span>
       </div>
-      <div class="status-strip" id="status-strip">
-        <div class="status-strip-item skeleton" style="height: 56px; border-radius: 8px;"></div>
-        <div class="status-strip-item skeleton" style="height: 56px; border-radius: 8px;"></div>
-        <div class="status-strip-item skeleton" style="height: 56px; border-radius: 8px;"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Network Teaser ── -->
-  <section class="section fade-up topo-teaser-section" style="animation-delay: 0.22s">
-    <div class="section-inner">
-      <div class="section-header">
-        <h2 class="section-title">Live Network</h2>
-        <a href="/status#netmap" class="mono link-subtle">Full topology →</a>
-      </div>
-      <a href="/status" class="topo-teaser" aria-label="View live network topology">
-        <div class="topo-teaser-inner" id="topo-teaser-inner">
-          <!-- Mirrored mini-map: rendered by JS from live.json node states -->
-          <svg class="topo-mini-svg" id="topo-mini-svg" aria-hidden="true">
-            <defs>
-              <pattern id="tt-grid" width="24" height="24" patternUnits="userSpaceOnUse">
-                <path d="M 24 0 L 0 0 0 24" fill="none" stroke="rgba(203,166,247,0.05)" stroke-width="1"/>
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#tt-grid)"/>
-            <g id="tt-lines"></g>
-            <g id="tt-packets"></g>
-          </svg>
-          <!-- Static node glyphs — JS colours them from live data -->
-          <div class="tt-nodes">
-            <div class="tt-node tt-internet" id="tt-internet">
-              <div class="tt-node-dot" id="tt-dot-internet"></div>
-              <span>WAN</span>
-            </div>
-            <div class="tt-arrow">↓</div>
-            <div class="tt-node tt-router" id="tt-router">
-              <div class="tt-node-dot" id="tt-dot-mikrotik"></div>
-              <span>MikroTik</span>
-            </div>
-            <div class="tt-arrow">↓</div>
-            <div class="tt-cluster">
-              <div class="tt-cluster-label">k3s cluster</div>
-              <div class="tt-cluster-nodes">
-                <div class="tt-node tt-k3s" id="tt-tywin">
-                  <div class="tt-node-dot" id="tt-dot-tywin"></div>
-                  <span>Tywin</span>
-                </div>
-                <div class="tt-node tt-k3s" id="tt-jaime">
-                  <div class="tt-node-dot" id="tt-dot-jaime"></div>
-                  <span>Jaime</span>
-                </div>
-                <div class="tt-node tt-k3s" id="tt-tyrion">
-                  <div class="tt-node-dot" id="tt-dot-tyrion"></div>
-                  <span>Tyrion</span>
-                </div>
-              </div>
-            </div>
-            <div class="tt-edge-nodes">
-              <div class="tt-node tt-edge" id="tt-bronn">
-                <div class="tt-node-dot" id="tt-dot-bronn"></div>
-                <span>Bronn</span>
-              </div>
-              <div class="tt-node tt-edge" id="tt-varys">
-                <div class="tt-node-dot" id="tt-dot-varys"></div>
-                <span>Varys</span>
-              </div>
-              <div class="tt-node tt-edge" id="tt-ned">
-                <div class="tt-node-dot" id="tt-dot-ned"></div>
-                <span>Ned</span>
-              </div>
-            </div>
-          </div>
-          <div class="topo-teaser-cta">
-            <span class="topo-cta-text">Explore the live network</span>
-            <span class="topo-cta-arrow">→</span>
-          </div>
-          <div class="topo-teaser-fade"></div>
+      <div class="cc-cost-card">
+        <div class="cc-cost-figrow">
+          <div><div class="cc-cost-big mono">{MONTHLY_LABEL}</div><div class="cc-cost-sub mono">all-in, current</div></div>
+          <div><div class="cc-cost-big mono" style="color:var(--signal)">R{ELECTRICITY_COST}</div><div class="cc-cost-sub mono">electricity / mo</div></div>
+          <div><div class="cc-cost-big mono">~{RACK_WATTS}W</div><div class="cc-cost-sub mono">rack draw</div></div>
         </div>
-      </a>
-    </div>
-  </section>
-
-  <!-- ── Stack ── -->
-  <section class="section fade-up" style="animation-delay: 0.25s">
-    <div class="section-inner">
-      <div class="section-header">
-        <h2 class="section-title">Stack</h2>
-        <a href="/blog" class="mono link-subtle">ADRs →</a>
-      </div>
-      <div class="stack-grid">
-        {[
-          { name: 'k3s',         role: 'Kubernetes distro',     accent: 'peach'    },
-          { name: 'Flux',        role: 'GitOps operator',        accent: 'mauve'    },
-          { name: 'Traefik',     role: 'Ingress / proxy',        accent: 'sapphire' },
-          { name: 'Authentik',   role: 'Identity provider',      accent: 'gold'     },
-          { name: 'Prometheus',  role: 'Metrics & alerting',     accent: 'peach'    },
-          { name: 'Grafana',     role: 'Observability',          accent: 'gold'     },
-          { name: 'Loki',        role: 'Log aggregation',        accent: 'mauve'    },
-          { name: 'Velero',      role: 'Cluster backups',        accent: 'sapphire' },
-          { name: 'CrowdSec',    role: 'Threat intelligence',    accent: 'crit'     },
-          { name: 'SOPS',        role: 'Secret encryption',      accent: 'mauve'    },
-          { name: 'MikroTik',    role: 'Router / firewall',      accent: 'peach'    },
-          { name: 'TrueNAS',     role: 'NAS / storage',          accent: 'gold'     },
-        ].map(t => (
-          <div class="stack-item sheen" data-accent={t.accent}>
-            <span class="stack-name">{t.name}</span>
-            <span class="stack-role">{t.role}</span>
-          </div>
-        ))}
+        <p class="cc-cost-note">Mostly electricity — three mini-PCs, the NAS, a Pi, switch and UPS. Idle-tuned in Q1 for a ~28% cut. No cloud bill, no surprises. <a href="/cost" class="cc-signal" style="text-decoration:none">Full breakdown →</a></p>
       </div>
     </div>
   </section>
 
-  <!-- ── Cinematic break strip ── -->
-  <section class="manifesto-strip fade-up" style="animation-delay: 0.26s" aria-hidden="true">
-    <div class="manifesto-inner">
-      <span class="manifesto-line">No demos.</span>
-      <span class="manifesto-sep">·</span>
-      <span class="manifesto-line">No staging.</span>
-      <span class="manifesto-sep">·</span>
-      <span class="manifesto-line manifesto-accent">Built in public.</span>
+  <!-- ── The stack ── -->
+  <section class="cc-stack-section fade-up">
+    <div class="cc-stack-head">
+      <h2 class="cc-col-title" style="margin:0">The stack</h2>
+      <span class="mono cc-stack-meta">GitOps · everything declared in one repo</span>
     </div>
-  </section>
-
-  <!-- ── 24h Activity ── -->
-  <section class="section fade-up" style="animation-delay: 0.27s">
-    <div class="section-inner">
-      <div class="section-header">
-        <h2 class="section-title">Activity — Last 24h</h2>
-        <a href="https://github.com/Kagiso-me" target="_blank" rel="noopener" class="mono live-badge">
-          <span class="status-dot ok"></span>
-          github.com/Kagiso-me ↗
-        </a>
-      </div>
-      <div class="act-wrap" id="act-wrap">
-        <!-- Skeleton -->
-        <div class="act-repo-card skeleton" style="height:140px"></div>
-        <div class="act-repo-card skeleton" style="height:140px"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Recent Posts ── -->
-  <section class="section fade-up" style="animation-delay: 0.28s">
-    <div class="section-inner">
-      <div class="section-header">
-        <h2 class="section-title">From the Blog</h2>
-        <a href="/blog" class="mono link-subtle">All posts →</a>
-      </div>
-      <div class="blog-grid">
-        {recentPosts.map(post => (
-          <a href={`/blog/${post.id}`} class="blog-card">
-            <div class="blog-card-meta">
-              <span class="mono blog-date">{new Date(post.data.date).toLocaleDateString('en-ZA', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
-              {post.data.adr && <span class="mono blog-adr">{post.data.adr}</span>}
-            </div>
-            <div class="blog-card-title">{post.data.title}</div>
-            <div class="blog-card-summary">{post.data.summary}</div>
-            <span class="mono blog-read">read →</span>
-          </a>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Recent Digest + Active Project ── -->
-  <section class="section fade-up" style="animation-delay: 0.3s">
-    <div class="section-inner two-col">
-
-      <div>
-        <div class="section-header">
-          <h2 class="section-title">Recent Digest</h2>
-          <a href="/digest" class="mono link-subtle">All entries →</a>
+    <div class="cc-stack-grid">
+      {[
+        { sym: '⬡', name: 'k3s', desc: 'Kubernetes distro' },
+        { sym: '⟳', name: 'Flux', desc: 'GitOps operator' },
+        { sym: '⇄', name: 'Traefik', desc: 'Ingress / proxy' },
+        { sym: '⿿', name: 'Authentik', desc: 'Identity / SSO' },
+        { sym: '◈', name: 'Prometheus', desc: 'Metrics & alerts' },
+        { sym: '▦', name: 'Grafana', desc: 'Observability' },
+        { sym: '≡', name: 'Loki', desc: 'Log aggregation' },
+        { sym: '⭃', name: 'Velero', desc: 'Cluster backups' },
+        { sym: '⛨', name: 'CrowdSec', desc: 'Threat intel' },
+        { sym: '⚿', name: 'SOPS', desc: 'Secret encryption' },
+        { sym: '⚲', name: 'MikroTik', desc: 'Router / firewall' },
+        { sym: '⬢', name: 'TrueNAS', desc: 'NAS / storage' },
+      ].map(s => (
+        <div class="cc-stack-chip">
+          <span class="cc-stack-sym mono">{s.sym}</span>
+          <div class="cc-stack-txt"><div class="cc-stack-name">{s.name}</div><div class="cc-stack-desc">{s.desc}</div></div>
         </div>
-        <div id="digest-list">
-          <div class="skeleton" style="height: 80px; border-radius: 8px; margin-bottom: 0.75rem;"></div>
-          <div class="skeleton" style="height: 80px; border-radius: 8px; margin-bottom: 0.75rem;"></div>
-          <div class="skeleton" style="height: 80px; border-radius: 8px;"></div>
-        </div>
-      </div>
-
-      <div>
-        <div class="section-header">
-          <h2 class="section-title">Active Work</h2>
-          <a href="/projects" class="mono link-subtle">Roadmap →</a>
-        </div>
-        <div id="active-project">
-          <div class="skeleton" style="height: 200px; border-radius: 12px;"></div>
-        </div>
-      </div>
-
+      ))}
     </div>
   </section>
 
@@ -633,6 +471,64 @@ const recentPosts = (await getCollection('blog'))
     .cc-hosts-header { display: none; }
     .cc-hosts-row { grid-template-columns: 1fr 1fr; row-gap: 6px; }
   }
+
+  /* ── Tagline divider ── */
+  .cc-tagline {
+    max-width: 1220px; margin: 6px auto 0; padding: 50px 1.5rem;
+    display: flex; align-items: center; justify-content: center; gap: 18px; flex-wrap: wrap;
+    font-family: var(--font-display); font-weight: 700; font-size: clamp(1.2rem, 3vw, 27px);
+    letter-spacing: -0.01em; position: relative;
+  }
+  .cc-tagline-word { color: var(--color-subtle); }
+  .cc-tagline-grad {
+    background: linear-gradient(90deg, var(--accent), var(--color-ok));
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .cc-tagline-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--color-faint); }
+  .cc-tagline-rule { flex: 1; min-width: 30px; max-width: 170px; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,.16)); }
+  .cc-tagline-rule:last-child { background: linear-gradient(90deg, rgba(255,255,255,.16), transparent); }
+
+  /* ── Incident log + cost two-up ── */
+  .cc-twoup {
+    max-width: 1220px; margin: 0 auto; padding: 62px 1.5rem 8px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+  }
+  .cc-col-title { font-family: var(--font-display); font-size: 25px; font-weight: 600; margin: 0 0 22px; color: var(--color-heading); }
+  .cc-timeline { position: relative; padding-left: 26px; }
+  .cc-timeline::before { content: ''; position: absolute; left: 6px; top: 6px; bottom: 6px; width: 1px; background: linear-gradient(var(--color-muted), transparent); }
+  .cc-inc { position: relative; margin-bottom: 22px; }
+  .cc-inc-dot { position: absolute; left: -26px; top: 4px; width: 11px; height: 11px; border-radius: 50%; background: var(--color-base); border: 2px solid var(--color-ok); }
+  .cc-inc-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; }
+  .cc-inc-date { font-family: var(--font-mono); font-size: 11.5px; color: var(--color-subtle); }
+  .cc-inc-sev { font-family: var(--font-mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; padding: 1px 7px; border-radius: 20px; border: 1px solid; }
+  .cc-inc-title { font-size: 15px; font-weight: 600; color: var(--color-heading); margin-bottom: 3px; }
+  .cc-inc-note { font-size: 13px; color: var(--color-text); line-height: 1.5; }
+
+  .cc-cost-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 22px; }
+  .cc-cost-fig { font-size: 12px; color: var(--color-ok); }
+  .cc-cost-card { border: 1px solid var(--color-muted); border-radius: 14px; padding: 22px; background: rgba(255,255,255,.012); }
+  .cc-cost-figrow { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 14px; }
+  .cc-cost-big { font-size: 26px; font-weight: 600; color: var(--color-heading); line-height: 1; }
+  .cc-cost-sub { font-size: 11px; color: var(--color-subtle); margin-top: 4px; }
+  .cc-cost-note { font-size: 13px; color: var(--color-subtle); line-height: 1.6; margin: 0; }
+
+  /* ── The stack ── */
+  .cc-stack-section { max-width: 1220px; margin: 0 auto; padding: 62px 1.5rem 8px; }
+  .cc-stack-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 8px; }
+  .cc-stack-meta { font-size: 12px; color: var(--color-subtle); }
+  .cc-stack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(155px, 1fr)); gap: 10px; }
+  .cc-stack-chip {
+    display: flex; align-items: center; gap: 11px;
+    background: rgba(255,255,255,.02); border: 1px solid var(--color-muted); border-radius: 11px; padding: 13px 15px;
+    transition: border-color .18s ease;
+  }
+  .cc-stack-chip:hover { border-color: var(--signal); }
+  .cc-stack-sym { font-size: 13px; color: var(--signal); width: 18px; text-align: center; flex: none; }
+  .cc-stack-txt { min-width: 0; }
+  .cc-stack-name { font-size: 13.5px; font-weight: 500; color: var(--color-text); }
+  .cc-stack-desc { font-size: 11px; color: var(--color-subtle); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  @media (max-width: 860px) { .cc-twoup { grid-template-columns: 1fr; gap: 2.5rem; } }
 
   .section {
     padding: 6rem 1.5rem;
@@ -2038,12 +1934,44 @@ const recentPosts = (await getCollection('blog'))
     _ccClock = window.setInterval(tick, 1000);
   }
 
+  const INC_SEV: Record<string, { color: string }> = {
+    INCIDENT: { color: 'var(--color-crit)' },
+    FIX:      { color: 'var(--color-ok)' },
+    SECURITY: { color: 'var(--accent)' },
+    NETWORK:  { color: 'var(--signal)' },
+  };
+  async function loadIncidents() {
+    const el = document.getElementById('cc-incidents');
+    if (!el) return;
+    try {
+      const res = await fetch('/data/digest.json', { cache: 'no-store' });
+      if (!res.ok) throw new Error('no data');
+      const all = await res.json();
+      const rows = (Array.isArray(all) ? all : [])
+        .filter((e: any) => e.type === 'INCIDENT' || e.type === 'FIX' || e.type === 'SECURITY')
+        .slice(0, 4);
+      if (!rows.length) { el.innerHTML = `<div class="cc-inc-note" style="color:var(--color-subtle)">No incidents logged — the cluster's had a quiet run.</div>`; return; }
+      el.innerHTML = rows.map((e: any) => {
+        const sev = INC_SEV[e.type] ?? { color: 'var(--color-subtle)' };
+        const d = new Date(e.date.length === 7 ? e.date + '-01' : e.date);
+        const date = isNaN(+d) ? e.date : d.toLocaleDateString('en-ZA', { day: '2-digit', month: 'short', year: 'numeric' });
+        return `<div class="cc-inc">
+          <span class="cc-inc-dot" style="border-color:${sev.color};box-shadow:0 0 8px ${sev.color}"></span>
+          <div class="cc-inc-meta"><span class="cc-inc-date">${date}</span><span class="cc-inc-sev" style="color:${sev.color};border-color:${sev.color}">${e.type}</span></div>
+          <div class="cc-inc-title">${e.title}</div>
+          ${e.summary && e.summary !== e.title ? `<div class="cc-inc-note">${e.summary}</div>` : ''}
+        </div>`;
+      }).join('');
+    } catch {
+      el.innerHTML = `<div class="cc-inc-note" style="color:var(--color-subtle)">Incident log unavailable</div>`;
+    }
+  }
+
   function initPage() {
     if (_pageInited) return;
     _pageInited = true;
     loadLiveData();
-    loadDigest();
-    loadProject();
+    loadIncidents();
     startMapClock();
     // Reset for next navigation
     setTimeout(() => { _pageInited = false; }, 500);

@@ -223,18 +223,29 @@ build_backup() {
 # bronn, bran). CPU% = load1 / nproc capped at 100; mem% = 1 - MemAvailable/MemTotal.
 # Every host is independently guarded — a single unreachable host degrades to an
 # empty entry, never breaks the run.
+# CPU/mem from /proc, as one line "cpu mem". Shared by local + SSH paths.
+_PROC_UTIL_SNIPPET='
+  read -r l1 _ < /proc/loadavg
+  ncpu=$(nproc 2>/dev/null || echo 1)
+  memt=$(awk "/^MemTotal:/{print \$2}" /proc/meminfo)
+  mema=$(awk "/^MemAvailable:/{print \$2}" /proc/meminfo)
+  cpu=$(awk -v l="$l1" -v n="$ncpu" "BEGIN{p=l/n*100; if(p>100)p=100; printf \"%d\", p}")
+  mem=$(awk -v t="$memt" -v a="$mema" "BEGIN{ if(t>0) printf \"%d\", (t-a)*100/t; else print \"\" }")
+  echo "$cpu $mem"
+'
+
+# The runner reads its OWN /proc directly — no SSH-to-self (which needs a key
+# and is fragile). RUNNER_SELF_IP defaults to bran (.9), the bran-site host.
+RUNNER_SELF_IP="${RUNNER_SELF_IP:-10.0.10.9}"
+
 host_util_json() {
   # $1 = ip. Emits {"cpu":"NN%","mem":"NN%"} or {} on any failure.
   local ip="$1" out
-  out=$(ssh -o ConnectTimeout=5 -o BatchMode=yes "$ip" '
-    read -r l1 _ < /proc/loadavg
-    ncpu=$(nproc 2>/dev/null || echo 1)
-    memt=$(awk "/^MemTotal:/{print \$2}" /proc/meminfo)
-    mema=$(awk "/^MemAvailable:/{print \$2}" /proc/meminfo)
-    cpu=$(awk -v l="$l1" -v n="$ncpu" "BEGIN{p=l/n*100; if(p>100)p=100; printf \"%d\", p}")
-    mem=$(awk -v t="$memt" -v a="$mema" "BEGIN{ if(t>0) printf \"%d\", (t-a)*100/t; else print \"\" }")
-    echo "$cpu $mem"
-  ' 2>/dev/null || echo "")
+  if [[ "$ip" == "$RUNNER_SELF_IP" ]]; then
+    out=$(bash -c "$_PROC_UTIL_SNIPPET" 2>/dev/null || echo "")
+  else
+    out=$(ssh -o ConnectTimeout=5 -o BatchMode=yes "$ip" "$_PROC_UTIL_SNIPPET" 2>/dev/null || echo "")
+  fi
   local cpu mem
   cpu=$(echo "$out" | awk '{print $1}')
   mem=$(echo "$out" | awk '{print $2}')

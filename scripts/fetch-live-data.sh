@@ -297,11 +297,14 @@ build_host_metrics() {
 # Emits an array of {date, severity, minutes}. Empty [] on any failure — the
 # band then falls back to the honest cluster-age view.
 #
-# IMPORTANT: excludes auto_remediated incidents. The Beesly engine self-heals
-# routine blips (Flux reconciles, transient crashloops) — those are NOT
-# outages, they're the automation working. Counting them would make a healthy
-# cluster look badly degraded. Only incidents that needed real intervention
-# (auto_remediated = false) count against uptime here.
+# IMPORTANT: only real, user-facing outages count against uptime — not the
+# self-healing churn the Beesly engine handles automatically. We exclude on
+# TWO signals, because auto_remediated alone is unreliably set:
+#   1. auto_remediated = true, AND
+#   2. inherently transient alert types (Pod crashloop, Flux reconcile) that
+#      recover on their own regardless of the flag.
+# Today that reduces 99 raw incidents → ~2 genuine ones (OOMKilled,
+# Velero-stale). Add new self-healing alertnames here as runbooks are added.
 build_outages() {
   local raw
   raw=$(kubectl exec -n databases postgresql-primary-0 -c postgresql -- \
@@ -313,6 +316,7 @@ build_outages() {
      FROM incidents
      WHERE fired_at IS NOT NULL
        AND COALESCE(auto_remediated, false) = false
+       AND alertname NOT IN ('Pod crashloop', 'Flux reconcile')
      ORDER BY fired_at DESC
      LIMIT 200;" 2>/dev/null) || raw=""
 

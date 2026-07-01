@@ -145,42 +145,23 @@ import Layout from '../layouts/Layout.astro';
   <!-- PHILOSOPHY -->
   <section class="mf-section">
     <div class="mf-section-label"><span>// </span>philosophy</div>
-    <h2 class="mf-section-title">How I think.</h2>
-    <div class="pull-list">
-      <div class="pull-item">
-        <div class="pull-num">01</div>
-        <div>
-          <div class="pull-text">
-            Build it broken first. <strong>A thing that runs badly and teaches you
-            something beats a perfect plan that never ships.</strong>
-            The cluster has had incidents. That's not failure — that's curriculum.
-          </div>
-          <div class="pull-attr">on learning</div>
-        </div>
+    <h2 class="mf-section-title">What I believe about running systems.</h2>
+    <div class="belief-grid">
+      <div class="belief-card">
+        <div class="belief-title">If it isn't in git, it doesn't exist</div>
+        <p class="belief-body">Every change is a reviewed commit. The cluster is reproducible from a repo, or it's a pet I'm one bad night away from losing.</p>
       </div>
-      <div class="pull-item">
-        <div class="pull-num">02</div>
-        <div>
-          <div class="pull-text">
-            I don't self-host out of paranoia. I self-host because
-            <strong>dependency on someone else's infrastructure
-            is a liability I can actually reduce.</strong>
-            My data lives on my hardware. That's not ideology. It's just correct.
-          </div>
-          <div class="pull-attr">on self-hosting</div>
-        </div>
+      <div class="belief-card">
+        <div class="belief-title">Build it to fail safely</div>
+        <p class="belief-body">HA, quorum, floating VIPs, tested restores. The goal isn't to avoid failure — it's to make failure boring. The cluster has had incidents; that's curriculum, not catastrophe.</p>
       </div>
-      <div class="pull-item">
-        <div class="pull-num">03</div>
-        <div>
-          <div class="pull-text">
-            <strong>Write it down while it hurts.</strong>
-            That's when the detail is most honest.
-            Every post-mortem, every ops log entry, every decision record —
-            future me is the intended reader.
-          </div>
-          <div class="pull-attr">on documentation</div>
-        </div>
+      <div class="belief-card">
+        <div class="belief-title">Document the why, not just the what</div>
+        <p class="belief-body">Anyone can read a config. Write it down while it hurts — that's when the detail is most honest, and future me is the intended reader.</p>
+      </div>
+      <div class="belief-card">
+        <div class="belief-title">Operate in the open</div>
+        <p class="belief-body">Showing the scars — incidents, wrong turns, the slow SSD — is more useful than another polished architecture diagram. I self-host to reduce a liability, not to prove a point.</p>
       </div>
     </div>
   </section>
@@ -524,23 +505,20 @@ import Layout from '../layouts/Layout.astro';
 .pc-body em { color: var(--color-mauve); font-style: normal; }
 
 /* Philosophy */
-.pull-list { display: flex; flex-direction: column; gap: 1px; margin-top: 2.5rem; }
-.pull-item {
-  display: grid; grid-template-columns: 3rem 1fr;
-  gap: 1.5rem; align-items: start; padding: 2rem 1.5rem;
-  border-radius: 14px; transition: background .2s ease; cursor: default;
+/* Belief cards (mockup) */
+.belief-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 2.5rem; }
+.belief-card {
+  background: rgba(255, 255, 255, 0.022);
+  border: 1px solid var(--color-muted);
+  border-left: 2px solid var(--accent);
+  border-radius: 12px;
+  padding: 20px 22px;
+  transition: border-color .2s ease;
 }
-.pull-item:hover { background: color-mix(in srgb, var(--color-mauve) 4%, transparent); }
-
-.pull-num {
-  font-family: var(--font-mono); font-size: 2rem; font-weight: 700;
-  color: color-mix(in srgb, var(--color-mauve) 30%, transparent);
-  line-height: 1; text-align: right; padding-top: .1rem;
-}
-.pull-text { font-family: var(--font-display); font-size: clamp(.95rem, 2vw, 1.1rem); font-weight: 400; color: var(--color-text); line-height: 1.75; }
-.pull-text strong { color: var(--color-heading); font-weight: 600; }
-.pull-attr { font-family: var(--font-mono); font-size: .63rem; color: var(--color-subtle); letter-spacing: .1em; text-transform: uppercase; margin-top: .5rem; }
-.pull-attr::before { content: '— '; color: var(--color-mauve); }
+.belief-card:hover { border-color: color-mix(in srgb, var(--color-text) 16%, transparent); border-left-color: var(--accent); }
+.belief-title { font-family: var(--font-display); font-size: 17px; font-weight: 600; color: var(--color-heading); margin-bottom: 8px; }
+.belief-body { font-size: 14.5px; line-height: 1.65; color: var(--color-subtle); margin: 0; }
+@media (max-width: 720px) { .belief-grid { grid-template-columns: 1fr; } }
 
 /* Stack table */
 .stack-table { margin-top: 2rem; border: 1px solid var(--color-muted); border-radius: 12px; overflow: hidden; font-family: var(--font-mono); font-size: .75rem; }
@@ -736,7 +714,7 @@ function showManifesto() {
         }
       });
     }, { threshold: 0.1 });
-    mp.querySelectorAll('.dual-card, .pull-item, .st-row, .personal-card').forEach((el, i) => {
+    mp.querySelectorAll('.dual-card, .belief-card, .st-row, .personal-card').forEach((el, i) => {
       el.style.opacity = '0';
       el.style.transform = 'translateY(20px)';
       el.style.transition = `opacity .6s ease ${i * 60}ms, transform .6s ease ${i * 60}ms`;

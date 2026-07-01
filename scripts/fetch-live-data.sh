@@ -254,6 +254,51 @@ build_host_metrics() {
   echo "{\"tywin\":${tywin},\"jaime\":${jaime},\"tyrion\":${tyrion},\"varys\":${varys},\"truenas\":${truenas},\"bronn\":${bronn},\"bran\":${bran}}"
 }
 
+# ── Outage history (real, from the Beesly incident journal) ────────────────────
+# Reads resolved incidents out of the central Postgres incidents table so the
+# uptime band can render real downtime instead of a fabricated series.
+# Emits an array of {date, severity, minutes}. Empty [] on any failure — the
+# band then falls back to the honest cluster-age view.
+build_outages() {
+  local raw
+  raw=$(kubectl exec -n databases postgresql-primary-0 -c postgresql -- \
+    psql -U beesly -d beesly -At -F $'\t' -c \
+    "SELECT to_char(fired_at,'YYYY-MM-DD'),
+            COALESCE(severity,'critical'),
+            COALESCE(recovery_seconds,
+                     EXTRACT(EPOCH FROM (resolved_at - fired_at))::int, 0)
+     FROM incidents
+     WHERE fired_at IS NOT NULL
+     ORDER BY fired_at DESC
+     LIMIT 200;" 2>/dev/null) || raw=""
+
+  if [[ -z "$raw" ]]; then
+    echo "[]"
+    return
+  fi
+
+  printf '%s\n' "$raw" | python3 -c '
+import sys, json
+out = []
+for line in sys.stdin:
+    line = line.rstrip("\n")
+    if not line.strip():
+        continue
+    parts = line.split("\t")
+    if len(parts) < 3:
+        continue
+    date, sev, secs = parts[0], parts[1].lower(), parts[2]
+    try:
+        minutes = max(0, round(int(float(secs)) / 60))
+    except Exception:
+        minutes = 0
+    # normalise severity to the band vocabulary
+    sev = "critical" if sev in ("critical","crit","page","high") else ("warning" if sev in ("warning","warn","degraded") else "info")
+    out.append({"date": date, "severity": sev, "minutes": minutes})
+print(json.dumps(out))
+' 2>/dev/null || echo "[]"
+}
+
 # ── Backblaze B2 cloud sync (TrueNAS cloudsync.query via WebSocket) ───────────
 build_b2() {
   local api_key="${TRUENAS_API_KEY:-}"
@@ -1031,6 +1076,7 @@ except:
 # ── Assemble live cards ────────────────────────────────────────────────────────
 NODES=$(build_nodes)
 HOST_METRICS=$(build_host_metrics)
+OUTAGES=$(build_outages)
 CLUSTER_START=$(build_cluster_start)
 FLUX=$(build_flux)
 BACKUP=$(build_backup)
@@ -1120,7 +1166,8 @@ fi
 # Write JSON via temp files to avoid shell quoting issues
 TMP_NODES=$(mktemp); TMP_FLUX=$(mktemp); TMP_SVC_DATA=$(mktemp); TMP_NETWORK=$(mktemp)
 TMP_BRAN=$(mktemp); TMP_UPS=$(mktemp); TMP_DEPLOY=$(mktemp); TMP_STORAGE=$(mktemp)
-TMP_CONTRIBS=$(mktemp); TMP_HOSTMETRICS=$(mktemp)
+TMP_CONTRIBS=$(mktemp); TMP_HOSTMETRICS=$(mktemp); TMP_OUTAGES=$(mktemp)
+echo "$OUTAGES"      > "$TMP_OUTAGES"
 echo "$NODES"        > "$TMP_NODES"
 echo "$FLUX"         > "$TMP_FLUX"
 echo "$SERVICES"     > "$TMP_SVC_DATA"
@@ -1132,7 +1179,7 @@ echo "$STORAGE"      > "$TMP_STORAGE"
 echo "$CONTRIBS"     > "$TMP_CONTRIBS"
 echo "$HOST_METRICS" > "$TMP_HOSTMETRICS"
 
-python3 - "$TMP_NODES" "$TMP_FLUX" "$TMP_SVC_DATA" "$TMP_NETWORK" "$TMP_BRAN" "$TMP_UPS" "$TMP_DEPLOY" "$TMP_STORAGE" "$TMP_CONTRIBS" "$TMP_HOSTMETRICS" <<PYEOF
+python3 - "$TMP_NODES" "$TMP_FLUX" "$TMP_SVC_DATA" "$TMP_NETWORK" "$TMP_BRAN" "$TMP_UPS" "$TMP_DEPLOY" "$TMP_STORAGE" "$TMP_CONTRIBS" "$TMP_HOSTMETRICS" "$TMP_OUTAGES" <<PYEOF
 import json, sys
 
 with open(sys.argv[1]) as f: nodes       = json.load(f)
@@ -1145,6 +1192,7 @@ with open(sys.argv[7]) as f: last_deploy = json.load(f)
 with open(sys.argv[8]) as f: storage     = json.load(f)
 with open(sys.argv[9]) as f: contribs    = json.load(f)
 with open(sys.argv[10]) as f: host_metrics = json.load(f)
+with open(sys.argv[11]) as f: outages     = json.load(f)
 
 # Prefer real utilisation (from /proc over SSH) over request-based % for k3s nodes
 for n in nodes:
@@ -1169,6 +1217,7 @@ data = {
   'updated':       '${NOW}',
   'fetched_at':    '${NOW}',
   'cluster_start': '${CLUSTER_START}' or None,
+  'outages':       outages,
   'cards': [
     {'label': 'Workloads',      'value': '—' if total == 0 else f'{running}/{total}', 'sub': wl_sub, 'status': wl_status},
     {'label': 'Flux',           'value': '${FLUX_LABEL}',        'sub': '${FLUX_SYNC}',       'status': '${FLUX_STATUS}'},
@@ -1193,7 +1242,7 @@ data = {
 print(json.dumps(data, indent=2))
 PYEOF
 
-rm -f "$TMP_NODES" "$TMP_FLUX" "$TMP_SVC_DATA" "$TMP_NETWORK" "$TMP_BRAN" "$TMP_UPS" "$TMP_DEPLOY" "$TMP_STORAGE" "$TMP_CONTRIBS" "$TMP_HOSTMETRICS"
+rm -f "$TMP_NODES" "$TMP_FLUX" "$TMP_SVC_DATA" "$TMP_NETWORK" "$TMP_BRAN" "$TMP_UPS" "$TMP_DEPLOY" "$TMP_STORAGE" "$TMP_CONTRIBS" "$TMP_HOSTMETRICS" "$TMP_OUTAGES"
 
 # ── Write maintenance.json — active only when no nodes are ready ──────────────
 READY_NODES=$(echo "$NODES" | python3 -c "

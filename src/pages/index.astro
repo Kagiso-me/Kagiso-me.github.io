@@ -131,14 +131,14 @@ const RACK_WATTS = Math.round((ELECTRICITY_KWH * 1000) / (30 * 24));
     <ClusterTerminal />
   </section>
 
-  <!-- ── 90-day band (real: cluster age + digest incidents) ── -->
+  <!-- ── Uptime band (real: cluster age + Beesly incident-journal outages) ── -->
   <section class="cc-uptime-section fade-up">
     <div class="cc-uptime-head">
       <div class="cc-uptime-title-row">
-        <span class="cc-uptime-title">Cluster age</span>
+        <span class="cc-uptime-title">Uptime since launch</span>
         <span class="cc-uptime-stat mono" id="cc-uptime-age">—</span>
       </div>
-      <span class="mono cc-uptime-meta" id="cc-uptime-meta">incidents from the ops log</span>
+      <span class="mono cc-uptime-meta" id="cc-uptime-meta">from the incident journal</span>
     </div>
     <div class="cc-uptime-bars" id="cc-uptime-bars" aria-hidden="true"></div>
     <div class="cc-uptime-axis mono"><span id="cc-uptime-start">cluster start</span><span>today</span></div>
@@ -1884,7 +1884,7 @@ const RACK_WATTS = Math.round((ELECTRICITY_KWH * 1000) / (30 * 24));
       </div>`).join('');
   }
 
-  async function buildUptimeBand(data: any) {
+  function buildUptimeBand(data: any) {
     const bars = document.getElementById('cc-uptime-bars');
     const ageEl = document.getElementById('cc-uptime-age');
     const startEl = document.getElementById('cc-uptime-start');
@@ -1897,36 +1897,50 @@ const RACK_WATTS = Math.round((ELECTRICITY_KWH * 1000) / (30 * 24));
     if (ageEl) ageEl.textContent = totalDays + ' days';
     if (startEl) startEl.textContent = start.toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' });
 
-    // Mark days that had a real INCIDENT in the digest
-    let incidentDays = new Set<number>();
-    let incidentCount = 0;
-    try {
-      const res = await fetch('/data/digest.json', { cache: 'no-store' });
-      if (res.ok) {
-        const all = await res.json();
-        for (const e of (Array.isArray(all) ? all : [])) {
-          if (e.type !== 'INCIDENT') continue;
-          const d = new Date(e.date.length === 7 ? e.date + '-01' : e.date);
-          if (isNaN(+d) || d < start) continue;
-          incidentDays.add(Math.floor((d.getTime() - start.getTime()) / 86400000));
-          incidentCount++;
-        }
-      }
-    } catch { /* band still renders without incident marks */ }
+    // Real outages from the Beesly incident journal (via live.json)
+    const outages: any[] = Array.isArray(data?.outages) ? data.outages : [];
+    // Per-day worst severity + summed downtime
+    const dayWorst = new Map<number, 'critical' | 'warning'>();
+    let downMinutes = 0;
+    for (const o of outages) {
+      const d = new Date((o.date ?? '').length === 7 ? o.date + '-01' : o.date);
+      if (isNaN(+d) || d < start) continue;
+      const bucket = Math.floor((d.getTime() - start.getTime()) / 86400000);
+      const sev = o.severity === 'critical' ? 'critical' : 'warning';
+      const prev = dayWorst.get(bucket);
+      if (prev !== 'critical') dayWorst.set(bucket, sev);
+      downMinutes += Math.max(0, Number(o.minutes) || 0);
+    }
 
-    if (metaEl) metaEl.textContent = `${incidentCount} incident${incidentCount === 1 ? '' : 's'} since launch · from the ops log`;
+    // Real uptime % over the elapsed window
+    const elapsedMin = (Date.now() - start.getTime()) / 60000;
+    const uptimePct = elapsedMin > 0 ? Math.max(0, 100 - (downMinutes / elapsedMin) * 100) : 100;
+    const uptimeStr = uptimePct >= 99.995 ? '100%' : uptimePct.toFixed(uptimePct >= 99.9 ? 3 : 2) + '%';
+    const nInc = outages.length;
+    if (metaEl) {
+      metaEl.textContent = nInc === 0
+        ? `${uptimeStr} uptime · no incidents since launch`
+        : `${uptimeStr} uptime · ${nInc} incident${nInc === 1 ? '' : 's'} · ${downMinutes}m total downtime`;
+    }
 
     const N = Math.min(60, totalDays);
     let html = '';
     for (let i = 0; i < N; i++) {
       const dayStart = Math.floor((i / N) * totalDays);
       const dayEnd = Math.floor(((i + 1) / N) * totalDays);
-      let hit = false;
-      for (const d of incidentDays) if (d >= dayStart && d < dayEnd) hit = true;
-      const h = hit ? 60 : 88 + ((i % 4) * 3);
-      const color = hit ? 'linear-gradient(180deg,#fd9089,#de5048)' : 'linear-gradient(180deg,#6cecb3,#2ea776)';
-      const glow = hit ? '0 0 11px rgba(248,115,107,.5)' : '0 0 7px rgba(82,224,160,.28)';
-      html += `<div title="${hit ? 'incident' : 'operational'}" style="height:${h}%;background:${color};box-shadow:${glow}"></div>`;
+      let sev: 'critical' | 'warning' | null = null;
+      for (const [bucket, s] of dayWorst) {
+        if (bucket >= dayStart && bucket < dayEnd) sev = (sev === 'critical' || s === 'critical') ? 'critical' : 'warning';
+      }
+      let h: number, color: string, glow: string, title: string;
+      if (sev === 'critical') {
+        h = 48; color = 'linear-gradient(180deg,#fd9089,#de5048)'; glow = '0 0 11px rgba(248,115,107,.5)'; title = 'major incident';
+      } else if (sev === 'warning') {
+        h = 70; color = 'linear-gradient(180deg,#f8ca6f,#dc9316)'; glow = '0 0 9px rgba(243,179,77,.42)'; title = 'degraded';
+      } else {
+        h = 88 + ((i % 4) * 3); color = 'linear-gradient(180deg,#6cecb3,#2ea776)'; glow = '0 0 7px rgba(82,224,160,.28)'; title = 'operational';
+      }
+      html += `<div title="${title}" style="height:${h}%;background:${color};box-shadow:${glow}"></div>`;
     }
     bars.innerHTML = html;
   }

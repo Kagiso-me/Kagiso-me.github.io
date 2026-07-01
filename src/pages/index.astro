@@ -1844,6 +1844,8 @@ const RACK_WATTS = Math.round((ELECTRICITY_KWH * 1000) / (30 * 24));
     const live: any[] = Array.isArray(data?.nodes) ? data.nodes : [];
     const byName: Record<string, any> = {};
     for (const n of live) byName[String(n.name).toLowerCase()] = n;
+    // Per-host real utilisation (from /proc over SSH) — covers all 7 hosts
+    const hm: Record<string, any> = data?.host_metrics ?? {};
 
     type Row = { name: string; role: string; ip: string; cpu: number; mem: number; status: string };
     const rows: Row[] = [];
@@ -1852,13 +1854,18 @@ const RACK_WATTS = Math.round((ELECTRICITY_KWH * 1000) / (30 * 24));
       const n = byName[name];
       rows.push({
         name, ip: CC_K3S[name], role: 'k3s · control-plane + worker + etcd',
-        cpu: ccPctNum(n?.cpu), mem: ccPctNum(n?.memory), status: n?.status ?? 'unknown',
+        cpu: ccPctNum(hm[name]?.cpu ?? n?.cpu), mem: ccPctNum(hm[name]?.mem ?? n?.memory), status: n?.status ?? 'unknown',
       });
     }
-    // static fleet — role/ip known; status ok if cluster data loaded
+    // static fleet — role/ip known; cpu/mem from host_metrics where reachable
     for (const name of Object.keys(CC_FLEET)) {
       const f = CC_FLEET[name];
-      rows.push({ name, ip: f.ip, role: f.role, cpu: 0, mem: 0, status: live.length ? 'ok' : 'unknown' });
+      const reachable = hm[name] && (hm[name].cpu || hm[name].mem);
+      rows.push({
+        name, ip: f.ip, role: f.role,
+        cpu: ccPctNum(hm[name]?.cpu), mem: ccPctNum(hm[name]?.mem),
+        status: reachable ? 'ok' : (live.length ? 'ok' : 'unknown'),
+      });
     }
 
     const dotColor = (s: string) => s === 'ok' ? 'var(--color-ok)' : s === 'warn' ? 'var(--color-warn)' : s === 'unknown' ? 'var(--color-unknown)' : 'var(--color-crit)';

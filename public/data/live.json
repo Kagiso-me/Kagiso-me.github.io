@@ -1,300 +1,15 @@
 {
-  "updated": "2026-07-01T22:59:19Z",
-  "fetched_at": "2026-07-01T22:59:19Z",
+  "updated": "2026-07-01T23:18:03Z",
+  "fetched_at": "2026-07-01T23:18:03Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "outages": [
     {
-      "date": "2026-07-01",
-      "severity": "warning",
-      "minutes": 35
-    },
-    {
-      "date": "2026-07-01",
-      "severity": "warning",
-      "minutes": 32
-    },
-    {
-      "date": "2026-07-01",
-      "severity": "warning",
-      "minutes": 31
-    },
-    {
-      "date": "2026-07-01",
-      "severity": "warning",
-      "minutes": 31
-    },
-    {
-      "date": "2026-07-01",
-      "severity": "warning",
-      "minutes": 31
-    },
-    {
-      "date": "2026-07-01",
-      "severity": "warning",
-      "minutes": 31
-    },
-    {
-      "date": "2026-06-30",
-      "severity": "warning",
-      "minutes": 30
-    },
-    {
-      "date": "2026-06-30",
-      "severity": "warning",
-      "minutes": 30
-    },
-    {
-      "date": "2026-06-30",
-      "severity": "warning",
-      "minutes": 31
-    },
-    {
-      "date": "2026-06-30",
-      "severity": "warning",
-      "minutes": 31
-    },
-    {
-      "date": "2026-06-30",
-      "severity": "warning",
-      "minutes": 31
-    },
-    {
-      "date": "2026-06-30",
-      "severity": "warning",
-      "minutes": 31
-    },
-    {
       "date": "2026-06-30",
       "severity": "warning",
       "minutes": 0
     },
     {
-      "date": "2026-06-30",
-      "severity": "warning",
-      "minutes": 31
-    },
-    {
-      "date": "2026-06-30",
-      "severity": "warning",
-      "minutes": 31
-    },
-    {
       "date": "2026-06-29",
-      "severity": "warning",
-      "minutes": 31
-    },
-    {
-      "date": "2026-06-29",
-      "severity": "warning",
-      "minutes": 35
-    },
-    {
-      "date": "2026-06-29",
-      "severity": "warning",
-      "minutes": 31
-    },
-    {
-      "date": "2026-06-29",
-      "severity": "warning",
-      "minutes": 31
-    },
-    {
-      "date": "2026-06-29",
-      "severity": "warning",
-      "minutes": 31
-    },
-    {
-      "date": "2026-06-29",
-      "severity": "warning",
-      "minutes": 31
-    },
-    {
-      "date": "2026-06-29",
-      "severity": "warning",
-      "minutes": 30
-    },
-    {
-      "date": "2026-06-29",
-      "severity": "warning",
-      "minutes": 30
-    },
-    {
-      "date": "2026-06-29",
-      "severity": "warning",
-      "minutes": 30
-    },
-    {
-      "date": "2026-06-29",
-      "severity": "warning",
-      "minutes": 31
-    },
-    {
-      "date": "2026-06-29",
-      "severity": "warning",
-      "minutes": 0
-    },
-    {
-      "date": "2026-06-29",
-      "severity": "warning",
-      "minutes": 31
-    },
-    {
-      "date": "2026-06-28",
-      "severity": "warning",
-      "minutes": 31
-    },
-    {
-      "date": "2026-06-28",
-      "severity": "warning",
-      "minutes": 31
-    },
-    {
-      "date": "2026-06-28",
-      "severity": "warning",
-      "minutes": 31
-    },
-    {
-      "date": "2026-06-28",
-      "severity": "warning",
-      "minutes": 31
-    },
-    {
-      "date": "2026-06-28",
-      "severity": "warning",
-      "minutes": 31
-    },
-    {
-      "date": "2026-06-28",
-      "severity": "warning",
-      "minutes": 31
-    },
-    {
-      "date": "2026-06-28",
-      "severity": "warning",
-      "minutes": 0
-    },
-    {
-      "date": "2026-06-28",
-      "severity": "warning",
-      "minutes": 0
-    },
-    {
-      "date": "2026-06-28",
-      "severity": "warning",
-      "minutes": 0
-    },
-    {
-      "date": "2026-06-28",
-      "severity": "warning",
-      "minutes": 0
-    },
-    {
-      "date": "2026-06-28",
-      "severity": "warning",
-      "minutes": 0
-    },
-    {
-      "date": "2026-06-28",
-      "severity": "warning",
-      "minutes": 0
-    },
-    {
-      "date": "2026-06-28",
-      "severity": "warning",
-      "minutes": 0
-    },
-    {
-      "date": "2026-06-28",
-      "severity": "warning",
-      "minutes": 0
-    },
-    {
-      "date": "2026-06-28",
-      "severity": "warning",
-      "minutes": 0
-    },
-    {
-      "date": "2026-06-28",
-      "severity": "warning",
-      "minutes": 0
-    },
-    {
-      "date": "2026-06-28",
-      "severity": "warning",
-      "minutes": 0
-    },
-    {
-      "date": "2026-06-28",
-      "severity": "warning",
-      "minutes": 0
-    },
-    {
-      "date": "2026-06-28",
-      "severity": "warning",
-      "minutes": 0
-    },
-    {
-      "date": "2026-06-28",
-      "severity": "warning",
-      "minutes": 31
-    },
-    {
-      "date": "2026-06-28",
-      "severity": "warning",
-      "minutes": 0
-    },
-    {
-      "date": "2026-06-28",
-      "severity": "warning",
-      "minutes": 0
-    },
-    {
-      "date": "2026-06-28",
-      "severity": "warning",
-      "minutes": 0
-    },
-    {
-      "date": "2026-06-28",
-      "severity": "warning",
-      "minutes": 0
-    },
-    {
-      "date": "2026-06-28",
-      "severity": "warning",
-      "minutes": 0
-    },
-    {
-      "date": "2026-06-28",
-      "severity": "warning",
-      "minutes": 0
-    },
-    {
-      "date": "2026-06-28",
-      "severity": "warning",
-      "minutes": 0
-    },
-    {
-      "date": "2026-06-28",
-      "severity": "warning",
-      "minutes": 0
-    },
-    {
-      "date": "2026-06-28",
-      "severity": "warning",
-      "minutes": 0
-    },
-    {
-      "date": "2026-06-28",
-      "severity": "warning",
-      "minutes": 0
-    },
-    {
-      "date": "2026-06-22",
-      "severity": "warning",
-      "minutes": 0
-    },
-    {
-      "date": "2026-06-22",
       "severity": "warning",
       "minutes": 0
     }
@@ -302,7 +17,7 @@
   "cards": [
     {
       "label": "Workloads",
-      "value": "69/75",
+      "value": "67/73",
       "sub": "pods running",
       "status": "warn"
     },
@@ -314,25 +29,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "20h 56m ago",
+      "value": "21h 14m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "10h 59m ago",
+      "value": "11h 18m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 59m ago",
+      "value": "4h 18m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "21h 59m ago",
+      "value": "22h 17m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -348,9 +63,9 @@
       "name": "jaime",
       "role": "control-plane",
       "status": "ok",
-      "pods": "19/110",
+      "pods": "18/110",
       "cpu": "22%",
-      "memory": "47%",
+      "memory": "34%",
       "pressure": []
     },
     {
@@ -358,44 +73,44 @@
       "role": "control-plane",
       "status": "ok",
       "pods": "22/110",
-      "cpu": "17%",
-      "memory": "54%",
+      "cpu": "23%",
+      "memory": "56%",
       "pressure": []
     },
     {
       "name": "tywin",
       "role": "control-plane",
       "status": "ok",
-      "pods": "30/110",
-      "cpu": "25%",
+      "pods": "33/110",
+      "cpu": "26%",
       "memory": "45%",
       "pressure": []
     }
   ],
   "host_metrics": {
     "tywin": {
-      "cpu": "25%",
+      "cpu": "26%",
       "mem": "45%"
     },
     "jaime": {
       "cpu": "22%",
-      "mem": "47%"
+      "mem": "34%"
     },
     "tyrion": {
-      "cpu": "17%",
-      "mem": "54%"
+      "cpu": "23%",
+      "mem": "56%"
     },
     "varys": {
       "cpu": "0%",
-      "mem": "21%"
+      "mem": "23%"
     },
     "bronn": {
-      "cpu": "24%",
+      "cpu": "13%",
       "mem": "13%"
     },
     "bran": {
-      "cpu": "24%",
-      "mem": "50%"
+      "cpu": "20%",
+      "mem": "46%"
     }
   },
   "flux": {
@@ -534,12 +249,12 @@
     },
     {
       "name": "Nextcloud",
-      "tag": "Nextcloud: 60.9 MB used",
-      "status": "ok"
+      "tag": "Nextcloud: offline",
+      "status": "crit"
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 609.4 GB left",
+      "tag": "SABnzbd: downloading \u00b7 604.8 GB left",
       "status": "ok"
     },
     {
@@ -573,23 +288,23 @@
     }
   ],
   "network": {
-    "fw_hits": 1293096,
+    "fw_hits": 1293466,
     "fw_rate_per_hour": null,
-    "latency_ms": 38.0,
+    "latency_ms": 48.4,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 53.7,
+    "temp_c": 48.3,
     "temp_status": "ok",
-    "load": 1.06,
-    "mem_pct": 54.2
+    "load": 0.57,
+    "mem_pct": 46.1
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 608,
-    "runtime_str": "10m",
-    "load_pct": 30,
+    "runtime_s": 452,
+    "runtime_str": "7m",
+    "load_pct": 36,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
@@ -612,7 +327,7 @@
     },
     {
       "name": "archive",
-      "used": "760.7 GB",
+      "used": "760.8 GB",
       "total": "4.0 TB",
       "pct": 19.1,
       "status": "ok",
@@ -621,9 +336,9 @@
     },
     {
       "name": "core",
-      "used": "119.5 GB",
+      "used": "119.1 GB",
       "total": "476.7 GB",
-      "pct": 25.1,
+      "pct": 25.0,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -631,7 +346,7 @@
   ],
   "contribs": {
     "days": {
-      "2026-07-01": 48,
+      "2026-07-01": 52,
       "2026-06-30": 24,
       "2026-06-28": 19,
       "2026-06-27": 20,
@@ -641,7 +356,7 @@
       "2026-06-21": 4,
       "2026-06-19": 6
     },
-    "total": 136,
+    "total": 140,
     "active_days": 9
   }
 }

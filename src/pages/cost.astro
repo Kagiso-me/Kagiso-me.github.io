@@ -178,6 +178,18 @@ const MONTHLY_SAVINGS    = CLOUD_TOTAL - SELF_CLOUD_EQUIV;
 const ACTUAL_SAVINGS     = Math.round(CANCELLED_TOTAL); // what literally stopped being billed
 
 const TICKER_RATE_PER_SEC = ACTUAL_SAVINGS / (30 * 24 * 3600); // R per second saved
+
+// ── Running-cost stat tiles + breakdown (mockup) — all from real cost.ts ──
+const PROJECTED_YEAR = MY_MONTHLY_TOTAL * 12;
+// Always-on draw behind the 91 kWh/month figure (127W continuous — see cost.ts note)
+const RACK_WATTS = Math.round((ELECTRICITY_KWH * 1000) / (30 * 24));
+const BREAKDOWN = [
+  { name: 'Electricity (~' + RACK_WATTS + 'W avg)', cost: ELECTRICITY_COST, color: 'var(--signal)', note: 'Three mini-PCs, TrueNAS, Pi, switch, UPS overhead' },
+  ...ONGOING.filter(o => o.cost > 0).map(o => ({
+    name: o.item, cost: o.cost, color: 'var(--accent)', note: 'monthly · leaves the account',
+  })),
+];
+const BREAKDOWN_TOTAL = BREAKDOWN.reduce((s, b) => s + b.cost, 0);
 ---
 
 <Layout
@@ -200,6 +212,46 @@ const TICKER_RATE_PER_SEC = ACTUAL_SAVINGS / (30 * 24 * 3600); // R per second s
       The savings are a bonus. The control is the point.
     </p>
   </div>
+
+  <!-- ── Running-cost stat tiles (real, from cost.ts) ── -->
+  <section class="cost-tiles fade-up" style="animation-delay:0.04s">
+    <div class="cost-tile cost-tile-accent">
+      <div class="cost-tile-val mono">R{MY_MONTHLY_TOTAL}<span class="cost-tile-unit">/mo</span></div>
+      <div class="cost-tile-label mono">all-in, current</div>
+    </div>
+    <div class="cost-tile">
+      <div class="cost-tile-val mono">R{PROJECTED_YEAR}</div>
+      <div class="cost-tile-label mono">projected this year</div>
+    </div>
+    <div class="cost-tile">
+      <div class="cost-tile-val mono" style="color:var(--color-ok)">R{ELECTRICITY_COST}</div>
+      <div class="cost-tile-label mono">electricity / mo</div>
+    </div>
+    <div class="cost-tile">
+      <div class="cost-tile-val mono">~{RACK_WATTS}<span class="cost-tile-unit">W</span></div>
+      <div class="cost-tile-label mono">whole-rack draw</div>
+    </div>
+  </section>
+
+  <!-- ── Where the money goes (real breakdown) ── -->
+  <section class="section fade-up" style="animation-delay:0.06s">
+    <div class="section-header">
+      <h2 class="section-title">Where the R{MY_MONTHLY_TOTAL} goes</h2>
+      <span class="mono" style="color:var(--color-subtle);font-size:0.72rem">mostly electricity</span>
+    </div>
+    <div class="cost-breakdown">
+      {BREAKDOWN.map(b => (
+        <div class="cost-bd-row">
+          <div class="cost-bd-top">
+            <span class="cost-bd-name">{b.name}</span>
+            <span class="cost-bd-cost mono">R{b.cost}</span>
+          </div>
+          <div class="cost-bd-track"><div class="cost-bd-fill" style={`width:${Math.round((b.cost / BREAKDOWN_TOTAL) * 100)}%;background:${b.color}`}></div></div>
+          <div class="cost-bd-note">{b.note}</div>
+        </div>
+      ))}
+    </div>
+  </section>
 
   <!-- ── Live savings ticker ── -->
   <section class="ticker-section fade-up" style="animation-delay:0.05s">
@@ -492,6 +544,44 @@ const TICKER_RATE_PER_SEC = ACTUAL_SAVINGS / (30 * 24 * 3600); // R per second s
 </Layout>
 
 <style is:global>
+  /* ── Running-cost stat tiles (mockup) ── */
+  .cost-tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 14px;
+    margin-bottom: 2rem;
+  }
+  .cost-tile {
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid var(--color-muted);
+    border-radius: 14px;
+    padding: 20px 22px;
+  }
+  .cost-tile-accent {
+    background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 10%, transparent), rgba(255,255,255,.02));
+    border-color: color-mix(in srgb, var(--accent) 20%, transparent);
+  }
+  .cost-tile-val { font-size: 34px; font-weight: 600; color: var(--color-heading); line-height: 1; }
+  .cost-tile-accent .cost-tile-val { color: var(--accent); }
+  .cost-tile-unit { font-size: 16px; color: var(--color-subtle); }
+  .cost-tile-label { font-size: 12px; color: var(--color-subtle); margin-top: 4px; }
+
+  /* ── Breakdown bars ── */
+  .cost-breakdown {
+    border: 1px solid var(--color-muted);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.012);
+    padding: 0.5rem 1.25rem 1rem;
+  }
+  .cost-bd-row { padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.04); }
+  .cost-bd-row:last-child { border-bottom: none; }
+  .cost-bd-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 7px; }
+  .cost-bd-name { font-size: 14px; color: var(--color-text); }
+  .cost-bd-cost { font-size: 13px; color: var(--color-heading); }
+  .cost-bd-track { height: 5px; border-radius: 3px; background: rgba(255, 255, 255, 0.06); overflow: hidden; }
+  .cost-bd-fill { height: 100%; border-radius: 3px; }
+  .cost-bd-note { font-size: 11.5px; color: var(--color-subtle); margin-top: 6px; }
+
   .page-wrap {
     max-width: 960px;
     margin: 0 auto;

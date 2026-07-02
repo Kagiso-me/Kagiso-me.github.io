@@ -131,12 +131,12 @@ const RACK_WATTS = Math.round((ELECTRICITY_KWH * 1000) / (30 * 24));
     <ClusterTerminal />
   </section>
 
-  <!-- ── Uptime band (real: cluster age + Beesly incident-journal outages) ── -->
+  <!-- ── Cluster incident band (real: Beesly incident journal, rolling 60d) ── -->
   <section class="cc-uptime-section fade-up">
     <div class="cc-uptime-head">
       <div class="cc-uptime-title-row">
-        <span class="cc-uptime-title">Uptime since launch</span>
-        <span class="cc-uptime-stat mono" id="cc-uptime-age">—</span>
+        <span class="cc-uptime-title">Cluster incidents</span>
+        <span class="cc-uptime-stat mono" id="cc-uptime-age">60d</span>
       </div>
       <span class="mono cc-uptime-meta" id="cc-uptime-meta">from the incident journal</span>
     </div>
@@ -1963,58 +1963,59 @@ const RACK_WATTS = Math.round((ELECTRICITY_KWH * 1000) / (30 * 24));
     const metaEl = document.getElementById('cc-uptime-meta');
     if (!bars) return;
 
+    // Fixed rolling window — always the last WINDOW days (status-page convention).
+    const WINDOW = 60;
     const start = data?.cluster_start ? new Date(data.cluster_start) : null;
-    if (!start || isNaN(+start)) { bars.innerHTML = ''; return; }
-    const totalDays = Math.max(1, Math.floor((Date.now() - start.getTime()) / 86400000));
-    if (ageEl) ageEl.textContent = totalDays + ' days';
-    if (startEl) startEl.textContent = start.toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' });
+    if (startEl) startEl.textContent = `${WINDOW} days ago`;
 
-    // Real outages from the Beesly incident journal (via live.json)
+    // Real cluster incidents from the Beesly incident journal (via live.json).
+    // NOTE: these are CLUSTER-level incidents (Beesly/Alertmanager), not per-app
+    // availability probes. We mark the day of each incident by worst severity —
+    // no fabricated "uptime %" (incident-open time ≠ measured downtime).
+    const todayMid = new Date(); todayMid.setHours(0, 0, 0, 0);
+    const dayKey = (d: Date) => { const x = new Date(d); x.setHours(0, 0, 0, 0); return Math.round((todayMid.getTime() - x.getTime()) / 86400000); };
+
     const outages: any[] = Array.isArray(data?.outages) ? data.outages : [];
-    // Per-day worst severity + summed downtime
-    const dayWorst = new Map<number, 'critical' | 'warning'>();
-    let downMinutes = 0;
+    const dayWorst = new Map<number, 'critical' | 'warning'>(); // key: days-ago (0..WINDOW-1)
+    let inWindow = 0;
     for (const o of outages) {
       const d = new Date((o.date ?? '').length === 7 ? o.date + '-01' : o.date);
-      if (isNaN(+d) || d < start) continue;
-      const bucket = Math.floor((d.getTime() - start.getTime()) / 86400000);
+      if (isNaN(+d)) continue;
+      const ago = dayKey(d);
+      if (ago < 0 || ago >= WINDOW) continue;
       const sev = o.severity === 'critical' ? 'critical' : 'warning';
-      const prev = dayWorst.get(bucket);
-      if (prev !== 'critical') dayWorst.set(bucket, sev);
-      downMinutes += Math.max(0, Number(o.minutes) || 0);
+      if (dayWorst.get(ago) !== 'critical') dayWorst.set(ago, sev);
+      inWindow++;
     }
 
-    // Real uptime % over the elapsed window
-    const elapsedMin = (Date.now() - start.getTime()) / 60000;
-    const uptimePct = elapsedMin > 0 ? Math.max(0, 100 - (downMinutes / elapsedMin) * 100) : 100;
-    const uptimeStr = uptimePct >= 99.995 ? '100%' : uptimePct.toFixed(uptimePct >= 99.9 ? 3 : 2) + '%';
-    const nInc = outages.length;
+    // Days before the cluster existed (within the window) render greyed/pending.
+    const preLaunchAgo = start && !isNaN(+start) ? dayKey(start) : WINDOW;
+
+    if (ageEl) ageEl.textContent = `${WINDOW}d`;
     if (metaEl) {
-      metaEl.textContent = nInc === 0
-        ? `${uptimeStr} uptime · no incidents since launch`
-        : `${uptimeStr} uptime · ${nInc} incident${nInc === 1 ? '' : 's'} · ${downMinutes}m total downtime`;
+      metaEl.textContent = inWindow === 0
+        ? `no cluster incidents in the last ${WINDOW} days`
+        : `${inWindow} cluster incident${inWindow === 1 ? '' : 's'} in the last ${WINDOW} days`;
     }
 
-    const N = Math.min(60, totalDays);
     let html = '';
-    for (let i = 0; i < N; i++) {
-      const dayStart = Math.floor((i / N) * totalDays);
-      const dayEnd = Math.floor(((i + 1) / N) * totalDays);
-      let sev: 'critical' | 'warning' | null = null;
-      for (const [bucket, s] of dayWorst) {
-        if (bucket >= dayStart && bucket < dayEnd) sev = (sev === 'critical' || s === 'critical') ? 'critical' : 'warning';
-      }
+    for (let i = 0; i < WINDOW; i++) {
+      const ago = WINDOW - 1 - i;           // leftmost = oldest, rightmost = today
+      const sev = dayWorst.get(ago) ?? null;
+      const preLaunch = ago > preLaunchAgo;
       let h: number, color: string, glow: string, label: string, dot: string;
-      if (sev === 'critical') {
+      if (preLaunch) {
+        h = 34; color = 'rgba(255,255,255,.05)'; glow = 'none'; label = 'before launch'; dot = '#566173';
+      } else if (sev === 'critical') {
         h = 48; color = 'linear-gradient(180deg,#fd9089,#de5048)'; glow = '0 0 11px rgba(248,115,107,.5)'; label = 'major incident'; dot = '#f8736b';
       } else if (sev === 'warning') {
-        h = 70; color = 'linear-gradient(180deg,#f8ca6f,#dc9316)'; glow = '0 0 9px rgba(243,179,77,.42)'; label = 'degraded'; dot = '#f3b34d';
+        h = 70; color = 'linear-gradient(180deg,#f8ca6f,#dc9316)'; glow = '0 0 9px rgba(243,179,77,.42)'; label = 'incident'; dot = '#f3b34d';
       } else {
         h = 88 + ((i % 4) * 3); color = 'linear-gradient(180deg,#6cecb3,#2ea776)'; glow = '0 0 7px rgba(82,224,160,.28)'; label = 'operational'; dot = '#52e0a0';
       }
-      const daysAgo = totalDays - dayStart;
-      const pulse = i === N - 1 ? 'animation:ccBarPulse 2s infinite;' : '';
-      html += `<div class="cc-ubar" data-label="${daysAgo}d ago · ${label}" data-dot="${dot}" data-left="${(((i + 0.5) / N) * 100).toFixed(1)}%" style="height:${h}%;background:${color};box-shadow:${glow};${pulse}"></div>`;
+      const agoLabel = ago === 0 ? 'today' : `${ago}d ago`;
+      const pulse = ago === 0 ? 'animation:ccBarPulse 2s infinite;' : '';
+      html += `<div class="cc-ubar" data-label="${agoLabel} · ${label}" data-dot="${dot}" data-left="${(((i + 0.5) / WINDOW) * 100).toFixed(1)}%" style="height:${h}%;background:${color};box-shadow:${glow};${pulse}"></div>`;
     }
     bars.innerHTML = html;
 

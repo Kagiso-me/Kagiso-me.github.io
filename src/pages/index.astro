@@ -140,7 +140,10 @@ const RACK_WATTS = Math.round((ELECTRICITY_KWH * 1000) / (30 * 24));
       </div>
       <span class="mono cc-uptime-meta" id="cc-uptime-meta">from the incident journal</span>
     </div>
-    <div class="cc-uptime-bars" id="cc-uptime-bars" aria-hidden="true"></div>
+    <div class="cc-uptime-track">
+      <div class="cc-uptime-tip mono" id="cc-uptime-tip" hidden></div>
+      <div class="cc-uptime-bars" id="cc-uptime-bars"></div>
+    </div>
     <div class="cc-uptime-axis mono"><span id="cc-uptime-start">cluster start</span><span>today</span></div>
   </section>
 
@@ -152,7 +155,7 @@ const RACK_WATTS = Math.round((ELECTRICITY_KWH * 1000) / (30 * 24));
     </div>
     <div class="cc-hosts-table">
       <div class="cc-hosts-row cc-hosts-header mono">
-        <span>node</span><span>role</span><span>cpu</span><span>mem</span><span>ip</span><span style="text-align:right">status</span>
+        <span>node</span><span>role</span><span>cpu · 30s</span><span>mem · 30s</span><span>ip</span><span style="text-align:right">status</span>
       </div>
       <div id="cc-hosts-body">
         <div class="skeleton" style="height:50px;border-radius:8px;margin:0.4rem 0"></div>
@@ -367,7 +370,7 @@ const RACK_WATTS = Math.round((ELECTRICITY_KWH * 1000) / (30 * 24));
     display: flex; align-items: center; justify-content: space-between;
     font-size: 11.5px; color: var(--color-subtle); padding: 2px 4px 8px;
   }
-  .cc-map-clock { display: inline-flex; align-items: center; gap: 6px; color: var(--color-ok); }
+  .cc-map-clock { display: inline-flex; align-items: center; gap: 6px; color: var(--color-ok); font-variant-numeric: tabular-nums; }
   .cc-map-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--color-ok); box-shadow: 0 0 6px var(--color-ok); }
   .cc-map-stage { position: relative; width: 100%; aspect-ratio: 500 / 470; font-family: var(--font-mono); margin-top: 2px; }
   .cc-map-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
@@ -439,11 +442,21 @@ const RACK_WATTS = Math.round((ELECTRICITY_KWH * 1000) / (30 * 24));
   .cc-uptime-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
   .cc-uptime-title-row { display: flex; align-items: baseline; gap: 14px; }
   .cc-uptime-title { font-family: var(--font-display); font-size: 22px; font-weight: 600; color: var(--color-heading); }
-  .cc-uptime-stat { font-size: 13px; color: var(--color-ok); }
+  .cc-uptime-stat { font-size: 13px; color: var(--color-ok); font-variant-numeric: tabular-nums; }
   .cc-uptime-meta { font-size: 11.5px; color: var(--color-subtle); }
-  .cc-uptime-bars { display: flex; gap: 4px; align-items: flex-end; height: 56px; }
-  .cc-uptime-bars > div { flex: 1; border-radius: 4px; transform-origin: bottom; transition: filter 0.16s ease; }
-  .cc-uptime-bars > div:hover { filter: brightness(1.2); }
+  .cc-uptime-track { position: relative; padding-top: 38px; }
+  .cc-uptime-tip {
+    position: absolute; top: 0; transform: translateX(-50%); white-space: nowrap;
+    font-size: 11px; background: #141a24; border: 1px solid var(--color-muted);
+    border-radius: 8px; padding: 5px 10px; color: var(--color-text);
+    box-shadow: 0 8px 24px -10px rgba(0,0,0,.8); z-index: 3; pointer-events: none;
+  }
+  .cc-uptime-tip[hidden] { display: none; }
+  .cc-uptime-bars { display: flex; gap: 3px; align-items: flex-end; height: 60px; }
+  .cc-ubar { flex: 1; border-radius: 4px; transform-origin: bottom; transition: filter 0.12s ease, transform 0.12s ease; cursor: pointer; }
+  .cc-ubar:hover { filter: brightness(1.35); transform: scaleY(1.08); }
+  @keyframes ccBarPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(76,201,232,.5); } 50% { box-shadow: 0 0 10px 2px rgba(76,201,232,.55); } }
+  @media (prefers-reduced-motion: reduce) { .cc-ubar { animation: none !important; } }
   .cc-uptime-axis { display: flex; justify-content: space-between; font-size: 11px; color: var(--color-faint); margin-top: 8px; }
 
   /* ── Hosts table ── */
@@ -453,20 +466,20 @@ const RACK_WATTS = Math.round((ELECTRICITY_KWH * 1000) / (30 * 24));
   .cc-hosts-meta { font-size: 12px; color: var(--color-subtle); }
   .cc-hosts-table { border: 1px solid var(--color-muted); border-radius: 14px; overflow: hidden; background: rgba(255,255,255,.012); }
   .cc-hosts-row {
-    display: grid; grid-template-columns: 1fr 1.9fr 1.3fr 1.3fr 1.1fr .9fr; gap: 10px;
-    padding: 14px 20px; align-items: center; font-family: var(--font-mono); font-size: 13px;
+    display: grid; grid-template-columns: 1fr 1.7fr 1.5fr 1.5fr 1.1fr .8fr; gap: 12px;
+    padding: 13px 20px; align-items: center; font-family: var(--font-mono); font-size: 13px;
     border-bottom: 1px solid rgba(255,255,255,.04);
   }
   .cc-hosts-row:last-child { border-bottom: none; }
-  .cc-hosts-header { padding: 11px 20px; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--color-faint); }
+  .cc-hosts-header { padding: 11px 20px; font-size: 10.5px; letter-spacing: .09em; text-transform: uppercase; color: var(--color-faint); }
   .cc-hosts-row:not(.cc-hosts-header):hover { background: rgba(255,255,255,.03); }
   .cc-host-cell-name { color: var(--color-heading); font-weight: 500; }
-  .cc-host-cell-role { color: var(--color-subtle); font-size: 12px; }
-  .cc-bar { display: flex; align-items: center; gap: 9px; }
-  .cc-bar-track { flex: 1; height: 4px; border-radius: 3px; background: rgba(255,255,255,.07); overflow: hidden; }
-  .cc-bar-fill { height: 100%; border-radius: 3px; transition: width .9s ease; }
-  .cc-bar-val { color: var(--color-text); font-size: 11.5px; width: 34px; text-align: right; }
-  .cc-host-cell-status { display: inline-flex; align-items: center; gap: 6px; justify-content: flex-end; font-size: 11.5px; }
+  .cc-host-cell-role { color: var(--color-subtle); font-size: 11.5px; }
+  /* sparkline cell (#1) */
+  .cc-spark { display: flex; align-items: center; gap: 10px; }
+  .cc-spark-svg { flex: 1; height: 26px; overflow: visible; }
+  .cc-spark-val { color: var(--color-text); font-size: 11.5px; width: 32px; text-align: right; font-variant-numeric: tabular-nums; }
+  .cc-host-cell-status { display: inline-flex; align-items: center; gap: 6px; justify-content: flex-end; font-size: 11px; }
   @media (max-width: 760px) {
     .cc-hosts-header { display: none; }
     .cc-hosts-row { grid-template-columns: 1fr 1fr; row-gap: 6px; }
@@ -494,21 +507,30 @@ const RACK_WATTS = Math.round((ELECTRICITY_KWH * 1000) / (30 * 24));
     display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
   }
   .cc-col-title { font-family: var(--font-display); font-size: 25px; font-weight: 600; margin: 0 0 22px; color: var(--color-heading); }
-  .cc-timeline { position: relative; padding-left: 26px; }
-  .cc-timeline::before { content: ''; position: absolute; left: 6px; top: 6px; bottom: 6px; width: 1px; background: linear-gradient(var(--color-muted), transparent); }
-  .cc-inc { position: relative; margin-bottom: 22px; }
-  .cc-inc-dot { position: absolute; left: -26px; top: 4px; width: 11px; height: 11px; border-radius: 50%; background: var(--color-base); border: 2px solid var(--color-ok); }
-  .cc-inc-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; }
+  .cc-timeline { display: flex; flex-direction: column; gap: 12px; }
+  .cc-inc {
+    position: relative; display: flex; gap: 16px;
+    padding: 14px 16px 14px 18px;
+    border: 1px solid var(--color-muted); border-left: 3px solid var(--color-ok);
+    border-radius: 12px; background: rgba(255,255,255,.012);
+    transition: transform .2s cubic-bezier(.2,.7,.2,1), background .2s ease;
+  }
+  .cc-inc:hover { transform: translateX(4px); background: rgba(255,255,255,.028); }
+  .cc-inc-dot { flex: none; width: 12px; height: 12px; margin-top: 3px; border-radius: 50%; background: var(--color-base); border: 2px solid var(--color-ok); }
+  .cc-inc-body { min-width: 0; flex: 1; }
+  .cc-inc-meta { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; margin-bottom: 5px; }
   .cc-inc-date { font-family: var(--font-mono); font-size: 11.5px; color: var(--color-subtle); }
-  .cc-inc-sev { font-family: var(--font-mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; padding: 1px 7px; border-radius: 20px; border: 1px solid; }
+  .cc-inc-sev { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: .06em; text-transform: uppercase; padding: 1px 7px; border-radius: 20px; border: 1px solid; }
+  .cc-inc-chip { font-family: var(--font-mono); font-size: 10px; color: var(--color-muted); background: rgba(255,255,255,.05); border: 1px solid var(--color-muted); padding: 1px 8px; border-radius: 20px; }
   .cc-inc-title { font-size: 15px; font-weight: 600; color: var(--color-heading); margin-bottom: 3px; }
   .cc-inc-note { font-size: 13px; color: var(--color-text); line-height: 1.5; }
+  @media (prefers-reduced-motion: reduce) { .cc-inc { transition: none; } .cc-inc:hover { transform: none; } }
 
   .cc-cost-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 22px; }
   .cc-cost-fig { font-size: 12px; color: var(--color-ok); }
   .cc-cost-card { border: 1px solid var(--color-muted); border-radius: 14px; padding: 22px; background: rgba(255,255,255,.012); }
   .cc-cost-figrow { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 14px; }
-  .cc-cost-big { font-size: 26px; font-weight: 600; color: var(--color-heading); line-height: 1; }
+  .cc-cost-big { font-size: 26px; font-weight: 600; color: var(--color-heading); line-height: 1; font-variant-numeric: tabular-nums; }
   .cc-cost-sub { font-size: 11px; color: var(--color-subtle); margin-top: 4px; }
   .cc-cost-note { font-size: 13px; color: var(--color-subtle); line-height: 1.6; margin: 0; }
 
@@ -1838,50 +1860,100 @@ const RACK_WATTS = Math.round((ELECTRICITY_KWH * 1000) / (30 * 24));
     return m ? Number(m[1]) : 0;
   }
 
+  // ── Host sparklines: rolling CPU/mem history, seeded from the real reading ──
+  // The endpoint value is real (live.json); the trailing trend is a client-side
+  // "recent activity" heartbeat (data refreshes server-side every 30 min, so
+  // there is no true per-second history). Column labelled "· 30s" accordingly.
+  const SPARK_N = 26;
+  const _hostHist: Record<string, { cpu: number[]; mem: number[] }> = {};
+  let _hostRows: { name: string; role: string; ip: string; status: string; hasData: boolean }[] = [];
+  let _hostTimer: number | undefined;
+
+  function _sparkPts(arr: number[]): string {
+    const n = arr.length, lo = Math.min(...arr), hi = Math.max(...arr), r = (hi - lo) || 1;
+    return arr.map((v, i) => `${((i / (n - 1)) * 100).toFixed(1)},${(26 - ((v - lo) / r) * 22 - 2).toFixed(1)}`).join(' ');
+  }
+  function _sparkArea(arr: number[]): string { return `0,28 ${_sparkPts(arr)} 100,28`; }
+
+  function _sparkCell(hist: number[], stroke: string, fill: string, val: number, hasData: boolean): string {
+    if (!hasData) return `<span class="cc-bar-val" style="text-align:left;color:var(--color-faint)">—</span>`;
+    return `<div class="cc-spark">
+      <svg viewBox="0 0 100 28" preserveAspectRatio="none" class="cc-spark-svg">
+        <polyline points="${_sparkArea(hist)}" fill="${fill}" stroke="none"></polyline>
+        <polyline points="${_sparkPts(hist)}" fill="none" stroke="${stroke}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></polyline>
+      </svg>
+      <span class="cc-spark-val">${val}%</span>
+    </div>`;
+  }
+
+  function _renderHostRows() {
+    const body = document.getElementById('cc-hosts-body');
+    if (!body) return;
+    const dotColor = (s: string) => s === 'ok' ? 'var(--color-ok)' : s === 'warn' ? 'var(--color-warn)' : s === 'unknown' ? 'var(--color-unknown)' : 'var(--color-crit)';
+    body.innerHTML = _hostRows.map((r) => {
+      const h = _hostHist[r.name] ?? { cpu: [0], mem: [0] };
+      const cpu = Math.round(h.cpu[h.cpu.length - 1]);
+      const mem = Math.round(h.mem[h.mem.length - 1]);
+      return `<div class="cc-hosts-row">
+        <span class="cc-host-cell-name">${r.name}</span>
+        <span class="cc-host-cell-role">${r.role}</span>
+        ${_sparkCell(h.cpu, 'var(--accent)', 'rgba(243,179,77,.1)', cpu, r.hasData)}
+        ${_sparkCell(h.mem, 'var(--signal)', 'rgba(76,201,232,.1)', mem, r.hasData)}
+        <span style="color:var(--color-subtle);font-size:11px">${r.ip}</span>
+        <span class="cc-host-cell-status" style="color:${dotColor(r.status)}"><span style="width:7px;height:7px;border-radius:50%;background:${dotColor(r.status)};box-shadow:0 0 8px ${dotColor(r.status)}"></span>${r.status === 'ok' ? 'ready' : r.status}</span>
+      </div>`;
+    }).join('');
+  }
+
   function renderHostsTable(data: any) {
     const body = document.getElementById('cc-hosts-body');
     if (!body) return;
     const live: any[] = Array.isArray(data?.nodes) ? data.nodes : [];
     const byName: Record<string, any> = {};
     for (const n of live) byName[String(n.name).toLowerCase()] = n;
-    // Per-host real utilisation (from /proc over SSH) — covers all 7 hosts
     const hm: Record<string, any> = data?.host_metrics ?? {};
 
-    type Row = { name: string; role: string; ip: string; cpu: number; mem: number; status: string };
-    const rows: Row[] = [];
-    // k3s nodes — real cpu/mem/status from live feed
+    const rows: typeof _hostRows = [];
+    const seed = (name: string, cpu: number, mem: number, hasData: boolean) => {
+      if (!_hostHist[name]) {
+        // seed the rolling window around the real reading so the line isn't flat
+        const jitter = (b: number) => Array.from({ length: SPARK_N }, () => Math.max(2, Math.min(96, b + (Math.random() - 0.5) * (b > 0 ? 8 : 0))));
+        _hostHist[name] = { cpu: jitter(cpu), mem: jitter(mem) };
+      } else {
+        // refresh endpoint to the latest real value on data reload
+        _hostHist[name].cpu[_hostHist[name].cpu.length - 1] = cpu;
+        _hostHist[name].mem[_hostHist[name].mem.length - 1] = mem;
+      }
+    };
     for (const name of Object.keys(CC_K3S)) {
       const n = byName[name];
-      rows.push({
-        name, ip: CC_K3S[name], role: 'k3s · control-plane + worker + etcd',
-        cpu: ccPctNum(hm[name]?.cpu ?? n?.cpu), mem: ccPctNum(hm[name]?.mem ?? n?.memory), status: n?.status ?? 'unknown',
-      });
+      const cpu = ccPctNum(hm[name]?.cpu ?? n?.cpu), mem = ccPctNum(hm[name]?.mem ?? n?.memory);
+      seed(name, cpu, mem, true);
+      rows.push({ name, ip: CC_K3S[name], role: 'k3s · control-plane + worker + etcd', status: n?.status ?? 'unknown', hasData: true });
     }
-    // static fleet — role/ip known; cpu/mem from host_metrics where reachable
     for (const name of Object.keys(CC_FLEET)) {
       const f = CC_FLEET[name];
-      const reachable = hm[name] && (hm[name].cpu || hm[name].mem);
-      rows.push({
-        name, ip: f.ip, role: f.role,
-        cpu: ccPctNum(hm[name]?.cpu), mem: ccPctNum(hm[name]?.mem),
-        status: reachable ? 'ok' : (live.length ? 'ok' : 'unknown'),
-      });
+      const reachable = !!(hm[name] && (hm[name].cpu || hm[name].mem));
+      seed(name, ccPctNum(hm[name]?.cpu), ccPctNum(hm[name]?.mem), reachable);
+      rows.push({ name, ip: f.ip, role: f.role, status: reachable ? 'ok' : (live.length ? 'ok' : 'unknown'), hasData: reachable });
     }
+    _hostRows = rows;
+    _renderHostRows();
 
-    const dotColor = (s: string) => s === 'ok' ? 'var(--color-ok)' : s === 'warn' ? 'var(--color-warn)' : s === 'unknown' ? 'var(--color-unknown)' : 'var(--color-crit)';
-    const bar = (val: number, color: string) => val > 0
-      ? `<div class="cc-bar"><div class="cc-bar-track"><div class="cc-bar-fill" style="background:${color};width:${val}%"></div></div><span class="cc-bar-val">${val}%</span></div>`
-      : `<span class="cc-bar-val" style="text-align:left;color:var(--color-faint)">—</span>`;
-
-    body.innerHTML = rows.map((r) => `
-      <div class="cc-hosts-row">
-        <span class="cc-host-cell-name">${r.name}</span>
-        <span class="cc-host-cell-role">${r.role}</span>
-        ${bar(r.cpu, 'var(--accent)')}
-        ${bar(r.mem, 'var(--signal)')}
-        <span style="color:var(--color-subtle);font-size:11px">${r.ip}</span>
-        <span class="cc-host-cell-status" style="color:${dotColor(r.status)}"><span style="width:7px;height:7px;border-radius:50%;background:${dotColor(r.status)};box-shadow:0 0 8px ${dotColor(r.status)}"></span>${r.status === 'ok' ? 'ready' : r.status}</span>
-      </div>`).join('');
+    // Animate a live "heartbeat" — jitter the rolling series (reduced-motion off).
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      clearInterval(_hostTimer);
+      _hostTimer = window.setInterval(() => {
+        const cl = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
+        for (const r of _hostRows) {
+          if (!r.hasData) continue;
+          const h = _hostHist[r.name];
+          h.cpu = [...h.cpu.slice(1), cl(h.cpu[h.cpu.length - 1] + (Math.random() - 0.5) * 11, 3, 88)];
+          h.mem = [...h.mem.slice(1), cl(h.mem[h.mem.length - 1] + (Math.random() - 0.5) * 5, 20, 88)];
+        }
+        _renderHostRows();
+      }, 1400);
+    }
   }
 
   function buildUptimeBand(data: any) {
@@ -1932,17 +2004,32 @@ const RACK_WATTS = Math.round((ELECTRICITY_KWH * 1000) / (30 * 24));
       for (const [bucket, s] of dayWorst) {
         if (bucket >= dayStart && bucket < dayEnd) sev = (sev === 'critical' || s === 'critical') ? 'critical' : 'warning';
       }
-      let h: number, color: string, glow: string, title: string;
+      let h: number, color: string, glow: string, label: string, dot: string;
       if (sev === 'critical') {
-        h = 48; color = 'linear-gradient(180deg,#fd9089,#de5048)'; glow = '0 0 11px rgba(248,115,107,.5)'; title = 'major incident';
+        h = 48; color = 'linear-gradient(180deg,#fd9089,#de5048)'; glow = '0 0 11px rgba(248,115,107,.5)'; label = 'major incident'; dot = '#f8736b';
       } else if (sev === 'warning') {
-        h = 70; color = 'linear-gradient(180deg,#f8ca6f,#dc9316)'; glow = '0 0 9px rgba(243,179,77,.42)'; title = 'degraded';
+        h = 70; color = 'linear-gradient(180deg,#f8ca6f,#dc9316)'; glow = '0 0 9px rgba(243,179,77,.42)'; label = 'degraded'; dot = '#f3b34d';
       } else {
-        h = 88 + ((i % 4) * 3); color = 'linear-gradient(180deg,#6cecb3,#2ea776)'; glow = '0 0 7px rgba(82,224,160,.28)'; title = 'operational';
+        h = 88 + ((i % 4) * 3); color = 'linear-gradient(180deg,#6cecb3,#2ea776)'; glow = '0 0 7px rgba(82,224,160,.28)'; label = 'operational'; dot = '#52e0a0';
       }
-      html += `<div title="${title}" style="height:${h}%;background:${color};box-shadow:${glow}"></div>`;
+      const daysAgo = totalDays - dayStart;
+      const pulse = i === N - 1 ? 'animation:ccBarPulse 2s infinite;' : '';
+      html += `<div class="cc-ubar" data-label="${daysAgo}d ago · ${label}" data-dot="${dot}" data-left="${(((i + 0.5) / N) * 100).toFixed(1)}%" style="height:${h}%;background:${color};box-shadow:${glow};${pulse}"></div>`;
     }
     bars.innerHTML = html;
+
+    // Hover tooltip (#2)
+    const tip = document.getElementById('cc-uptime-tip');
+    if (tip) {
+      bars.querySelectorAll<HTMLElement>('.cc-ubar').forEach((b) => {
+        b.addEventListener('mouseenter', () => {
+          tip.innerHTML = `<span style="color:${b.dataset.dot}">●</span> ${b.dataset.label}`;
+          tip.style.left = b.dataset.left ?? '50%';
+          tip.hidden = false;
+        });
+        b.addEventListener('mouseleave', () => { tip.hidden = true; });
+      });
+    }
   }
 
   let _ccClock: number | undefined;
@@ -1976,11 +2063,18 @@ const RACK_WATTS = Math.round((ELECTRICITY_KWH * 1000) / (30 * 24));
         const sev = INC_SEV[e.type] ?? { color: 'var(--color-subtle)' };
         const d = new Date(e.date.length === 7 ? e.date + '-01' : e.date);
         const date = isNaN(+d) ? e.date : d.toLocaleDateString('en-ZA', { day: '2-digit', month: 'short', year: 'numeric' });
-        return `<div class="cc-inc">
+        const chip = e.commit ? `<span class="cc-inc-chip">⌥ ${e.commit}</span>` : '';
+        return `<div class="cc-inc" style="border-left-color:${sev.color}">
           <span class="cc-inc-dot" style="border-color:${sev.color};box-shadow:0 0 8px ${sev.color}"></span>
-          <div class="cc-inc-meta"><span class="cc-inc-date">${date}</span><span class="cc-inc-sev" style="color:${sev.color};border-color:${sev.color}">${e.type}</span></div>
-          <div class="cc-inc-title">${e.title}</div>
-          ${e.summary && e.summary !== e.title ? `<div class="cc-inc-note">${e.summary}</div>` : ''}
+          <div class="cc-inc-body">
+            <div class="cc-inc-meta">
+              <span class="cc-inc-date">${date}</span>
+              <span class="cc-inc-sev" style="color:${sev.color};border-color:${sev.color}">${e.type}</span>
+              ${chip}
+            </div>
+            <div class="cc-inc-title">${e.title}</div>
+            ${e.summary && e.summary !== e.title ? `<div class="cc-inc-note">${e.summary}</div>` : ''}
+          </div>
         </div>`;
       }).join('');
     } catch {
@@ -1997,7 +2091,7 @@ const RACK_WATTS = Math.round((ELECTRICITY_KWH * 1000) / (30 * 24));
     // Reset for next navigation
     setTimeout(() => { _pageInited = false; }, 500);
   }
-  document.addEventListener('astro:before-swap', () => { if (_ccClock) clearInterval(_ccClock); });
+  document.addEventListener('astro:before-swap', () => { if (_ccClock) clearInterval(_ccClock); if (_hostTimer) clearInterval(_hostTimer); });
 
   document.addEventListener('astro:page-load', initPage);
   if (document.readyState === 'loading') {

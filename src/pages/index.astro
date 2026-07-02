@@ -442,7 +442,7 @@ const RACK_WATTS = Math.round((ELECTRICITY_KWH * 1000) / (30 * 24));
   .cc-uptime-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
   .cc-uptime-title-row { display: flex; align-items: baseline; gap: 14px; }
   .cc-uptime-title { font-family: var(--font-display); font-size: 22px; font-weight: 600; color: var(--color-heading); }
-  .cc-uptime-stat { font-size: 13px; color: var(--color-ok); font-variant-numeric: tabular-nums; }
+  .cc-uptime-stat { font-size: 14px; font-weight: 500; color: var(--color-ok); font-variant-numeric: tabular-nums; }
   .cc-uptime-meta { font-size: 11.5px; color: var(--color-subtle); }
   .cc-uptime-track { position: relative; padding-top: 38px; }
   .cc-uptime-tip {
@@ -1991,11 +1991,18 @@ const RACK_WATTS = Math.round((ELECTRICITY_KWH * 1000) / (30 * 24));
     // Days before the cluster existed (within the window) render greyed/pending.
     const preLaunchAgo = start && !isNaN(+start) ? dayKey(start) : WINDOW;
 
-    if (ageEl) ageEl.textContent = `${WINDOW}d`;
+    // Incident-free days % — honest: share of observed days with zero incidents.
+    // Denominator is the observed window (capped at the cluster's own age so a
+    // young cluster isn't penalised for days before it existed).
+    const observedDays = Math.max(1, Math.min(WINDOW, preLaunchAgo + 1));
+    const incidentDays = dayWorst.size;
+    const cleanPct = Math.max(0, (observedDays - incidentDays) / observedDays) * 100;
+    const cleanStr = cleanPct >= 99.95 ? '100%' : cleanPct.toFixed(1) + '%';
+    if (ageEl) ageEl.textContent = `${cleanStr} incident-free · ${WINDOW}d`;
     if (metaEl) {
       metaEl.textContent = inWindow === 0
         ? `no cluster incidents in the last ${WINDOW} days`
-        : `${inWindow} cluster incident${inWindow === 1 ? '' : 's'} in the last ${WINDOW} days`;
+        : `${inWindow} cluster incident${inWindow === 1 ? '' : 's'} across ${incidentDays} day${incidentDays === 1 ? '' : 's'} · last ${WINDOW} days`;
     }
 
     let html = '';

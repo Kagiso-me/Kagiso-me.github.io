@@ -348,6 +348,72 @@ print(json.dumps(out))
 ' 2>/dev/null || echo "[]"
 }
 
+# ── Per-app uptime (real, from the Beesly incident journal's app attribution) ──
+# Groups genuine user-facing incidents by the `app` column and computes uptime over a
+# rolling window. Same honesty rules as build_outages: exclude self-healing churn (only
+# real outages count). Apps with zero recorded incidents report has_data=false so the UI
+# shows "no incidents recorded" — NOT a fabricated 100%. Empty [] on any failure.
+#
+# The app roster is fixed here (the user-facing apps) so every app renders even before it
+# ever has an incident; incident downtime is LEFT-JOINed on. `app` values match derive_app
+# in the Beesly journal (beesly/lib/journal.sh).
+APP_UPTIME_WINDOW_DAYS="${APP_UPTIME_WINDOW_DAYS:-90}"
+build_app_uptime() {
+  local win="$APP_UPTIME_WINDOW_DAYS" raw
+  raw=$(kubectl exec -n databases postgresql-primary-0 -c postgresql -- \
+    psql -U beesly -d beesly -At -F $'\t' -c \
+    "WITH roster(app) AS (VALUES
+        ('immich'),('nextcloud'),('vaultwarden'),('grafana'),
+        ('authentik'),('postgresql'),('miniflux'),('seerr')),
+      inc AS (
+        SELECT app,
+               COALESCE(recovery_seconds,
+                        EXTRACT(EPOCH FROM (resolved_at - fired_at))::int, 0) AS secs
+        FROM incidents
+        WHERE app IS NOT NULL
+          AND fired_at >= now() - interval '${win} days'
+          AND COALESCE(auto_remediated, false) = false
+          AND alertname NOT IN ('Pod crashloop', 'Flux reconcile'))
+      SELECT r.app,
+             COUNT(i.secs)                        AS incidents,
+             COALESCE(SUM(GREATEST(i.secs,0)),0)  AS down_secs
+      FROM roster r LEFT JOIN inc i ON i.app = r.app
+      GROUP BY r.app ORDER BY r.app;" 2>/dev/null) || raw=""
+
+  if [[ -z "$raw" ]]; then
+    echo "[]"
+    return
+  fi
+
+  printf '%s\n' "$raw" | WINDOW_DAYS="$win" python3 -c '
+import sys, json, os
+win_days = int(os.environ.get("WINDOW_DAYS", "90"))
+window_secs = win_days * 86400
+out = []
+for line in sys.stdin:
+    line = line.rstrip("\n")
+    if not line.strip():
+        continue
+    parts = line.split("\t")
+    if len(parts) < 3:
+        continue
+    app, incidents, down = parts[0], int(parts[1]), int(parts[2])
+    has_data = incidents > 0
+    # Uptime only when we have real signal; otherwise report null and flag has_data=false
+    # so the UI renders "no incidents recorded" instead of a fake perfect measurement.
+    pct = round(100.0 * (1 - down / window_secs), 4) if has_data else None
+    out.append({
+        "app": app,
+        "incidents": incidents,
+        "downtime_min": round(down / 60),
+        "uptime_pct": pct,
+        "window_days": win_days,
+        "has_data": has_data,
+    })
+print(json.dumps(out))
+' 2>/dev/null || echo "[]"
+}
+
 # ── Backblaze B2 cloud sync (TrueNAS cloudsync.query via WebSocket) ───────────
 build_b2() {
   local api_key="${TRUENAS_API_KEY:-}"
@@ -1133,6 +1199,7 @@ except:
 NODES=$(build_nodes)
 HOST_METRICS=$(build_host_metrics)
 OUTAGES=$(build_outages)
+APP_UPTIME=$(build_app_uptime)
 CLUSTER_START=$(build_cluster_start)
 FLUX=$(build_flux)
 BACKUP=$(build_backup)
@@ -1223,7 +1290,9 @@ fi
 TMP_NODES=$(mktemp); TMP_FLUX=$(mktemp); TMP_SVC_DATA=$(mktemp); TMP_NETWORK=$(mktemp)
 TMP_BRAN=$(mktemp); TMP_UPS=$(mktemp); TMP_DEPLOY=$(mktemp); TMP_STORAGE=$(mktemp)
 TMP_CONTRIBS=$(mktemp); TMP_HOSTMETRICS=$(mktemp); TMP_OUTAGES=$(mktemp)
+TMP_APP_UPTIME=$(mktemp)
 echo "$OUTAGES"      > "$TMP_OUTAGES"
+echo "$APP_UPTIME"   > "$TMP_APP_UPTIME"
 echo "$NODES"        > "$TMP_NODES"
 echo "$FLUX"         > "$TMP_FLUX"
 echo "$SERVICES"     > "$TMP_SVC_DATA"
@@ -1235,7 +1304,7 @@ echo "$STORAGE"      > "$TMP_STORAGE"
 echo "$CONTRIBS"     > "$TMP_CONTRIBS"
 echo "$HOST_METRICS" > "$TMP_HOSTMETRICS"
 
-python3 - "$TMP_NODES" "$TMP_FLUX" "$TMP_SVC_DATA" "$TMP_NETWORK" "$TMP_BRAN" "$TMP_UPS" "$TMP_DEPLOY" "$TMP_STORAGE" "$TMP_CONTRIBS" "$TMP_HOSTMETRICS" "$TMP_OUTAGES" <<PYEOF
+python3 - "$TMP_NODES" "$TMP_FLUX" "$TMP_SVC_DATA" "$TMP_NETWORK" "$TMP_BRAN" "$TMP_UPS" "$TMP_DEPLOY" "$TMP_STORAGE" "$TMP_CONTRIBS" "$TMP_HOSTMETRICS" "$TMP_OUTAGES" "$TMP_APP_UPTIME" <<PYEOF
 import json, sys
 
 with open(sys.argv[1]) as f: nodes       = json.load(f)
@@ -1249,6 +1318,7 @@ with open(sys.argv[8]) as f: storage     = json.load(f)
 with open(sys.argv[9]) as f: contribs    = json.load(f)
 with open(sys.argv[10]) as f: host_metrics = json.load(f)
 with open(sys.argv[11]) as f: outages     = json.load(f)
+with open(sys.argv[12]) as f: app_uptime  = json.load(f)
 
 # Prefer real utilisation (from /proc over SSH) over request-based % for k3s nodes
 for n in nodes:
@@ -1274,6 +1344,7 @@ data = {
   'fetched_at':    '${NOW}',
   'cluster_start': '${CLUSTER_START}' or None,
   'outages':       outages,
+  'app_uptime':    app_uptime,
   'cards': [
     {'label': 'Workloads',      'value': '—' if total == 0 else f'{running}/{total}', 'sub': wl_sub, 'status': wl_status},
     {'label': 'Flux',           'value': '${FLUX_LABEL}',        'sub': '${FLUX_SYNC}',       'status': '${FLUX_STATUS}'},
@@ -1298,7 +1369,7 @@ data = {
 print(json.dumps(data, indent=2))
 PYEOF
 
-rm -f "$TMP_NODES" "$TMP_FLUX" "$TMP_SVC_DATA" "$TMP_NETWORK" "$TMP_BRAN" "$TMP_UPS" "$TMP_DEPLOY" "$TMP_STORAGE" "$TMP_CONTRIBS" "$TMP_HOSTMETRICS" "$TMP_OUTAGES"
+rm -f "$TMP_NODES" "$TMP_FLUX" "$TMP_SVC_DATA" "$TMP_NETWORK" "$TMP_BRAN" "$TMP_UPS" "$TMP_DEPLOY" "$TMP_STORAGE" "$TMP_CONTRIBS" "$TMP_HOSTMETRICS" "$TMP_OUTAGES" "$TMP_APP_UPTIME"
 
 # ── Write maintenance.json — active only when no nodes are ready ──────────────
 READY_NODES=$(echo "$NODES" | python3 -c "

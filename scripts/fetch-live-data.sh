@@ -348,37 +348,28 @@ print(json.dumps(out))
 ' 2>/dev/null || echo "[]"
 }
 
-# ── Per-app uptime (real, from the Beesly incident journal's app attribution) ──
-# Groups genuine user-facing incidents by the `app` column and computes uptime over a
-# rolling window. Same honesty rules as build_outages: exclude self-healing churn (only
-# real outages count). Apps with zero recorded incidents report has_data=false so the UI
-# shows "no incidents recorded" — NOT a fabricated 100%. Empty [] on any failure.
-#
-# The app roster is fixed here (the user-facing apps) so every app renders even before it
-# ever has an incident; incident downtime is LEFT-JOINed on. `app` values match derive_app
-# in the Beesly journal (beesly/lib/journal.sh).
-APP_UPTIME_WINDOW_DAYS="${APP_UPTIME_WINDOW_DAYS:-90}"
+# ── Per-app uptime (real, from Gatus active probing) ──────────────────────────
+# Gatus probes each public app endpoint every 60s and persists hourly rollups in its
+# central Postgres `endpoint_uptimes` table (total/successful executions + response time,
+# in ms). We aggregate those buckets over a rolling window into a true uptime % and average
+# latency — real measured reachability, unlike the old incident-derived version which only
+# knew "no incident was logged". The endpoint roster is whatever Gatus is configured to
+# probe (apps/base/gatus/configmap.yaml), so this stays in sync with the config.
+# has_data=false only when an endpoint has no rollups yet. Empty [] on any failure.
+APP_UPTIME_WINDOW_DAYS="${APP_UPTIME_WINDOW_DAYS:-30}"
 build_app_uptime() {
   local win="$APP_UPTIME_WINDOW_DAYS" raw
   raw=$(kubectl exec -n databases postgresql-primary-0 -c postgresql -- \
-    psql -U beesly -d beesly -At -F $'\t' -c \
-    "WITH roster(app) AS (VALUES
-        ('immich'),('nextcloud'),('vaultwarden'),('grafana'),
-        ('authentik'),('postgresql'),('miniflux'),('seerr')),
-      inc AS (
-        SELECT app,
-               COALESCE(recovery_seconds,
-                        EXTRACT(EPOCH FROM (resolved_at - fired_at))::int, 0) AS secs
-        FROM incidents
-        WHERE app IS NOT NULL
-          AND fired_at >= now() - interval '${win} days'
-          AND COALESCE(auto_remediated, false) = false
-          AND alertname NOT IN ('Pod crashloop', 'Flux reconcile'))
-      SELECT r.app,
-             COUNT(i.secs)                        AS incidents,
-             COALESCE(SUM(GREATEST(i.secs,0)),0)  AS down_secs
-      FROM roster r LEFT JOIN inc i ON i.app = r.app
-      GROUP BY r.app ORDER BY r.app;" 2>/dev/null) || raw=""
+    psql -U gatus -d gatus -At -F $'\t' -c \
+    "SELECT e.endpoint_key,
+            SUM(u.total_executions),
+            SUM(u.successful_executions),
+            ROUND(SUM(u.total_response_time)::numeric
+                  / NULLIF(SUM(u.total_executions),0), 0)
+     FROM endpoint_uptimes u JOIN endpoints e USING (endpoint_id)
+     WHERE u.hour_unix_timestamp >= EXTRACT(EPOCH FROM now() - interval '${win} days')
+     GROUP BY e.endpoint_key
+     ORDER BY e.endpoint_key;" 2>/dev/null) || raw=""
 
   if [[ -z "$raw" ]]; then
     echo "[]"
@@ -387,26 +378,28 @@ build_app_uptime() {
 
   printf '%s\n' "$raw" | WINDOW_DAYS="$win" python3 -c '
 import sys, json, os
-win_days = int(os.environ.get("WINDOW_DAYS", "90"))
-window_secs = win_days * 86400
+win_days = int(os.environ.get("WINDOW_DAYS", "30"))
 out = []
 for line in sys.stdin:
     line = line.rstrip("\n")
     if not line.strip():
         continue
     parts = line.split("\t")
-    if len(parts) < 3:
+    if len(parts) < 4:
         continue
-    app, incidents, down = parts[0], int(parts[1]), int(parts[2])
-    has_data = incidents > 0
-    # Uptime only when we have real signal; otherwise report null and flag has_data=false
-    # so the UI renders "no incidents recorded" instead of a fake perfect measurement.
-    pct = round(100.0 * (1 - down / window_secs), 4) if has_data else None
+    key, total, ok, avg_ms = parts[0], int(parts[1]), int(parts[2]), parts[3]
+    # Gatus keys are "<group>_<name>". Split once; the app name is the remainder.
+    group, _, app = key.partition("_")
+    if not app:
+        app, group = group, ""
+    has_data = total > 0
+    pct = round(100.0 * ok / total, 3) if has_data else None
     out.append({
         "app": app,
-        "incidents": incidents,
-        "downtime_min": round(down / 60),
+        "group": group,
         "uptime_pct": pct,
+        "avg_ms": int(float(avg_ms)) if avg_ms not in ("", None) else None,
+        "checks": total,
         "window_days": win_days,
         "has_data": has_data,
     })

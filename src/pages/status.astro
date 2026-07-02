@@ -1344,26 +1344,30 @@ import Layout from '../layouts/Layout.astro';
         }).join('');
       }
 
-      // Service Uptime — per-app, from the Beesly incident journal's app attribution.
-      // has_data=false → "no incidents recorded" (honest), NOT a fabricated 100%.
+      // Service Uptime — per-app, measured by Gatus (active probe every 60s).
+      // Real uptime % + avg latency over a rolling window. has_data=false only before
+      // an endpoint has any rollups yet ("measuring…"), never a fabricated 100%.
       const uptimeGrid = document.getElementById('app-uptime-grid');
       if (uptimeGrid && Array.isArray(data.app_uptime)) {
         const APP_TITLES: Record<string, string> = {
           immich: 'Immich', nextcloud: 'Nextcloud', vaultwarden: 'Vaultwarden',
           grafana: 'Grafana', authentik: 'Authentik', postgresql: 'PostgreSQL',
-          miniflux: 'Miniflux', seerr: 'Seerr',
+          miniflux: 'Miniflux', seerr: 'Seerr', plex: 'Plex',
         };
         const title = (a: string) => APP_TITLES[a] ?? (a.charAt(0).toUpperCase() + a.slice(1));
-        // Severity from uptime%: <99 crit, <99.9 warn, else ok. No data → its own class.
+        // Severity from uptime%: <95 crit, <99.5 warn, else ok. No data → its own class.
         const cls = (u: any) => !u.has_data ? 'nodata'
-          : u.uptime_pct < 99 ? 'crit' : u.uptime_pct < 99.9 ? 'warn' : '';
+          : u.uptime_pct < 95 ? 'crit' : u.uptime_pct < 99.5 ? 'warn' : '';
+        // Trim trailing zeros: 100.000 → 100, 99.870 → 99.87
+        const fmtPct = (p: number) => parseFloat(p.toFixed(3)).toString();
         uptimeGrid.innerHTML = data.app_uptime.map((u: any) => {
           const c = cls(u);
-          const pctText = u.has_data ? `${u.uptime_pct.toFixed(2)}%` : 'no incidents recorded';
+          const pctText = u.has_data ? `${fmtPct(u.uptime_pct)}%` : 'measuring…';
           const fillW = u.has_data ? Math.max(0, Math.min(100, u.uptime_pct)) : 0;
+          const lat = (u.avg_ms != null && u.has_data) ? ` · ${u.avg_ms}ms` : '';
           const meta = u.has_data
-            ? `${u.incidents} incident${u.incidents === 1 ? '' : 's'} · ${u.downtime_min}m down · ${u.window_days}d`
-            : `clean · ${u.window_days}d window`;
+            ? `${u.checks.toLocaleString()} checks${lat} · ${u.window_days}d`
+            : `awaiting first checks · ${u.window_days}d window`;
           return `
           <div class="uptime-card ${c}">
             <div class="uptime-card-head">

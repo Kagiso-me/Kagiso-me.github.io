@@ -1,13 +1,8 @@
 {
-  "updated": "2026-07-01T23:18:03Z",
-  "fetched_at": "2026-07-01T23:18:03Z",
+  "updated": "2026-07-02T01:30:27Z",
+  "fetched_at": "2026-07-02T01:30:27Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "outages": [
-    {
-      "date": "2026-06-30",
-      "severity": "warning",
-      "minutes": 0
-    },
     {
       "date": "2026-06-29",
       "severity": "warning",
@@ -17,7 +12,7 @@
   "cards": [
     {
       "label": "Workloads",
-      "value": "67/73",
+      "value": "70/72",
       "sub": "pods running",
       "status": "warn"
     },
@@ -29,25 +24,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "21h 14m ago",
+      "value": "23h 27m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "11h 18m ago",
+      "value": "1h 30m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "4h 18m ago",
+      "value": "30m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "22h 17m ago",
+      "value": "30m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -64,53 +59,53 @@
       "role": "control-plane",
       "status": "ok",
       "pods": "18/110",
-      "cpu": "22%",
-      "memory": "34%",
+      "cpu": "28%",
+      "memory": "48%",
       "pressure": []
     },
     {
       "name": "tyrion",
       "role": "control-plane",
       "status": "ok",
-      "pods": "22/110",
+      "pods": "21/110",
       "cpu": "23%",
-      "memory": "56%",
+      "memory": "55%",
       "pressure": []
     },
     {
       "name": "tywin",
       "role": "control-plane",
       "status": "ok",
-      "pods": "33/110",
-      "cpu": "26%",
+      "pods": "32/110",
+      "cpu": "27%",
       "memory": "45%",
       "pressure": []
     }
   ],
   "host_metrics": {
     "tywin": {
-      "cpu": "26%",
+      "cpu": "27%",
       "mem": "45%"
     },
     "jaime": {
-      "cpu": "22%",
-      "mem": "34%"
+      "cpu": "28%",
+      "mem": "48%"
     },
     "tyrion": {
       "cpu": "23%",
-      "mem": "56%"
+      "mem": "55%"
     },
     "varys": {
       "cpu": "0%",
-      "mem": "23%"
+      "mem": "22%"
     },
     "bronn": {
-      "cpu": "13%",
+      "cpu": "87%",
       "mem": "13%"
     },
     "bran": {
-      "cpu": "20%",
-      "mem": "46%"
+      "cpu": "16%",
+      "mem": "45%"
     }
   },
   "flux": {
@@ -224,7 +219,7 @@
       {
         "namespace": "flux-system",
         "name": "platform-trivy-operator",
-        "age": "3d14h",
+        "age": "3d16h",
         "ready": true
       },
       {
@@ -249,12 +244,12 @@
     },
     {
       "name": "Nextcloud",
-      "tag": "Nextcloud: offline",
-      "status": "crit"
+      "tag": "Nextcloud: online",
+      "status": "ok"
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 604.8 GB left",
+      "tag": "SABnzbd: downloading \u00b7 568.7 GB left",
       "status": "ok"
     },
     {
@@ -288,23 +283,23 @@
     }
   ],
   "network": {
-    "fw_hits": 1293466,
+    "fw_hits": 1295710,
     "fw_rate_per_hour": null,
-    "latency_ms": 48.4,
+    "latency_ms": 32.6,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 48.3,
+    "temp_c": 47.2,
     "temp_status": "ok",
-    "load": 0.57,
-    "mem_pct": 46.1
+    "load": 0.65,
+    "mem_pct": 45.0
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 452,
-    "runtime_str": "7m",
-    "load_pct": 36,
+    "runtime_s": 532,
+    "runtime_str": "8m",
+    "load_pct": 32,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
@@ -320,14 +315,14 @@
       "name": "tera",
       "used": "6.3 TB",
       "total": "7.9 TB",
-      "pct": 80.1,
+      "pct": 80.4,
       "status": "warn",
       "pool_status": "ONLINE",
       "healthy": true
     },
     {
       "name": "archive",
-      "used": "760.8 GB",
+      "used": "761.4 GB",
       "total": "4.0 TB",
       "pct": 19.1,
       "status": "ok",
@@ -336,9 +331,9 @@
     },
     {
       "name": "core",
-      "used": "119.1 GB",
+      "used": "119.8 GB",
       "total": "476.7 GB",
-      "pct": 25.0,
+      "pct": 25.1,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true

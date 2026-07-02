@@ -50,6 +50,7 @@ const umamiSiteId = import.meta.env.PUBLIC_UMAMI_SITE_ID;
     {umamiSrc && umamiSiteId && (
       <script is:inline defer src={umamiSrc} data-website-id={umamiSiteId}></script>
     )}
+    <noscript><style>.fade-up{opacity:1 !important;transform:none !important;}</style></noscript>
   </head>
   <body>
     <div id="cursor-glow" aria-hidden="true"></div>

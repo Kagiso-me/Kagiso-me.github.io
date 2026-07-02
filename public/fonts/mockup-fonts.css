@@ -30,3 +30,12 @@
 @font-face { font-family: 'Spectral'; font-style: italic; font-weight: 400; font-display: swap; src: url('/fonts/spectral-400-italic-latin.woff2') format('woff2'); }
 @font-face { font-family: 'Spectral'; font-style: normal; font-weight: 500; font-display: swap; src: url('/fonts/spectral-500-latin.woff2') format('woff2'); }
 @font-face { font-family: 'Spectral'; font-style: normal; font-weight: 600; font-display: swap; src: url('/fonts/spectral-600-latin.woff2') format('woff2'); }
+
+/* Newsreader — editorial serif (Status page headings) */
+@font-face {
+  font-family: 'Newsreader';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('/fonts/newsreader-var-latin.woff2') format('woff2');
+}

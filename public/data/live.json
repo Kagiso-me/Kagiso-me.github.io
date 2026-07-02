@@ -1,8 +1,13 @@
 {
-  "updated": "2026-07-02T16:20:39Z",
-  "fetched_at": "2026-07-02T16:20:39Z",
+  "updated": "2026-07-02T17:40:51Z",
+  "fetched_at": "2026-07-02T17:40:51Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "outages": [
+    {
+      "date": "2026-07-02",
+      "severity": "warning",
+      "minutes": 0
+    },
     {
       "date": "2026-07-02",
       "severity": "warning",
@@ -29,27 +34,27 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "14h 16m ago",
+      "value": "15h 36m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "16h 21m ago",
+      "value": "17h 41m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3m ago",
+      "value": "1h 23m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "15h 20m ago",
+      "value": "\u2014",
       "sub": "age keys \u00b7 varys",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "Backblaze B2",
@@ -64,8 +69,8 @@
       "role": "control-plane",
       "status": "ok",
       "pods": "19/110",
-      "cpu": "22%",
-      "memory": "32%",
+      "cpu": "16%",
+      "memory": "36%",
       "pressure": []
     },
     {
@@ -73,44 +78,41 @@
       "role": "control-plane",
       "status": "ok",
       "pods": "21/110",
-      "cpu": "31%",
-      "memory": "31%",
+      "cpu": "19%",
+      "memory": "30%",
       "pressure": []
     },
     {
       "name": "tywin",
       "role": "control-plane",
       "status": "ok",
-      "pods": "32/110",
-      "cpu": "31%",
-      "memory": "36%",
+      "pods": "31/110",
+      "cpu": "29%",
+      "memory": "39%",
       "pressure": []
     }
   ],
   "host_metrics": {
     "tywin": {
-      "cpu": "31%",
-      "mem": "36%"
+      "cpu": "29%",
+      "mem": "39%"
     },
     "jaime": {
-      "cpu": "22%",
-      "mem": "32%"
+      "cpu": "16%",
+      "mem": "36%"
     },
     "tyrion": {
-      "cpu": "31%",
-      "mem": "31%"
+      "cpu": "19%",
+      "mem": "30%"
     },
-    "varys": {
-      "cpu": "4%",
-      "mem": "21%"
-    },
+    "varys": {},
     "bronn": {
       "cpu": "2%",
       "mem": "10%"
     },
     "bran": {
-      "cpu": "43%",
-      "mem": "49%"
+      "cpu": "27%",
+      "mem": "46%"
     }
   },
   "flux": {
@@ -224,7 +226,7 @@
       {
         "namespace": "flux-system",
         "name": "platform-trivy-operator",
-        "age": "4d7h",
+        "age": "4d8h",
         "ready": true
       },
       {
@@ -288,23 +290,23 @@
     }
   ],
   "network": {
-    "fw_hits": 1313216,
+    "fw_hits": 1315444,
     "fw_rate_per_hour": null,
-    "latency_ms": 16.2,
+    "latency_ms": 9.6,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 43.5,
+    "temp_c": 47.2,
     "temp_status": "ok",
-    "load": 1.0,
-    "mem_pct": 49.7
+    "load": 0.71,
+    "mem_pct": 48.5
   },
   "ups": {
-    "charge": 64,
-    "runtime_s": 320,
-    "runtime_str": "5m",
-    "load_pct": 34,
+    "charge": 87,
+    "runtime_s": 564,
+    "runtime_str": "9m",
+    "load_pct": 29,
     "status": "OL CHRG",
     "nominal_w": 390,
     "on_battery": false,
@@ -350,14 +352,14 @@
       "2026-07-01": 52,
       "2026-06-30": 24,
       "2026-06-28": 19,
-      "2026-06-27": 18,
+      "2026-06-27": 10,
       "2026-06-26": 7,
       "2026-06-24": 7,
       "2026-06-22": 1,
       "2026-06-21": 4,
       "2026-06-19": 6
     },
-    "total": 150,
+    "total": 142,
     "active_days": 10
   }
 }

@@ -1,6 +1,6 @@
 {
-  "updated": "2026-07-02T17:40:51Z",
-  "fetched_at": "2026-07-02T17:40:51Z",
+  "updated": "2026-07-02T19:16:29Z",
+  "fetched_at": "2026-07-02T19:16:29Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "outages": [
     {
@@ -22,8 +22,8 @@
   "cards": [
     {
       "label": "Workloads",
-      "value": "70/72",
-      "sub": "pods running",
+      "value": "70/70",
+      "sub": "3 failed jobs",
       "status": "warn"
     },
     {
@@ -34,27 +34,27 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "15h 36m ago",
+      "value": "17h 11m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "17h 41m ago",
+      "value": "19h 16m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "1h 23m ago",
+      "value": "15m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "\u2014",
+      "value": "18h 16m ago",
       "sub": "age keys \u00b7 varys",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "Backblaze B2",
@@ -69,16 +69,16 @@
       "role": "control-plane",
       "status": "ok",
       "pods": "19/110",
-      "cpu": "16%",
-      "memory": "36%",
+      "cpu": "19%",
+      "memory": "37%",
       "pressure": []
     },
     {
       "name": "tyrion",
       "role": "control-plane",
       "status": "ok",
-      "pods": "21/110",
-      "cpu": "19%",
+      "pods": "20/110",
+      "cpu": "23%",
       "memory": "30%",
       "pressure": []
     },
@@ -87,32 +87,35 @@
       "role": "control-plane",
       "status": "ok",
       "pods": "31/110",
-      "cpu": "29%",
+      "cpu": "26%",
       "memory": "39%",
       "pressure": []
     }
   ],
   "host_metrics": {
     "tywin": {
-      "cpu": "29%",
+      "cpu": "26%",
       "mem": "39%"
     },
     "jaime": {
-      "cpu": "16%",
-      "mem": "36%"
+      "cpu": "19%",
+      "mem": "37%"
     },
     "tyrion": {
-      "cpu": "19%",
+      "cpu": "23%",
       "mem": "30%"
     },
-    "varys": {},
+    "varys": {
+      "cpu": "2%",
+      "mem": "17%"
+    },
     "bronn": {
       "cpu": "2%",
       "mem": "10%"
     },
     "bran": {
-      "cpu": "27%",
-      "mem": "46%"
+      "cpu": "19%",
+      "mem": "49%"
     }
   },
   "flux": {
@@ -226,7 +229,7 @@
       {
         "namespace": "flux-system",
         "name": "platform-trivy-operator",
-        "age": "4d8h",
+        "age": "4d10h",
         "ready": true
       },
       {
@@ -290,24 +293,24 @@
     }
   ],
   "network": {
-    "fw_hits": 1315444,
+    "fw_hits": 1317171,
     "fw_rate_per_hour": null,
-    "latency_ms": 9.6,
+    "latency_ms": 14.7,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
     "temp_c": 47.2,
     "temp_status": "ok",
-    "load": 0.71,
-    "mem_pct": 48.5
+    "load": 0.54,
+    "mem_pct": 48.4
   },
   "ups": {
-    "charge": 87,
-    "runtime_s": 564,
-    "runtime_str": "9m",
+    "charge": 100,
+    "runtime_s": 648,
+    "runtime_str": "10m",
     "load_pct": 29,
-    "status": "OL CHRG",
+    "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
     "dot": "ok"
@@ -329,7 +332,7 @@
     },
     {
       "name": "archive",
-      "used": "770.3 GB",
+      "used": "770.7 GB",
       "total": "4.0 TB",
       "pct": 19.3,
       "status": "ok",
@@ -338,9 +341,9 @@
     },
     {
       "name": "core",
-      "used": "121.3 GB",
+      "used": "121.4 GB",
       "total": "476.7 GB",
-      "pct": 25.4,
+      "pct": 25.5,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true

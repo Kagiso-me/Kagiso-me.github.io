@@ -264,6 +264,16 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </section>
 
+    <!-- ── Service Uptime (per-app, from the Beesly incident journal) ── -->
+    <section class="section fade-up" id="app-uptime-section" style="animation-delay:0.16s">
+      <h2 class="section-label">Service Uptime</h2>
+      <div class="uptime-grid" id="app-uptime-grid">
+        <div class="card skeleton" style="height:92px"></div>
+        <div class="card skeleton" style="height:92px"></div>
+        <div class="card skeleton" style="height:92px"></div>
+      </div>
+    </section>
+
     <!-- ── Nodes ── -->
     <section class="section fade-up" style="animation-delay:0.18s">
       <h2 class="section-label">Nodes</h2>
@@ -730,6 +740,87 @@ import Layout from '../layouts/Layout.astro';
   @keyframes shimmer {
     0%   { background-position: 200% 0; }
     100% { background-position: -200% 0; }
+  }
+
+  /* ── Service Uptime (per-app) ── */
+  #app-uptime-section:has(#app-uptime-grid:empty) { display: none; }
+
+  .uptime-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+  }
+
+  .uptime-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-muted);
+    border-left: 3px solid var(--color-ok);
+    border-radius: 12px;
+    padding: 1.1rem 1.25rem;
+  }
+  .uptime-card.warn    { border-left-color: var(--color-warn); }
+  .uptime-card.crit    { border-left-color: var(--color-crit); }
+  .uptime-card.nodata  { border-left-color: var(--color-muted); }
+
+  .uptime-card-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .uptime-app-name {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-heading);
+    letter-spacing: -0.01em;
+  }
+
+  .uptime-pct {
+    font-family: var(--font-mono);
+    font-size: 1.05rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-ok);
+  }
+  .uptime-card.warn   .uptime-pct { color: var(--color-warn); }
+  .uptime-card.crit   .uptime-pct { color: var(--color-crit); }
+  .uptime-card.nodata .uptime-pct {
+    color: var(--color-subtle);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .uptime-bar-track {
+    height: 5px;
+    background: var(--color-overlay);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 0.6rem;
+  }
+  .uptime-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--color-ok);
+    transition: width 0.7s ease;
+  }
+  .uptime-bar-fill.warn { background: var(--color-warn); }
+  .uptime-bar-fill.crit { background: var(--color-crit); }
+  /* No-data: a faint dashed track, no fill — visibly "unmeasured", not fake-full */
+  .uptime-card.nodata .uptime-bar-track {
+    background: repeating-linear-gradient(90deg,
+      var(--color-muted) 0 4px, transparent 4px 8px);
+    opacity: 0.5;
+  }
+
+  .uptime-meta {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--color-subtle);
+    letter-spacing: 0.02em;
   }
 
   /* ── Deploy banner ── */
@@ -1249,6 +1340,38 @@ import Layout from '../layouts/Layout.astro';
             <div style="font-size:1.4rem;font-weight:700;color:var(--color-heading);font-family:var(--font-mono);margin-bottom:0.25rem"
                  ${countAttr}>0</div>
             <div class="mono" style="font-size:0.85rem">${c.sub ?? ''}</div>
+          </div>`;
+        }).join('');
+      }
+
+      // Service Uptime — per-app, from the Beesly incident journal's app attribution.
+      // has_data=false → "no incidents recorded" (honest), NOT a fabricated 100%.
+      const uptimeGrid = document.getElementById('app-uptime-grid');
+      if (uptimeGrid && Array.isArray(data.app_uptime)) {
+        const APP_TITLES: Record<string, string> = {
+          immich: 'Immich', nextcloud: 'Nextcloud', vaultwarden: 'Vaultwarden',
+          grafana: 'Grafana', authentik: 'Authentik', postgresql: 'PostgreSQL',
+          miniflux: 'Miniflux', seerr: 'Seerr',
+        };
+        const title = (a: string) => APP_TITLES[a] ?? (a.charAt(0).toUpperCase() + a.slice(1));
+        // Severity from uptime%: <99 crit, <99.9 warn, else ok. No data → its own class.
+        const cls = (u: any) => !u.has_data ? 'nodata'
+          : u.uptime_pct < 99 ? 'crit' : u.uptime_pct < 99.9 ? 'warn' : '';
+        uptimeGrid.innerHTML = data.app_uptime.map((u: any) => {
+          const c = cls(u);
+          const pctText = u.has_data ? `${u.uptime_pct.toFixed(2)}%` : 'no incidents recorded';
+          const fillW = u.has_data ? Math.max(0, Math.min(100, u.uptime_pct)) : 0;
+          const meta = u.has_data
+            ? `${u.incidents} incident${u.incidents === 1 ? '' : 's'} · ${u.downtime_min}m down · ${u.window_days}d`
+            : `clean · ${u.window_days}d window`;
+          return `
+          <div class="uptime-card ${c}">
+            <div class="uptime-card-head">
+              <span class="uptime-app-name">${title(u.app)}</span>
+              <span class="uptime-pct">${pctText}</span>
+            </div>
+            <div class="uptime-bar-track"><div class="uptime-bar-fill ${c === 'nodata' ? '' : c}" style="width:${fillW}%"></div></div>
+            <div class="uptime-meta">${meta}</div>
           </div>`;
         }).join('');
       }

@@ -1,6 +1,6 @@
 {
-  "updated": "2026-07-02T01:30:27Z",
-  "fetched_at": "2026-07-02T01:30:27Z",
+  "updated": "2026-07-02T05:36:25Z",
+  "fetched_at": "2026-07-02T05:36:25Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "outages": [
     {
@@ -24,25 +24,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "23h 27m ago",
+      "value": "3h 31m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "1h 30m ago",
+      "value": "5h 36m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "30m ago",
+      "value": "2h 36m ago",
       "sub": "last cluster backup",
-      "status": "ok"
+      "status": "warn"
     },
     {
       "label": "varys Keys",
-      "value": "30m ago",
+      "value": "4h 36m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -59,17 +59,17 @@
       "role": "control-plane",
       "status": "ok",
       "pods": "18/110",
-      "cpu": "28%",
-      "memory": "48%",
+      "cpu": "30%",
+      "memory": "43%",
       "pressure": []
     },
     {
       "name": "tyrion",
       "role": "control-plane",
       "status": "ok",
-      "pods": "21/110",
-      "cpu": "23%",
-      "memory": "55%",
+      "pods": "20/110",
+      "cpu": "28%",
+      "memory": "46%",
       "pressure": []
     },
     {
@@ -77,35 +77,35 @@
       "role": "control-plane",
       "status": "ok",
       "pods": "32/110",
-      "cpu": "27%",
-      "memory": "45%",
+      "cpu": "29%",
+      "memory": "46%",
       "pressure": []
     }
   ],
   "host_metrics": {
     "tywin": {
-      "cpu": "27%",
-      "mem": "45%"
+      "cpu": "29%",
+      "mem": "46%"
     },
     "jaime": {
-      "cpu": "28%",
-      "mem": "48%"
+      "cpu": "30%",
+      "mem": "43%"
     },
     "tyrion": {
-      "cpu": "23%",
-      "mem": "55%"
+      "cpu": "28%",
+      "mem": "46%"
     },
     "varys": {
-      "cpu": "0%",
-      "mem": "22%"
+      "cpu": "1%",
+      "mem": "9%"
     },
     "bronn": {
-      "cpu": "87%",
+      "cpu": "2%",
       "mem": "13%"
     },
     "bran": {
-      "cpu": "16%",
-      "mem": "45%"
+      "cpu": "18%",
+      "mem": "43%"
     }
   },
   "flux": {
@@ -219,7 +219,7 @@
       {
         "namespace": "flux-system",
         "name": "platform-trivy-operator",
-        "age": "3d16h",
+        "age": "3d20h",
         "ready": true
       },
       {
@@ -249,7 +249,7 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: downloading \u00b7 568.7 GB left",
+      "tag": "SABnzbd: idle",
       "status": "ok"
     },
     {
@@ -283,23 +283,23 @@
     }
   ],
   "network": {
-    "fw_hits": 1295710,
+    "fw_hits": 1299940,
     "fw_rate_per_hour": null,
-    "latency_ms": 32.6,
+    "latency_ms": 4.4,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 47.2,
+    "temp_c": 46.2,
     "temp_status": "ok",
     "load": 0.65,
-    "mem_pct": 45.0
+    "mem_pct": 43.8
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 532,
-    "runtime_str": "8m",
-    "load_pct": 32,
+    "runtime_s": 568,
+    "runtime_str": "9m",
+    "load_pct": 31,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
@@ -315,25 +315,25 @@
       "name": "tera",
       "used": "6.3 TB",
       "total": "7.9 TB",
-      "pct": 80.4,
+      "pct": 80.7,
       "status": "warn",
       "pool_status": "ONLINE",
       "healthy": true
     },
     {
       "name": "archive",
-      "used": "761.4 GB",
+      "used": "771.1 GB",
       "total": "4.0 TB",
-      "pct": 19.1,
+      "pct": 19.3,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
     },
     {
       "name": "core",
-      "used": "119.8 GB",
+      "used": "120.0 GB",
       "total": "476.7 GB",
-      "pct": 25.1,
+      "pct": 25.2,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -341,6 +341,7 @@
   ],
   "contribs": {
     "days": {
+      "2026-07-02": 0,
       "2026-07-01": 52,
       "2026-06-30": 24,
       "2026-06-28": 19,
@@ -352,6 +353,6 @@
       "2026-06-19": 6
     },
     "total": 140,
-    "active_days": 9
+    "active_days": 10
   }
 }

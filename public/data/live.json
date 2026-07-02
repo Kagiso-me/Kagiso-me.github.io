@@ -1,6 +1,6 @@
 {
-  "updated": "2026-07-02T08:47:34Z",
-  "fetched_at": "2026-07-02T08:47:34Z",
+  "updated": "2026-07-02T11:29:31Z",
+  "fetched_at": "2026-07-02T11:29:31Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "outages": [
     {
@@ -17,8 +17,8 @@
   "cards": [
     {
       "label": "Workloads",
-      "value": "69/69",
-      "sub": "3 failed jobs",
+      "value": "69/71",
+      "sub": "pods running",
       "status": "warn"
     },
     {
@@ -29,25 +29,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "6h 42m ago",
+      "value": "9h 24m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "8h 47m ago",
+      "value": "11h 29m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "1h 47m ago",
+      "value": "4h 29m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "7h 47m ago",
+      "value": "10h 29m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -64,17 +64,17 @@
       "role": "control-plane",
       "status": "ok",
       "pods": "18/110",
-      "cpu": "27%",
-      "memory": "43%",
+      "cpu": "30%",
+      "memory": "44%",
       "pressure": []
     },
     {
       "name": "tyrion",
       "role": "control-plane",
       "status": "ok",
-      "pods": "19/110",
-      "cpu": "15%",
-      "memory": "49%",
+      "pods": "21/110",
+      "cpu": "27%",
+      "memory": "52%",
       "pressure": []
     },
     {
@@ -82,35 +82,35 @@
       "role": "control-plane",
       "status": "ok",
       "pods": "32/110",
-      "cpu": "25%",
-      "memory": "46%",
+      "cpu": "30%",
+      "memory": "47%",
       "pressure": []
     }
   ],
   "host_metrics": {
     "tywin": {
-      "cpu": "25%",
-      "mem": "46%"
+      "cpu": "30%",
+      "mem": "47%"
     },
     "jaime": {
-      "cpu": "27%",
-      "mem": "43%"
+      "cpu": "30%",
+      "mem": "44%"
     },
     "tyrion": {
-      "cpu": "15%",
-      "mem": "49%"
+      "cpu": "27%",
+      "mem": "52%"
     },
     "varys": {
       "cpu": "0%",
-      "mem": "9%"
+      "mem": "25%"
     },
     "bronn": {
-      "cpu": "14%",
+      "cpu": "15%",
       "mem": "13%"
     },
     "bran": {
-      "cpu": "14%",
-      "mem": "47%"
+      "cpu": "23%",
+      "mem": "48%"
     }
   },
   "flux": {
@@ -128,7 +128,7 @@
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "84d",
+        "age": "85d",
         "ready": true
       },
       {
@@ -224,7 +224,7 @@
       {
         "namespace": "flux-system",
         "name": "platform-trivy-operator",
-        "age": "3d23h",
+        "age": "4d2h",
         "ready": true
       },
       {
@@ -259,7 +259,7 @@
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: 65 series",
+      "tag": "Sonarr: 64 series",
       "status": "ok"
     },
     {
@@ -288,23 +288,23 @@
     }
   ],
   "network": {
-    "fw_hits": 1303784,
+    "fw_hits": 1307611,
     "fw_rate_per_hour": null,
-    "latency_ms": 3.8,
+    "latency_ms": 22.1,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
     "temp_c": 46.2,
     "temp_status": "ok",
-    "load": 0.6,
-    "mem_pct": 47.3
+    "load": 0.57,
+    "mem_pct": 47.4
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 628,
-    "runtime_str": "10m",
-    "load_pct": 29,
+    "runtime_s": 548,
+    "runtime_str": "9m",
+    "load_pct": 32,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
@@ -320,7 +320,7 @@
       "name": "tera",
       "used": "6.3 TB",
       "total": "7.9 TB",
-      "pct": 80.7,
+      "pct": 80.5,
       "status": "warn",
       "pool_status": "ONLINE",
       "healthy": true
@@ -336,9 +336,9 @@
     },
     {
       "name": "core",
-      "used": "120.8 GB",
+      "used": "121.5 GB",
       "total": "476.7 GB",
-      "pct": 25.3,
+      "pct": 25.5,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -346,18 +346,18 @@
   ],
   "contribs": {
     "days": {
-      "2026-07-02": 0,
+      "2026-07-02": 12,
       "2026-07-01": 52,
       "2026-06-30": 24,
       "2026-06-28": 19,
-      "2026-06-27": 20,
+      "2026-06-27": 18,
       "2026-06-26": 7,
       "2026-06-24": 7,
       "2026-06-22": 1,
       "2026-06-21": 4,
       "2026-06-19": 6
     },
-    "total": 140,
+    "total": 150,
     "active_days": 10
   }
 }

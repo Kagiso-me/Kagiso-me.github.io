@@ -1,6 +1,6 @@
 {
-  "updated": "2026-07-02T11:29:31Z",
-  "fetched_at": "2026-07-02T11:29:31Z",
+  "updated": "2026-07-02T16:20:39Z",
+  "fetched_at": "2026-07-02T16:20:39Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "outages": [
     {
@@ -17,37 +17,37 @@
   "cards": [
     {
       "label": "Workloads",
-      "value": "69/71",
+      "value": "70/72",
       "sub": "pods running",
       "status": "warn"
     },
     {
       "label": "Flux",
       "value": "20/20 synced",
-      "sub": "84d",
+      "sub": "85d",
       "status": "ok"
     },
     {
       "label": "Docker Appdata",
-      "value": "9h 24m ago",
+      "value": "14h 16m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "11h 29m ago",
+      "value": "16h 21m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "4h 29m ago",
+      "value": "3m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "10h 29m ago",
+      "value": "15h 20m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -63,9 +63,9 @@
       "name": "jaime",
       "role": "control-plane",
       "status": "ok",
-      "pods": "18/110",
-      "cpu": "30%",
-      "memory": "44%",
+      "pods": "19/110",
+      "cpu": "22%",
+      "memory": "32%",
       "pressure": []
     },
     {
@@ -73,8 +73,8 @@
       "role": "control-plane",
       "status": "ok",
       "pods": "21/110",
-      "cpu": "27%",
-      "memory": "52%",
+      "cpu": "31%",
+      "memory": "31%",
       "pressure": []
     },
     {
@@ -82,47 +82,47 @@
       "role": "control-plane",
       "status": "ok",
       "pods": "32/110",
-      "cpu": "30%",
-      "memory": "47%",
+      "cpu": "31%",
+      "memory": "36%",
       "pressure": []
     }
   ],
   "host_metrics": {
     "tywin": {
-      "cpu": "30%",
-      "mem": "47%"
+      "cpu": "31%",
+      "mem": "36%"
     },
     "jaime": {
-      "cpu": "30%",
-      "mem": "44%"
+      "cpu": "22%",
+      "mem": "32%"
     },
     "tyrion": {
-      "cpu": "27%",
-      "mem": "52%"
+      "cpu": "31%",
+      "mem": "31%"
     },
     "varys": {
-      "cpu": "0%",
-      "mem": "25%"
+      "cpu": "4%",
+      "mem": "21%"
     },
     "bronn": {
-      "cpu": "15%",
-      "mem": "13%"
+      "cpu": "2%",
+      "mem": "10%"
     },
     "bran": {
-      "cpu": "23%",
-      "mem": "48%"
+      "cpu": "43%",
+      "mem": "49%"
     }
   },
   "flux": {
     "ready": 20,
     "total": 20,
-    "last_sync": "84d",
+    "last_sync": "85d",
     "status": "ok",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
-        "age": "84d",
+        "age": "85d",
         "ready": true
       },
       {
@@ -134,109 +134,109 @@
       {
         "namespace": "flux-system",
         "name": "platform-authentik",
-        "age": "84d",
+        "age": "85d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
-        "age": "84d",
+        "age": "85d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
-        "age": "84d",
+        "age": "85d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
-        "age": "84d",
+        "age": "85d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
-        "age": "84d",
+        "age": "85d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-namespaces",
-        "age": "84d",
+        "age": "85d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking",
-        "age": "84d",
+        "age": "85d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-config",
-        "age": "84d",
+        "age": "85d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-tls",
-        "age": "84d",
+        "age": "85d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability",
-        "age": "84d",
+        "age": "85d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
-        "age": "84d",
+        "age": "85d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-digest",
-        "age": "84d",
+        "age": "85d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security",
-        "age": "84d",
+        "age": "85d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security-issuers",
-        "age": "84d",
+        "age": "85d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-storage",
-        "age": "84d",
+        "age": "85d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-trivy-operator",
-        "age": "4d2h",
+        "age": "4d7h",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade",
-        "age": "84d",
+        "age": "85d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade-plans",
-        "age": "84d",
+        "age": "85d",
         "ready": true
       }
     ]
@@ -244,28 +244,28 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 928 photos \u00b7 22 videos",
-      "status": "ok"
+      "tag": "Immich: offline",
+      "status": "crit"
     },
     {
       "name": "Nextcloud",
-      "tag": "Nextcloud: online",
-      "status": "ok"
+      "tag": "Nextcloud: offline",
+      "status": "crit"
     },
     {
       "name": "SABnzbd",
       "tag": "SABnzbd: idle",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: 64 series",
-      "status": "ok"
+      "tag": "Sonarr: \u2014 series",
+      "status": "unknown"
     },
     {
       "name": "Radarr",
-      "tag": "Radarr: 20 movies",
-      "status": "ok"
+      "tag": "Radarr: \u2014 movies",
+      "status": "unknown"
     },
     {
       "name": "Lidarr",
@@ -277,7 +277,7 @@
     {
       "name": "Plex",
       "label": "idle",
-      "status": "ok",
+      "status": "unknown",
       "playing": false
     },
     {
@@ -288,24 +288,24 @@
     }
   ],
   "network": {
-    "fw_hits": 1307611,
+    "fw_hits": 1313216,
     "fw_rate_per_hour": null,
-    "latency_ms": 22.1,
+    "latency_ms": 16.2,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 46.2,
+    "temp_c": 43.5,
     "temp_status": "ok",
-    "load": 0.57,
-    "mem_pct": 47.4
+    "load": 1.0,
+    "mem_pct": 49.7
   },
   "ups": {
-    "charge": 100,
-    "runtime_s": 548,
-    "runtime_str": "9m",
-    "load_pct": 32,
-    "status": "OL",
+    "charge": 64,
+    "runtime_s": 320,
+    "runtime_str": "5m",
+    "load_pct": 34,
+    "status": "OL CHRG",
     "nominal_w": 390,
     "on_battery": false,
     "dot": "ok"
@@ -327,7 +327,7 @@
     },
     {
       "name": "archive",
-      "used": "769.6 GB",
+      "used": "770.3 GB",
       "total": "4.0 TB",
       "pct": 19.3,
       "status": "ok",
@@ -336,9 +336,9 @@
     },
     {
       "name": "core",
-      "used": "121.5 GB",
+      "used": "121.3 GB",
       "total": "476.7 GB",
-      "pct": 25.5,
+      "pct": 25.4,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true

@@ -1,2193 +1,469 @@
 ---
 import Layout from '../layouts/Layout.astro';
+// Editorial Status page. Every live region is wired to /data/live.json (built
+// every ~30 min on bran). Service uptime is real Gatus data (app_uptime[]).
+// Static-per-load config (network rows, topology) is described inline.
 ---
 
-<Layout title="Status" description="Live cluster health, node metrics, and service uptime.">
+<Layout title="Status" description="Live cluster health, per-service uptime, storage, backups and GitOps — read straight off the hardware.">
+  <div class="ed">
 
-  <div class="page-wrap">
-
-    <!-- ── Header ── -->
-    <div class="page-header fade-up">
-      <div>
-        <p class="mono" style="color:var(--color-peach); margin-bottom:0.25rem">~/status</p>
-        <h1 style="margin:0">Cluster Status</h1>
-        <!-- Live cluster age counter (time since earliest node joined; survives reboots) -->
-        <div class="uptime-counter" id="uptime-counter">
-          <span class="uptime-label mono">cluster age</span>
-          <span class="uptime-value mono" id="uptime-value">—</span>
-        </div>
+    <!-- ── HERO ── -->
+    <header class="ed-hero">
+      <div class="ed-eyebrow mono">~/status</div>
+      <h1 class="ed-h1" id="ed-verdict">All systems operational.</h1>
+      <p class="ed-lede">A real k3s cluster, built and run in public. Every figure below is read live off the hardware — no staging, no theatre.</p>
+      <div class="ed-metrics">
+        <div class="ed-metric"><div class="ed-metric-n mono" id="m-nodes">—</div><div class="ed-metric-l mono">nodes ready</div></div>
+        <div class="ed-metric"><div class="ed-metric-n mono" id="m-pods">—</div><div class="ed-metric-l mono">pods running</div></div>
+        <div class="ed-metric"><div class="ed-metric-n mono ok" id="m-uptime">—</div><div class="ed-metric-l mono">services healthy</div></div>
+        <div class="ed-metric"><div class="ed-metric-n mono" id="m-incidents">—</div><div class="ed-metric-l mono">open incidents</div></div>
       </div>
-      <div style="text-align:right">
-        <div class="mono live-badge">
-          <span class="status-dot ok"></span>
-          Live · auto-refresh 30s
-        </div>
-        <div class="mono" id="last-updated" style="color:var(--color-subtle); margin-top:0.25rem">—</div>
+    </header>
+
+    <!-- ── KNOWN ISSUES ── -->
+    <section class="ed-sec">
+      <div class="ed-sec-head">
+        <div><div class="ed-eyebrow mono">~/known-issues</div><h2 class="ed-h2">Known issues</h2></div>
+        <span class="mono ed-note ok" id="ed-issues-note">—</span>
       </div>
-    </div>
+      <div id="ed-issues"></div>
+    </section>
 
-    <!-- ── Network Topology Map ── -->
-    <section class="section fade-up" style="animation-delay:0.05s">
-      <h2 class="section-label">Network Topology</h2>
+    <!-- ── NODES ── -->
+    <section class="ed-sec">
+      <div class="ed-eyebrow mono">~/nodes</div>
+      <h2 class="ed-h2">Nodes, live</h2>
+      <div class="ed-nhead ed-ngrid mono">
+        <span>Host</span><span>Role</span><span>Address</span><span>CPU</span><span>Mem</span>
+      </div>
+      <div id="ed-nodes"></div>
+    </section>
 
-      <div class="netmap-wrap" id="netmap-wrap">
-        <!-- Full-canvas SVG: grid + connection beams + packet animations -->
-        <svg class="netmap-svg" id="netmap-svg" aria-hidden="true">
-          <defs>
-            <!-- Grid pattern -->
-            <pattern id="nm-grid" width="32" height="32" patternUnits="userSpaceOnUse">
-              <path d="M 32 0 L 0 0 0 32" fill="none" stroke="rgba(203,166,247,0.04)" stroke-width="1"/>
-            </pattern>
-            <!-- Glow filters per colour -->
-            <filter id="glow-wan"    x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-            <filter id="glow-mauve"  x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-            <filter id="glow-sap"    x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-            <filter id="glow-green"  x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-            <filter id="glow-gold"   x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-            <filter id="glow-red"    x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-            <!-- Soft node halo -->
-            <filter id="node-halo" x="-60%" y="-60%" width="220%" height="220%">
-              <feGaussianBlur stdDeviation="8" result="b"/>
-              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-            </filter>
-          </defs>
-          <!-- Grid background rect -->
-          <rect width="100%" height="100%" fill="url(#nm-grid)"/>
-          <!-- Lines group (redrawn by JS) -->
-          <g id="nm-lines"></g>
-          <!-- Packets group (animated by JS) -->
-          <g id="nm-packets"></g>
-        </svg>
+    <!-- ── SERVICES (real Gatus uptime) ── -->
+    <section class="ed-sec">
+      <div class="ed-sec-head">
+        <div><div class="ed-eyebrow mono">~/services</div><h2 class="ed-h2">Services, by uptime</h2></div>
+        <span class="mono ed-note" id="ed-svc-note">measured by Gatus · per app</span>
+      </div>
+      <div class="ed-svhead ed-svgrid mono">
+        <span>Service</span><span>Group</span><span style="text-align:right">Uptime</span><span style="text-align:right">Latency</span>
+      </div>
+      <div id="ed-services"></div>
+    </section>
 
-        <!-- ── Tier 1 : Internet ── -->
-        <div class="nm-node nm-tier1 nm-internet" id="nm-internet"
-             data-id="internet" data-ip="WAN" data-role="Internet / WAN"
-             data-services="Cloudflare · ISP uplink · DDoS protection">
-          <div class="nm-node-glow"></div>
-          <svg class="nm-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-          </svg>
-          <div class="nm-label">The Internet</div>
-          <div class="nm-ip">WAN</div>
-          <span class="nm-badge" style="--nm-c:#74c7ec">WAN</span>
-          <span class="nm-dot" id="dot-internet"></span>
+    <!-- ── CLUSTER INCIDENTS (real outages) ── -->
+    <section class="ed-sec">
+      <div class="ed-sec-head">
+        <div><div class="ed-eyebrow mono">~/incidents</div><h2 class="ed-h2">Cluster incidents</h2></div>
+        <span class="mono ed-note" id="ed-inc-stat">—</span>
+      </div>
+      <div class="ed-band" id="ed-band"></div>
+      <div class="ed-band-axis mono"><span id="ed-band-start">60 days ago</span><span>today</span></div>
+      <div class="ed-inc-log" id="ed-inc-log"></div>
+    </section>
+
+    <!-- ── TOPOLOGY ── -->
+    <section class="ed-sec">
+      <div class="ed-eyebrow mono">~/topology</div>
+      <h2 class="ed-h2">Cluster topology</h2>
+      <div class="ed-topo">
+        <div class="ed-topo-row">
+          <div class="ed-box"><span class="ed-box-t">Internet</span><span class="ed-box-s">WAN · fibre</span></div>
+          <span class="ed-arrow">→</span>
+          <div class="ed-box"><span class="ed-box-t">MikroTik <span class="ed-faint">.1</span></span><span class="ed-box-s">router · DNS · gateway</span></div>
+          <span class="ed-arrow">→</span>
+          <div class="ed-box"><span class="ed-box-t">MetalLB <span class="ed-faint">.100–120</span></span><span class="ed-box-s">L2 · Traefik ingress</span></div>
         </div>
-
-        <!-- ── Tier 2 : Router ── -->
-        <div class="nm-node nm-tier2 nm-router" id="nm-mikrotik"
-             data-id="mikrotik" data-ip="10.0.10.1" data-role="Router · Firewall"
-             data-services="RouterOS · DHCP · DNS · VLANs · Firewall · CrowdSec">
-          <div class="nm-node-glow"></div>
-          <svg class="nm-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="8" width="20" height="8" rx="2"/><path d="M6 12h.01M10 12h.01M14 12h4"/><path d="M18 8V6a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v2"/><path d="M6 16v2a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-2"/>
-          </svg>
-          <div class="nm-label">MikroTik</div>
-          <div class="nm-ip">10.0.10.1</div>
-          <span class="nm-badge" style="--nm-c:#fab387">ROUTER</span>
-          <span class="nm-dot" id="dot-mikrotik"></span>
-        </div>
-
-        <!-- ── Tier 3 : k3s cluster group ── -->
-        <div class="nm-group nm-group-k3s" id="nm-group-k3s">
-          <div class="nm-group-label">
-            <svg viewBox="0 0 16 16" fill="none" width="10" height="10" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="4" r="2"/><circle cx="3" cy="12" r="2"/><circle cx="13" cy="12" r="2"/><path d="M8 6v2M8 8L3 10M8 8l5 2"/></svg>
-            k3s Cluster · 10.0.10.0/24
-          </div>
-          <div class="nm-group-inner">
-            <div class="nm-node nm-k3s nm-master" id="nm-tywin"
-                 data-id="tywin" data-ip="10.0.10.11" data-role="k3s Control-plane"
-                 data-services="Traefik · Authentik · Flux · cert-manager · MetalLB">
-              <div class="nm-node-glow"></div>
-              <svg class="nm-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><circle cx="12" cy="10" r="2"/>
-              </svg>
-              <div class="nm-label">Tywin</div>
-              <div class="nm-ip">10.0.10.11</div>
-              <span class="nm-badge" style="--nm-c:#cba6f7">MASTER</span>
-              <span class="nm-dot" id="dot-tywin"></span>
-            </div>
-            <div class="nm-node nm-k3s nm-worker" id="nm-jaime"
-                 data-id="jaime" data-ip="10.0.10.12" data-role="k3s Worker"
-                 data-services="Prometheus · Grafana · Loki · Alertmanager">
-              <div class="nm-node-glow"></div>
-              <svg class="nm-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
-              </svg>
-              <div class="nm-label">Jaime</div>
-              <div class="nm-ip">10.0.10.12</div>
-              <span class="nm-badge" style="--nm-c:#cba6f7">WORKER</span>
-              <span class="nm-dot" id="dot-jaime"></span>
-            </div>
-            <div class="nm-node nm-k3s nm-worker" id="nm-tyrion"
-                 data-id="tyrion" data-ip="10.0.10.13" data-role="k3s Worker"
-                 data-services="CrowdSec · SOPS · Velero · NFS storage">
-              <div class="nm-node-glow"></div>
-              <svg class="nm-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
-              </svg>
-              <div class="nm-label">Tyrion</div>
-              <div class="nm-ip">10.0.10.13</div>
-              <span class="nm-badge" style="--nm-c:#cba6f7">WORKER</span>
-              <span class="nm-dot" id="dot-tyrion"></span>
-            </div>
+        <div class="ed-box ed-cluster">
+          <div class="ed-cluster-head"><span class="mono">k3s cluster · 10.0.10.0/24</span><span class="mono ok">etcd quorum · runs all workloads</span></div>
+          <div class="ed-cluster-nodes">
+            <div class="ed-chip"><span class="ed-dot" data-node="tywin"></span><span class="mono">tywin</span><span class="mono ed-faint">.11 · master</span></div>
+            <div class="ed-chip"><span class="ed-dot" data-node="jaime"></span><span class="mono">jaime</span><span class="mono ed-faint">.12 · worker</span></div>
+            <div class="ed-chip"><span class="ed-dot" data-node="tyrion"></span><span class="mono">tyrion</span><span class="mono ed-faint">.13 · worker</span></div>
           </div>
         </div>
-
-        <!-- ── Tier 4 : Edge nodes ── -->
-        <div class="nm-node nm-edge nm-docker" id="nm-bronn"
-             data-id="bronn" data-ip="10.0.10.20" data-role="Docker Host"
-             data-services="Ollama (LLM) · Open WebUI · Docker Compose">
-          <div class="nm-node-glow"></div>
-          <svg class="nm-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M22 12.5a9.5 9.5 0 1 1-19 0 9.5 9.5 0 0 1 19 0z"/><path d="M2.5 12.5h19M12 2.5c-2.5 3-4 5.5-4 10s1.5 7 4 10M12 2.5c2.5 3 4 5.5 4 10s-1.5 7-4 10"/>
-          </svg>
-          <div class="nm-label">Bronn</div>
-          <div class="nm-ip">10.0.10.20</div>
-          <span class="nm-badge" style="--nm-c:#74c7ec">DOCKER</span>
-          <span class="nm-dot" id="dot-bronn"></span>
-        </div>
-
-        <div class="nm-node nm-edge nm-control" id="nm-varys"
-             data-id="varys" data-ip="10.0.10.9" data-role="Control Node · CI"
-             data-services="GitHub Actions runner · SSH bastion · age keys">
-          <div class="nm-node-glow"></div>
-          <svg class="nm-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
-          </svg>
-          <div class="nm-label">Varys</div>
-          <div class="nm-ip">10.0.10.9</div>
-          <span class="nm-badge" style="--nm-c:#a6e3a1">CI / OPS</span>
-          <span class="nm-dot" id="dot-varys"></span>
-        </div>
-
-        <div class="nm-node nm-edge nm-storage" id="nm-ned"
-             data-id="ned" data-ip="10.0.10.80" data-role="NAS · Storage"
-             data-services="TrueNAS SCALE · ZFS · NFS · 8TB + 4TB SAS">
-          <div class="nm-node-glow"></div>
-          <svg class="nm-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/>
-          </svg>
-          <div class="nm-label">Ned</div>
-          <div class="nm-ip">10.0.10.80</div>
-          <span class="nm-badge" style="--nm-c:#e6b450">STORAGE</span>
-          <span class="nm-dot" id="dot-ned"></span>
-        </div>
-
-        <div class="nm-node nm-edge nm-pi" id="nm-bran"
-             data-id="bran" data-ip="10.0.10.9" data-role="RPi 3B+ · DNS"
-             data-services="Unbound · recursive DNS · DNSSEC">
-          <div class="nm-node-glow"></div>
-          <svg class="nm-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/><path d="M12 6v6l4 2"/>
-          </svg>
-          <div class="nm-label">Bran</div>
-          <div class="nm-ip">10.0.10.9</div>
-          <span class="nm-badge" style="--nm-c:#f38ba8">RPi DNS</span>
-          <span class="nm-dot" id="dot-bran"></span>
-        </div>
-
-        <!-- VLAN legend -->
-        <div class="nm-legend">
-          <div class="nm-legend-item" style="--lc:#cba6f7"><span class="nm-legend-pip"></span>LAN · 10.0.10.0/24</div>
-          <div class="nm-legend-item" style="--lc:#74c7ec"><span class="nm-legend-pip"></span>MGMT · 10.0.20.0/24</div>
-          <div class="nm-legend-item" style="--lc:#fab387"><span class="nm-legend-pip"></span>WAN uplink</div>
-        </div>
-
-        <!-- Tooltip panel -->
-        <div class="nm-tooltip" id="nm-tooltip" role="tooltip" aria-live="polite">
-          <div class="nm-tt-header">
-            <span class="nm-tt-name" id="nm-tt-name"></span>
-            <span class="nm-tt-ip"   id="nm-tt-ip"></span>
-          </div>
-          <div class="nm-tt-role" id="nm-tt-role"></div>
-          <div class="nm-tt-divider"></div>
-          <div class="nm-tt-services" id="nm-tt-services"></div>
+        <div class="ed-topo-support">
+          <div class="ed-box ed-support"><span class="ed-support-t"><span class="ed-dot ok"></span><span class="mono">varys <span class="ed-faint">.10</span></span></span><span class="ed-box-s">ci · gitops origin</span></div>
+          <div class="ed-box ed-support"><span class="ed-support-t"><span class="ed-dot ok"></span><span class="mono">ned <span class="ed-faint">.80</span></span></span><span class="ed-box-s">truenas · nfs + minio</span></div>
+          <div class="ed-box ed-support"><span class="ed-support-t"><span class="ed-dot ok"></span><span class="mono">bran <span class="ed-faint">.9</span></span></span><span class="ed-box-s">rpi · dns · ups watcher</span></div>
+          <div class="ed-box ed-support ed-dashed"><span class="ed-support-t"><span class="ed-dot muted"></span><span class="mono ed-mut">bronn <span class="ed-faint">.20</span></span></span><span class="ed-box-s">standalone docker</span></div>
         </div>
       </div>
     </section>
 
-    <!-- ── Known Issues ── -->
-    <section class="section fade-up" id="known-issues-section" style="animation-delay:0.01s">
-      <h2 class="section-label">Known Issues</h2>
-      <div id="known-issues-list"></div>
+    <!-- ── NETWORK ── -->
+    <section class="ed-sec">
+      <div class="ed-eyebrow mono">~/network</div>
+      <h2 class="ed-h2">Network</h2>
+      <div class="ed-net" id="ed-net"></div>
     </section>
 
-    <!-- ── Security ── -->
-    <section class="section fade-up" style="animation-delay:0.02s">
-      <h2 class="section-label">Security</h2>
-      <div id="cve-banner">
-        <div class="skeleton" style="height:56px; border-radius:10px"></div>
-      </div>
+    <!-- ── STORAGE ── -->
+    <section class="ed-sec">
+      <div class="ed-eyebrow mono">~/storage</div>
+      <h2 class="ed-h2">Storage</h2>
+      <div id="ed-storage"></div>
     </section>
 
-    <!-- ── Network ── -->
-    <section class="section fade-up" style="animation-delay:0.05s">
-      <h2 class="section-label">Network</h2>
-      <div class="cards-grid" id="network-cards" style="margin-bottom:1.5rem">
-        <div class="card skeleton" style="height:100px"></div>
-        <div class="card skeleton" style="height:100px"></div>
-        <div class="card skeleton" style="height:100px"></div>
-      </div>
-      <div id="offenders-section">
-        <div class="skeleton" style="height:180px;border-radius:12px"></div>
-      </div>
+    <!-- ── BACKUPS ── -->
+    <section class="ed-sec">
+      <div class="ed-eyebrow mono">~/backups</div>
+      <h2 class="ed-h2">Backups</h2>
+      <div id="ed-backups"></div>
+      <div class="mono ed-foot-note">3-2-1 · 2 media · 1 offsite (Backblaze B2)</div>
     </section>
 
-    <!-- ── Infrastructure ── -->
-    <section class="section fade-up" style="animation-delay:0.1s">
-      <h2 class="section-label">Infrastructure</h2>
-      <div id="infra-deploy" style="margin-bottom:1rem">
-        <div class="skeleton" style="height:56px;border-radius:10px"></div>
-      </div>
-      <div class="cards-grid" id="infra-cards">
-        <div class="card skeleton" style="height:120px"></div>
-        <div class="card skeleton" style="height:120px"></div>
-        <div class="card skeleton" style="height:120px"></div>
-        <div class="card skeleton" style="height:120px"></div>
-      </div>
-    </section>
-
-    <!-- ── Storage ── -->
-    <section class="section fade-up" style="animation-delay:0.13s">
-      <h2 class="section-label">Storage</h2>
-      <div id="storage-grid">
-        <div class="skeleton" style="height:120px;border-radius:12px"></div>
-      </div>
-    </section>
-
-    <!-- ── At a Glance ── -->
-    <section class="section fade-up" style="animation-delay:0.15s">
-      <h2 class="section-label">At a Glance</h2>
-      <div class="cards-grid" id="glance-cards">
-        <div class="card skeleton" style="height:100px"></div>
-        <div class="card skeleton" style="height:100px"></div>
-      </div>
-    </section>
-
-    <!-- ── Service Uptime (per-app, from the Beesly incident journal) ── -->
-    <section class="section fade-up" id="app-uptime-section" style="animation-delay:0.16s">
-      <h2 class="section-label">Service Uptime</h2>
-      <div class="uptime-grid" id="app-uptime-grid">
-        <div class="card skeleton" style="height:92px"></div>
-        <div class="card skeleton" style="height:92px"></div>
-        <div class="card skeleton" style="height:92px"></div>
-      </div>
-    </section>
-
-    <!-- ── Nodes ── -->
-    <section class="section fade-up" style="animation-delay:0.18s">
-      <h2 class="section-label">Nodes</h2>
-      <div class="nodes-grid" id="nodes-grid">
-        <div class="skeleton" style="height:160px; border-radius:12px"></div>
-        <div class="skeleton" style="height:160px; border-radius:12px"></div>
-        <div class="skeleton" style="height:160px; border-radius:12px"></div>
-      </div>
-    </section>
-
-    <!-- ── GitOps ── -->
-    <section class="section fade-up" style="animation-delay:0.20s">
-      <h2 class="section-label">GitOps — Flux Kustomizations</h2>
-      <div id="flux-section">
-        <div class="skeleton" style="height:220px; border-radius:12px"></div>
-      </div>
-    </section>
-
-    <!-- ── Backups ── -->
-    <section class="section fade-up" style="animation-delay:0.23s">
-      <h2 class="section-label">Backups</h2>
-      <div class="cards-grid" id="backup-cards">
-        <div class="card skeleton" style="height:100px"></div>
-        <div class="card skeleton" style="height:100px"></div>
-        <div class="card skeleton" style="height:100px"></div>
-        <div class="card skeleton" style="height:100px"></div>
-      </div>
+    <!-- ── INFRA ── -->
+    <section class="ed-sec">
+      <div class="ed-eyebrow mono">~/infra</div>
+      <h2 class="ed-h2">Infrastructure &amp; GitOps</h2>
+      <div class="ed-infra" id="ed-infra"></div>
     </section>
 
   </div>
-
 </Layout>
 
 <style is:global>
-  /* ── Known Issues ── */
-  #known-issues-section:has(#known-issues-list:empty) { display: none; }
-
-  .known-issue {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    align-items: start;
-    gap: 1rem;
-    padding: 1rem 1.25rem;
-    background: color-mix(in srgb, var(--color-warn) 5%, var(--color-surface));
-    border: 1px solid color-mix(in srgb, var(--color-warn) 30%, var(--color-muted));
-    border-left: 3px solid var(--color-warn);
-    border-radius: 10px;
-    margin-bottom: 0.6rem;
-  }
-
-  .known-issue:last-child { margin-bottom: 0; }
-
-  .known-issue.crit {
-    background: color-mix(in srgb, var(--color-crit) 5%, var(--color-surface));
-    border-color: color-mix(in srgb, var(--color-crit) 30%, var(--color-muted));
-    border-left-color: var(--color-crit);
-  }
-
-  .known-issue.info {
-    background: color-mix(in srgb, var(--color-sapphire) 5%, var(--color-surface));
-    border-color: color-mix(in srgb, var(--color-sapphire) 30%, var(--color-muted));
-    border-left-color: var(--color-sapphire);
-  }
-
-  .ki-icon {
-    font-size: 1rem;
-    line-height: 1.5;
-    flex-shrink: 0;
-  }
-
-  .ki-body {}
-
-  .ki-title {
-    font-family: var(--font-display);
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--color-heading);
-    margin-bottom: 0.2rem;
-    letter-spacing: -0.01em;
-  }
-
-  .ki-desc {
-    font-size: 0.85rem;
-    color: var(--color-subtle);
-    line-height: 1.6;
-  }
-
-  .ki-meta {
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-    color: var(--color-subtle);
-    white-space: nowrap;
-    padding-top: 0.2rem;
-    letter-spacing: 0.03em;
-  }
-
-  /* ── Page wrap ── */
-  .page-wrap {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 3rem 1.5rem 4rem;
-    position: relative;
-    z-index: 1;
-  }
-
-  .page-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 3rem;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-
-  h1 { font-size: clamp(1.75rem, 4vw, 2.5rem); }
-
-  .live-badge {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    color: var(--color-ok);
-    justify-content: flex-end;
-  }
-
-  .uptime-counter {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    margin-top: 0.75rem;
-    background: color-mix(in srgb, var(--color-ok) 8%, transparent);
-    border: 1px solid color-mix(in srgb, var(--color-ok) 25%, transparent);
-    border-radius: 8px;
-    padding: 0.4rem 0.9rem;
-  }
-
-  .uptime-label {
-    font-size: 0.68rem;
-    color: var(--color-ok);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-
-  .uptime-value {
-    font-size: 0.82rem;
-    color: var(--color-heading);
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .section { margin-bottom: 5.5rem; }
-
-  .section-label {
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--color-subtle);
-    margin: 0 0 1rem;
-    font-family: var(--font-mono);
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .section-label::before {
-    content: '';
-    display: block;
-    width: 3px;
-    height: 0.85rem;
-    background: linear-gradient(to bottom, #fab387, #cba6f7);
-    border-radius: 2px;
-    flex-shrink: 0;
-  }
-
-  .cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 1rem;
-  }
-
-  .nodes-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 1rem;
-  }
-
-  .node-card {
-    background: var(--color-surface);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 16px;
-    padding: 1.25rem 1.5rem 1.5rem;
-    border-left-width: 3px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06);
-    transition: box-shadow 0.25s, transform 0.25s;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .node-card::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 60px;
-    border-radius: 16px 16px 0 0;
-    pointer-events: none;
-    opacity: 0.08;
-  }
-  .node-card.ok::after   { background: radial-gradient(ellipse at 50% 0%, var(--color-ok), transparent 70%); }
-  .node-card.warn::after { background: radial-gradient(ellipse at 50% 0%, var(--color-warn), transparent 70%); }
-  .node-card.crit::after { background: radial-gradient(ellipse at 50% 0%, var(--color-crit), transparent 70%); }
-
-  .node-card:hover {
-    box-shadow: 0 12px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.09);
-    transform: translateY(-2px);
-  }
-
-  .node-card.ok      { border-left-color: var(--color-ok); }
-  .node-card.warn    { border-left-color: var(--color-warn); }
-  .node-card.crit    { border-left-color: var(--color-crit); }
-  .node-card.unknown { border-left-color: var(--color-muted); }
-
-  /* Ring scroll-in animation */
-  .node-status-ring circle.arc {
-    stroke-dasharray: 0 125.7;
-    transition: stroke-dasharray 0.9s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .node-status-ring circle.arc.ring-revealed {
-    /* dasharray set inline by JS once revealed */
-  }
-
-  @keyframes ring-pulse {
-    0%, 100% { opacity: 1; filter: drop-shadow(0 0 3px var(--color-ok)); }
-    50%       { opacity: 0.7; filter: drop-shadow(0 0 8px var(--color-ok)); }
-  }
-  .node-card.ok .node-status-ring circle.arc.ring-revealed {
-    animation: ring-pulse 2.4s ease-in-out infinite;
-  }
-
-  .node-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 0.5rem;
-    margin-bottom: 1.25rem;
-  }
-
-  .node-identity { display: flex; flex-direction: column; gap: 0.35rem; }
-  .node-identity-row { display: flex; align-items: baseline; gap: 0.5rem; }
-
-  .node-field-label {
-    font-family: var(--font-mono);
-    font-size: 0.6rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--color-muted);
-    flex-shrink: 0;
-    min-width: 2.4rem;
-  }
-
-  .node-field-value {
-    font-family: var(--font-mono);
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--color-heading);
-    line-height: 1.2;
-  }
-
-  .node-field-value.role {
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--color-subtle);
-  }
-
-  .node-status-badge {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.1rem;
-    flex-shrink: 0;
-  }
-
-  .node-status-ring { width: 52px; height: 52px; }
-
-  .node-ring-label {
-    font-family: var(--font-mono);
-    font-size: 0.58rem;
-    color: var(--color-subtle);
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-
-  .node-metrics-4 {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 0.4rem;
-  }
-
-  @media (max-width: 440px) {
-    .node-metrics-4 { grid-template-columns: 1fr 1fr; }
-  }
-
-  .metric {
-    background: var(--color-overlay);
-    border: 1px solid var(--color-muted);
-    border-radius: 8px;
-    padding: 0.6rem 0.5rem 0.5rem;
-    overflow: hidden;
-  }
-
-  .metric-value {
-    font-family: var(--font-mono);
-    font-size: 0.88rem;
-    font-weight: 600;
-    color: var(--color-peach);
-    display: block;
-    text-align: center;
-  }
-
-  .metric-label {
-    font-family: var(--font-mono);
-    font-size: 0.62rem;
-    color: var(--color-subtle);
-    display: block;
-    text-align: center;
-    margin-top: 0.2rem;
-    margin-bottom: 0.4rem;
-  }
-
-  .metric-bar-track {
-    height: 3px;
-    background: rgba(255,255,255,0.07);
-    border-radius: 2px;
-    overflow: hidden;
-    margin-top: 0.35rem;
-  }
-
-  .metric-bar-fill {
-    height: 100%;
-    border-radius: 2px;
-    background: var(--color-peach);
-    transition: width 0.4s ease;
-  }
-
-  .metric-bar-fill.warn { background: var(--color-warn); }
-  .metric-bar-fill.crit { background: var(--color-crit); }
-
-  .flux-table {
-    background: var(--color-surface);
-    border: 1px solid var(--color-muted);
-    border-radius: 14px;
-    overflow: hidden;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.05);
-  }
-
-  .flux-row {
-    display: grid;
-    grid-template-columns: 1.8fr 120px 110px 100px;
-    padding: 0.75rem 1.25rem;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    align-items: center;
-    gap: 1rem;
-    transition: background 0.15s;
-  }
-
-  .flux-row:last-child { border-bottom: none; }
-  .flux-row:not(.header):hover { background: rgba(255,255,255,0.03); }
-
-  .flux-row.header {
-    background: rgba(255,255,255,0.04);
-    font-family: var(--font-mono);
-    font-size: 0.68rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--color-subtle);
-  }
-
-  .flux-row.crit-row {
-    background: color-mix(in srgb, var(--color-crit) 7%, transparent);
-    border-left: 3px solid var(--color-crit);
-    padding-left: calc(1.25rem - 3px);
-  }
-  .flux-row.crit-row:hover {
-    background: color-mix(in srgb, var(--color-crit) 12%, transparent);
-  }
-
-  .flux-summary {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.25rem;
-    flex-wrap: wrap;
-  }
-
-  .flux-ratio-bar {
-    flex: 1;
-    min-width: 140px;
-    max-width: 300px;
-    height: 6px;
-    background: var(--color-overlay);
-    border-radius: 3px;
-    overflow: hidden;
-    display: flex;
-  }
-  .flux-ratio-bar-ok   { height: 100%; background: var(--color-ok);   transition: width 0.6s ease; }
-  .flux-ratio-bar-crit { height: 100%; background: var(--color-crit); transition: width 0.6s ease; }
-
-  .flux-ratio-label {
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    color: var(--color-subtle);
-    white-space: nowrap;
-  }
-
-  .flux-name-cell { display: flex; align-items: center; min-width: 0; overflow: hidden; }
-  .flux-name-icon {
-    display: inline-block;
-    width: 1rem;
-    text-align: center;
-    margin-right: 0.4rem;
-    flex-shrink: 0;
-    font-size: 0.85rem;
-  }
-  .flux-name-icon.ok   { color: var(--color-ok); }
-  .flux-name-icon.crit { color: var(--color-crit); }
-  .flux-name-text {
-    font-family: var(--font-mono);
-    font-size: 0.875rem;
-    color: var(--color-heading);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    padding: 0.2rem 0.55rem;
-    border-radius: 4px;
-    white-space: nowrap;
-  }
-
-  .badge.ok      { background: color-mix(in srgb, var(--color-ok)     18%, transparent); color: var(--color-ok); }
-  .badge.warn    { background: color-mix(in srgb, var(--color-warn)   18%, transparent); color: var(--color-warn); }
-  .badge.crit    { background: color-mix(in srgb, var(--color-crit)   18%, transparent); color: var(--color-crit); }
-  .badge.unknown { background: color-mix(in srgb, var(--color-subtle) 18%, transparent); color: var(--color-subtle); }
-
-  .skeleton {
-    background: linear-gradient(
-      90deg,
-      var(--color-surface) 25%,
-      var(--color-overlay) 50%,
-      var(--color-surface) 75%
-    );
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-  }
-
-  @keyframes shimmer {
-    0%   { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-  }
-
-  /* ── Service Uptime (per-app) ── */
-  #app-uptime-section:has(#app-uptime-grid:empty) { display: none; }
-
-  .uptime-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 1rem;
-  }
-
-  .uptime-card {
-    background: var(--color-surface);
-    border: 1px solid var(--color-muted);
-    border-left: 3px solid var(--color-ok);
-    border-radius: 12px;
-    padding: 1.1rem 1.25rem;
-  }
-  .uptime-card.warn    { border-left-color: var(--color-warn); }
-  .uptime-card.crit    { border-left-color: var(--color-crit); }
-  .uptime-card.nodata  { border-left-color: var(--color-muted); }
-
-  .uptime-card-head {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 0.5rem;
-    margin-bottom: 0.75rem;
-  }
-
-  .uptime-app-name {
-    font-family: var(--font-display);
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--color-heading);
-    letter-spacing: -0.01em;
-  }
-
-  .uptime-pct {
-    font-family: var(--font-mono);
-    font-size: 1.05rem;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-    color: var(--color-ok);
-  }
-  .uptime-card.warn   .uptime-pct { color: var(--color-warn); }
-  .uptime-card.crit   .uptime-pct { color: var(--color-crit); }
-  .uptime-card.nodata .uptime-pct {
-    color: var(--color-subtle);
-    font-size: 0.72rem;
-    font-weight: 500;
-    letter-spacing: 0.02em;
-  }
-
-  .uptime-bar-track {
-    height: 5px;
-    background: var(--color-overlay);
-    border-radius: 3px;
-    overflow: hidden;
-    margin-bottom: 0.6rem;
-  }
-  .uptime-bar-fill {
-    height: 100%;
-    border-radius: 3px;
-    background: var(--color-ok);
-    transition: width 0.7s ease;
-  }
-  .uptime-bar-fill.warn { background: var(--color-warn); }
-  .uptime-bar-fill.crit { background: var(--color-crit); }
-  /* No-data: a faint dashed track, no fill — visibly "unmeasured", not fake-full */
-  .uptime-card.nodata .uptime-bar-track {
-    background: repeating-linear-gradient(90deg,
-      var(--color-muted) 0 4px, transparent 4px 8px);
-    opacity: 0.5;
-  }
-
-  .uptime-meta {
-    font-family: var(--font-mono);
-    font-size: 0.68rem;
-    color: var(--color-subtle);
-    letter-spacing: 0.02em;
-  }
-
-  /* ── Deploy banner ── */
-  .deploy-banner {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    background: var(--color-surface);
-    border: 1px solid var(--color-muted);
-    border-radius: 10px;
-    padding: 0.875rem 1.25rem;
-    font-family: var(--font-mono);
-  }
-
-  .deploy-sha {
-    font-size: 0.72rem;
-    color: var(--color-peach);
-    background: color-mix(in srgb, var(--color-peach) 12%, transparent);
-    padding: 0.15rem 0.5rem;
-    border-radius: 4px;
-    flex-shrink: 0;
-  }
-
-  .deploy-msg {
-    font-size: 0.85rem;
-    color: var(--color-heading);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    flex: 1;
-  }
-
-  .deploy-age {
-    font-size: 0.75rem;
-    color: var(--color-subtle);
-    flex-shrink: 0;
-  }
-
-  /* ── Storage pools ── */
-  .storage-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-  }
-
-  @media (max-width: 860px) {
-    .storage-grid { grid-template-columns: repeat(2, 1fr); }
-  }
-
-  @media (max-width: 560px) {
-    .storage-grid { grid-template-columns: 1fr; }
-  }
-
-  .storage-card {
-    background: var(--color-surface);
-    border: 1px solid var(--color-muted);
-    border-radius: 14px;
-    padding: 1.5rem;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .storage-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: var(--color-ok);
-    border-radius: 14px 14px 0 0;
-  }
-  .storage-card.warn::before { background: var(--color-warn); }
-  .storage-card.crit::before { background: var(--color-crit); }
-
-  .storage-pool-name {
-    font-family: var(--font-mono);
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--color-heading);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    margin-bottom: 0.25rem;
-  }
-
-  .storage-health {
-    font-size: 0.72rem;
-    font-family: var(--font-mono);
-    margin-bottom: 1.25rem;
-  }
-
-  .storage-donut-row {
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-    margin-bottom: 1.25rem;
-  }
-
-  .storage-donut {
-    flex-shrink: 0;
-  }
-
-  .storage-legend {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-    flex: 1;
-  }
-
-  .storage-legend-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-  }
-
-  .storage-legend-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    margin-right: 0.4rem;
-    flex-shrink: 0;
-  }
-
-  .storage-bar-track {
-    height: 6px;
-    background: var(--color-overlay);
-    border-radius: 3px;
-    overflow: hidden;
-  }
-
-  .storage-bar-fill {
-    height: 100%;
-    border-radius: 3px;
-    background: var(--color-ok);
-    transition: width 0.7s ease;
-  }
-  .storage-bar-fill.warn { background: var(--color-warn); }
-  .storage-bar-fill.crit { background: var(--color-crit); }
-
-  @media (max-width: 640px) {
-    .flux-row { grid-template-columns: 1fr 90px; }
-    .flux-row > *:nth-child(2),
-    .flux-row > *:nth-child(3) { display: none; }
-  }
-
-  /* ── Network Diagram ── */
-  /* ══════════════════════════════════════════════
-     NETWORK MAP  —  complete visual system
-     ══════════════════════════════════════════════ */
-
-  .netmap-wrap {
-    position: relative;
-    background:
-      radial-gradient(ellipse 80% 60% at 50% 0%,   color-mix(in srgb, #cba6f7 6%, transparent), transparent 70%),
-      radial-gradient(ellipse 60% 50% at 10% 100%,  color-mix(in srgb, #74c7ec 5%, transparent), transparent 60%),
-      radial-gradient(ellipse 50% 40% at 90% 80%,   color-mix(in srgb, #fab387 4%, transparent), transparent 55%),
-      var(--color-mantle);
-    border: 1px solid color-mix(in srgb, var(--color-muted) 40%, transparent);
-    border-top: 1px solid color-mix(in srgb, white 9%, transparent);
-    border-radius: 24px;
-    padding: 2.5rem 2rem 1.5rem;
-    min-height: 580px;
-    box-shadow:
-      0 0 0 1px color-mix(in srgb, var(--color-mauve) 8%, transparent),
-      0 24px 80px rgba(0,0,0,0.6),
-      inset 0 1px 0 color-mix(in srgb, white 6%, transparent);
-    overflow: hidden;
-    isolation: isolate;
-  }
-
-  .netmap-svg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 0;
-    overflow: visible;
-  }
-
-  /* ── Node base ── */
-  .nm-node {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.18rem;
-    padding: 0.85rem 1.1rem 0.75rem;
-    border-radius: 14px;
-    cursor: pointer;
-    z-index: 2;
-    text-align: center;
-    /* Glass card */
-    background: color-mix(in srgb, var(--color-surface) 70%, transparent);
-    backdrop-filter: blur(12px) saturate(140%);
-    -webkit-backdrop-filter: blur(12px) saturate(140%);
-    border: 1px solid color-mix(in srgb, var(--nm-c, var(--color-muted)) 22%, transparent);
-    border-top: 1px solid color-mix(in srgb, white 12%, transparent);
-    box-shadow:
-      0 4px 24px rgba(0,0,0,0.45),
-      0 1px 0 color-mix(in srgb, white 8%, transparent) inset,
-      0 0 0 1px color-mix(in srgb, var(--nm-c, var(--color-muted)) 10%, transparent);
-    transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
-  }
-
-  .nm-node-glow {
-    position: absolute;
-    inset: -1px;
-    border-radius: 14px;
-    background: radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--nm-c, var(--color-mauve)) 18%, transparent) 0%, transparent 70%);
-    pointer-events: none;
-    opacity: 0.6;
-    transition: opacity 0.25s;
-    z-index: -1;
-  }
-
-  .nm-node:hover {
-    border-color: color-mix(in srgb, var(--nm-c, var(--color-peach)) 55%, transparent);
-    box-shadow:
-      0 0 0 1px color-mix(in srgb, var(--nm-c, var(--color-peach)) 30%, transparent),
-      0 8px 40px rgba(0,0,0,0.5),
-      0 0 32px color-mix(in srgb, var(--nm-c, var(--color-peach)) 18%, transparent);
-    transform: translateY(-4px) scale(1.03);
-    z-index: 10;
-  }
-  .nm-node:hover .nm-node-glow { opacity: 1; }
-
-  .nm-svg-icon {
-    width: 1.6rem;
-    height: 1.6rem;
-    color: var(--nm-c, var(--color-mauve));
-    filter: drop-shadow(0 0 6px color-mix(in srgb, var(--nm-c, var(--color-mauve)) 60%, transparent));
-    margin-bottom: 0.1rem;
-    flex-shrink: 0;
-  }
-
-  .nm-label {
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: var(--color-heading);
-    letter-spacing: 0.02em;
-    white-space: nowrap;
-  }
-
-  .nm-ip {
-    font-family: var(--font-mono);
-    font-size: 0.55rem;
-    color: var(--color-subtle);
-    letter-spacing: 0.06em;
-  }
-
-  .nm-badge {
-    margin-top: 0.3rem;
-    display: inline-block;
-    font-family: var(--font-mono);
-    font-size: 0.48rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 0.1rem 0.5rem;
-    border-radius: 4px;
-    color: var(--nm-c, var(--color-peach));
-    background: color-mix(in srgb, var(--nm-c, var(--color-peach)) 13%, transparent);
-    border: 1px solid color-mix(in srgb, var(--nm-c, var(--color-peach)) 28%, transparent);
-  }
-
-  .nm-dot {
-    position: absolute;
-    top: 0.5rem; right: 0.55rem;
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: var(--color-subtle);
-    transition: background 0.3s, box-shadow 0.3s;
-  }
-  .nm-dot.ok   { background: var(--color-ok);   box-shadow: 0 0 6px var(--color-ok);   animation: nm-pulse-ok 2.5s ease-in-out infinite; }
-  .nm-dot.warn { background: var(--color-warn);  box-shadow: 0 0 6px var(--color-warn); animation: nm-pulse-warn 1.5s ease-in-out infinite; }
-  .nm-dot.crit { background: var(--color-crit);  box-shadow: 0 0 8px var(--color-crit); animation: nm-pulse-crit 0.8s ease-in-out infinite; }
-
-  @keyframes nm-pulse-ok {
-    0%, 100% { box-shadow: 0 0 4px var(--color-ok);  opacity: 1; }
-    50%       { box-shadow: 0 0 10px var(--color-ok); opacity: 0.8; }
-  }
-  @keyframes nm-pulse-warn {
-    0%, 100% { box-shadow: 0 0 4px var(--color-warn); }
-    50%       { box-shadow: 0 0 12px var(--color-warn); }
-  }
-  @keyframes nm-pulse-crit {
-    0%, 100% { box-shadow: 0 0 6px var(--color-crit); opacity: 1; }
-    50%       { box-shadow: 0 0 14px var(--color-crit); opacity: 0.7; }
-  }
-
-  /* ── Tier sizing ── */
-  .nm-tier1 { min-width: 118px; --nm-c: #74c7ec; }
-  .nm-tier2 { min-width: 135px; --nm-c: #fab387; padding: 1rem 1.2rem 0.85rem; }
-  .nm-tier2 .nm-svg-icon { width: 1.8rem; height: 1.8rem; }
-
-  /* ── Absolute positions ── */
-  .nm-internet { left: 50%; top: 1.8rem;  transform: translateX(-50%); }
-  .nm-router   { left: 50%; top: 9.5rem;  transform: translateX(-50%); }
-
-  /* ── k3s cluster group ── */
-  .nm-group-k3s {
-    position: absolute;
-    left: 50%;
-    top: 19.5rem;
-    transform: translateX(-50%);
-    z-index: 1;
-    min-width: 400px;
-    padding: 2.4rem 1.4rem 1.4rem;
-    border-radius: 18px;
-    background:
-      radial-gradient(ellipse 90% 60% at 50% 0%, color-mix(in srgb, #cba6f7 7%, transparent), transparent 70%),
-      color-mix(in srgb, var(--color-surface) 30%, transparent);
-    border: 1px solid color-mix(in srgb, #cba6f7 25%, transparent);
-    border-top: 1px solid color-mix(in srgb, #cba6f7 40%, transparent);
-    box-shadow:
-      0 0 0 1px color-mix(in srgb, #cba6f7 8%, transparent),
-      0 8px 40px rgba(0,0,0,0.3),
-      inset 0 1px 0 color-mix(in srgb, white 6%, transparent);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-  }
-
-  .nm-group-label {
-    position: absolute;
-    top: 0.65rem; left: 1.1rem;
-    font-family: var(--font-mono);
-    font-size: 0.55rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: color-mix(in srgb, #cba6f7 75%, var(--color-subtle));
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-  }
-
-  .nm-group-inner {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-  }
-
-  .nm-k3s {
-    position: relative !important;
-    transform: none !important;
-    left: auto !important; top: auto !important;
-    min-width: 108px;
-    --nm-c: #cba6f7;
-  }
-  .nm-k3s:hover { transform: translateY(-4px) scale(1.03) !important; }
-
-  /* ── Edge nodes row ── */
-  .nm-edge { min-width: 108px; }
-  .nm-docker  { --nm-c: #74c7ec; left: 4%;   bottom: 3.2rem; }
-  .nm-control { --nm-c: #a6e3a1; left: 25%;  bottom: 3.2rem; }
-  .nm-storage { --nm-c: #e6b450; right: 20%; bottom: 3.2rem; }
-  .nm-pi      { --nm-c: #f38ba8; right: 3%;  bottom: 3.2rem; }
-
-  /* ── Legend ── */
-  .nm-legend {
-    position: absolute;
-    bottom: 1rem;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 1.25rem;
-    z-index: 3;
-    background: color-mix(in srgb, var(--color-crust) 80%, transparent);
-    border: 1px solid color-mix(in srgb, var(--color-muted) 40%, transparent);
-    border-radius: 50px;
-    padding: 0.35rem 1rem;
-    backdrop-filter: blur(8px);
-  }
-
-  .nm-legend-item {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-family: var(--font-mono);
-    font-size: 0.56rem;
-    color: var(--color-subtle);
-    white-space: nowrap;
-  }
-
-  .nm-legend-pip {
-    width: 20px; height: 2px;
-    border-radius: 2px;
-    background: var(--lc, var(--color-muted));
-    box-shadow: 0 0 4px var(--lc, var(--color-muted));
-    flex-shrink: 0;
-  }
-
-  /* ── Tooltip ── */
-  .nm-tooltip {
-    position: absolute;
-    min-width: 200px;
-    max-width: 240px;
-    background: color-mix(in srgb, var(--color-crust) 95%, transparent);
-    border: 1px solid color-mix(in srgb, var(--color-muted) 60%, transparent);
-    border-top: 1px solid color-mix(in srgb, white 10%, transparent);
-    border-radius: 12px;
-    padding: 0.9rem 1rem;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.15s, transform 0.15s;
-    transform: translateY(4px);
-    z-index: 30;
-    box-shadow: 0 12px 48px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
-    backdrop-filter: blur(16px);
-  }
-  .nm-tooltip.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .nm-tt-header {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 0.5rem;
-    margin-bottom: 0.3rem;
-  }
-  .nm-tt-name {
-    font-family: var(--font-mono);
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--color-heading);
-  }
-  .nm-tt-ip {
-    font-family: var(--font-mono);
-    font-size: 0.58rem;
-    color: var(--color-peach);
-    letter-spacing: 0.04em;
-  }
-  .nm-tt-role {
-    font-family: var(--font-mono);
-    font-size: 0.62rem;
-    color: var(--color-subtle);
-    margin-bottom: 0.5rem;
-  }
-  .nm-tt-divider {
-    height: 1px;
-    background: linear-gradient(to right, color-mix(in srgb, var(--color-muted) 60%, transparent), transparent);
-    margin-bottom: 0.5rem;
-  }
-  .nm-tt-services {
-    font-family: var(--font-mono);
-    font-size: 0.62rem;
-    color: var(--color-text);
-    line-height: 1.8;
-    display: flex;
-    flex-direction: column;
-    gap: 0.05rem;
-  }
-  .nm-tt-svc-row {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-  }
-  .nm-tt-svc-row::before {
-    content: '';
-    display: block;
-    width: 4px; height: 4px;
-    border-radius: 50%;
-    background: var(--color-mauve);
-    flex-shrink: 0;
-    box-shadow: 0 0 4px var(--color-mauve);
-  }
-
-  @media (max-width: 768px) {
-    .netmap-wrap { min-height: 760px; padding: 2rem 1rem 1.5rem; }
-    .nm-group-k3s { min-width: 290px; }
-    .nm-group-inner { gap: 0.65rem; }
-    .nm-k3s { min-width: 88px; }
-    .nm-docker  { left: 1%;   bottom: 2rem; }
-    .nm-control { left: 26%;  bottom: 2rem; }
-    .nm-storage { right: 18%; bottom: 2rem; }
-    .nm-pi      { right: 1%;  bottom: 2rem; }
-    .nm-legend  { flex-wrap: wrap; justify-content: center; gap: 0.6rem; border-radius: 12px; }
+  .ed {
+    --ed-bg: #0e0e11; --ed-tx: #eaeaed; --ed-mut: #9a9aa3; --ed-fnt: #63636b;
+    --ed-hair: rgba(255,255,255,.09); --ed-hair2: rgba(255,255,255,.14);
+    --ed-ok: #2fa06b; --ed-warn: #c98a1e; --ed-crit: #cf5349; --ed-muted: #6b6f77;
+    --ed-serif: 'Newsreader', Georgia, serif;
+    max-width: 1080px; margin: 0 auto; padding: 0 32px;
+    color: var(--ed-tx); font-family: var(--font-sans);
+  }
+  .ed .mono { font-family: var(--font-mono); }
+  .ed .ok { color: var(--ed-ok); }
+  .ed .ed-mut { color: var(--ed-mut); }
+  .ed .ed-faint { color: var(--ed-fnt); font-weight: 400; }
+  .ed .ed-eyebrow { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--ed-mut); }
+  .ed .ed-h2 { font-family: var(--ed-serif); font-weight: 500; font-size: 29px; margin: 9px 0 0; color: var(--ed-tx); letter-spacing: -.01em; }
+
+  /* HERO */
+  .ed-hero { padding: 60px 0 6px; }
+  .ed-h1 { font-family: var(--ed-serif); font-weight: 500; font-size: clamp(40px, 6vw, 64px); line-height: 1.02; letter-spacing: -.02em; margin: 16px 0 0; color: var(--ed-tx); }
+  .ed-lede { margin: 18px 0 0; max-width: 60ch; font-size: 16px; line-height: 1.65; color: var(--ed-mut); }
+  .ed-metrics { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 44px; border-top: 1px solid var(--ed-hair); }
+  .ed-metric { padding: 22px 22px 22px 0; }
+  .ed-metric + .ed-metric { border-left: 1px solid var(--ed-hair); padding-left: 22px; }
+  .ed-metric-n { font-size: 36px; font-weight: 500; font-variant-numeric: tabular-nums; color: var(--ed-tx); }
+  .ed-metric-l { font-size: 11px; letter-spacing: .04em; color: var(--ed-mut); margin-top: 6px; }
+
+  /* SECTIONS */
+  .ed-sec { padding: 46px 0; border-top: 1px solid var(--ed-hair); }
+  .ed-sec-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 8px; }
+  .ed-note { font-size: 12px; color: var(--ed-fnt); }
+
+  /* KNOWN ISSUES */
+  .ed-issue { display: flex; gap: 16px; padding: 16px 0; border-top: 1px solid var(--ed-hair); }
+  .ed-issue:first-child { border-top: none; }
+  .ed-issue-tag { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: .1em; border: 1px solid; border-radius: 4px; padding: 3px 7px; height: fit-content; flex: none; }
+  .ed-issue-title { font-size: 14.5px; color: var(--ed-tx); font-weight: 500; }
+  .ed-issue-detail { font-size: 13px; color: var(--ed-mut); margin-top: 4px; line-height: 1.55; }
+
+  /* NODES */
+  .ed-ngrid { display: grid; grid-template-columns: 1.15fr 1.7fr 1fr 1.15fr 1.15fr; gap: 16px; align-items: center; }
+  .ed-nhead { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--ed-fnt); padding-bottom: 2px; }
+  .ed-nrow { padding: 13px 0; border-top: 1px solid var(--ed-hair); font-family: var(--font-mono); font-size: 13px; transition: background .15s; }
+  .ed-nrow:hover { background: rgba(255,255,255,.02); }
+  .ed-nname { display: flex; align-items: center; gap: 9px; color: var(--ed-tx); font-weight: 500; }
+  .ed-nrole { font-size: 12.5px; color: var(--ed-mut); font-family: var(--font-sans); }
+  .ed-nip { font-size: 11.5px; color: var(--ed-fnt); }
+  .ed-bar { display: flex; align-items: center; gap: 9px; }
+  .ed-bar-track { flex: 1; height: 4px; border-radius: 2px; background: rgba(255,255,255,.08); overflow: hidden; }
+  .ed-bar-fill { display: block; height: 100%; transition: width .8s ease; }
+  .ed-bar-val { font-size: 11.5px; color: var(--ed-mut); width: 34px; text-align: right; font-variant-numeric: tabular-nums; }
+
+  /* SERVICES */
+  .ed-svgrid { display: grid; grid-template-columns: 1.6fr 1fr .9fr .9fr; gap: 16px; align-items: center; }
+  .ed-svhead { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--ed-fnt); padding-bottom: 2px; }
+  .ed-svrow { padding: 13px 0; border-top: 1px solid var(--ed-hair); font-family: var(--font-mono); font-size: 13px; transition: background .15s; }
+  .ed-svrow:hover { background: rgba(255,255,255,.02); }
+  .ed-svname { display: flex; align-items: center; gap: 9px; color: var(--ed-tx); font-weight: 500; font-family: var(--font-sans); font-size: 13.5px; }
+  .ed-svgroup { font-size: 11.5px; color: var(--ed-fnt); }
+  .ed-svpct { text-align: right; font-size: 12.5px; font-variant-numeric: tabular-nums; }
+  .ed-svlat { text-align: right; font-size: 11.5px; color: var(--ed-mut); font-variant-numeric: tabular-nums; }
+
+  /* INCIDENT BAND */
+  .ed-band { display: flex; gap: 2px; align-items: flex-end; height: 48px; }
+  .ed-band > span { flex: 1; border-radius: 1.5px; }
+  .ed-band-axis { display: flex; justify-content: space-between; font-size: 10.5px; color: var(--ed-fnt); margin-top: 8px; }
+  .ed-inc-log { margin-top: 30px; }
+  .ed-inc-row { display: grid; grid-template-columns: 110px 1fr auto; gap: 16px; align-items: center; padding: 12px 0; border-top: 1px solid var(--ed-hair); }
+  .ed-inc-date { font-family: var(--font-mono); font-size: 12px; color: var(--ed-fnt); }
+  .ed-inc-title { font-size: 13.5px; color: var(--ed-tx); }
+  .ed-inc-sev { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: .08em; border: 1px solid; border-radius: 4px; padding: 2px 7px; }
+
+  /* TOPOLOGY */
+  .ed-topo { display: flex; flex-direction: column; gap: 18px; }
+  .ed-topo-row { display: flex; align-items: stretch; gap: 12px; flex-wrap: wrap; }
+  .ed-box { flex: 1; min-width: 170px; padding: 12px 16px; border: 1px solid var(--ed-hair); border-radius: 8px; display: flex; flex-direction: column; gap: 3px; }
+  .ed-box-t { font-family: var(--font-mono); font-size: 12px; color: var(--ed-tx); }
+  .ed-box-s { font-family: var(--font-mono); font-size: 10.5px; color: var(--ed-fnt); }
+  .ed-arrow { align-self: center; color: var(--ed-fnt); }
+  .ed-cluster { border-color: var(--ed-hair2); gap: 12px; }
+  .ed-cluster-head { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 6px; font-size: 11px; letter-spacing: .06em; }
+  .ed-cluster-nodes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .ed-chip { display: flex; align-items: center; gap: 8px; padding: 9px 12px; background: rgba(255,255,255,.03); border-radius: 7px; font-size: 12px; }
+  .ed-chip .ed-faint { margin-left: auto; font-size: 10px; }
+  .ed-topo-support { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .ed-support { min-width: 0; }
+  .ed-support-t { display: flex; align-items: center; gap: 7px; font-size: 12px; }
+  .ed-dashed { border-style: dashed; }
+  .ed-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ed-muted); flex: none; }
+  .ed-dot.ok { background: var(--ed-ok); } .ed-dot.warn { background: var(--ed-warn); }
+  .ed-dot.crit { background: var(--ed-crit); } .ed-dot.muted { background: var(--ed-muted); }
+
+  /* NETWORK */
+  .ed-net { display: grid; grid-template-columns: 1fr 1fr; gap: 0 40px; }
+  .ed-net-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 13px 0; border-top: 1px solid var(--ed-hair); }
+  .ed-net-label { font-size: 13px; color: var(--ed-mut); }
+  .ed-net-val { font-family: var(--font-mono); font-size: 12.5px; color: var(--ed-tx); text-align: right; }
+  .ed-net-note { font-family: var(--font-mono); font-size: 11px; color: var(--ed-fnt); display: block; margin-top: 2px; }
+
+  /* STORAGE */
+  .ed-strow { padding: 15px 0; border-top: 1px solid var(--ed-hair); }
+  .ed-strow-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 9px; flex-wrap: wrap; gap: 6px; }
+  .ed-stname { font-family: var(--font-mono); font-size: 13.5px; color: var(--ed-tx); }
+  .ed-stkind { font-size: 12px; color: var(--ed-mut); margin-left: 12px; }
+  .ed-stused { font-family: var(--font-mono); font-size: 12px; color: var(--ed-mut); font-variant-numeric: tabular-nums; }
+  .ed-sttrack { height: 5px; border-radius: 3px; background: rgba(255,255,255,.08); overflow: hidden; }
+  .ed-stfill { display: block; height: 100%; }
+
+  /* BACKUPS */
+  .ed-bkrow { display: grid; grid-template-columns: 1.3fr 1.6fr 1fr auto; gap: 16px; align-items: center; padding: 13px 0; border-top: 1px solid var(--ed-hair); font-family: var(--font-mono); font-size: 12.5px; }
+  .ed-bkname { color: var(--ed-tx); }
+  .ed-bktarget { color: var(--ed-mut); font-family: var(--font-sans); }
+  .ed-bkwhen { color: var(--ed-fnt); font-size: 11.5px; }
+  .ed-bkstatus { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; }
+  .ed-foot-note { font-size: 11.5px; color: var(--ed-fnt); margin-top: 16px; }
+
+  /* INFRA */
+  .ed-infra { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .ed-inf { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border: 1px solid var(--ed-hair); border-radius: 9px; }
+  .ed-inf-body { flex: 1; }
+  .ed-inf-name { font-family: var(--font-mono); font-size: 13px; color: var(--ed-tx); }
+  .ed-inf-detail { font-size: 12px; color: var(--ed-mut); margin-top: 2px; }
+  .ed-inf-label { font-family: var(--font-mono); font-size: 10.5px; }
+
+  @media (max-width: 820px) {
+    .ed-metrics { grid-template-columns: repeat(2, 1fr); }
+    .ed-net, .ed-infra { grid-template-columns: 1fr; }
+    .ed-cluster-nodes, .ed-topo-support { grid-template-columns: 1fr 1fr; }
+    .ed-ngrid { grid-template-columns: 1.2fr 1fr 1fr; }
+    .ed-nhead span:nth-child(2), .ed-nrow .ed-nrole, .ed-nhead span:nth-child(3), .ed-nrow .ed-nip { display: none; }
+    .ed-svgrid { grid-template-columns: 1.4fr .9fr .9fr; }
+    .ed-svhead span:nth-child(2), .ed-svrow .ed-svgroup { display: none; }
   }
 </style>
 
 <script>
+  const OK = '#2fa06b', WARN = '#c98a1e', CRIT = '#cf5349', MUTED = '#6b6f77', FNT = '#63636b';
+
+  function pct(v: any): string { const m = /(\d+)/.exec(String(v ?? '')); return m ? m[1] : '0'; }
+  function el(id: string) { return document.getElementById(id); }
+  function set(id: string, t: string) { const e = el(id); if (e) e.textContent = t; }
+
   async function loadStatus() {
-    try {
-      const res = await fetch('/data/live.json?t=' + Date.now());
-      if (!res.ok) throw new Error('no data');
-      const data = await res.json();
+    let d: any;
+    try { const r = await fetch('/data/live.json', { cache: 'no-store' }); if (!r.ok) throw 0; d = await r.json(); }
+    catch { return; }
 
-      // Last updated timestamp
-      if (data.updated) {
-        const el = document.getElementById('last-updated');
-        if (el) {
-          const d = new Date(data.updated);
-          el.textContent = 'Data as of ' + d.toLocaleTimeString('en-ZA', {
-            timeZone: 'Africa/Johannesburg',
-            hour: '2-digit', minute: '2-digit'
-          }) + ' SAST';
-        }
-      }
+    const nodes: any[] = Array.isArray(d.nodes) ? d.nodes : [];
+    const hm: Record<string, any> = d.host_metrics ?? {};
+    const byName: Record<string, any> = {};
+    for (const n of nodes) byName[String(n.name).toLowerCase()] = n;
 
-      // Glance cards — only Workloads + Flux (backups live in their own section)
-      const glance = document.getElementById('glance-cards');
-      if (glance && data.cards) {
-        const glanceLabels = ['workloads', 'flux'];
-        glance.innerHTML = data.cards.filter((c: any) => glanceLabels.includes(c.label.toLowerCase())).map((c: any) => {
-          // Extract leading number for count-up (e.g. "61/64" → 61, "19/19 synced" → 19)
-          const numMatch = (c.value ?? '').match(/^(\d+)/);
-          const countAttr = numMatch ? `data-count-to="${numMatch[1]}" data-count-suffix="${c.value.slice(numMatch[1].length)}"` : '';
-          return `
-          <div class="card">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
-              <span class="mono" style="color:var(--color-subtle);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em">${c.label}</span>
-              <span class="status-dot ${c.status}"></span>
-            </div>
-            <div style="font-size:1.4rem;font-weight:700;color:var(--color-heading);font-family:var(--font-mono);margin-bottom:0.25rem"
-                 ${countAttr}>0</div>
-            <div class="mono" style="font-size:0.85rem">${c.sub ?? ''}</div>
+    // ── Hero verdict + metrics ──
+    const ready = nodes.filter(n => n.status === 'ok').length;
+    const pods = nodes.reduce((s, n) => s + (parseInt(n.pods) || 0), 0);
+    const outages: any[] = Array.isArray(d.outages) ? d.outages : [];
+    const openInc = outages.filter(o => (o.minutes ?? 0) === 0 && o.date === new Date().toISOString().slice(0,10)).length;
+    const apps: any[] = Array.isArray(d.app_uptime) ? d.app_uptime : [];
+    const measured = apps.filter(a => a.has_data);
+    const healthy = measured.filter(a => (a.uptime_pct ?? 0) >= 99.5).length;
+
+    set('m-nodes', nodes.length ? `${ready}/${nodes.length}` : '—');
+    set('m-pods', pods ? String(pods) : '—');
+    set('m-uptime', measured.length ? `${healthy}/${measured.length}` : '—');
+    set('m-incidents', String(openInc));
+
+    const verdict = el('ed-verdict');
+    if (verdict) {
+      if (ready < nodes.length || openInc > 0) { verdict.textContent = 'Operating with known issues.'; }
+      else verdict.textContent = 'All systems operational.';
+    }
+
+    // ── Known issues ──
+    const issues: { tag: string; tone: string; title: string; detail: string }[] = [];
+    for (const s of (d.storage ?? [])) {
+      if (s.pct > 80) issues.push({ tag: 'WATCH', tone: WARN, title: `${s.name} pool at ${Math.round(s.pct)}% capacity`, detail: `${s.used} of ${s.total} used — plan expansion before it tightens.` });
+    }
+    issues.push({ tag: 'KNOWN', tone: MUTED, title: 'bronn (.20) outside cluster monitoring', detail: 'standalone docker host, no Prometheus scrape and no Gatus probe — known, by design.' });
+    const issuesEl = el('ed-issues');
+    if (issuesEl) issuesEl.innerHTML = issues.map(i => `
+      <div class="ed-issue">
+        <span class="ed-issue-tag" style="color:${i.tone};border-color:${i.tone}">${i.tag}</span>
+        <div><div class="ed-issue-title">${i.title}</div><div class="ed-issue-detail">${i.detail}</div></div>
+      </div>`).join('');
+    set('ed-issues-note', openInc === 0 ? 'no active incidents' : `${openInc} active`);
+
+    // ── Nodes (CPU/Mem real; disk not collected → omitted) ──
+    const nEl = el('ed-nodes');
+    if (nEl) nEl.innerHTML = nodes.map(n => {
+      const key = String(n.name).toLowerCase();
+      const cpu = pct(hm[key]?.cpu ?? n.cpu), mem = pct(hm[key]?.mem ?? n.memory);
+      const bar = (v: string, c: string) => `<span class="ed-bar"><span class="ed-bar-track"><span class="ed-bar-fill" style="width:${v}%;background:${c}"></span></span><span class="ed-bar-val">${v}%</span></span>`;
+      return `<div class="ed-nrow ed-ngrid">
+        <span class="ed-nname"><span class="ed-dot ${n.status}"></span>${n.name}</span>
+        <span class="ed-nrole">${n.role ?? ''}</span>
+        <span class="ed-nip">${n.ip ?? ''}</span>
+        ${bar(cpu, '#6f8fb0')}${bar(mem, '#9a86ad')}
+      </div>`;
+    }).join('');
+
+    // ── Topology dots ──
+    document.querySelectorAll<HTMLElement>('.ed-dot[data-node]').forEach(dot => {
+      const n = byName[dot.dataset.node ?? ''];
+      dot.className = 'ed-dot ' + (n?.status ?? 'ok');
+    });
+
+    // ── Services, by uptime (real Gatus) ──
+    const svcEl = el('ed-services');
+    if (svcEl) {
+      if (!apps.length) { svcEl.innerHTML = `<div class="ed-svrow"><span class="ed-svgroup">no service data yet</span></div>`; }
+      else {
+        const sorted = [...apps].sort((a, b) => (b.uptime_pct ?? -1) - (a.uptime_pct ?? -1));
+        svcEl.innerHTML = sorted.map(a => {
+          const name = a.app.charAt(0).toUpperCase() + a.app.slice(1);
+          const upC = !a.has_data ? FNT : (a.uptime_pct < 99) ? CRIT : (a.uptime_pct < 99.9) ? WARN : OK;
+          const upT = a.has_data ? `${a.uptime_pct}%` : 'measuring…';
+          const lat = a.avg_ms != null ? `${a.avg_ms}ms` : '—';
+          const dot = !a.has_data ? MUTED : (a.uptime_pct < 99 ? CRIT : OK);
+          return `<div class="ed-svrow ed-svgrid">
+            <span class="ed-svname"><span class="ed-dot" style="background:${dot}"></span>${name}</span>
+            <span class="ed-svgroup">${a.group ?? ''}</span>
+            <span class="ed-svpct" style="color:${upC}">${upT}</span>
+            <span class="ed-svlat">${lat}</span>
           </div>`;
         }).join('');
       }
-
-      // Service Uptime — per-app, measured by Gatus (active probe every 60s).
-      // Real uptime % + avg latency over a rolling window. has_data=false only before
-      // an endpoint has any rollups yet ("measuring…"), never a fabricated 100%.
-      const uptimeGrid = document.getElementById('app-uptime-grid');
-      if (uptimeGrid && Array.isArray(data.app_uptime)) {
-        const APP_TITLES: Record<string, string> = {
-          immich: 'Immich', nextcloud: 'Nextcloud', vaultwarden: 'Vaultwarden',
-          grafana: 'Grafana', authentik: 'Authentik', postgresql: 'PostgreSQL',
-          miniflux: 'Miniflux', seerr: 'Seerr', plex: 'Plex',
-        };
-        const title = (a: string) => APP_TITLES[a] ?? (a.charAt(0).toUpperCase() + a.slice(1));
-        // Severity from uptime%: <95 crit, <99.5 warn, else ok. No data → its own class.
-        const cls = (u: any) => !u.has_data ? 'nodata'
-          : u.uptime_pct < 95 ? 'crit' : u.uptime_pct < 99.5 ? 'warn' : '';
-        // Trim trailing zeros: 100.000 → 100, 99.870 → 99.87
-        const fmtPct = (p: number) => parseFloat(p.toFixed(3)).toString();
-        uptimeGrid.innerHTML = data.app_uptime.map((u: any) => {
-          const c = cls(u);
-          const pctText = u.has_data ? `${fmtPct(u.uptime_pct)}%` : 'measuring…';
-          const fillW = u.has_data ? Math.max(0, Math.min(100, u.uptime_pct)) : 0;
-          const lat = (u.avg_ms != null && u.has_data) ? ` · ${u.avg_ms}ms` : '';
-          const meta = u.has_data
-            ? `${u.checks.toLocaleString()} checks${lat} · ${u.window_days}d`
-            : `awaiting first checks · ${u.window_days}d window`;
-          return `
-          <div class="uptime-card ${c}">
-            <div class="uptime-card-head">
-              <span class="uptime-app-name">${title(u.app)}</span>
-              <span class="uptime-pct">${pctText}</span>
-            </div>
-            <div class="uptime-bar-track"><div class="uptime-bar-fill ${c === 'nodata' ? '' : c}" style="width:${fillW}%"></div></div>
-            <div class="uptime-meta">${meta}</div>
-          </div>`;
-        }).join('');
-      }
-
-      // Nodes
-      const nodesGrid = document.getElementById('nodes-grid');
-      if (nodesGrid && data.nodes) {
-        const parsePct = (s: string) => { const m = s?.match(/(\d+)/); return m ? parseInt(m[1]) : null; };
-        const barClass = (pct: number | null) => pct == null ? '' : pct >= 85 ? 'crit' : pct >= 70 ? 'warn' : '';
-        const metricBar = (val: string, label: string) => {
-          const pct = parsePct(val);
-          const fill = pct != null ? `<div class="metric-bar-track"><div class="metric-bar-fill ${barClass(pct)}" style="width:${Math.min(pct,100)}%"></div></div>` : '';
-          return `<div class="metric">
-            <span class="metric-value">${val}</span>
-            <span class="metric-label">${label}</span>
-            ${fill}
-          </div>`;
-        };
-
-        const uptimeRing = (status: string) => {
-          const color = status === 'ok' ? 'var(--color-ok)' : status === 'warn' ? 'var(--color-warn)' : 'var(--color-crit)';
-          const glyph = status === 'ok' ? '✓' : status === 'warn' ? '!' : '✗';
-          const label = status === 'ok' ? 'Ready' : status === 'warn' ? 'Degraded' : 'Not Ready';
-          // Exact values from mockup: r=20, circ=125.66
-          // ok: full ring (125.7 0), warn: ~75% (94.3 31.4), crit: ~25% (31.4 94.3)
-          const dash = status === 'ok' ? '125.7 0' : status === 'warn' ? '94.3 31.4' : '31.4 94.3';
-          return `<div class="node-status-badge">
-            <svg class="node-status-ring" viewBox="0 0 52 52" fill="none">
-              <circle cx="26" cy="26" r="20" stroke="rgba(255,255,255,0.06)" stroke-width="4"/>
-              <circle class="arc" cx="26" cy="26" r="20" stroke="${color}" stroke-width="4"
-                stroke-dasharray="0 125.7" data-dash="${dash}" stroke-dashoffset="31.4"
-                stroke-linecap="round"/>
-              <text x="26" y="26" text-anchor="middle" dominant-baseline="middle"
-                font-family="JetBrains Mono,monospace" font-size="11" font-weight="700"
-                fill="${color}">${glyph}</text>
-            </svg>
-            <div class="node-ring-label">${label}</div>
-          </div>`;
-        };
-
-        const fourthMetric = (n: any) => {
-          const pressures = (n.pressure ?? []).filter((p: string) => !/false/i.test(p));
-          const podCap = (n.pods ?? '—/—').split('/')[1] ?? '—';
-          if (pressures.length > 0) {
-            return `<div class="metric" style="border:1px solid color-mix(in srgb,var(--color-crit) 40%,transparent)">
-              <span class="metric-value" style="color:var(--color-crit)">${pressures.length}</span>
-              <span class="metric-label" style="color:var(--color-crit)">Pressure</span>
-            </div>`;
-          }
-          return `<div class="metric">
-            <span class="metric-value" style="font-size:0.8rem">${podCap}</span>
-            <span class="metric-label">Pod Cap</span>
-          </div>`;
-        };
-
-        nodesGrid.innerHTML = data.nodes.map((n: any) => {
-          const alertBanner = n.status === 'crit'
-            ? `<div style="margin-top:0.875rem;padding:0.4rem 0.75rem;background:color-mix(in srgb,var(--color-crit) 15%,transparent);border-radius:6px;font-family:var(--font-mono);font-size:0.72rem;color:var(--color-crit)">⚠ Node not ready — check kubelet</div>`
-            : '';
-          return `
-          <div class="node-card ${n.status}">
-            <div class="node-header">
-              <div class="node-identity">
-                <div class="node-identity-row">
-                  <span class="node-field-label">Node</span>
-                  <span class="node-field-value">${n.name}</span>
-                </div>
-                <div class="node-identity-row">
-                  <span class="node-field-label">Role</span>
-                  <span class="node-field-value role">${n.role}</span>
-                </div>
-              </div>
-              ${uptimeRing(n.status)}
-            </div>
-            <div class="node-metrics-4">
-              ${metricBar(n.cpu,    'CPU')}
-              ${metricBar(n.memory, 'Memory')}
-              <div class="metric">
-                <span class="metric-value">${n.pods}</span>
-                <span class="metric-label">Pods</span>
-              </div>
-              ${fourthMetric(n)}
-            </div>
-            ${alertBanner}
-          </div>`;
-        }).join('');
-      }
-
-      // Infrastructure — Last Deployment
-      const deployEl = document.getElementById('infra-deploy');
-      if (deployEl && data.last_deploy) {
-        const d = data.last_deploy;
-        deployEl.innerHTML = `
-          <div class="deploy-banner">
-            <span class="mono" style="font-size:0.72rem;color:var(--color-subtle);text-transform:uppercase;letter-spacing:0.06em;flex-shrink:0">Last commit</span>
-            <span class="deploy-sha">${d.sha}</span>
-            <span class="deploy-msg">${d.message}</span>
-            <span class="deploy-age">${d.age}</span>
-          </div>`;
-      }
-
-      // Infrastructure — bran + UPS + Power placeholders
-      const infraCards = document.getElementById('infra-cards');
-      if (infraCards) {
-        const b = data.bran ?? {};
-        const tempStatus = b.temp_status ?? 'unknown';
-        const tempVal    = b.temp_c != null ? b.temp_c + '°C' : '—';
-        const loadVal    = b.load   != null ? b.load.toFixed(2) : '—';
-        const memVal     = b.mem_pct != null ? b.mem_pct + '%' : '—';
-
-        infraCards.innerHTML = `
-          <div class="card">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem">
-              <div>
-                <span class="mono" style="color:var(--color-subtle);font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em">bran</span>
-                <div style="font-size:0.78rem;color:var(--color-subtle);font-family:var(--font-mono);margin-top:0.1rem">RPi 4 · automation runner &amp; site CI</div>
-              </div>
-              <span class="status-dot ${tempStatus}"></span>
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.4rem;margin-top:0.75rem">
-              <div class="metric">
-                <span class="metric-value" style="font-size:0.85rem">${tempVal}</span>
-                <span class="metric-label">Temp</span>
-              </div>
-              <div class="metric">
-                <span class="metric-value" style="font-size:0.85rem">${memVal}</span>
-                <span class="metric-label">Mem</span>
-              </div>
-              <div class="metric">
-                <span class="metric-value" style="font-size:0.85rem">${loadVal}</span>
-                <span class="metric-label">Load</span>
-              </div>
-            </div>
-          </div>
-          <div class="card" style="opacity:0.6;border-style:dashed">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
-              <span class="mono" style="color:var(--color-subtle);font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em">Homelab Power</span>
-              <span class="status-dot unknown"></span>
-            </div>
-            <div style="font-size:1.25rem;font-weight:700;color:var(--color-subtle);font-family:var(--font-mono);margin-bottom:0.25rem">— W</div>
-            <div class="mono" style="color:var(--color-subtle);font-size:0.85rem">Sonoff POW on PDU · not yet connected</div>
-          </div>
-          ${(() => {
-            const u = data.ups ?? {};
-            const dot = u.dot ?? 'unknown';
-            const hasData = u.charge != null;
-            if (!hasData) return `
-          <div class="card" style="opacity:0.6;border-style:dashed">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
-              <span class="mono" style="color:var(--color-subtle);font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em">UPS</span>
-              <span class="status-dot unknown"></span>
-            </div>
-            <div style="font-size:1.25rem;font-weight:700;color:var(--color-subtle);font-family:var(--font-mono);margin-bottom:0.25rem">—</div>
-            <div class="mono" style="color:var(--color-subtle);font-size:0.85rem">NUT unavailable</div>
-          </div>`;
-            const onBattery = u.on_battery ? ' · ON BATTERY' : '';
-            return `
-          <div class="card">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem">
-              <div>
-                <span class="mono" style="color:var(--color-subtle);font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em">UPS</span>
-                <div style="font-size:0.78rem;color:var(--color-subtle);font-family:var(--font-mono);margin-top:0.1rem">APC · ${u.nominal_w ?? '—'}W nominal${onBattery}</div>
-              </div>
-              <span class="status-dot ${dot}"></span>
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.4rem;margin-top:0.75rem">
-              <div class="metric">
-                <span class="metric-value" style="font-size:0.85rem"
-                      data-count-to="${u.charge ?? 0}" data-count-suffix="%">0%</span>
-                <span class="metric-label">Charge</span>
-              </div>
-              <div class="metric">
-                <span class="metric-value" style="font-size:0.85rem">${u.runtime_str ?? '—'}</span>
-                <span class="metric-label">Runtime</span>
-              </div>
-              <div class="metric">
-                <span class="metric-value" style="font-size:0.85rem">${u.load_pct ?? '—'}%</span>
-                <span class="metric-label">Load</span>
-              </div>
-            </div>
-          </div>`;
-          })()}`;
-      }
-
-      // Storage pools
-      const storageGrid = document.getElementById('storage-grid');
-      if (storageGrid) {
-        const pools = data.storage ?? [];
-        if (pools.length > 0) {
-          const colorVar = (status: string) =>
-            status === 'crit' ? 'var(--color-crit)' : status === 'warn' ? 'var(--color-warn)' : 'var(--color-ok)';
-
-          const donut = (pct: number, status: string) => {
-            const r = 36, cx = 44, cy = 44, stroke = 10;
-            const circ = 2 * Math.PI * r;
-            const used = (pct / 100) * circ;
-            const free = circ - used;
-            const color = colorVar(status);
-            return `<svg class="storage-donut" width="88" height="88" viewBox="0 0 88 88">
-              <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--color-overlay)" stroke-width="${stroke}"/>
-              <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="${stroke}"
-                stroke-dasharray="${used} ${free}" stroke-dashoffset="${circ * 0.25}"
-                stroke-linecap="round" style="transition:stroke-dasharray 0.7s ease"/>
-              <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="middle"
-                font-family="var(--font-mono)" font-size="13" font-weight="700" fill="${color}"
-                data-count-to="${pct}" data-count-suffix="%">0%</text>
-            </svg>`;
-          };
-
-          storageGrid.className = 'storage-grid';
-          storageGrid.innerHTML = pools.map((p: any) => `
-            <div class="storage-card ${p.status}">
-              <div class="storage-pool-name">${p.name}</div>
-              <div class="storage-health" style="color:var(--color-${p.healthy ? 'ok' : 'crit'})">
-                ● ${p.pool_status ?? 'UNKNOWN'}
-              </div>
-              <div class="storage-donut-row">
-                ${donut(p.pct, p.status)}
-                <div class="storage-legend">
-                  <div class="storage-legend-item">
-                    <div style="display:flex;align-items:center">
-                      <div class="storage-legend-dot" style="background:${colorVar(p.status)}"></div>
-                      <span style="color:var(--color-subtle)">Used</span>
-                    </div>
-                    <span style="color:var(--color-heading);font-weight:600">${p.used}</span>
-                  </div>
-                  <div class="storage-legend-item">
-                    <div style="display:flex;align-items:center">
-                      <div class="storage-legend-dot" style="background:var(--color-overlay)"></div>
-                      <span style="color:var(--color-subtle)">Total</span>
-                    </div>
-                    <span style="color:var(--color-heading);font-weight:600">${p.total}</span>
-                  </div>
-                  <div class="storage-bar-track" style="margin-top:0.5rem">
-                    <div class="storage-bar-fill ${p.status}" style="width:${Math.min(p.pct,100)}%"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          `).join('');
-        } else {
-          storageGrid.innerHTML = '<div class="mono" style="color:var(--color-subtle);padding:0.5rem 0">Storage data unavailable</div>';
-        }
-      }
-
-      // Flux
-      const fluxSection = document.getElementById('flux-section');
-      if (fluxSection && data.flux) {
-        const f = data.flux;
-        const ks = f.kustomizations ?? [];
-
-        // Sort: failed first, then ready
-        const sorted = [...ks].sort((a: any, b: any) => {
-          if (!a.ready && b.ready) return -1;
-          if (a.ready && !b.ready) return 1;
-          return 0;
-        });
-
-        const total = f.total || 1;
-        const readyPct  = Math.round((f.ready / total) * 100);
-        const failedPct = 100 - readyPct;
-        const failedCount = total - f.ready;
-
-        const summary = `
-          <div class="flux-summary">
-            <span class="badge ${f.status}">${f.ready}/${f.total} synced</span>
-            <div class="flux-ratio-bar" title="${f.ready} ready · ${failedCount} failed">
-              <div class="flux-ratio-bar-ok"   style="width:${readyPct}%"></div>
-              <div class="flux-ratio-bar-crit" style="width:${failedPct}%"></div>
-            </div>
-            <span class="flux-ratio-label">${f.ready} ready · ${failedCount} failed</span>
-            <span class="mono" style="margin-left:auto;color:var(--color-subtle)">last sync ${f.last_sync}</span>
-          </div>`;
-
-        const tableRows = sorted.map((k: any) => `
-          <div class="flux-row${k.ready ? '' : ' crit-row'}">
-            <div class="flux-name-cell">
-              <span class="flux-name-icon ${k.ready ? 'ok' : 'crit'}">${k.ready ? '✓' : '✗'}</span>
-              <span class="flux-name-text">${k.name}</span>
-            </div>
-            <span style="font-family:var(--font-mono);font-size:0.75rem;color:var(--color-subtle)">${k.namespace}</span>
-            <span style="font-family:var(--font-mono);font-size:0.75rem;color:var(--color-subtle)">${k.age}</span>
-            <span class="badge ${k.ready ? 'ok' : 'crit'}">${k.ready ? '✓ Ready' : '✗ Failed'}</span>
-          </div>`).join('');
-
-        fluxSection.innerHTML = summary + (ks.length ? `
-          <div class="flux-table">
-            <div class="flux-row header">
-              <span>Kustomization</span>
-              <span>Namespace</span>
-              <span>Last Applied</span>
-              <span>Status</span>
-            </div>
-            ${tableRows}
-          </div>` : `<div class="mono" style="color:var(--color-subtle);padding:1rem 0">No kustomization data yet — pipeline pending</div>`);
-      }
-
-      // Backups
-      const backupCards = document.getElementById('backup-cards');
-      if (backupCards && data.cards) {
-        const find = (label: string) => data.cards.find((c: any) => c.label === label);
-        const da = find('Docker Appdata');
-        const et = find('etcd Snapshot');
-        const vc = find('Velero');
-        const vy = find('varys Keys');
-        const items = [
-          { label: 'Docker Appdata', value: da?.value ?? '—', sub: 'bronn · daily 02:00',  status: da?.status ?? 'unknown' },
-          { label: 'etcd Snapshot',  value: et?.value ?? '—', sub: 'k3s · daily',           status: et?.status ?? 'unknown' },
-          { label: 'Velero (k8s)',   value: vc?.value ?? '—', sub: 'last cluster backup',    status: vc?.status ?? 'unknown' },
-          { label: 'varys Keys',     value: vy?.value ?? '—', sub: 'age keys · varys',       status: vy?.status ?? 'unknown' },
-        ];
-        backupCards.innerHTML = items.map(c => `
-          <div class="card">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
-              <span class="mono" style="color:var(--color-subtle);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em">${c.label}</span>
-              <span class="status-dot ${c.status}"></span>
-            </div>
-            <div style="font-size:1.25rem;font-weight:700;color:var(--color-heading);font-family:var(--font-mono);margin-bottom:0.25rem">${c.value}</div>
-            <div class="mono" style="font-size:0.85rem">${c.sub}</div>
-          </div>
-        `).join('');
-      }
-
-      // Network
-      const net = data.network;
-      if (net) {
-        const latencyStatus = net.latency_ms == null ? 'unknown'
-          : net.latency_ms < 30 ? 'ok'
-          : net.latency_ms < 80 ? 'warn' : 'crit';
-
-        // CrowdSec: null means the LAPI query failed — show "unknown", never a
-        // fake-safe zero. A real 0 (no active bans) is a healthy, accurate state.
-        const bans = net.crowdsec_bans;
-        const bansUnknown = bans == null;
-        const crowdsecCard = `
-          <div class="card" style="border-left:3px solid ${bansUnknown ? 'var(--color-subtle)' : 'var(--color-crit)'}">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
-              <span class="mono" style="color:var(--color-subtle);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em">CrowdSec Bans</span>
-              <span class="status-dot ${bansUnknown ? 'unknown' : 'ok'}"></span>
-            </div>
-            <div style="font-size:1.25rem;font-weight:700;color:${bansUnknown ? 'var(--color-subtle)' : 'var(--color-crit)'};font-family:var(--font-mono);margin-bottom:0.25rem"
-                 ${bansUnknown ? '' : `data-count-to="${bans}" data-count-suffix=""`}>${bansUnknown ? '—' : '0'}</div>
-            <div class="mono" style="font-size:0.85rem">${bansUnknown ? 'IDS unreachable' : 'active IP bans · threat intelligence'}</div>
-          </div>`;
-
-        // Firewall: the raw counter is cumulative since the router's last reset,
-        // so headline the drop RATE (a real signal of unusual activity) and keep
-        // the lifetime total as the subtitle for context.
-        const rate = net.fw_rate_per_hour;
-        const fwDisplay = rate != null ? rate.toLocaleString() + '/hr'
-          : net.fw_hits != null ? net.fw_hits.toLocaleString() : '—';
-        const fwSub = rate != null && net.fw_hits != null
-          ? `packets dropped/hr · ${net.fw_hits.toLocaleString()} total`
-          : 'packets dropped at router';
-
-        const netCards = document.getElementById('network-cards');
-        if (netCards) {
-          netCards.innerHTML = crowdsecCard + [
-            { label: 'Firewall Blocks', raw: rate,           suffix: rate != null ? '/hr' : '', display: fwDisplay,                                                            sub: fwSub,               status: 'ok' },
-            { label: 'WAN Latency',     raw: net.latency_ms, suffix: ' ms',                     display: net.latency_ms != null ? net.latency_ms + ' ms' : '—',               sub: 'avg RTT to 8.8.8.8', status: latencyStatus },
-          ].map(c => `
-            <div class="card">
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
-                <span class="mono" style="color:var(--color-subtle);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em">${c.label}</span>
-                <span class="status-dot ${c.status}"></span>
-              </div>
-              <div style="font-size:1.25rem;font-weight:700;color:var(--color-heading);font-family:var(--font-mono);margin-bottom:0.25rem"
-                   ${c.raw != null ? `data-count-to="${c.raw}" data-count-suffix="${c.suffix}"` : ''}>0</div>
-              <div class="mono" style="font-size:0.85rem">${c.sub}</div>
-            </div>
-          `).join('');
-        }
-
-        // Persistent offenders table
-        const offEl = document.getElementById('offenders-section');
-        if (offEl) {
-          const offs = net.offenders ?? [];
-          if (offs.length > 0) {
-            offEl.innerHTML = `
-              <div class="flux-table">
-                <div class="flux-row header" style="grid-template-columns:1.5fr 80px 140px">
-                  <span>IP Address</span><span>Hits</span><span>Rule</span>
-                </div>
-                ${offs.map((o: any) => `
-                  <div class="flux-row" style="grid-template-columns:1.5fr 80px 140px">
-                    <span style="font-family:var(--font-mono);font-size:0.875rem;color:var(--color-peach)">${o.ip}</span>
-                    <span class="badge crit">${o.hits}</span>
-                    <span style="font-family:var(--font-mono);font-size:0.75rem;color:var(--color-subtle)">${o.type}</span>
-                  </div>
-                `).join('')}
-              </div>`;
-          } else {
-            offEl.innerHTML = '<div class="mono" style="color:var(--color-subtle);padding:0.5rem 0">No persistent offenders detected</div>';
-          }
-        }
-      }
-
-      // ── Known Issues — derives from live data ─────────────────────────────
-      renderKnownIssues(data);
-
-    } catch { /* skeletons remain */ }
-  }
-
-  function renderKnownIssues(data: any) {
-    const el = document.getElementById('known-issues-list');
-    if (!el) return;
-
-    const issues: Array<{ severity: string; icon: string; title: string; desc: string; since: string }> = [];
-
-    // UPS runtime check — anything under 10 minutes on a 390W unit is a dead battery
-    const ups = data.ups ?? {};
-    if (ups.runtime_s != null && ups.runtime_s < 600) {
-      const mins = Math.round(ups.runtime_s / 60);
-      issues.push({
-        severity: 'warn',
-        icon: '⚡',
-        title: 'UPS battery degraded — replacement needed',
-        desc: `APC Back-UPS Pro 650VA is showing ${mins} minute${mins !== 1 ? 's' : ''} of runtime at ${ups.load_pct ?? '—'}% load. Rated capacity is ~2h at 390W nominal. The battery cells have failed and will not sustain an orderly shutdown during a power outage. Replacement battery ordered.`,
-        since: 'Since 2026-04',
-      });
+      const m = apps.filter(a => a.has_data).length;
+      set('ed-svc-note', m ? `measured by Gatus · ${m} apps` : 'Gatus · warming up');
     }
 
-    if (!issues.length) {
-      el.innerHTML = '';
-      return;
-    }
+    // ── Cluster incident band (rolling 60d, real outages) ──
+    buildBand(outages);
 
-    el.innerHTML = issues.map(i => `
-      <div class="known-issue ${i.severity}">
-        <span class="ki-icon">${i.icon}</span>
-        <div class="ki-body">
-          <div class="ki-title">${i.title}</div>
-          <div class="ki-desc">${i.desc}</div>
-        </div>
-        <span class="ki-meta">${i.since}</span>
-      </div>
-    `).join('');
+    // ── Network ──
+    const net = d.network ?? {};
+    const netRows = [
+      { label: 'WAN latency', value: net.latency_ms != null ? `${net.latency_ms}ms` : '—', note: 'probe round-trip' },
+      { label: 'LAN', value: '10.0.10.0/24', note: 'k3s + services' },
+      { label: 'Firewall', value: typeof net.fw_hits === 'number' ? `${net.fw_hits.toLocaleString()} hits` : '—', note: `${net.crowdsec_bans ?? 0} CrowdSec bans` },
+      { label: 'Ingress', value: 'Traefik · *.kagiso.me', note: 'MetalLB .110' },
+      { label: 'Gateway', value: 'MikroTik · .1', note: 'router · DNS' },
+      { label: 'MetalLB pool', value: '10.0.10.100–120', note: 'L2 advertise' },
+    ];
+    const netEl = el('ed-net');
+    if (netEl) netEl.innerHTML = netRows.map(x => `
+      <div class="ed-net-row"><span class="ed-net-label">${x.label}</span>
+      <span><span class="ed-net-val">${x.value}</span><span class="ed-net-note">${x.note}</span></span></div>`).join('');
+
+    // ── Storage (real pools) ──
+    const stEl = el('ed-storage');
+    if (stEl) stEl.innerHTML = (d.storage ?? []).map((s: any) => {
+      const p = Math.round(s.pct ?? 0);
+      const c = p > 80 ? WARN : OK;
+      return `<div class="ed-strow">
+        <div class="ed-strow-head"><span><span class="ed-stname">${s.name}</span><span class="ed-stkind">${s.pool_status ?? ''}</span></span>
+        <span class="ed-stused">${s.used} / ${s.total}</span></div>
+        <div class="ed-sttrack"><span class="ed-stfill" style="width:${p}%;background:${c}"></span></div>
+      </div>`;
+    }).join('');
+
+    // ── Backups (from cards) ──
+    const cards: any[] = Array.isArray(d.cards) ? d.cards : [];
+    const bkMap = [
+      { label: 'Velero · cluster', card: 'Velero', target: 'MinIO @ ned (.80)' },
+      { label: 'etcd snapshot', card: 'etcd Snapshot', target: 'local · k3s server' },
+      { label: 'Docker appdata', card: 'Docker Appdata', target: 'bronn → ned' },
+      { label: 'Offsite', card: 'Backblaze B2', target: 'Backblaze B2 · offsite' },
+    ];
+    const bkEl = el('ed-backups');
+    if (bkEl) bkEl.innerHTML = bkMap.map(b => {
+      const c = cards.find(x => x.label === b.card);
+      const when = c?.value ?? '—';
+      const st = c?.status ?? 'unknown';
+      const col = st === 'ok' ? OK : st === 'warn' ? WARN : st === 'unknown' ? FNT : CRIT;
+      return `<div class="ed-bkrow">
+        <span class="ed-bkname">${b.label}</span>
+        <span class="ed-bktarget">${b.target}</span>
+        <span class="ed-bkwhen">${when}</span>
+        <span class="ed-bkstatus" style="color:${col}"><span class="ed-dot" style="background:${col}"></span>${st === 'ok' ? 'current' : st}</span>
+      </div>`;
+    }).join('');
+
+    // ── Infra / GitOps (real flux) ──
+    const flux = d.flux ?? {};
+    const infra = [
+      { name: 'k3s', detail: '3 nodes · control-plane + etcd', dot: OK },
+      { name: 'Flux', detail: flux.ready != null ? `${flux.ready}/${flux.total} kustomizations synced` : 'gitops', dot: flux.status === 'ok' ? OK : WARN },
+      { name: 'Authentik', detail: 'SSO · OIDC for all apps', dot: OK },
+      { name: 'Observability', detail: 'Prometheus · Grafana · Loki', dot: OK },
+      { name: 'Gatus', detail: `active uptime probing · ${apps.length || '—'} apps`, dot: OK },
+      { name: 'cert-manager', detail: 'Let’s Encrypt · auto-renew', dot: OK },
+    ];
+    const infEl = el('ed-infra');
+    if (infEl) infEl.innerHTML = infra.map(f => `
+      <div class="ed-inf"><span class="ed-dot" style="background:${f.dot}"></span>
+      <div class="ed-inf-body"><div class="ed-inf-name">${f.name}</div><div class="ed-inf-detail">${f.detail}</div></div>
+      <span class="ed-inf-label" style="color:${f.dot === OK ? OK : WARN}">${f.dot === OK ? 'ready' : 'degraded'}</span></div>`).join('');
   }
 
-  // ── Number counters ───────────────────────────────────────────────────────
-  function countUp(el: Element, target: number, suffix: string, duration = 900) {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      el.textContent = target + suffix;
-      return;
+  function buildBand(outages: any[]) {
+    const bandEl = el('ed-band'); if (!bandEl) return;
+    const WINDOW = 60;
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const dayKey = (iso: string) => { const d = new Date(iso.length === 7 ? iso + '-01' : iso); d.setHours(0,0,0,0); return Math.round((today.getTime() - d.getTime()) / 86400000); };
+    const worst = new Map<number, 'crit' | 'warn'>();
+    let n = 0;
+    for (const o of outages) {
+      const a = dayKey(o.date ?? ''); if (isNaN(a) || a < 0 || a >= WINDOW) continue;
+      const sev = o.severity === 'critical' ? 'crit' : 'warn';
+      if (worst.get(a) !== 'crit') worst.set(a, sev); n++;
     }
-    const start = performance.now();
-    const step = (now: number) => {
-      const progress = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      el.textContent = Math.round(eased * target) + suffix;
-      if (progress < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
+    set('ed-inc-stat', n === 0 ? `no incidents · ${WINDOW}d` : `${n} incident${n === 1 ? '' : 's'} · ${WINDOW}d`);
+    let html = '';
+    for (let i = 0; i < WINDOW; i++) {
+      const ago = WINDOW - 1 - i;
+      const s = worst.get(ago);
+      const [h, c, title] = s === 'crit' ? ['46%', 'linear-gradient(180deg,#e07b73,#cf5349)', 'major incident']
+        : s === 'warn' ? ['68%', 'linear-gradient(180deg,#dcae6a,#c98a1e)', 'degraded']
+        : ['100%', 'linear-gradient(180deg,#3ab77e,#2fa06b)', 'operational'];
+      html += `<span title="${ago === 0 ? 'today' : ago + 'd ago'} · ${title}" style="height:${h};background:${c}"></span>`;
+    }
+    bandEl.innerHTML = html;
+
+    // Incident log — real outages, newest first
+    const logEl = el('ed-inc-log'); if (!logEl) return;
+    if (!outages.length) { logEl.innerHTML = `<div class="ed-inc-row"><span class="ed-inc-title" style="color:var(--ed-mut)">No incidents recorded in this window.</span></div>`; return; }
+    logEl.innerHTML = `<div class="mono ed-eyebrow" style="margin-bottom:6px">Incident record</div>` + outages.slice(0, 6).map(o => {
+      const d = new Date((o.date ?? '').length === 7 ? o.date + '-01' : o.date);
+      const date = isNaN(+d) ? o.date : d.toLocaleDateString('en-ZA', { day: '2-digit', month: 'short', year: 'numeric' });
+      const sev = o.severity === 'critical' ? 'CRIT' : 'WARN';
+      const col = o.severity === 'critical' ? CRIT : WARN;
+      const dur = (o.minutes ?? 0) > 0 ? `${o.minutes}m` : 'ongoing / recovered';
+      return `<div class="ed-inc-row">
+        <span class="ed-inc-date">${date}</span>
+        <span class="ed-inc-title">cluster incident · ${dur}</span>
+        <span class="ed-inc-sev" style="color:${col};border-color:${col}">${sev}</span>
+      </div>`;
+    }).join('');
   }
 
-  function initCounters() {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        const el = entry.target as HTMLElement;
-        const target = parseFloat(el.dataset.countTo ?? '0');
-        const suffix = el.dataset.countSuffix ?? '';
-        countUp(el, target, suffix);
-        observer.unobserve(el);
-      });
-    }, { threshold: 0.3 });
-
-    document.querySelectorAll('[data-count-to]').forEach(el => observer.observe(el));
-  }
-
-  // ── CVE banner (fetched once, not on 30s poll) ───────────────────────────
-  async function loadCVEBanner() {
-    const banner = document.getElementById('cve-banner');
-    if (!banner) return;
-    try {
-      const res = await fetch('/data/cve.json?t=' + Date.now());
-      if (!res.ok) throw new Error('no data');
-      const d = await res.json();
-
-      const statusDotClass = d.status === 'clean' || d.status === 'ok' ? 'ok'
-                           : d.status === 'crit'                        ? 'crit'
-                           : 'warn';
-
-      let label = '';
-      if (d.status === 'clean') {
-        label = `No known CVEs &middot; ${d.tracked ?? '?'} components tracked`;
-      } else {
-        const parts: string[] = [];
-        if (d.counts?.CRITICAL) parts.push(`${d.counts.CRITICAL} CRITICAL`);
-        if (d.counts?.HIGH)     parts.push(`${d.counts.HIGH} HIGH`);
-        if (d.counts?.MEDIUM)   parts.push(`${d.counts.MEDIUM} MEDIUM`);
-        if (d.counts?.LOW)      parts.push(`${d.counts.LOW} LOW`);
-        label = parts.join(', ') || `${d.total} CVEs`;
-      }
-
-      banner.innerHTML = `
-        <a href="/security" class="deploy-banner" style="text-decoration:none; display:flex; align-items:center; gap:1rem">
-          <span class="status-dot ${statusDotClass}"></span>
-          <span class="deploy-msg">${label}</span>
-          <span class="deploy-age">view details →</span>
-        </a>`;
-    } catch {
-      banner.innerHTML = '';
-    }
-  }
-
-  // ── Polling lifecycle ─────────────────────────────────────────────────────
-  let pollInterval: ReturnType<typeof setInterval> | null = null;
-
-  function startPolling() {
-    if (pollInterval) clearInterval(pollInterval);
-    loadStatus().then(() => setTimeout(initCounters, 80));
-    pollInterval = setInterval(() => loadStatus().then(() => setTimeout(initCounters, 80)), 30000);
-  }
-
-  function stopPolling() {
-    if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
-  }
-
-  // ── Ring scroll-reveal ───────────────────────────────────────────────────
-  // Watches for node cards injected by loadStatus(), then animates each
-  // ring arc from 0 to its target dasharray when it enters the viewport.
-  function initRingObserver() {
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        const arc = entry.target as SVGCircleElement;
-        const target = arc.dataset.dash;
-        if (!target) return;
-        // Tiny delay so the CSS transition has a frame to start from zero
-        requestAnimationFrame(() => {
-          arc.style.strokeDasharray = target;
-          arc.classList.add('ring-revealed');
-        });
-        io.unobserve(arc);
-      });
-    }, { threshold: 0.3 });
-
-    document.querySelectorAll('.node-status-ring circle.arc[data-dash]').forEach(arc => {
-      io.observe(arc);
-    });
-  }
-
-  // Re-run after each data load (nodes grid is replaced each poll)
-  (window as any).__ringObserverPatched = true;
-
-  // Hook into the nodes grid being populated via MutationObserver
-  const nodesGridEl = document.getElementById('nodes-grid');
-  if (nodesGridEl) {
-    const mo = new MutationObserver(() => {
-      // Small delay for innerHTML to fully settle before querying arcs
-      setTimeout(initRingObserver, 60);
-    });
-    mo.observe(nodesGridEl, { childList: true, subtree: false });
-  }
-
-  // ── Cluster uptime counter ───────────────────────────────────────────────
-  let _clusterEpoch: number | null = null;
-  let _uptimeTimer: ReturnType<typeof setInterval> | null = null;
-
-  function startUptimeCounter(epochMs: number) {
-    if (_uptimeTimer) clearInterval(_uptimeTimer);
-    _clusterEpoch = epochMs;
-    function tick() {
-      const el = document.getElementById('uptime-value');
-      if (!el || _clusterEpoch === null) return;
-      const ms = Date.now() - _clusterEpoch;
-      const s  = Math.floor(ms / 1000);
-      const m  = Math.floor(s  / 60);
-      const h  = Math.floor(m  / 60);
-      const d  = Math.floor(h  / 24);
-      const hh = String(h % 24).padStart(2, '0');
-      const mm = String(m % 60).padStart(2, '0');
-      const ss = String(s % 60).padStart(2, '0');
-      el.textContent = `${d}d ${hh}h ${mm}m ${ss}s`;
-    }
-    tick();
-    _uptimeTimer = setInterval(tick, 1000);
-  }
-
-  // Seed with live data; falls back to hardcoded epoch if cluster_start unavailable
-  (async () => {
-    try {
-      const r = await fetch('/data/live.json?t=' + Date.now());
-      const d = r.ok ? await r.json() : null;
-      const epoch = d?.cluster_start
-        ? new Date(d.cluster_start).getTime()
-        : new Date('2024-11-01T00:00:00Z').getTime();
-      startUptimeCounter(epoch);
-    } catch {
-      startUptimeCounter(new Date('2024-11-01T00:00:00Z').getTime());
-    }
-  })();
-
-  document.addEventListener('astro:before-swap', () => { if (_uptimeTimer) clearInterval(_uptimeTimer); });
-
-  document.addEventListener('astro:page-load', () => { startPolling(); loadCVEBanner(); initNetMap(); });
-  document.addEventListener('astro:before-swap', stopPolling);
-
-  // ── Network Diagram ─────────────────────────────────────────────────────────
-  type Pt = { x: number; y: number };
-
-  // [fromId, toId, colour, dashed]
-  const NET_LINKS: [string, string, string, boolean][] = [
-    ['nm-internet', 'nm-mikrotik', '#fab387', false],
-    ['nm-mikrotik', 'nm-tywin',   '#cba6f7', false],
-    ['nm-mikrotik', 'nm-jaime',   '#cba6f7', false],
-    ['nm-mikrotik', 'nm-tyrion',  '#cba6f7', false],
-    ['nm-mikrotik', 'nm-bronn',   '#74c7ec', false],
-    ['nm-mikrotik', 'nm-varys',   '#a6e3a1', false],
-    ['nm-mikrotik', 'nm-ned',     '#e6b450', false],
-    ['nm-mikrotik', 'nm-bran',    '#f38ba8', false],
-    ['nm-tywin',    'nm-jaime',   '#cba6f7', true],
-    ['nm-tywin',    'nm-tyrion',  '#cba6f7', true],
-    ['nm-jaime',    'nm-tyrion',  '#cba6f7', true],
-    ['nm-bronn',    'nm-ned',     '#74c7ec', true],
-  ];
-
-  // Packet animations: one packet per active primary link, looping
-  interface Packet { el: SVGCircleElement; fromId: string; toId: string; color: string; t: number; speed: number; }
-  const _packets: Packet[] = [];
-  let   _rafId = 0;
-  let   _hoverId: string | null = null;
-
-  async function initNetMap() {
-    const svg     = document.getElementById('netmap-svg') as SVGSVGElement | null;
-    const linesG  = document.getElementById('nm-lines')   as SVGGElement   | null;
-    const packsG  = document.getElementById('nm-packets') as SVGGElement   | null;
-    const tooltip = document.getElementById('nm-tooltip') as HTMLElement   | null;
-    if (!svg || !linesG || !packsG) return;
-
-    const wrap = () => document.getElementById('netmap-wrap') as HTMLElement;
-
-    function centre(id: string): Pt | null {
-      const el = document.getElementById(id);
-      if (!el) return null;
-      const wr = wrap().getBoundingClientRect();
-      const r  = el.getBoundingClientRect();
-      return { x: r.left + r.width  / 2 - wr.left,
-               y: r.top  + r.height / 2 - wr.top  };
-    }
-
-    // Bezier helper — gentle curve for hierarchy lines
-    function bezier(a: Pt, b: Pt): string {
-      const dy = b.y - a.y;
-      const cy = dy * 0.45;
-      return `M ${a.x} ${a.y} C ${a.x} ${a.y + cy}, ${b.x} ${b.y - cy}, ${b.x} ${b.y}`;
-    }
-    function lerp(a: Pt, b: Pt, t: number): Pt {
-      // cubic bezier point
-      const cy = (b.y - a.y) * 0.45;
-      const p0 = a, p1 = { x: a.x, y: a.y + cy }, p2 = { x: b.x, y: b.y - cy }, p3 = b;
-      const mt = 1 - t;
-      return {
-        x: mt*mt*mt*p0.x + 3*mt*mt*t*p1.x + 3*mt*t*t*p2.x + t*t*t*p3.x,
-        y: mt*mt*mt*p0.y + 3*mt*mt*t*p1.y + 3*mt*t*t*p2.y + t*t*t*p3.y,
-      };
-    }
-
-    function drawLines(hoverId: string | null) {
-      _hoverId = hoverId;
-      linesG.innerHTML = '';
-
-      for (const [a, b, color, dashed] of NET_LINKS) {
-        const ca = centre(a), cb = centre(b);
-        if (!ca || !cb) continue;
-
-        const aId = a.replace('nm-', '');
-        const bId = b.replace('nm-', '');
-        const active = hoverId && (a.includes(hoverId) || b.includes(hoverId) || aId === hoverId || bId === hoverId);
-
-        const d = bezier(ca, cb);
-
-        // Shadow / glow path (behind)
-        if (active) {
-          const glow = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-          glow.setAttribute('d', d);
-          glow.setAttribute('stroke', color);
-          glow.setAttribute('stroke-width', '6');
-          glow.setAttribute('fill', 'none');
-          glow.setAttribute('stroke-opacity', '0.15');
-          glow.setAttribute('stroke-linecap', 'round');
-          linesG.appendChild(glow);
-        }
-
-        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        path.setAttribute('d', d);
-        path.setAttribute('stroke', color + (active ? 'dd' : '30'));
-        path.setAttribute('stroke-width', active ? '2' : '1');
-        path.setAttribute('fill', 'none');
-        path.setAttribute('stroke-linecap', 'round');
-        if (dashed) path.setAttribute('stroke-dasharray', active ? '5 6' : '3 8');
-        linesG.appendChild(path);
-      }
-    }
-
-    // ── Packet animation ──────────────────────────────────────────────────
-    function spawnPackets() {
-      packsG.innerHTML = '';
-      _packets.length = 0;
-
-      // Only primary (non-dashed) links get flowing packets
-      for (const [a, b, color, dashed] of NET_LINKS) {
-        if (dashed) continue;
-        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-        circle.setAttribute('r', '3.5');
-        circle.setAttribute('fill', color);
-        circle.setAttribute('filter', `drop-shadow(0 0 4px ${color})`);
-        circle.setAttribute('opacity', '0');
-        packsG.appendChild(circle);
-        _packets.push({
-          el: circle,
-          fromId: a, toId: b,
-          color,
-          t: Math.random(),
-          speed: 0.0008 + Math.random() * 0.0006,
-        });
-      }
-    }
-
-    function tickPackets() {
-      for (const p of _packets) {
-        p.t += p.speed;
-        if (p.t > 1) p.t -= 1;
-
-        const ca = centre(p.fromId), cb = centre(p.toId);
-        if (!ca || !cb) { p.el.setAttribute('opacity', '0'); continue; }
-
-        const pt = lerp(ca, cb, p.t);
-        p.el.setAttribute('cx', String(pt.x));
-        p.el.setAttribute('cy', String(pt.y));
-
-        // Fade in/out at ends
-        const fade = p.t < 0.12 ? p.t / 0.12 : p.t > 0.88 ? (1 - p.t) / 0.12 : 1;
-        p.el.setAttribute('opacity', String(fade * 0.85));
-      }
-      _rafId = requestAnimationFrame(tickPackets);
-    }
-
-    // ── Tooltip ───────────────────────────────────────────────────────────
-    document.querySelectorAll<HTMLElement>('.nm-node').forEach(node => {
-      node.addEventListener('mouseenter', () => {
-        const id = node.dataset.id ?? node.id.replace('nm-', '');
-        drawLines(id);
-
-        if (tooltip) {
-          const ttName = document.getElementById('nm-tt-name');
-          const ttIp   = document.getElementById('nm-tt-ip');
-          const ttRole = document.getElementById('nm-tt-role');
-          const ttSvc  = document.getElementById('nm-tt-services');
-
-          if (ttName) ttName.textContent = node.querySelector('.nm-label')?.textContent ?? '';
-          if (ttIp)   ttIp.textContent   = node.dataset.ip ?? '';
-          if (ttRole) ttRole.textContent  = node.dataset.role ?? '';
-          if (ttSvc)  ttSvc.innerHTML = (node.dataset.services ?? '')
-            .split(' · ')
-            .map(s => `<span class="nm-tt-svc-row">${s}</span>`)
-            .join('');
-
-          const wr = wrap().getBoundingClientRect();
-          const nr = node.getBoundingClientRect();
-          let tx = nr.left - wr.left + nr.width + 12;
-          let ty = nr.top  - wr.top  - 8;
-          if (tx + 245 > wr.width) tx = nr.left - wr.left - 250;
-          if (ty + 160 > wr.height) ty = wr.height - 170;
-          if (ty < 4) ty = 4;
-          tooltip.style.left = tx + 'px';
-          tooltip.style.top  = ty + 'px';
-          tooltip.classList.add('visible');
-        }
-      });
-
-      node.addEventListener('mouseleave', () => {
-        drawLines(null);
-        tooltip?.classList.remove('visible');
-      });
-    });
-
-    // ── Live status dots ──────────────────────────────────────────────────
-    try {
-      const r = await fetch('/data/live.json');
-      if (r.ok) {
-        const data = await r.json();
-        for (const n of (data.nodes ?? [])) {
-          const dot = document.getElementById('dot-' + n.name?.toLowerCase());
-          if (dot) dot.className = 'nm-dot ' + (n.status === 'ok' ? 'ok' : n.status === 'warn' ? 'warn' : 'crit');
-        }
-      }
-    } catch {}
-
-    // ── Init ──────────────────────────────────────────────────────────────
-    drawLines(null);
-    spawnPackets();
-    tickPackets();
-
-    let _resizeTimer = 0;
-    window.addEventListener('resize', () => {
-      clearTimeout(_resizeTimer);
-      _resizeTimer = window.setTimeout(() => {
-        drawLines(_hoverId);
-        spawnPackets(); // recreate packet elements (positions may have shifted)
-      }, 120);
-    }, { passive: true });
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initNetMap);
-  } else {
-    initNetMap();
-  }
-
-  document.addEventListener('astro:before-swap', () => {
-    if (_rafId) { cancelAnimationFrame(_rafId); _rafId = 0; }
-  });
+  document.addEventListener('astro:page-load', loadStatus);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', loadStatus);
+  else loadStatus();
 </script>

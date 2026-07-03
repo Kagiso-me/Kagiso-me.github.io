@@ -1,28 +1,8 @@
 {
-  "updated": "2026-07-03T19:12:08Z",
-  "fetched_at": "2026-07-03T19:12:08Z",
+  "updated": "2026-07-03T22:01:04Z",
+  "fetched_at": "2026-07-03T22:01:04Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "outages": [
-    {
-      "date": "2026-07-03",
-      "severity": "warning",
-      "minutes": 0
-    },
-    {
-      "date": "2026-07-03",
-      "severity": "warning",
-      "minutes": 0
-    },
-    {
-      "date": "2026-07-03",
-      "severity": "warning",
-      "minutes": 0
-    },
-    {
-      "date": "2026-07-03",
-      "severity": "warning",
-      "minutes": 0
-    },
     {
       "date": "2026-07-03",
       "severity": "warning",
@@ -48,27 +28,27 @@
     {
       "app": "immich",
       "group": "apps",
-      "uptime_pct": 99.843,
-      "avg_ms": 3,
-      "checks": 1271,
+      "uptime_pct": 99.861,
+      "avg_ms": 4,
+      "checks": 1439,
       "window_days": 30,
       "has_data": true
     },
     {
       "app": "moodle",
       "group": "apps",
-      "uptime_pct": 99.844,
-      "avg_ms": 52,
-      "checks": 639,
+      "uptime_pct": 99.862,
+      "avg_ms": 51,
+      "checks": 724,
       "window_days": 30,
       "has_data": true
     },
     {
       "app": "nextcloud",
       "group": "apps",
-      "uptime_pct": 99.921,
-      "avg_ms": 288,
-      "checks": 1271,
+      "uptime_pct": 99.931,
+      "avg_ms": 297,
+      "checks": 1439,
       "window_days": 30,
       "has_data": true
     },
@@ -76,17 +56,17 @@
       "app": "seerr",
       "group": "apps",
       "uptime_pct": 100.0,
-      "avg_ms": 76,
-      "checks": 639,
+      "avg_ms": 74,
+      "checks": 724,
       "window_days": 30,
       "has_data": true
     },
     {
       "app": "vaultwarden",
       "group": "apps",
-      "uptime_pct": 99.686,
+      "uptime_pct": 99.722,
       "avg_ms": 3,
-      "checks": 1273,
+      "checks": 1441,
       "window_days": 30,
       "has_data": true
     },
@@ -94,8 +74,8 @@
       "app": "finforge",
       "group": "forge",
       "uptime_pct": 100.0,
-      "avg_ms": 77,
-      "checks": 639,
+      "avg_ms": 76,
+      "checks": 724,
       "window_days": 30,
       "has_data": true
     },
@@ -103,17 +83,17 @@
       "app": "training",
       "group": "forge",
       "uptime_pct": 100.0,
-      "avg_ms": 98,
-      "checks": 639,
+      "avg_ms": 101,
+      "checks": 723,
       "window_days": 30,
       "has_data": true
     },
     {
       "app": "authentik",
       "group": "platform",
-      "uptime_pct": 99.921,
+      "uptime_pct": 99.931,
       "avg_ms": 63,
-      "checks": 1271,
+      "checks": 1439,
       "window_days": 30,
       "has_data": true
     }
@@ -133,25 +113,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "17h 9m ago",
+      "value": "19h 58m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "1h 12m ago",
+      "value": "4h 1m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "12m ago",
+      "value": "3h 1m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "18h 12m ago",
+      "value": "21h 1m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -168,15 +148,15 @@
       "role": "control-plane",
       "status": "ok",
       "pods": "18/110",
-      "cpu": "21%",
-      "memory": "44%",
+      "cpu": "19%",
+      "memory": "40%",
       "pressure": []
     },
     {
       "name": "tyrion",
       "role": "control-plane",
       "status": "ok",
-      "pods": "18/110",
+      "pods": "20/110",
       "cpu": "19%",
       "memory": "34%",
       "pressure": []
@@ -186,35 +166,35 @@
       "role": "control-plane",
       "status": "ok",
       "pods": "25/110",
-      "cpu": "16%",
-      "memory": "29%",
+      "cpu": "32%",
+      "memory": "35%",
       "pressure": []
     }
   ],
   "host_metrics": {
     "tywin": {
-      "cpu": "16%",
-      "mem": "29%"
+      "cpu": "32%",
+      "mem": "35%"
     },
     "jaime": {
-      "cpu": "21%",
-      "mem": "44%"
+      "cpu": "19%",
+      "mem": "40%"
     },
     "tyrion": {
       "cpu": "19%",
       "mem": "34%"
     },
     "varys": {
-      "cpu": "0%",
+      "cpu": "1%",
       "mem": "7%"
     },
     "bronn": {
-      "cpu": "8%",
+      "cpu": "4%",
       "mem": "17%"
     },
     "bran": {
-      "cpu": "13%",
-      "mem": "53%"
+      "cpu": "11%",
+      "mem": "51%"
     }
   },
   "flux": {
@@ -322,7 +302,7 @@
       {
         "namespace": "flux-system",
         "name": "platform-trivy-operator",
-        "age": "5d10h",
+        "age": "5d13h",
         "ready": true
       },
       {
@@ -386,23 +366,23 @@
     }
   ],
   "network": {
-    "fw_hits": 1354622,
+    "fw_hits": 1357720,
     "fw_rate_per_hour": null,
-    "latency_ms": 4.6,
+    "latency_ms": 9.6,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
     "temp_c": 45.6,
     "temp_status": "ok",
-    "load": 0.58,
-    "mem_pct": 52.8
+    "load": 0.22,
+    "mem_pct": 51.1
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 548,
-    "runtime_str": "9m",
-    "load_pct": 32,
+    "runtime_s": 648,
+    "runtime_str": "10m",
+    "load_pct": 29,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
@@ -434,9 +414,9 @@
     },
     {
       "name": "core",
-      "used": "122.7 GB",
+      "used": "122.8 GB",
       "total": "476.7 GB",
-      "pct": 25.7,
+      "pct": 25.8,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true

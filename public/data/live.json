@@ -1,6 +1,6 @@
 {
-  "updated": "2026-07-03T06:08:11Z",
-  "fetched_at": "2026-07-03T06:08:11Z",
+  "updated": "2026-07-03T09:40:58Z",
+  "fetched_at": "2026-07-03T09:40:58Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "outages": [
     {
@@ -30,7 +30,7 @@
       "group": "apps",
       "uptime_pct": 100.0,
       "avg_ms": 4,
-      "checks": 492,
+      "checks": 703,
       "window_days": 30,
       "has_data": true
     },
@@ -39,7 +39,7 @@
       "group": "apps",
       "uptime_pct": 100.0,
       "avg_ms": 43,
-      "checks": 247,
+      "checks": 354,
       "window_days": 30,
       "has_data": true
     },
@@ -47,8 +47,8 @@
       "app": "nextcloud",
       "group": "apps",
       "uptime_pct": 100.0,
-      "avg_ms": 229,
-      "checks": 492,
+      "avg_ms": 260,
+      "checks": 703,
       "window_days": 30,
       "has_data": true
     },
@@ -56,17 +56,17 @@
       "app": "seerr",
       "group": "apps",
       "uptime_pct": 100.0,
-      "avg_ms": 78,
-      "checks": 247,
+      "avg_ms": 71,
+      "checks": 354,
       "window_days": 30,
       "has_data": true
     },
     {
       "app": "vaultwarden",
       "group": "apps",
-      "uptime_pct": 99.595,
+      "uptime_pct": 99.716,
       "avg_ms": 4,
-      "checks": 494,
+      "checks": 705,
       "window_days": 30,
       "has_data": true
     },
@@ -74,8 +74,8 @@
       "app": "finforge",
       "group": "forge",
       "uptime_pct": 100.0,
-      "avg_ms": 82,
-      "checks": 247,
+      "avg_ms": 81,
+      "checks": 354,
       "window_days": 30,
       "has_data": true
     },
@@ -83,8 +83,8 @@
       "app": "training",
       "group": "forge",
       "uptime_pct": 100.0,
-      "avg_ms": 105,
-      "checks": 247,
+      "avg_ms": 102,
+      "checks": 354,
       "window_days": 30,
       "has_data": true
     },
@@ -92,8 +92,8 @@
       "app": "authentik",
       "group": "platform",
       "uptime_pct": 100.0,
-      "avg_ms": 56,
-      "checks": 492,
+      "avg_ms": 62,
+      "checks": 703,
       "window_days": 30,
       "has_data": true
     }
@@ -101,8 +101,8 @@
   "cards": [
     {
       "label": "Workloads",
-      "value": "61/61",
-      "sub": "3 failed jobs",
+      "value": "61/62",
+      "sub": "pods running",
       "status": "warn"
     },
     {
@@ -113,27 +113,27 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "4h 5m ago",
+      "value": "7h 37m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "8m ago",
+      "value": "3h 41m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 8m ago",
+      "value": "2h 40m ago",
       "sub": "last cluster backup",
-      "status": "warn"
+      "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "\u2014",
+      "value": "8h 40m ago",
       "sub": "age keys \u00b7 varys",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "Backblaze B2",
@@ -148,8 +148,8 @@
       "role": "control-plane",
       "status": "ok",
       "pods": "18/110",
-      "cpu": "24%",
-      "memory": "40%",
+      "cpu": "23%",
+      "memory": "42%",
       "pressure": []
     },
     {
@@ -157,8 +157,8 @@
       "role": "control-plane",
       "status": "ok",
       "pods": "18/110",
-      "cpu": "17%",
-      "memory": "32%",
+      "cpu": "23%",
+      "memory": "31%",
       "pressure": []
     },
     {
@@ -167,31 +167,34 @@
       "status": "ok",
       "pods": "25/110",
       "cpu": "25%",
-      "memory": "33%",
+      "memory": "34%",
       "pressure": []
     }
   ],
   "host_metrics": {
     "tywin": {
       "cpu": "25%",
-      "mem": "33%"
+      "mem": "34%"
     },
     "jaime": {
-      "cpu": "24%",
-      "mem": "40%"
+      "cpu": "23%",
+      "mem": "42%"
     },
     "tyrion": {
-      "cpu": "17%",
-      "mem": "32%"
+      "cpu": "23%",
+      "mem": "31%"
     },
-    "varys": {},
+    "varys": {
+      "cpu": "9%",
+      "mem": "22%"
+    },
     "bronn": {
-      "cpu": "0%",
-      "mem": "10%"
+      "cpu": "24%",
+      "mem": "16%"
     },
     "bran": {
-      "cpu": "25%",
-      "mem": "50%"
+      "cpu": "18%",
+      "mem": "51%"
     }
   },
   "flux": {
@@ -299,7 +302,7 @@
       {
         "namespace": "flux-system",
         "name": "platform-trivy-operator",
-        "age": "4d21h",
+        "age": "5d",
         "ready": true
       },
       {
@@ -330,17 +333,17 @@
     {
       "name": "SABnzbd",
       "tag": "SABnzbd: idle",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: \u2014 series",
-      "status": "unknown"
+      "tag": "Sonarr: 64 series",
+      "status": "ok"
     },
     {
       "name": "Radarr",
-      "tag": "Radarr: \u2014 movies",
-      "status": "unknown"
+      "tag": "Radarr: 20 movies",
+      "status": "ok"
     },
     {
       "name": "Lidarr",
@@ -352,7 +355,7 @@
     {
       "name": "Plex",
       "label": "idle",
-      "status": "unknown",
+      "status": "ok",
       "playing": false
     },
     {
@@ -363,23 +366,23 @@
     }
   ],
   "network": {
-    "fw_hits": 1335402,
+    "fw_hits": 1340439,
     "fw_rate_per_hour": null,
-    "latency_ms": 17.2,
+    "latency_ms": 16.0,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 45.6,
+    "temp_c": 47.2,
     "temp_status": "ok",
-    "load": 0.45,
-    "mem_pct": 51.7
+    "load": 0.57,
+    "mem_pct": 51.4
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 588,
-    "runtime_str": "9m",
-    "load_pct": 31,
+    "runtime_s": 648,
+    "runtime_str": "10m",
+    "load_pct": 29,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
@@ -402,18 +405,18 @@
     },
     {
       "name": "archive",
-      "used": "779.1 GB",
+      "used": "762.0 GB",
       "total": "4.0 TB",
-      "pct": 19.5,
+      "pct": 19.1,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
     },
     {
       "name": "core",
-      "used": "121.8 GB",
+      "used": "122.3 GB",
       "total": "476.7 GB",
-      "pct": 25.5,
+      "pct": 25.7,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
@@ -421,7 +424,7 @@
   ],
   "contribs": {
     "days": {
-      "2026-07-03": 3,
+      "2026-07-03": 7,
       "2026-07-02": 26,
       "2026-07-01": 52,
       "2026-06-30": 24,
@@ -433,7 +436,7 @@
       "2026-06-21": 4,
       "2026-06-19": 6
     },
-    "total": 159,
+    "total": 163,
     "active_days": 11
   }
 }

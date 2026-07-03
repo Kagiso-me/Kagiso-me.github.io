@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-07-02T08:55:30Z",
+  "fetched_at": "2026-07-03T09:17:16Z",
   "status": "warn",
   "counts": {
     "CRITICAL": 0,
@@ -18,7 +18,7 @@
       "severity": "MEDIUM",
       "cvss": null,
       "published": "2026-06-17T14:01:48Z",
-      "modified": "2026-06-25T18:56:34.261267418Z",
+      "modified": "2026-07-02T14:44:23.150776378Z",
       "refs": [
         "https://github.com/traefik/traefik/security/advisories/GHSA-3g6v-2r68-prfc",
         "https://github.com/traefik/traefik",

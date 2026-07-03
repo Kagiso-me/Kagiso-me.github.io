@@ -2,39 +2,44 @@
 
 @theme {
   /* ── Colour palette ── matches the .dc.html mockup design system ── */
-  --color-base:       #0a0c11;  /* ink */
+  --color-base:       #0d0d10;  /* ink — nudged toward Status's neutral #0e0e11 */
   --color-mantle:     #0f1118;
   --color-crust:      #10141c;
   --color-surface:    #10141c;  /* raised panels */
   --color-overlay:    #1a1f2b;
   --color-muted:      rgba(255, 255, 255, 0.07);  /* line / hairline */
-  --color-subtle:     #7e8a9c;  /* muted-2 / secondary labels */
-  --color-text:       #a6b0c0;  /* muted / body prose */
-  --color-heading:    #f6f8fc;  /* bright / headlines */
-  --color-faint:      #566173;
+  /* Text — leaned toward the Status page's warmer neutrals */
+  --color-subtle:     #8b909b;  /* secondary labels */
+  --color-text:       #b0b3bb;  /* body prose */
+  --color-heading:    #eaeaed;  /* headlines (Status --tx) */
+  --color-faint:      #63636b;  /* Status --fnt */
 
-  /* Accents — amber = you/control-plane/GitOps · cyan = machine/live/storage */
-  --color-peach:      #f3b34d;  /* amber */
-  --color-mauve:      #cba6f7;
-  --color-gold:       #f3b34d;
-  --color-green:      #52e0a0;
-  --color-red:        #f8736b;
-  --color-amber:      #f3b34d;
-  --color-sapphire:   #4cc9e8;  /* cyan / signal */
+  /* Accents — leaned ~halfway toward the muted editorial palette (not fully).
+     Same hues, lower saturation/brightness than the vivid command-center set. */
+  --color-peach:      #e0a24a;  /* amber (was #f3b34d) */
+  --color-mauve:      #b79ad4;
+  --color-gold:       #e0a24a;
+  --color-green:      #43b482;  /* green (between #52e0a0 and Status #2fa06b) */
+  --color-red:        #d66259;  /* red (toward Status #cf5349) */
+  --color-amber:      #e0a24a;
+  --color-sapphire:   #55bcd6;  /* cyan, slightly muted */
 
   /* Status */
-  --color-ok:         #52e0a0;
-  --color-warn:       #f3b34d;
-  --color-crit:       #f8736b;
-  --color-unknown:    #566173;
+  --color-ok:         #43b482;
+  --color-warn:       #d6a03a;
+  --color-crit:       #d66259;
+  --color-unknown:    #63636b;
 
   /* Semantic aliases — "you/control-plane/GitOps" vs "machine/live-data/storage" */
   --accent: var(--color-peach);
   --signal: var(--color-sapphire);
 
-  /* Typography — mockup design system */
-  --font-display: 'Bricolage Grotesque', 'Space Grotesk', -apple-system, sans-serif;
-  --font-serif: 'Spectral', Georgia, serif;
+  /* Typography — unified with the Status page's editorial system. Newsreader
+     serif for display/headings (as Status uses it); IBM Plex Sans body + Mono
+     data (already shared with Status). Newsreader is 400–600, so heading rules
+     that asked for 700/800 are clamped to 600 in the base h1/h2 styles below. */
+  --font-display: 'Newsreader', Georgia, serif;
+  --font-serif: 'Newsreader', 'Spectral', Georgia, serif;
   --font-sans:  'IBM Plex Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono:  'IBM Plex Mono', 'JetBrains Mono', 'Fira Code', monospace;
 }
@@ -62,11 +67,13 @@ html::before {
 }
 
 body {
+  /* Calmer, editorial-leaning backdrop — glows dialled well down to harmonise
+     with the flat, restrained Status page. A whisper of warmth, not a light show. */
   background-color: var(--color-base);
   background-image:
-    radial-gradient(ellipse 80% 50% at 20% 0%,   color-mix(in srgb, var(--color-gold)      8%, transparent) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 85% 100%, color-mix(in srgb, var(--color-green)     5%, transparent) 0%, transparent 55%),
-    radial-gradient(ellipse 40% 30% at -5% 55%,  color-mix(in srgb, var(--color-sapphire)  3%, transparent) 0%, transparent 50%);
+    radial-gradient(ellipse 80% 50% at 20% 0%,   color-mix(in srgb, var(--color-gold)      4%, transparent) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 85% 100%, color-mix(in srgb, var(--color-green)     2%, transparent) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 30% at -5% 55%,  color-mix(in srgb, var(--color-sapphire)  2%, transparent) 0%, transparent 50%);
   color: var(--color-text);
   font-family: var(--font-sans);
   line-height: 1.6;
@@ -89,9 +96,11 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   color: var(--color-heading);
-  font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
+  /* Newsreader is a serif (400–600) — 500 weight and gentle tracking read
+     right, matching the Status page. (Old sans display used 700 / -0.02em.) */
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
 }
 
 a {

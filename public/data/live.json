@@ -1,6 +1,6 @@
 {
-  "updated": "2026-07-03T16:21:28Z",
-  "fetched_at": "2026-07-03T16:21:28Z",
+  "updated": "2026-07-03T17:55:41Z",
+  "fetched_at": "2026-07-03T17:55:41Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "outages": [
     {
@@ -28,18 +28,18 @@
     {
       "app": "immich",
       "group": "apps",
-      "uptime_pct": 99.909,
+      "uptime_pct": 99.833,
       "avg_ms": 3,
-      "checks": 1102,
+      "checks": 1195,
       "window_days": 30,
       "has_data": true
     },
     {
       "app": "moodle",
       "group": "apps",
-      "uptime_pct": 99.819,
+      "uptime_pct": 99.834,
       "avg_ms": 53,
-      "checks": 554,
+      "checks": 601,
       "window_days": 30,
       "has_data": true
     },
@@ -47,8 +47,8 @@
       "app": "nextcloud",
       "group": "apps",
       "uptime_pct": 100.0,
-      "avg_ms": 280,
-      "checks": 1102,
+      "avg_ms": 283,
+      "checks": 1195,
       "window_days": 30,
       "has_data": true
     },
@@ -56,17 +56,17 @@
       "app": "seerr",
       "group": "apps",
       "uptime_pct": 100.0,
-      "avg_ms": 71,
-      "checks": 554,
+      "avg_ms": 76,
+      "checks": 601,
       "window_days": 30,
       "has_data": true
     },
     {
       "app": "vaultwarden",
       "group": "apps",
-      "uptime_pct": 99.728,
+      "uptime_pct": 99.666,
       "avg_ms": 3,
-      "checks": 1104,
+      "checks": 1197,
       "window_days": 30,
       "has_data": true
     },
@@ -75,7 +75,7 @@
       "group": "forge",
       "uptime_pct": 100.0,
       "avg_ms": 78,
-      "checks": 554,
+      "checks": 601,
       "window_days": 30,
       "has_data": true
     },
@@ -83,8 +83,8 @@
       "app": "training",
       "group": "forge",
       "uptime_pct": 100.0,
-      "avg_ms": 98,
-      "checks": 554,
+      "avg_ms": 97,
+      "checks": 601,
       "window_days": 30,
       "has_data": true
     },
@@ -92,8 +92,8 @@
       "app": "authentik",
       "group": "platform",
       "uptime_pct": 100.0,
-      "avg_ms": 64,
-      "checks": 1102,
+      "avg_ms": 63,
+      "checks": 1195,
       "window_days": 30,
       "has_data": true
     }
@@ -101,8 +101,8 @@
   "cards": [
     {
       "label": "Workloads",
-      "value": "61/62",
-      "sub": "pods running",
+      "value": "61/61",
+      "sub": "3 failed jobs",
       "status": "warn"
     },
     {
@@ -113,27 +113,27 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "\u2014",
+      "value": "15h 52m ago",
       "sub": "last backup",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "4h 22m ago",
+      "value": "5h 55m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "3h 22m ago",
+      "value": "4h 55m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "\u2014",
+      "value": "16h 55m ago",
       "sub": "age keys \u00b7 varys",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "Backblaze B2",
@@ -148,16 +148,16 @@
       "role": "control-plane",
       "status": "ok",
       "pods": "18/110",
-      "cpu": "23%",
-      "memory": "43%",
+      "cpu": "25%",
+      "memory": "41%",
       "pressure": []
     },
     {
       "name": "tyrion",
       "role": "control-plane",
       "status": "ok",
-      "pods": "19/110",
-      "cpu": "17%",
+      "pods": "18/110",
+      "cpu": "23%",
       "memory": "33%",
       "pressure": []
     },
@@ -177,18 +177,24 @@
       "mem": "35%"
     },
     "jaime": {
-      "cpu": "23%",
-      "mem": "43%"
+      "cpu": "25%",
+      "mem": "41%"
     },
     "tyrion": {
-      "cpu": "17%",
+      "cpu": "23%",
       "mem": "33%"
     },
-    "varys": {},
-    "bronn": {},
+    "varys": {
+      "cpu": "0%",
+      "mem": "7%"
+    },
+    "bronn": {
+      "cpu": "2%",
+      "mem": "16%"
+    },
     "bran": {
-      "cpu": "12%",
-      "mem": "52%"
+      "cpu": "18%",
+      "mem": "53%"
     }
   },
   "flux": {
@@ -296,7 +302,7 @@
       {
         "namespace": "flux-system",
         "name": "platform-trivy-operator",
-        "age": "5d7h",
+        "age": "5d9h",
         "ready": true
       },
       {
@@ -331,13 +337,13 @@
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: \u2014 series",
+      "tag": "Sonarr: 64 series",
       "status": "ok"
     },
     {
       "name": "Radarr",
-      "tag": "Radarr: \u2014 movies",
-      "status": "unknown"
+      "tag": "Radarr: 20 movies",
+      "status": "ok"
     },
     {
       "name": "Lidarr",
@@ -349,7 +355,7 @@
     {
       "name": "Plex",
       "label": "idle",
-      "status": "unknown",
+      "status": "ok",
       "playing": false
     },
     {
@@ -360,23 +366,23 @@
     }
   ],
   "network": {
-    "fw_hits": 1349361,
+    "fw_hits": 1353047,
     "fw_rate_per_hour": null,
-    "latency_ms": 3.6,
+    "latency_ms": 15.0,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 46.7,
+    "temp_c": 47.2,
     "temp_status": "ok",
-    "load": 0.19,
-    "mem_pct": 52.9
+    "load": 0.51,
+    "mem_pct": 51.6
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 608,
-    "runtime_str": "10m",
-    "load_pct": 30,
+    "runtime_s": 588,
+    "runtime_str": "9m",
+    "load_pct": 31,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
@@ -399,7 +405,7 @@
     },
     {
       "name": "archive",
-      "used": "762.6 GB",
+      "used": "762.7 GB",
       "total": "4.0 TB",
       "pct": 19.1,
       "status": "ok",
@@ -408,9 +414,9 @@
     },
     {
       "name": "core",
-      "used": "122.8 GB",
+      "used": "122.7 GB",
       "total": "476.7 GB",
-      "pct": 25.8,
+      "pct": 25.7,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true

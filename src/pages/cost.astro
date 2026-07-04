@@ -6,74 +6,49 @@ import { ONGOING, ELECTRICITY_KWH, ELECTRICITY_RATE, ELECTRICITY_COST, MONTHLY_T
 const MY_MONTHLY_TOTAL = MONTHLY_TOTAL;
 
 // ── Subscriptions actually cancelled ─────────────────────────────────────
-// These are real invoices that no longer arrive. Exact prices as billed.
+// Real invoices that no longer arrive — exact prices and the exact date each
+// was cancelled. `since` drives the stepped cumulative-savings chart below.
 const CANCELLED = [
-  {
-    name:     'iCloud 200GB',
-    replaces: 'Immich + Nextcloud',
-    vendor:   'Apple',
-    cost:     59.99,
-    note:     'Photos → Immich · Files → Nextcloud · Calendar/Contacts → Nextcloud',
-    logo:     '/logos/apple.svg',
-    invert:   true,
-  },
-  {
-    name:     'Microsoft 365 Basic',
-    replaces: 'Nextcloud',
-    vendor:   'Microsoft',
-    cost:     39.00,
-    note:     'OneDrive 1TB + Office web → Nextcloud handles files and docs',
-    logo:     '/logos/microsoft.svg',
-    invert:   false,
-  },
-  {
-    name:     'Apple TV+',
-    replaces: 'Plex',
-    vendor:   'Apple',
-    cost:     124.99,
-    note:     'Streaming → self-hosted Plex library. Own the content, own the server.',
-    logo:     '/logos/apple.svg',
-    invert:   true,
-  },
-  {
-    name:     'Showmax',
-    replaces: 'Plex',
-    vendor:   'Showmax',
-    cost:     99,
-    note:     'Streaming → self-hosted Plex library.',
-    logo:     '/logos/showmax.svg',
-    invert:   false,
-  },
-  {
-    name:     'Apple Music',
-    replaces: 'Navidrome',
-    vendor:   'Apple',
-    cost:     69.99,
-    note:     'Music streaming → Navidrome self-hosted music server.',
-    logo:     '/logos/apple.svg',
-    invert:   true,
-  },
-  {
-    name:     'YouTube Premium',
-    replaces: 'Invidious + SponsorBlock',
-    vendor:   'Google',
-    cost:     189,
-    note:     'Ad-free YouTube → self-hosted frontend, no tracking. Saves via yt-dlp to Plex.',
-    logo:     '/logos/youtube.svg',
-    invert:   false,
-  },
-  {
-    name:     'ChatGPT',
-    replaces: 'Ollama (local LLM)',
-    vendor:   'OpenAI',
-    cost:     149,
-    note:     'Local LLM on Bronn. Upgrade to a 32B model after the RAM expansion.',
-    logo:     '/logos/openai.svg',
-    invert:   true,
-  },
+  { name: 'Apple TV+',           replaces: 'Plex',                cost: 124.99, since: '2025-11-01' },
+  { name: 'Microsoft 365 Basic', replaces: 'Nextcloud',          cost:  39.00, since: '2026-04-01' },
+  { name: 'Apple One',           replaces: 'Immich + Nextcloud', cost: 179.00, since: '2026-04-25' },
+  { name: 'ChatGPT',             replaces: 'Ollama (local LLM)',  cost: 399.00, since: '2026-05-01' },
+  { name: 'YouTube Premium',     replaces: 'self-hosted',         cost: 189.00, since: '2026-06-01' },
 ];
 
 const CANCELLED_TOTAL = CANCELLED.reduce((s, c) => s + c.cost, 0);
+
+// ── Stepped cumulative savings ────────────────────────────────────────────
+// Real: on each cancel date the monthly saving steps up; the cumulative total
+// is the integral of that step function to today. No assumed history — every
+// point derives from a real cancel date + exact price.
+const SAVINGS = (() => {
+  const evs = [...CANCELLED].sort((a, b) => a.since.localeCompare(b.since));
+  const now = new Date();
+  const daysBetween = (a: Date, b: Date) => (b.getTime() - a.getTime()) / 86400000;
+  // Build monthly sample points from the first cancellation to now.
+  const start = new Date(evs[0].since);
+  const points: { date: string; rate: number; cumulative: number }[] = [];
+  let cumulative = 0;
+  let cursor = new Date(start.getFullYear(), start.getMonth(), 1);
+  let prev = start;
+  const rateAt = (d: Date) => evs.reduce((s, e) => s + (new Date(e.since) <= d ? e.cost : 0), 0);
+  while (cursor <= now) {
+    const seg = Math.max(0, daysBetween(prev, cursor));
+    cumulative += rateAt(prev) * (seg / 30.44); // accrue at the prior rate over the elapsed span
+    points.push({
+      date: cursor.toISOString().slice(0, 7),
+      rate: rateAt(cursor),
+      cumulative: Math.round(cumulative),
+    });
+    prev = cursor;
+    cursor = new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1);
+  }
+  // final point = today
+  cumulative += rateAt(prev) * (Math.max(0, daysBetween(prev, now)) / 30.44);
+  points.push({ date: now.toISOString().slice(0, 10), rate: rateAt(now), cumulative: Math.round(cumulative) });
+  return { points, total: Math.round(cumulative), monthlyRate: rateAt(now), events: evs };
+})();
 
 // ── Running-cost stat tiles + breakdown (mockup) — all from real cost.ts ──
 // Always-on draw behind the 91 kWh/month figure (127W continuous — see cost.ts note)
@@ -125,6 +100,39 @@ const REPLACED = CANCELLED.map(c => ({ was: c.name, now: c.replaces, cost: c.cos
     <div class="cost-stat">
       <div class="cost-stat-val mono" style="color:var(--ed-ok)">R{Math.round(CANCELLED_TOTAL)}<span class="cost-stat-unit">/mo</span></div>
       <div class="cost-stat-label mono">subscriptions replaced</div>
+    </div>
+  </section>
+
+  <!-- ── Subscriptions killed — ranked by monthly saving (real amounts) ── -->
+  <section class="cost-chart-section fade-up">
+    <div class="cost-chart-head">
+      <h2 class="cost-panel-head" style="border:none;padding:0">Subscriptions I killed</h2>
+      <span class="mono cost-chart-meta">R{Math.round(SAVINGS.monthlyRate)}/mo kept · R{SAVINGS.total.toLocaleString('en-ZA')} to date</span>
+    </div>
+    <div class="cost-chart-card">
+      {(() => {
+        const bars = [...CANCELLED].sort((a, b) => b.cost - a.cost);
+        const max = Math.max(...bars.map(b => b.cost));
+        const top = bars[0].name;
+        return (
+          <div class="cost-bars">
+            {bars.map(b => (
+              <div class={`cost-bar-row${b.name === top ? ' is-top' : ''}`}>
+                <span class="cost-bar-name">{b.name}</span>
+                <div class="cost-bar-track">
+                  <div class="cost-bar-fill" data-w={`${Math.round((b.cost / max) * 100)}%`} style="width:0"></div>
+                  <span class="cost-bar-repl mono">→ {b.replaces}</span>
+                </div>
+                <span class="cost-bar-amt mono">R{b.cost.toFixed(2).replace('.', ',')}<span class="cost-bar-per">/mo</span></span>
+              </div>
+            ))}
+            <div class="cost-bars-total">
+              <span class="mono">still not paying</span>
+              <span class="cost-bars-total-amt mono">R{SAVINGS.monthlyRate.toFixed(2).replace('.', ',')}/mo</span>
+            </div>
+          </div>
+        );
+      })()}
     </div>
   </section>
 
@@ -218,6 +226,37 @@ const REPLACED = CANCELLED.map(c => ({ was: c.name, now: c.replaces, cost: c.cos
   .cost-stat-unit { font-size:15px; color:var(--ed-fnt); }
   .cost-stat-label { font-size:11px; color:var(--ed-mut); margin-top:6px; }
 
+  /* ── Subscriptions killed — ranked bars (sequential + emphasis) ── */
+  .cost-chart-section { margin:38px 0 0; }
+  .cost-chart-head { display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:14px; }
+  .cost-chart-meta { font-size:12px; color:var(--ed-ok); }
+  .cost-chart-card { border:1px solid var(--ed-hair); border-radius:12px; padding:22px 24px; }
+  .cost-bars { display:flex; flex-direction:column; gap:14px; }
+  .cost-bar-row { display:grid; grid-template-columns:130px 1fr auto; gap:16px; align-items:center; }
+  .cost-bar-name { font-size:14px; color:var(--ed-tx); font-weight:500; }
+  .cost-bar-track { position:relative; height:30px; display:flex; align-items:center; }
+  .cost-bar-fill {
+    height:30px; border-radius:6px;
+    background:color-mix(in srgb, var(--ed-ok) 32%, transparent);
+    min-width:3px; transition:width .8s cubic-bezier(.2,.7,.2,1);
+  }
+  .cost-bar-row.is-top .cost-bar-fill { background:var(--ed-ok); }
+  .cost-bar-repl { position:absolute; left:12px; font-size:11px; color:var(--ed-mut); white-space:nowrap; pointer-events:none; }
+  .cost-bar-row.is-top .cost-bar-repl { color:#0e0e11; }
+  .cost-bar-amt { font-size:14px; color:var(--ed-tx); font-variant-numeric:tabular-nums; text-align:right; }
+  .cost-bar-per { font-size:11px; color:var(--ed-fnt); }
+  .cost-bars-total {
+    display:flex; align-items:baseline; justify-content:space-between;
+    padding-top:14px; margin-top:4px; border-top:1px solid var(--ed-box);
+    font-size:12.5px; color:var(--ed-mut);
+  }
+  .cost-bars-total-amt { color:var(--ed-ok); font-size:14px; }
+  @media (max-width:600px){
+    .cost-bar-row { grid-template-columns:1fr auto; }
+    .cost-bar-track { grid-column:1 / -1; order:3; }
+    .cost-bar-repl { display:none; }
+  }
+
   /* ── Two-up ── */
   .cost-twocol { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin:36px 0 0; align-items:start; }
   .cost-rightcol { display:flex; flex-direction:column; gap:14px; }
@@ -260,3 +299,22 @@ const REPLACED = CANCELLED.map(c => ({ was: c.name, now: c.replaces, cost: c.cos
     .cost-h1 { font-size:34px; }
   }
 </style>
+
+<script>
+  function growCostBars() {
+    const fills = document.querySelectorAll<HTMLElement>('.cost-bar-fill[data-w]');
+    if (!fills.length) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const paint = (el: HTMLElement) => { el.style.width = el.dataset.w || '0'; };
+    if (reduce) { fills.forEach(paint); return; }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { paint(e.target as HTMLElement); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.35 });
+    fills.forEach(el => io.observe(el));
+  }
+  document.addEventListener('astro:page-load', growCostBars);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', growCostBars);
+  else growCostBars();
+</script>

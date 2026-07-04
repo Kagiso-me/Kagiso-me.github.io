@@ -1,5 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+// Real "decisions recorded" — blog posts carrying an ADR reference
+const posts = await getCollection('blog');
+const DECISIONS = posts.filter(p => (p.data as any).adr).length;
 ---
 
 <Layout
@@ -30,186 +35,140 @@ import Layout from '../layouts/Layout.astro';
 <div id="manifesto-phase">
 
   <!-- HERO -->
-  <section class="mf-hero">
-    <div class="mf-orb mf-orb-1"></div>
-    <div class="mf-orb mf-orb-2"></div>
-    <div class="mf-hero-inner">
-
-      <div class="mf-text-col">
-        <div class="mf-pre">whoami</div>
-        <h1 class="mf-h1">
-          Executive<br>
-          by day.<br>
-          <span class="line-gold">Engineer by choice.</span>
-        </h1>
-        <p class="mf-body">
-          I didn't learn to code to change careers.<br>
-          I learned because <strong>I refused to stay illiterate</strong>
-          in the language that runs the industry I help lead.<br><br>
-          <em>This cluster is proof it's working.</em>
-        </p>
-        <div class="mf-actions">
-          <a href="/blog" class="btn-p">Read the Blog →</a>
-          <a href="/cost" class="btn-g">See the Cost</a>
-          <a href="/status" class="btn-g">Live Status</a>
-        </div>
-      </div>
-
-      <div class="mf-photo-col">
-        <div class="mf-photo-wrap">
-          <div class="mf-photo-frame">
-            <img src="/images/kagiso.jpg" alt="Kagiso" />
-          </div>
-        </div>
-      </div>
-
+  <header class="ab-hero">
+    <div class="ab-hero-text">
+      <div class="ab-kicker mono">$ whoami</div>
+      <h1 class="ab-h1">Kagiso — exec by day, operator by night.</h1>
     </div>
+    <div class="ab-photo">
+      <img src="/images/kagiso.jpg" alt="Kagiso" />
+    </div>
+  </header>
+
+  <!-- MANIFESTO -->
+  <section class="ab-manifesto">
+    <p class="ab-quote">I run strategy in a boardroom and a Kubernetes cluster in my study. This site is the seam between the two — proof that I don't just talk about how systems should work, I operate one.</p>
+    <p class="ab-body">I didn't learn to code to change careers. I learned because I refused to stay illiterate in the language that runs the industry I help lead. So I built something real to close the gap: three mini-PCs, a proper HA Kubernetes cluster, GitOps, identity, storage, backups, observability — run with production discipline, for an audience of one (plus whoever's reading this).</p>
+    <p class="ab-body">Everything here is genuinely live. The metrics come off the hardware, the ops log is the actual changelog, and the decision records document choices I really wrestled with — including the ones I got wrong first.</p>
   </section>
 
-  <div class="mf-divider"></div>
-
   <!-- DUALITY -->
-  <section class="mf-section">
-    <div class="mf-section-label"><span>// </span>identity</div>
-    <h2 class="mf-section-title">One person. Two worlds.</h2>
-    <p class="mf-section-sub">
+  <section class="ab-section">
+    <div class="ab-label mono">~/identity</div>
+    <h2 class="ab-h2">One person. Two worlds.</h2>
+    <p class="ab-sub">
       Most executives in a telco don't run Kubernetes clusters at home.
       Most people running Kubernetes clusters aren't in the C-suite by morning.
       I decided I wasn't going to pick a side.
     </p>
-    <div class="dual-grid">
-      <div class="dual-card dc-exec">
-        <div class="dc-glow"></div>
-        <span class="dc-icon">◈</span>
-        <div class="dc-title">The Executive</div>
-        <div class="dc-sub">telco · monday → friday · 08:00–18:00</div>
-        <div class="dc-trait"><span class="dc-arr">→</span>Force multiplier to executive leadership</div>
-        <div class="dc-trait"><span class="dc-arr">→</span>Owns the agenda — strategy, cadence, decisions</div>
-        <div class="dc-trait"><span class="dc-arr">→</span>Bridges commercial and technical in an industry being rebuilt by software</div>
-        <div class="dc-trait"><span class="dc-arr">→</span>Makes other people's best thinking possible</div>
-        <div class="dc-trait"><span class="dc-arr">→</span>Manages complexity so others can move faster</div>
+    <div class="ab-dual">
+      <div class="ab-dual-card">
+        <span class="ab-dual-icon mono">◈</span>
+        <div class="ab-dual-title">The Executive</div>
+        <div class="ab-dual-when mono">telco · monday → friday · 08:00–18:00</div>
+        <div class="ab-trait">Force multiplier to executive leadership</div>
+        <div class="ab-trait">Owns the agenda — strategy, cadence, decisions</div>
+        <div class="ab-trait">Bridges commercial and technical in an industry being rebuilt by software</div>
+        <div class="ab-trait">Makes other people's best thinking possible</div>
+        <div class="ab-trait">Manages complexity so others can move faster</div>
       </div>
-      <div class="dual-card dc-eng">
-        <div class="dc-glow"></div>
-        <span class="dc-icon">⬡</span>
-        <div class="dc-title">The Engineer</div>
-        <div class="dc-sub">evenings · weekends · 22:00–02:00</div>
-        <div class="dc-trait"><span class="dc-arr">→</span>Runs a real k3s cluster on owned hardware</div>
-        <div class="dc-trait"><span class="dc-arr">→</span>GitOps with Flux CD and Helm</div>
-        <div class="dc-trait"><span class="dc-arr">→</span>Full observability: Prometheus + Loki</div>
-        <div class="dc-trait"><span class="dc-arr">→</span>Writes Ansible, YAML, the odd bash crime</div>
-        <div class="dc-trait"><span class="dc-arr">→</span>Learning in public — incidents and all</div>
+      <div class="ab-dual-card">
+        <span class="ab-dual-icon mono">⬡</span>
+        <div class="ab-dual-title">The Engineer</div>
+        <div class="ab-dual-when mono">evenings · weekends · 22:00–02:00</div>
+        <div class="ab-trait">Runs a real k3s cluster on owned hardware</div>
+        <div class="ab-trait">GitOps with Flux CD and Helm</div>
+        <div class="ab-trait">Full observability: Prometheus + Loki</div>
+        <div class="ab-trait">Writes Ansible, YAML, the odd bash crime</div>
+        <div class="ab-trait">Learning in public — incidents and all</div>
       </div>
     </div>
 
-    <div style="margin-top:3rem">
-      <div class="mf-section-label" style="margin-bottom:.75rem"><span>// </span>away from the terminal</div>
-      <div class="personal-grid">
-        <div class="personal-card">
-          <span class="pc-icon">♡</span>
-          <div class="pc-title">Husband & Father</div>
-          <div class="pc-sub">the most important role</div>
-          <p class="pc-body">
-            Everything I build — the cluster, the self-hosting, the
-            data sovereignty — is ultimately for <strong>the people at home.</strong>
-            Their photos are on my Immich. Their privacy matters more than my convenience.
-          </p>
+    <div class="ab-personal-wrap">
+      <div class="ab-label mono">~/away-from-the-terminal</div>
+      <div class="ab-personal">
+        <div class="ab-personal-card">
+          <span class="ab-personal-icon">♡</span>
+          <div class="ab-personal-title">Husband & Father</div>
+          <div class="ab-personal-sub mono">the most important role</div>
+          <p class="ab-personal-body">Everything I build — the cluster, the self-hosting, the data sovereignty — is ultimately for the people at home. Their photos are on my Immich. Their privacy matters more than my convenience.</p>
         </div>
-        <div class="personal-card">
-          <span class="pc-icon">📷</span>
-          <div class="pc-title">Photographer</div>
-          <div class="pc-sub">stills · canon ecosystem</div>
-          <p class="pc-body">
-            I shoot our family's story — moments that deserve better than
-            a compressed thumbnail on someone else's server.
-            <em>Immich stores every frame.</em> I own the archive.
-          </p>
+        <div class="ab-personal-card">
+          <span class="ab-personal-icon">📷</span>
+          <div class="ab-personal-title">Photographer</div>
+          <div class="ab-personal-sub mono">stills · canon ecosystem</div>
+          <p class="ab-personal-body">I shoot our family's story — moments that deserve better than a compressed thumbnail on someone else's server. Immich stores every frame. I own the archive.</p>
         </div>
-        <div class="personal-card">
-          <span class="pc-icon">🎬</span>
-          <div class="pc-title">Videographer</div>
-          <div class="pc-sub">video · blackmagic · colour · storytelling</div>
-          <p class="pc-body">
-            Video is photography with a timeline.
-            <strong>The same eye for composition,</strong> the same obsession
-            with getting the detail right — just with more storage
-            requirements and a reason to upgrade the NAS.
-          </p>
+        <div class="ab-personal-card">
+          <span class="ab-personal-icon">🎬</span>
+          <div class="ab-personal-title">Videographer</div>
+          <div class="ab-personal-sub mono">video · blackmagic · colour</div>
+          <p class="ab-personal-body">Video is photography with a timeline. The same eye for composition, the same obsession with getting the detail right — just with more storage requirements and a reason to upgrade the NAS.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <div class="mf-divider"></div>
-
-  <!-- PHILOSOPHY -->
-  <section class="mf-section">
-    <div class="mf-section-label"><span>// </span>philosophy</div>
-    <h2 class="mf-section-title">What I believe about running systems.</h2>
-    <div class="belief-grid">
-      <div class="belief-card">
-        <div class="belief-title">If it isn't in git, it doesn't exist</div>
-        <p class="belief-body">Every change is a reviewed commit. The cluster is reproducible from a repo, or it's a pet I'm one bad night away from losing.</p>
+  <!-- BELIEFS -->
+  <section class="ab-section">
+    <div class="ab-label mono">~/philosophy</div>
+    <h2 class="ab-h2">What I believe about running systems</h2>
+    <div class="ab-beliefs">
+      <div class="ab-belief">
+        <div class="ab-belief-title mono">If it isn't in git, it doesn't exist</div>
+        <p class="ab-belief-body">Every change is a reviewed commit. The cluster is reproducible from a repo, or it's a pet I'm one bad night away from losing.</p>
       </div>
-      <div class="belief-card">
-        <div class="belief-title">Build it to fail safely</div>
-        <p class="belief-body">HA, quorum, floating VIPs, tested restores. The goal isn't to avoid failure — it's to make failure boring. The cluster has had incidents; that's curriculum, not catastrophe.</p>
+      <div class="ab-belief">
+        <div class="ab-belief-title mono">Build it to fail safely</div>
+        <p class="ab-belief-body">HA, quorum, floating VIPs, tested restores. The goal isn't to avoid failure — it's to make failure boring.</p>
       </div>
-      <div class="belief-card">
-        <div class="belief-title">Document the why, not just the what</div>
-        <p class="belief-body">Anyone can read a config. Write it down while it hurts — that's when the detail is most honest, and future me is the intended reader.</p>
+      <div class="ab-belief">
+        <div class="ab-belief-title mono">Document the why, not just the what</div>
+        <p class="ab-belief-body">Anyone can read a config. The decision records capture the trade-offs I made and would otherwise forget by next quarter.</p>
       </div>
-      <div class="belief-card">
-        <div class="belief-title">Operate in the open</div>
-        <p class="belief-body">Showing the scars — incidents, wrong turns, the slow SSD — is more useful than another polished architecture diagram. I self-host to reduce a liability, not to prove a point.</p>
+      <div class="ab-belief">
+        <div class="ab-belief-title mono">Operate in the open</div>
+        <p class="ab-belief-body">Showing the scars — incidents, wrong turns, the slow SSD — is more useful than another polished architecture diagram.</p>
       </div>
     </div>
   </section>
 
-  <div class="mf-divider"></div>
-
-  <!-- STACK -->
-  <section class="mf-section">
-    <div class="mf-section-label"><span>// </span>ps aux | grep running</div>
-    <h2 class="mf-section-title">What's actually running.</h2>
-    <p class="mf-section-sub">Not a list of things I've heard of. Every row below is live in production.</p>
-    <div class="stack-table">
-      <div class="st-head">
-        <span>PID</span><span>STAT</span><span>NAME</span><span>DESCRIPTION</span>
-      </div>
-      <div class="st-row"><span class="st-pid">1001</span><span class="st-stat run">S+</span><span class="st-name">k3s</span><span class="st-desc">Lightweight Kubernetes — 3 control nodes</span></div>
-      <div class="st-row"><span class="st-pid">1002</span><span class="st-stat run">S+</span><span class="st-name">flux-cd</span><span class="st-desc">GitOps operator — git is the source of truth</span></div>
-      <div class="st-row"><span class="st-pid">1003</span><span class="st-stat run">S+</span><span class="st-name">prometheus</span><span class="st-desc">Metrics — every node, every pod</span></div>
-      <div class="st-row"><span class="st-pid">1004</span><span class="st-stat run">S+</span><span class="st-name">grafana</span><span class="st-desc">Dashboards — the thing I check every morning</span></div>
-      <div class="st-row"><span class="st-pid">1005</span><span class="st-stat run">S+</span><span class="st-name">loki</span><span class="st-desc">Log aggregation — correlate, don't grep</span></div>
-      <div class="st-row"><span class="st-pid">1006</span><span class="st-stat run">S+</span><span class="st-name">traefik</span><span class="st-desc">Ingress — TLS, routing, the front door</span></div>
-      <div class="st-row"><span class="st-pid">1007</span><span class="st-stat run">S+</span><span class="st-name">authentik</span><span class="st-desc">SSO — one login for everything</span></div>
-      <div class="st-row"><span class="st-pid">1008</span><span class="st-stat run">S+</span><span class="st-name">immich</span><span class="st-desc">Photo library — 100% off Apple's servers</span></div>
-      <div class="st-row"><span class="st-pid">1009</span><span class="st-stat run">S+</span><span class="st-name">nextcloud</span><span class="st-desc">Files, calendar, contacts — off Microsoft's</span></div>
-      <div class="st-row"><span class="st-pid">1010</span><span class="st-stat run">S+</span><span class="st-name">plex</span><span class="st-desc">Media — own the content, own the server</span></div>
-      <div class="st-row"><span class="st-pid">1011</span><span class="st-stat run">S+</span><span class="st-name">ollama</span><span class="st-desc">Local LLM — AI that stays on my hardware</span></div>
-      <div class="st-row"><span class="st-pid">1012</span><span class="st-stat run">S+</span><span class="st-name">n8n</span><span class="st-desc">Automation — Beesly AI agent lives here</span></div>
-    </div>
+  <!-- STATS -->
+  <section class="ab-stats">
+    <div class="ab-stat"><div class="ab-stat-val mono" id="ab-uptime">—</div><div class="ab-stat-label mono">longest uptime</div></div>
+    <div class="ab-stat"><div class="ab-stat-val mono">{DECISIONS}</div><div class="ab-stat-label mono">decisions recorded</div></div>
+    <div class="ab-stat"><div class="ab-stat-val mono">8</div><div class="ab-stat-label mono">hosts on one /24</div></div>
+    <div class="ab-stat"><div class="ab-stat-val mono" style="color:var(--ab-ok)">∞</div><div class="ab-stat-label mono">things still to break</div></div>
   </section>
 
-  <div class="mf-divider"></div>
+  <!-- POKE AROUND + CONTRIB -->
+  <section class="ab-section">
+    <div class="ab-poke">
+      <h2 class="ab-h2" style="margin:0 0 8px">Poke around. It's all open.</h2>
+      <p class="ab-sub" style="margin:0 0 20px">The repo, the decisions, the live status — nothing here is staged. If you run a lab too, I'd genuinely like to compare notes.</p>
+      <div class="ab-chips">
+        <a href="https://github.com/Kagiso-me" target="_blank" rel="noopener" class="ab-chip mono">GitHub</a>
+        <a href="/blog" class="ab-chip mono">Journal</a>
+        <a href="/status" class="ab-chip mono">Live status</a>
+        <a href="/digest" class="ab-chip mono">Ops log</a>
+      </div>
 
-  <!-- CLOSE -->
-  <section class="mf-close">
-    <div class="mf-close-inner">
-      <h2 class="mf-close-h">
-        This isn't a hobby.<br>
-        It's a <span class="gradient-text">commitment.</span>
-      </h2>
-      <p class="mf-close-p">
-        Every incident documented. Every decision recorded. Every rand saved published.<br><br>
-        <strong>You don't need to choose between executive and engineer.</strong>
-        You just need to be willing to start badly — and keep going.
-      </p>
-      <div class="mf-actions" style="justify-content:center">
-        <a href="/blog" class="btn-p">Read the Blog →</a>
-        <a href="/cost" class="btn-g">The Cost</a>
-        <a href="/photos" class="btn-g">The Archive</a>
+      <!-- GitHub activity (real, from live.json contribs) -->
+      <div class="ab-contrib-wrap">
+        <div class="ab-contrib-head">
+          <span class="mono ab-contrib-label">github activity</span>
+          <span class="mono ab-contrib-total" id="ab-contrib-total"></span>
+        </div>
+        <div id="ab-contrib-graph" class="ab-contrib-graph"><div class="ab-contrib-loading mono">loading graph…</div></div>
+        <div class="ab-contrib-legend mono">
+          <span>less</span>
+          <span class="ab-cc" data-level="0"></span>
+          <span class="ab-cc" data-level="1"></span>
+          <span class="ab-cc" data-level="2"></span>
+          <span class="ab-cc" data-level="3"></span>
+          <span class="ab-cc" data-level="4"></span>
+          <span>more</span>
+        </div>
       </div>
     </div>
   </section>
@@ -218,7 +177,7 @@ import Layout from '../layouts/Layout.astro';
 
 </Layout>
 
-<style>
+<style is:global>
 /* ── TERMINAL PHASE ── */
 #terminal-phase {
   min-height: 100vh;
@@ -301,281 +260,98 @@ import Layout from '../layouts/Layout.astro';
 #skip-btn:hover { border-color: var(--color-gold); color: var(--color-gold); }
 
 /* ── MANIFESTO PHASE ── */
-#manifesto-phase { display: none; opacity: 0; min-height: 100vh; }
-#manifesto-phase.show { display: flex; flex-direction: column; }
+#manifesto-phase { display: none; opacity: 0; }
+#manifesto-phase.show { display: block; }
 #manifesto-phase.fade-in { animation: mfade 1.2s cubic-bezier(.16,1,.3,1) forwards; }
 @keyframes mfade { from{opacity:0} to{opacity:1} }
 
-.mf-hero {
-  min-height: 100vh; display: flex; align-items: center; justify-content: center;
-  position: relative; overflow: hidden; padding: 6rem 2rem 4rem;
+/* ── Editorial About (Command Center mockup) ── */
+#manifesto-phase {
+  --ab-tx:#eaeaed; --ab-mut:#9a9aa3; --ab-fnt:#63636b;
+  --ab-hair:rgba(255,255,255,.09); --ab-box:rgba(255,255,255,.16);
+  --ab-ok:#2fa06b;
+  --ab-serif:var(--font-display); --ab-mono:var(--font-mono);
+}
+.ab-hero, .ab-manifesto, .ab-section, .ab-stats {
+  max-width: 1080px; margin-left: auto; margin-right: auto;
+  padding-left: 1.5rem; padding-right: 1.5rem;
 }
 
-.mf-orb { position: absolute; border-radius: 50%; pointer-events: none; filter: blur(100px); }
-.mf-orb-1 {
-  width: 700px; height: 700px;
-  background: color-mix(in srgb, var(--color-gold) 9%, transparent);
-  top: -200px; left: -200px;
-  animation: drift 20s ease-in-out infinite;
-}
-.mf-orb-2 {
-  width: 500px; height: 500px;
-  background: color-mix(in srgb, var(--color-mauve) 7%, transparent);
-  bottom: -150px; right: -100px;
-  animation: drift 26s ease-in-out infinite reverse;
-}
-@keyframes drift {
-  0%,100%{transform:translate(0,0)}
-  33%{transform:translate(30px,20px)}
-  66%{transform:translate(-20px,30px)}
+/* Hero */
+.ab-hero { display: grid; grid-template-columns: 1fr auto; gap: 26px; align-items: center; padding-top: 48px; padding-bottom: 6px; }
+.ab-kicker { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--ab-mut); margin-bottom: 10px; }
+.ab-h1 { font-family: var(--ab-serif); font-weight: 500; font-size: clamp(1.9rem,4vw,44px); letter-spacing: -.02em; line-height: 1.06; margin: 0; color: var(--ab-tx); }
+.ab-photo { width: 72px; height: 72px; flex: none; }
+.ab-photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 16px; border: 1px solid var(--ab-hair); }
+
+/* Manifesto */
+.ab-manifesto { padding: 32px 1.5rem 8px; max-width: calc(72ch + 3rem); }
+.ab-quote { font-family: var(--ab-serif); font-style: italic; font-size: 22px; line-height: 1.55; color: var(--ab-tx); margin: 0 0 24px; font-weight: 400; }
+.ab-body { font-size: 15.5px; line-height: 1.72; color: var(--ab-mut); margin: 0 0 18px; }
+
+/* Sections */
+.ab-section { padding-top: 44px; padding-bottom: 8px; }
+.ab-label { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--ab-mut); margin-bottom: 9px; }
+.ab-h2 { font-family: var(--ab-serif); font-weight: 500; font-size: 25px; margin: 0 0 12px; color: var(--ab-tx); }
+.ab-sub { font-size: 14.5px; line-height: 1.65; color: var(--ab-mut); margin: 0 0 22px; max-width: 70ch; }
+
+/* Duality */
+.ab-dual { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.ab-dual-card { border: 1px solid var(--ab-hair); border-radius: 12px; padding: 22px 24px; }
+.ab-dual-icon { font-size: 16px; color: var(--ab-mut); }
+.ab-dual-title { font-family: var(--ab-serif); font-size: 20px; font-weight: 500; color: var(--ab-tx); margin: 8px 0 3px; }
+.ab-dual-when { font-size: 11px; color: var(--ab-fnt); margin-bottom: 14px; }
+.ab-trait { font-size: 13.5px; line-height: 1.5; color: var(--ab-mut); padding: 7px 0; border-top: 1px solid var(--ab-hair); }
+
+.ab-personal-wrap { margin-top: 36px; }
+.ab-personal { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+.ab-personal-card { border: 1px solid var(--ab-hair); border-radius: 12px; padding: 20px 22px; }
+.ab-personal-icon { font-size: 18px; }
+.ab-personal-title { font-family: var(--ab-serif); font-size: 17px; font-weight: 500; color: var(--ab-tx); margin: 10px 0 2px; }
+.ab-personal-sub { font-size: 11px; color: var(--ab-fnt); margin-bottom: 12px; }
+.ab-personal-body { font-size: 13px; line-height: 1.62; color: var(--ab-mut); margin: 0; }
+
+/* Beliefs 2x2 */
+.ab-beliefs { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-top: 1px solid var(--ab-hair); border-left: 1px solid var(--ab-hair); }
+.ab-belief { padding: 20px 22px; border-right: 1px solid var(--ab-hair); border-bottom: 1px solid var(--ab-hair); }
+.ab-belief-title { font-size: 14px; font-weight: 500; color: var(--ab-tx); margin-bottom: 8px; }
+.ab-belief-body { font-size: 13.5px; line-height: 1.65; color: var(--ab-mut); margin: 0; }
+
+/* Stats strip */
+.ab-stats { display: grid; grid-template-columns: repeat(4,1fr); margin-top: 44px; border-top: 1px solid var(--ab-hair); }
+.ab-stat { padding: 20px 22px 20px 0; border-left: 1px solid var(--ab-hair); padding-left: 22px; margin-left: -1px; }
+.ab-stat:first-child { border-left: none; padding-left: 0; margin-left: 0; }
+.ab-stat-val { font-size: 28px; font-weight: 500; color: var(--ab-tx); font-variant-numeric: tabular-nums; }
+.ab-stat-label { font-size: 11px; color: var(--ab-mut); margin-top: 5px; }
+
+/* Poke around */
+.ab-poke { border: 1px solid var(--ab-hair); border-radius: 12px; padding: 30px 32px; }
+.ab-chips { display: flex; gap: 10px; flex-wrap: wrap; }
+.ab-chip { padding: 9px 15px; border-radius: 8px; border: 1px solid var(--ab-hair); color: var(--ab-tx); text-decoration: none; font-size: 12.5px; transition: border-color .18s ease; }
+.ab-chip:hover { border-color: var(--ab-box); color: var(--ab-tx); }
+
+.ab-contrib-wrap { display: inline-flex; flex-direction: column; gap: 9px; margin-top: 26px; padding-top: 20px; border-top: 1px solid var(--ab-hair); }
+.ab-contrib-head { display: flex; align-items: baseline; gap: 12px; }
+.ab-contrib-label { font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--ab-fnt); }
+.ab-contrib-total { font-size: 10px; color: var(--ab-fnt); }
+.ab-contrib-graph { overflow-x: auto; }
+.ab-contrib-grid { display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, 10px); gap: 3px; width: max-content; }
+.ab-cc, .ab-contrib-grid span { width: 10px; height: 10px; border-radius: 2px; }
+.ab-cc[data-level="0"], .ab-contrib-grid span[data-level="0"] { background: rgba(255,255,255,.06); }
+.ab-cc[data-level="1"], .ab-contrib-grid span[data-level="1"] { background: rgba(111,143,176,.35); }
+.ab-cc[data-level="2"], .ab-contrib-grid span[data-level="2"] { background: rgba(47,160,107,.5); }
+.ab-cc[data-level="3"], .ab-contrib-grid span[data-level="3"] { background: color-mix(in srgb, #2fa06b 78%, transparent); }
+.ab-cc[data-level="4"], .ab-contrib-grid span[data-level="4"] { background: #2fa06b; }
+.ab-contrib-legend { display: flex; align-items: center; gap: 5px; justify-content: flex-end; font-size: 10px; color: var(--ab-fnt); }
+.ab-contrib-loading { font-size: 11px; color: var(--ab-mut); padding: 8px 0; }
+
+@media (max-width: 860px) {
+  .ab-dual, .ab-beliefs, .ab-personal, .ab-stats { grid-template-columns: 1fr; }
+  .ab-personal { grid-template-columns: 1fr; }
+  .ab-stats { grid-template-columns: repeat(2,1fr); }
+  .ab-h1 { font-size: 30px; }
 }
 
-.mf-hero-inner {
-  display: grid; grid-template-columns: 1fr 340px;
-  gap: 5rem; align-items: center;
-  max-width: 960px; width: 100%; position: relative; z-index: 1;
-}
-@media(max-width:780px){
-  .mf-hero-inner { grid-template-columns: 1fr; gap: 3rem; }
-  .mf-photo-col { order: -1; display: flex; justify-content: center; }
-}
-
-.mf-pre {
-  font-family: var(--font-mono); font-size: .68rem;
-  color: var(--color-subtle); text-transform: uppercase;
-  letter-spacing: .18em; margin-bottom: 2rem;
-  display: flex; align-items: center; gap: .75rem;
-}
-.mf-pre::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--color-muted), transparent); }
-
-.mf-h1 {
-  font-family: var(--font-display);
-  font-size: clamp(2.8rem, 8vw, 6rem);
-  font-weight: 800; line-height: 1.05;
-  letter-spacing: -.04em; color: var(--color-heading); margin-bottom: 2.5rem;
-}
-.mf-h1 .line-gold {
-  background: linear-gradient(120deg, var(--color-gold) 0%, #f7c76b 50%, var(--color-green) 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-}
-
-.mf-body {
-  font-family: var(--font-display);
-  font-size: clamp(1rem, 2.2vw, 1.2rem);
-  font-weight: 300; color: var(--color-subtle);
-  line-height: 1.85; max-width: 620px; margin-bottom: 3rem;
-}
-.mf-body strong { color: var(--color-text); font-weight: 500; }
-.mf-body em { color: var(--color-gold); font-style: normal; font-weight: 400; }
-
-.mf-actions { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
-
-/* Photo frame */
-.mf-photo-wrap { position: relative; }
-.mf-photo-frame {
-  width: 300px; height: 380px; border-radius: 24px; overflow: hidden;
-  border: 1px solid var(--color-muted);
-  box-shadow: 0 0 0 1px rgba(255,255,255,.04), 0 32px 80px rgba(0,0,0,.6),
-              0 0 80px color-mix(in srgb, var(--color-gold) 10%, transparent);
-}
-@media(max-width:780px){ .mf-photo-frame { width: 240px; height: 300px; } }
-
-.mf-photo-frame img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(15%) contrast(1.05); transition: filter .4s ease; }
-.mf-photo-frame:hover img { filter: grayscale(0%) contrast(1.05); }
-
-.mf-photo-placeholder {
-  width: 100%; height: 100%;
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem;
-  background: var(--color-surface);
-  color: var(--color-subtle); font-family: var(--font-mono); font-size: .7rem;
-  letter-spacing: .08em; text-align: center; padding: 1.5rem;
-}
-.mf-photo-placeholder-icon { font-size: 2.5rem; opacity: .3; }
-
-.mf-photo-wrap::before {
-  content: ''; position: absolute; bottom: -12px; right: -12px;
-  width: 100px; height: 100px;
-  border-bottom: 2px solid var(--color-gold); border-right: 2px solid var(--color-gold);
-  border-radius: 0 0 12px 0; pointer-events: none; opacity: .5;
-}
-.mf-photo-wrap::after {
-  content: ''; position: absolute; top: -12px; left: -12px;
-  width: 100px; height: 100px;
-  border-top: 2px solid color-mix(in srgb, var(--color-mauve) 60%, transparent);
-  border-left: 2px solid color-mix(in srgb, var(--color-mauve) 60%, transparent);
-  border-radius: 12px 0 0 0; pointer-events: none;
-}
-
-/* Section */
-.mf-section { padding: 5rem 2rem; max-width: 960px; margin: 0 auto; }
-.mf-divider {
-  width: 100%; height: 1px; max-width: 960px; margin: 0 auto;
-  background: linear-gradient(90deg, transparent, var(--color-muted), transparent);
-}
-
-.mf-section-label {
-  font-family: var(--font-mono); font-size: .63rem;
-  color: var(--color-subtle); letter-spacing: .18em; text-transform: uppercase; margin-bottom: .75rem;
-}
-.mf-section-label span { color: var(--color-gold); }
-
-.mf-section-title {
-  font-family: var(--font-display); font-weight: 800;
-  font-size: clamp(1.6rem, 3.5vw, 2.2rem);
-  color: var(--color-heading); margin-bottom: .75rem; letter-spacing: -.03em;
-}
-
-.mf-section-sub {
-  font-family: var(--font-display); font-size: .95rem;
-  color: var(--color-subtle); line-height: 1.8;
-  max-width: 540px; margin-bottom: 2.5rem;
-}
-
-/* Dual cards */
-.dual-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-@media(max-width:680px){ .dual-grid { grid-template-columns: 1fr; } }
-
-.dual-card {
-  border-radius: 20px; padding: 2.25rem 2rem;
-  position: relative; overflow: hidden;
-  transition: transform .3s ease, box-shadow .3s ease;
-}
-.dual-card:hover { transform: translateY(-5px); }
-
-.dc-exec {
-  background: linear-gradient(135deg, color-mix(in srgb, var(--color-gold) 6%, var(--color-surface)), color-mix(in srgb, var(--color-gold) 2%, var(--color-overlay)));
-  border: 1px solid color-mix(in srgb, var(--color-gold) 18%, var(--color-muted));
-}
-.dc-exec:hover { box-shadow: 0 20px 60px color-mix(in srgb, var(--color-gold) 14%, transparent); }
-
-.dc-eng {
-  background: linear-gradient(135deg, color-mix(in srgb, var(--color-green) 6%, var(--color-surface)), color-mix(in srgb, var(--color-green) 2%, var(--color-overlay)));
-  border: 1px solid color-mix(in srgb, var(--color-green) 18%, var(--color-muted));
-}
-.dc-eng:hover { box-shadow: 0 20px 60px color-mix(in srgb, var(--color-green) 14%, transparent); }
-
-.dc-glow {
-  position: absolute; border-radius: 50%; pointer-events: none;
-  width: 260px; height: 260px; top: -80px; right: -80px; filter: blur(70px); opacity: .2;
-}
-.dc-exec .dc-glow { background: var(--color-gold); }
-.dc-eng  .dc-glow { background: var(--color-green); }
-
-.dc-icon { font-size: 2rem; margin-bottom: 1.1rem; display: block; line-height: 1; }
-.dc-title { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; margin-bottom: .25rem; letter-spacing: -.02em; }
-.dc-exec .dc-title { color: var(--color-gold); }
-.dc-eng  .dc-title { color: var(--color-green); }
-
-.dc-sub { font-size: .68rem; color: var(--color-subtle); letter-spacing: .06em; font-family: var(--font-mono); margin-bottom: 1.5rem; }
-
-.dc-trait {
-  display: flex; align-items: flex-start; gap: .6rem;
-  font-family: var(--font-display); font-size: .875rem;
-  color: var(--color-text); padding: .4rem 0;
-  border-bottom: 1px solid rgba(255,255,255,.04); line-height: 1.5;
-}
-.dc-trait:last-child { border-bottom: none; }
-.dc-arr { flex-shrink: 0; font-family: var(--font-mono); font-size: .65rem; margin-top: .15rem; }
-.dc-exec .dc-arr { color: var(--color-gold); }
-.dc-eng  .dc-arr { color: var(--color-green); }
-
-/* Personal cards */
-.personal-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; margin-top: 2rem; }
-@media(max-width:680px){ .personal-grid { grid-template-columns: 1fr; } }
-
-.personal-card {
-  background: var(--color-surface); border: 1px solid var(--color-muted);
-  border-radius: 16px; padding: 1.75rem 1.5rem;
-  position: relative; overflow: hidden;
-  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
-}
-.personal-card:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--color-mauve) 40%, var(--color-muted)); box-shadow: 0 16px 48px rgba(0,0,0,.4); }
-.personal-card::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, var(--color-mauve), var(--color-sapphire), transparent);
-  opacity: 0; transition: opacity .25s ease;
-}
-.personal-card:hover::before { opacity: 1; }
-
-.pc-icon { font-size: 1.8rem; margin-bottom: 1rem; display: block; line-height: 1; }
-.pc-title { font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: var(--color-heading); margin-bottom: .4rem; letter-spacing: -.01em; }
-.pc-sub { font-family: var(--font-mono); font-size: .65rem; color: var(--color-subtle); letter-spacing: .06em; margin-bottom: 1rem; }
-.pc-body { font-family: var(--font-display); font-size: .875rem; color: var(--color-subtle); line-height: 1.7; }
-.pc-body strong { color: var(--color-text); font-weight: 500; }
-.pc-body em { color: var(--color-mauve); font-style: normal; }
-
-/* Philosophy */
-/* Belief cards (mockup) */
-.belief-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 2.5rem; }
-.belief-card {
-  background: rgba(255, 255, 255, 0.022);
-  border: 1px solid var(--color-muted);
-  border-left: 2px solid var(--accent);
-  border-radius: 12px;
-  padding: 20px 22px;
-  transition: border-color .2s ease;
-}
-.belief-card:hover { border-color: color-mix(in srgb, var(--color-text) 16%, transparent); border-left-color: var(--accent); }
-.belief-title { font-family: var(--font-display); font-size: 17px; font-weight: 600; color: var(--color-heading); margin-bottom: 8px; }
-.belief-body { font-size: 14.5px; line-height: 1.65; color: var(--color-subtle); margin: 0; }
-@media (max-width: 720px) { .belief-grid { grid-template-columns: 1fr; } }
-
-/* Stack table */
-.stack-table { margin-top: 2rem; border: 1px solid var(--color-muted); border-radius: 12px; overflow: hidden; font-family: var(--font-mono); font-size: .75rem; }
-.st-head {
-  display: grid; grid-template-columns: 4rem 5rem 1fr 1fr;
-  padding: .6rem 1.25rem; background: color-mix(in srgb, var(--color-muted) 40%, transparent);
-  color: var(--color-subtle); font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; gap: 1rem;
-}
-.st-row {
-  display: grid; grid-template-columns: 4rem 5rem 1fr 1fr;
-  padding: .55rem 1.25rem; gap: 1rem;
-  border-top: 1px solid color-mix(in srgb, var(--color-muted) 40%, transparent);
-  transition: background .15s ease;
-}
-@media(max-width:600px){ .st-head, .st-row { grid-template-columns: 4rem 1fr; } .st-stat, .st-desc { display: none; } }
-.st-row:hover { background: color-mix(in srgb, var(--color-gold) 3%, transparent); }
-.st-pid  { color: var(--color-subtle); }
-.st-stat.run { color: var(--color-green); }
-.st-name { color: var(--color-gold); font-weight: 500; }
-.st-desc { color: var(--color-text); }
-
-/* Closing */
-.mf-close { padding: 7rem 2rem 8rem; text-align: center; position: relative; overflow: hidden; }
-.mf-close::before {
-  content: ''; position: absolute; inset: 0; pointer-events: none;
-  background: radial-gradient(ellipse 70% 60% at 50% 50%, color-mix(in srgb, var(--color-gold) 6%, transparent), transparent 65%);
-}
-.mf-close-inner { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; }
-.mf-close-h { font-family: var(--font-display); font-size: clamp(2.2rem, 6vw, 4rem); font-weight: 800; letter-spacing: -.04em; line-height: 1.1; color: var(--color-heading); margin-bottom: 1.75rem; }
-.mf-close-p { font-family: var(--font-display); font-size: 1rem; color: var(--color-subtle); line-height: 1.9; margin-bottom: 2.5rem; }
-.mf-close-p strong { color: var(--color-text); }
-
-/* Buttons */
-.btn-p {
-  display: inline-flex; align-items: center; gap: .5rem;
-  background: linear-gradient(135deg, var(--color-gold), #c9923d);
-  color: var(--color-base); font-family: var(--font-mono); font-size: .75rem; font-weight: 700;
-  padding: .8rem 2rem; border-radius: 99px; text-decoration: none; letter-spacing: .04em;
-  box-shadow: 0 4px 24px rgba(230,180,80,.3);
-  transition: transform .2s, box-shadow .2s;
-}
-.btn-p:hover { transform: translateY(-2px); box-shadow: 0 8px 36px rgba(230,180,80,.4); color: var(--color-base); }
-
-.btn-g {
-  display: inline-flex; align-items: center; gap: .5rem;
-  background: transparent; color: var(--color-subtle);
-  font-family: var(--font-mono); font-size: .75rem;
-  padding: .8rem 2rem; border-radius: 99px;
-  border: 1px solid var(--color-muted); text-decoration: none;
-  transition: border-color .2s, color .2s, transform .2s;
-}
-.btn-g:hover { border-color: var(--color-gold); color: var(--color-gold); transform: translateY(-2px); }
-
-.gradient-text {
-  background: linear-gradient(120deg, var(--color-gold), var(--color-green));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-}
 </style>
 
 <script is:inline>
@@ -714,7 +490,7 @@ function showManifesto() {
         }
       });
     }, { threshold: 0.1 });
-    mp.querySelectorAll('.dual-card, .belief-card, .st-row, .personal-card').forEach((el, i) => {
+    mp.querySelectorAll('.ab-dual-card, .ab-belief, .ab-personal-card').forEach((el, i) => {
       el.style.opacity = '0';
       el.style.transform = 'translateY(20px)';
       el.style.transition = `opacity .6s ease ${i * 60}ms, transform .6s ease ${i * 60}ms`;
@@ -727,6 +503,47 @@ document.getElementById('skip-btn').addEventListener('click', () => {
   aborted = true;
   showManifesto();
 });
+
+// ── Real About data: longest uptime (cluster age) + GitHub contrib graph ──
+async function loadAboutData() {
+  let data = null;
+  try { data = await fetch('/data/live.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null); } catch {}
+
+  const upEl = document.getElementById('ab-uptime');
+  if (upEl && data?.cluster_start) {
+    const days = Math.max(0, Math.floor((Date.now() - new Date(data.cluster_start).getTime()) / 86400000));
+    upEl.textContent = days + 'd';
+  } else if (upEl) { upEl.textContent = '—'; }
+
+  const graphEl = document.getElementById('ab-contrib-graph');
+  const totalEl = document.getElementById('ab-contrib-total');
+  if (graphEl && data?.contribs?.days && Object.keys(data.contribs.days).length) {
+    const dayCounts = data.contribs.days;
+    const maxCount = Math.max(1, ...Object.values(dayCounts));
+    const toLevel = n => n === 0 ? 0 : Math.min(4, Math.ceil((n / maxCount) * 4));
+    const today = new Date(); today.setHours(0,0,0,0);
+    const gridEnd = new Date(today); gridEnd.setDate(gridEnd.getDate() + (6 - today.getDay()));
+    const cells = [];
+    for (let w = 12; w >= 0; w--) for (let d = 0; d < 7; d++) {
+      const dt = new Date(gridEnd); dt.setDate(dt.getDate() - w * 7 - (6 - d));
+      const iso = dt.toISOString().slice(0,10);
+      const count = dayCounts[iso] ?? 0;
+      cells.push({ iso, level: toLevel(count), count });
+    }
+    const grid = document.createElement('div');
+    grid.className = 'ab-contrib-grid';
+    grid.innerHTML = cells.map(c => `<span data-level="${c.level}" title="${c.iso} · ${c.count} contribution${c.count===1?'':'s'}"></span>`).join('');
+    graphEl.innerHTML = ''; graphEl.appendChild(grid);
+    if (totalEl) {
+      const total = cells.reduce((a,c) => a + c.count, 0);
+      const active = cells.filter(c => c.level > 0).length;
+      totalEl.textContent = `${total} contributions · ${active}d active`;
+    }
+  } else if (graphEl) {
+    graphEl.innerHTML = '<div class="ab-contrib-loading mono">activity unavailable</div>';
+  }
+}
+loadAboutData();
 
 run();
 </script>

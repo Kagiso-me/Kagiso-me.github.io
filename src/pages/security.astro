@@ -80,6 +80,24 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </section>
 
+    <!-- ── Edge · live blocks (real: MikroTik fw_blocklist) ── -->
+    <section class="edge-panel fade-up" style="animation-delay:0.08s">
+      <div class="edge-head">
+        <h2 class="section-label" style="margin:0">Edge · live blocks</h2>
+        <span class="edge-sub mono" id="edge-blocks-note">—</span>
+      </div>
+      <p class="edge-lede">
+        IPs the MikroTik jailed for a deliberate attack — port-scanning, hitting
+        SSH, or brute-forcing a login. Auto-expiring bans read straight off the
+        router's firewall. Not the constant background scan noise; only what
+        crossed a real threshold.
+      </p>
+      <div id="edge-blocks">
+        <div class="skeleton" style="height:44px;border-radius:8px;margin-bottom:0.4rem"></div>
+        <div class="skeleton" style="height:44px;border-radius:8px"></div>
+      </div>
+    </section>
+
     <!-- ── Honest gaps ── -->
     <section class="gaps-panel fade-up" style="animation-delay:0.09s">
       <div class="mono gaps-kicker">KNOWN GAPS · honest</div>
@@ -240,6 +258,23 @@ import Layout from '../layouts/Layout.astro';
   .layer-check { width: 16px; color: var(--ed-ok); font-family: var(--ed-mono); font-size: 12px; flex-shrink: 0; }
   .layer-name { font-size: 13.5px; color: var(--ed-tx); font-weight: 500; }
   .layer-detail { font-size: 11px; color: var(--ed-fnt); margin-top: 0.1rem; }
+
+  /* ── Edge · live blocks ── */
+  .edge-panel { margin: 46px 0 0; }
+  .edge-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+  .edge-sub { font-size: 11.5px; color: var(--ed-fnt); }
+  .edge-lede { font-size: 13px; line-height: 1.6; color: var(--ed-mut); margin: 0 0 16px; max-width: 78ch; }
+  .edge-table { border: 1px solid var(--ed-hair); border-radius: 12px; overflow: hidden; }
+  .edge-row { display: grid; grid-template-columns: 1fr auto auto; gap: 16px; align-items: center; padding: 11px 18px; border-bottom: 1px solid var(--ed-hair); font-family: var(--ed-mono); }
+  .edge-row:last-child { border-bottom: none; }
+  .edge-ip { font-size: 13px; color: var(--ed-tx); display: flex; align-items: center; gap: 10px; }
+  .edge-ip .d { width: 6px; height: 6px; border-radius: 50%; background: var(--ed-crit); flex: none; }
+  .edge-tag { font-size: 9.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--ed-crit); border: 1px solid color-mix(in srgb, var(--ed-crit) 40%, transparent); border-radius: 4px; padding: 1px 7px; }
+  .edge-ttl { font-size: 11.5px; color: var(--ed-mut); text-align: right; font-variant-numeric: tabular-nums; }
+  .edge-empty { border: 1px solid var(--ed-hair); border-radius: 12px; padding: 28px 24px; text-align: center; }
+  .edge-empty-icon { font-size: 1.8rem; color: var(--ed-ok); }
+  .edge-empty-title { font-family: var(--ed-serif); font-size: 17px; font-weight: 500; color: var(--ed-tx); margin: 6px 0 4px; }
+  .edge-empty-sub { font-family: var(--ed-mono); font-size: 12px; color: var(--ed-mut); }
 
   /* ── Honest gaps ── */
   .gaps-panel {
@@ -528,6 +563,36 @@ import Layout from '../layouts/Layout.astro';
     }
   }
 
+  function renderEdgeBlocks(net: any) {
+    const listEl = document.getElementById('edge-blocks');
+    const noteEl = document.getElementById('edge-blocks-note');
+    if (!listEl) return;
+    const blocked: any[] = Array.isArray(net?.blocked) ? net.blocked : [];
+    const hasFeed = net && ('blocked' in net);
+
+    if (!hasFeed) {
+      listEl.innerHTML = `<div class="edge-empty"><div class="edge-empty-sub">edge ban feed not available</div></div>`;
+      if (noteEl) noteEl.textContent = '';
+      return;
+    }
+    if (noteEl) noteEl.textContent = `${blocked.length} active · from MikroTik fw_blocklist`;
+
+    if (!blocked.length) {
+      listEl.innerHTML = `<div class="edge-empty">
+        <div class="edge-empty-icon">✓</div>
+        <div class="edge-empty-title">No active edge bans right now</div>
+        <div class="edge-empty-sub">nothing has crossed the scan / SSH / brute-force threshold recently</div>
+      </div>`;
+      return;
+    }
+    listEl.innerHTML = `<div class="edge-table">` + blocked.map((b: any) => `
+      <div class="edge-row">
+        <span class="edge-ip"><span class="d"></span>${b.ip}</span>
+        <span class="edge-tag">blocked</span>
+        <span class="edge-ttl">${b.remaining ? b.remaining + ' left' : '—'}</span>
+      </div>`).join('') + `</div>`;
+  }
+
   async function loadEdge() {
     const valEl  = document.getElementById('posture-edge-value');
     const dotEl  = document.getElementById('posture-edge-dot');
@@ -537,16 +602,19 @@ import Layout from '../layouts/Layout.astro';
       if (!res.ok) throw new Error('no data');
       const d = await res.json();
       const net = d.network ?? {};
-      const bans = net.crowdsec_bans ?? 0;
-      const hits = net.fw_hits;
-      if (valEl) valEl.textContent = bans > 0 ? `${bans} banned` : (typeof hits === 'number' ? `${hits.toLocaleString()} hits` : 'unknown');
-      if (dotEl) dotEl.className = 'posture-dot ' + (typeof hits === 'number' ? 'ok' : '');
-      if (noteEl) noteEl.textContent = typeof hits === 'number'
-        ? `firewall blocks · ${bans} active CrowdSec bans`
-        : 'firewall hits · CrowdSec bans';
+      const blockedN = typeof net.blocked_count === 'number' ? net.blocked_count
+                     : Array.isArray(net.blocked) ? net.blocked.length : null;
+      // EDGE posture card headlines the real active-ban count (deliberate attacks)
+      if (valEl) valEl.textContent = blockedN != null ? `${blockedN} banned` : 'unknown';
+      if (dotEl) dotEl.className = 'posture-dot ' + (blockedN != null ? (blockedN > 0 ? 'warn' : 'ok') : '');
+      if (noteEl) noteEl.textContent = blockedN != null
+        ? 'active edge bans · MikroTik fw_blocklist'
+        : 'edge bans · not yet available';
+      renderEdgeBlocks(net);
     } catch {
       if (valEl) valEl.textContent = 'unknown';
       if (dotEl) dotEl.className = 'posture-dot';
+      renderEdgeBlocks(null);
     }
   }
 

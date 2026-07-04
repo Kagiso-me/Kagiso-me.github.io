@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { ONGOING, ELECTRICITY_KWH, ELECTRICITY_RATE, ELECTRICITY_COST, MONTHLY_TOTAL } from '../lib/cost';
+import { ONGOING, ELECTRICITY_KWH, ELECTRICITY_RATE, ELECTRICITY_COST, MONTHLY_TOTAL, ADJACENT } from '../lib/cost';
 
 // Ongoing + electricity sourced from src/lib/cost.ts (shared with the live spine).
 const MY_MONTHLY_TOTAL = MONTHLY_TOTAL;
@@ -151,6 +151,15 @@ const REPLACED = CANCELLED.map(c => ({ was: c.name, now: c.replaces, cost: c.cos
             <div class="cost-bd-note">{b.note}</div>
           </div>
         ))}
+        {ADJACENT.map(a => (
+          <div class="cost-bd-row cost-bd-adjacent">
+            <div class="cost-bd-top">
+              <span class="cost-bd-name">{a.item} <span class="cost-bd-flag mono">separate</span></span>
+              <span class="cost-bd-cost mono">R{a.cost}</span>
+            </div>
+            <div class="cost-bd-note">{a.note}</div>
+          </div>
+        ))}
       </div>
     </div>
 
@@ -266,6 +275,10 @@ const REPLACED = CANCELLED.map(c => ({ was: c.name, now: c.replaces, cost: c.cos
 
   .cost-bd-row { padding:14px 0; border-top:1px solid var(--ed-hair); }
   .cost-bd-row:first-child { border-top:none; }
+  .cost-bd-adjacent { border-top:1px dashed var(--ed-box); }
+  .cost-bd-adjacent .cost-bd-name { color:var(--ed-mut); }
+  .cost-bd-adjacent .cost-bd-cost { color:var(--ed-mut); }
+  .cost-bd-flag { font-size:9px; letter-spacing:.06em; text-transform:uppercase; color:var(--ed-fnt); border:1px solid var(--ed-hair); border-radius:4px; padding:1px 6px; margin-left:6px; }
   .cost-bd-top { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px; }
   .cost-bd-name { font-size:14px; color:var(--ed-tx); }
   .cost-bd-cost { font-size:13px; color:var(--ed-tx); }

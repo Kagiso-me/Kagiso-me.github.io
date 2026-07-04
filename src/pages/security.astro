@@ -44,24 +44,20 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </section>
 
-    <!-- ── CVE list + defence-in-depth ── -->
+    <!-- ── MikroTik blocked IPs + defence-in-depth ── -->
     <section class="sec-split fade-up" style="animation-delay:0.06s">
       <div class="sec-col">
-        <div class="sec-panel-head">
-          <h2 class="section-label" style="margin:0">Vulnerabilities</h2>
-          <div class="summary-chips" id="summary-section" style="display:none">
-            <span class="summary-chip crit"><span class="chip-count" id="count-critical">0</span>C</span>
-            <span class="summary-chip high"><span class="chip-count" id="count-high">0</span>H</span>
-            <span class="summary-chip medium"><span class="chip-count" id="count-medium">0</span>M</span>
-            <span class="summary-chip low"><span class="chip-count" id="count-low">0</span>L</span>
+        <div class="edge-card">
+          <div class="edge-card-head">
+            <span class="edge-card-title">MikroTik · blocked IPs</span>
+            <span class="edge-card-live mono" id="edge-blocks-note"><span class="edge-live-dot"></span>live</span>
+          </div>
+          <div class="edge-card-body" id="edge-blocks">
+            <div class="skeleton" style="height:40px;margin:0.4rem 20px"></div>
+            <div class="skeleton" style="height:40px;margin:0.4rem 20px"></div>
+            <div class="skeleton" style="height:40px;margin:0.4rem 20px"></div>
           </div>
         </div>
-        <div id="cve-list">
-          <div class="skeleton" style="height:64px; border-radius:10px; margin-bottom:0.5rem"></div>
-          <div class="skeleton" style="height:64px; border-radius:10px; margin-bottom:0.5rem"></div>
-          <div class="skeleton" style="height:64px; border-radius:10px; margin-bottom:0.5rem"></div>
-        </div>
-        <div id="cve-footer" style="display:none" class="mono"></div>
       </div>
 
       <div class="sec-col">
@@ -80,22 +76,22 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </section>
 
-    <!-- ── Edge · live blocks (real: MikroTik fw_blocklist) ── -->
-    <section class="edge-panel fade-up" style="animation-delay:0.08s">
-      <div class="edge-head">
-        <h2 class="section-label" style="margin:0">Edge · live blocks</h2>
-        <span class="edge-sub mono" id="edge-blocks-note">—</span>
+    <!-- ── Vulnerabilities (OSV.dev) ── -->
+    <section class="sec-vulns fade-up" style="animation-delay:0.08s">
+      <div class="sec-panel-head">
+        <h2 class="section-label" style="margin:0">Vulnerabilities</h2>
+        <div class="summary-chips" id="summary-section" style="display:none">
+          <span class="summary-chip crit"><span class="chip-count" id="count-critical">0</span>C</span>
+          <span class="summary-chip high"><span class="chip-count" id="count-high">0</span>H</span>
+          <span class="summary-chip medium"><span class="chip-count" id="count-medium">0</span>M</span>
+          <span class="summary-chip low"><span class="chip-count" id="count-low">0</span>L</span>
+        </div>
       </div>
-      <p class="edge-lede">
-        IPs the MikroTik jailed for a deliberate attack — port-scanning, hitting
-        SSH, or brute-forcing a login. Auto-expiring bans read straight off the
-        router's firewall. Not the constant background scan noise; only what
-        crossed a real threshold.
-      </p>
-      <div id="edge-blocks">
-        <div class="skeleton" style="height:44px;border-radius:8px;margin-bottom:0.4rem"></div>
-        <div class="skeleton" style="height:44px;border-radius:8px"></div>
+      <div id="cve-list">
+        <div class="skeleton" style="height:64px; border-radius:10px; margin-bottom:0.5rem"></div>
+        <div class="skeleton" style="height:64px; border-radius:10px; margin-bottom:0.5rem"></div>
       </div>
+      <div id="cve-footer" style="display:none" class="mono"></div>
     </section>
 
     <!-- ── Honest gaps ── -->
@@ -259,22 +255,25 @@ import Layout from '../layouts/Layout.astro';
   .layer-name { font-size: 13.5px; color: var(--ed-tx); font-weight: 500; }
   .layer-detail { font-size: 11px; color: var(--ed-fnt); margin-top: 0.1rem; }
 
-  /* ── Edge · live blocks ── */
-  .edge-panel { margin: 46px 0 0; }
-  .edge-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
-  .edge-sub { font-size: 11.5px; color: var(--ed-fnt); }
-  .edge-lede { font-size: 13px; line-height: 1.6; color: var(--ed-mut); margin: 0 0 16px; max-width: 78ch; }
-  .edge-table { border: 1px solid var(--ed-hair); border-radius: 12px; overflow: hidden; }
-  .edge-row { display: grid; grid-template-columns: 1fr auto auto; gap: 16px; align-items: center; padding: 11px 18px; border-bottom: 1px solid var(--ed-hair); font-family: var(--ed-mono); }
+  /* ── MikroTik blocked IPs (live feed panel, mockup layout) ── */
+  .sec-vulns { margin: 46px 0 0; }
+  .edge-card { border: 1px solid var(--ed-hair); border-radius: 12px; overflow: hidden; }
+  .edge-card-head { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid var(--ed-hair); }
+  .edge-card-title { font-family: var(--ed-serif); font-size: 19px; font-weight: 500; color: var(--ed-tx); }
+  .edge-card-live { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; color: var(--ed-crit); }
+  .edge-live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ed-crit); animation: edBlinkS 3.2s ease-in-out infinite; }
+  @keyframes edBlinkS { 0%,100%{opacity:1} 50%{opacity:.45} }
+  .edge-card-body { height: 300px; overflow-y: auto; font-family: var(--ed-mono); }
+  .edge-row { display: flex; align-items: baseline; gap: 11px; padding: 9px 20px; border-bottom: 1px solid var(--ed-hair); }
   .edge-row:last-child { border-bottom: none; }
-  .edge-ip { font-size: 13px; color: var(--ed-tx); display: flex; align-items: center; gap: 10px; }
-  .edge-ip .d { width: 6px; height: 6px; border-radius: 50%; background: var(--ed-crit); flex: none; }
-  .edge-tag { font-size: 9.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--ed-crit); border: 1px solid color-mix(in srgb, var(--ed-crit) 40%, transparent); border-radius: 4px; padding: 1px 7px; }
-  .edge-ttl { font-size: 11.5px; color: var(--ed-mut); text-align: right; font-variant-numeric: tabular-nums; }
-  .edge-empty { border: 1px solid var(--ed-hair); border-radius: 12px; padding: 28px 24px; text-align: center; }
+  .edge-time { color: var(--ed-fnt); font-size: 11px; flex: none; font-variant-numeric: tabular-nums; }
+  .edge-tag { font-size: 9px; letter-spacing: .04em; text-transform: uppercase; color: var(--ed-crit); border: 1px solid var(--ed-crit); border-radius: 4px; padding: 1px 6px; flex: none; }
+  .edge-ip { font-size: 12px; color: var(--ed-tx); }
+  .edge-ttl { font-size: 12px; color: var(--ed-mut); margin-left: auto; flex: none; font-variant-numeric: tabular-nums; }
+  .edge-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; padding: 24px; }
   .edge-empty-icon { font-size: 1.8rem; color: var(--ed-ok); }
   .edge-empty-title { font-family: var(--ed-serif); font-size: 17px; font-weight: 500; color: var(--ed-tx); margin: 6px 0 4px; }
-  .edge-empty-sub { font-family: var(--ed-mono); font-size: 12px; color: var(--ed-mut); }
+  .edge-empty-sub { font-size: 12px; color: var(--ed-mut); max-width: 34ch; }
 
   /* ── Honest gaps ── */
   .gaps-panel {
@@ -571,26 +570,26 @@ import Layout from '../layouts/Layout.astro';
     const hasFeed = net && ('blocked' in net);
 
     if (!hasFeed) {
-      listEl.innerHTML = `<div class="edge-empty"><div class="edge-empty-sub">edge ban feed not available</div></div>`;
-      if (noteEl) noteEl.textContent = '';
+      listEl.innerHTML = `<div class="edge-empty"><div class="edge-empty-sub">blocked-IP feed not available yet</div></div>`;
+      if (noteEl) noteEl.style.display = 'none';
       return;
     }
-    if (noteEl) noteEl.textContent = `${blocked.length} active · from MikroTik fw_blocklist`;
+    if (noteEl) noteEl.style.display = '';
 
     if (!blocked.length) {
       listEl.innerHTML = `<div class="edge-empty">
         <div class="edge-empty-icon">✓</div>
-        <div class="edge-empty-title">No active edge bans right now</div>
-        <div class="edge-empty-sub">nothing has crossed the scan / SSH / brute-force threshold recently</div>
+        <div class="edge-empty-title">No IPs blocked right now</div>
+        <div class="edge-empty-sub">nothing has crossed the scan · SSH · brute-force threshold recently</div>
       </div>`;
       return;
     }
-    listEl.innerHTML = `<div class="edge-table">` + blocked.map((b: any) => `
+    listEl.innerHTML = blocked.map((b: any) => `
       <div class="edge-row">
-        <span class="edge-ip"><span class="d"></span>${b.ip}</span>
         <span class="edge-tag">blocked</span>
+        <span class="edge-ip">${b.ip}</span>
         <span class="edge-ttl">${b.remaining ? b.remaining + ' left' : '—'}</span>
-      </div>`).join('') + `</div>`;
+      </div>`).join('');
   }
 
   async function loadEdge() {

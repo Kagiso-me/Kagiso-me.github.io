@@ -8,115 +8,74 @@ const RACK_WATTS = Math.round((ELECTRICITY_KWH * 1000) / (30 * 24));
 
 <Layout title="Command Center" description="Living Homelab — built in public by Kagiso." ogImage="https://kagiso-me.github.io/og/home.svg">
 
-  <!-- ── Hero + live cluster map ── -->
-  <header class="cc-hero fade-up">
-    <div class="cc-hero-text">
-      <div class="cc-kicker mono">
-        <span class="cc-kicker-dot" aria-hidden="true"></span>
-        live · k3s HA · 10.0.10.0/24 · built in public
-      </div>
-      <h1 class="cc-h1">
-        The homelab,<br>running where<br>you can <span class="cc-accent">watch it.</span>
-      </h1>
-      <p class="cc-lede">
+  <!-- ── Editorial hero + flat topology ── -->
+  <header class="ed-hero fade-up">
+    <div class="ed-hero-text">
+      <div class="ed-kicker mono">~/ live · k3s HA · 10.0.10.0/24</div>
+      <h1 class="ed-h1">The homelab, running where you can <em class="ed-accent">watch it.</em></h1>
+      <p class="ed-lede">
         Not a diagram. Not a demo. A real three-node Kubernetes cluster — every
         metric on this page is read straight off the hardware on my shelf.
       </p>
-      <div class="cc-actions">
-        <a href="/status" class="cc-btn-primary">Open live status →</a>
-        <a href="/blog" class="cc-btn-ghost">Read the journal</a>
+      <div class="ed-actions">
+        <a href="/status" class="ed-btn-primary">Open live status →</a>
+        <a href="/blog" class="ed-btn-ghost">Read the journal</a>
       </div>
     </div>
 
-    <!-- LIVE TOPOLOGY (signature visual) -->
-    <div class="cc-map">
-      <div class="cc-map-head mono">
+    <!-- FLAT TIERED TOPOLOGY (editorial, real node status) -->
+    <div class="ed-map">
+      <div class="ed-map-head mono">
         <span>cluster.architecture · live</span>
-        <span class="cc-map-clock"><span class="cc-map-dot" aria-hidden="true"></span><span id="cc-map-clock">—</span></span>
+        <span class="ed-map-clock"><span class="ed-map-dot" aria-hidden="true"></span><span id="cc-map-clock">—</span></span>
       </div>
-      <div class="cc-map-stage">
-        <svg viewBox="0 0 500 470" class="cc-map-svg" aria-hidden="true">
-          <defs>
-            <marker id="cc-arC" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#4cc9e8"/></marker>
-            <marker id="cc-arA" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#f3b34d"/></marker>
-            <marker id="cc-arG" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5a6573"/></marker>
-            <filter id="cc-glow" x="-70%" y="-70%" width="240%" height="240%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-          </defs>
-          <rect class="cc-perim" x="8" y="8" width="484" height="454" rx="16" fill="none" stroke="rgba(255,255,255,.06)" stroke-dasharray="2 7"/>
-          <path d="M250,52 V90" fill="none" stroke="rgba(76,201,232,.45)" stroke-width="1.4" marker-end="url(#cc-arC)"/>
-          <path d="M152,150 H178" fill="none" stroke="rgba(243,179,77,.5)" stroke-width="1.4" marker-end="url(#cc-arA)"/>
-          <path d="M265,290 V305" fill="none" stroke="rgba(76,201,232,.45)" stroke-width="1.4" marker-end="url(#cc-arC)" marker-start="url(#cc-arC)"/>
-          <path d="M368,152 L352,164" fill="none" stroke="rgba(120,135,155,.55)" stroke-width="1.2" stroke-dasharray="3 4" marker-end="url(#cc-arG)"/>
-          <path d="M188,52 C120,130 83,200 83,296" fill="none" stroke="rgba(120,135,155,.4)" stroke-width="1.2" stroke-dasharray="3 4" marker-end="url(#cc-arG)"/>
-          <g filter="url(#cc-glow)">
-            <circle r="3.3" fill="#9fe8f7"><animateMotion dur="1.7s" repeatCount="indefinite" path="M250,52 V90"/></circle>
-            <circle r="2.2" fill="#4cc9e8" opacity=".65"><animateMotion dur="1.7s" begin="-.07s" repeatCount="indefinite" path="M250,52 V90"/></circle>
-            <circle r="3.3" fill="#9fe8f7"><animateMotion dur="1.7s" begin="-.85s" repeatCount="indefinite" path="M250,52 V90"/></circle>
-            <circle r="3.3" fill="#ffd58a"><animateMotion dur="1.3s" repeatCount="indefinite" path="M152,150 H178"/></circle>
-            <circle r="2.2" fill="#f3b34d" opacity=".6"><animateMotion dur="1.3s" begin="-.65s" repeatCount="indefinite" path="M152,150 H178"/></circle>
-            <circle r="3.1" fill="#9fe8f7"><animateMotion dur="1.8s" repeatCount="indefinite" path="M265,288 V306"/></circle>
-            <circle r="2.6" fill="#aeb8c6"><animateMotion dur="3.6s" repeatCount="indefinite" path="M188,52 C120,130 83,200 83,296"/></circle>
-            <circle r="2.2" fill="#aeb8c6" opacity=".7"><animateMotion dur="2.2s" repeatCount="indefinite" path="M368,152 L352,164"/></circle>
-          </g>
-          <text x="257" y="76" font-size="8" fill="rgba(76,201,232,.75)">serve</text>
-          <text x="150" y="142" font-size="8" fill="rgba(243,179,77,.85)">flux ⸱ deploy</text>
-          <text x="272" y="301" font-size="8" fill="rgba(76,201,232,.75)">NFS PVCs</text>
-          <text x="356" y="158" font-size="7.5" fill="rgba(150,165,185,.8)">watch</text>
-          <text x="20" y="24" font-size="8" fill="rgba(255,255,255,.28)">10.0.10.0/24</text>
-        </svg>
-
-        <div class="cc-host cc-host-router" style="left:30%;top:1.4%;width:40%;height:8.6%">
-          <span class="cc-host-dot ok"></span>
-          <div class="cc-host-l"><div class="cc-host-name">mikrotik <span class="cc-host-ip">.1</span></div><div class="cc-host-sub">router · DNS · gateway</div></div>
-          <span class="cc-host-tag cc-tag-signal">ROUTES</span>
+      <div class="ed-map-stack">
+        <div class="ed-tier ed-tier-router">
+          <span class="ed-host-dot ok"></span>
+          <span class="ed-host-name">mikrotik <span class="ed-host-ip">.1</span></span>
+          <span class="ed-host-role">router · DNS · gateway</span>
+          <span class="ed-tier-tag">ROUTES</span>
         </div>
 
-        <div class="cc-host cc-host-varys" style="left:2.6%;top:23%;width:28%;height:16.5%">
-          <div class="cc-host-row"><span class="cc-host-dot" data-node="varys"></span><span class="cc-host-name">varys</span><span class="cc-host-ip">.10</span><span class="cc-host-tag cc-tag-accent">DRIVES</span></div>
-          <div class="cc-host-sub cc-accent">the brain · GitOps origin</div>
-          <div class="cc-host-sub">kubectl · flux · ansible<br><span class="cc-faint">hosts nothing</span></div>
-        </div>
-
-        <div class="cc-host cc-host-bran" style="left:73.4%;top:23%;width:24%;height:16.5%">
-          <div class="cc-host-row"><span class="cc-host-dot" data-node="bran"></span><span class="cc-host-name">bran</span><span class="cc-host-ip">.9</span></div>
-          <div class="cc-host-sub cc-signal">the watcher · Pi</div>
-          <div class="cc-host-sub">UPS · CI · paging<br><span class="cc-faint">survives full outage</span></div>
-        </div>
-
-        <div class="cc-cluster" style="left:36%;top:17.5%;width:33.6%;height:43%">
-          <div class="cc-cluster-head"><span class="cc-accent">k3s · HA cluster</span><span class="cc-tag-accent">SERVES</span></div>
-          <div class="cc-cluster-vip cc-signal">vip · api .100 · traefik .110</div>
-          <div class="cc-cluster-nodes">
-            <div class="cc-cluster-node"><span class="cc-host-dot" data-node="tywin"></span><span>tywin</span><span class="cc-host-ip">.11</span></div>
-            <div class="cc-cluster-node"><span class="cc-host-dot" data-node="jaime"></span><span>jaime</span><span class="cc-host-ip">.12</span></div>
-            <div class="cc-cluster-node"><span class="cc-host-dot" data-node="tyrion"></span><span>tyrion</span><span class="cc-host-ip">.13</span></div>
+        <div class="ed-tier-2up">
+          <div class="ed-tier">
+            <div class="ed-host-row"><span class="ed-host-dot" data-node="varys"></span><span class="ed-host-name">varys <span class="ed-host-ip">.10</span></span></div>
+            <div class="ed-host-sub">the brain · GitOps origin, hosts nothing</div>
           </div>
-          <div class="cc-cluster-quorum"><span class="cc-host-dot ok"></span><span id="cc-quorum">etcd quorum · runs all workloads</span></div>
+          <div class="ed-tier">
+            <div class="ed-host-row"><span class="ed-host-dot" data-node="bran"></span><span class="ed-host-name">bran <span class="ed-host-ip">.9</span></span></div>
+            <div class="ed-host-sub">the watcher · UPS, CI, paging</div>
+          </div>
         </div>
 
-        <div class="cc-host cc-host-truenas" style="left:36%;top:65%;width:33.6%;height:12%">
-          <div class="cc-host-row"><span class="cc-host-dot ok"></span><span class="cc-host-name">truenas</span><span class="cc-host-ip">.80</span><span class="cc-host-tag cc-tag-signal">PERSISTS</span></div>
-          <div class="cc-host-sub">NFS-backed PVCs · MinIO backup target</div>
+        <div class="ed-cluster">
+          <div class="ed-cluster-head">
+            <span class="ed-host-name" style="font-size:11px">k3s · HA cluster</span>
+            <span class="ed-cluster-quorum" id="cc-quorum">etcd quorum 3/3 · runs all workloads</span>
+          </div>
+          <div class="ed-cluster-nodes">
+            <div class="ed-cluster-node"><span class="ed-host-dot" data-node="tywin"></span><span>tywin</span><span class="ed-host-ip">.11</span></div>
+            <div class="ed-cluster-node"><span class="ed-host-dot" data-node="jaime"></span><span>jaime</span><span class="ed-host-ip">.12</span></div>
+            <div class="ed-cluster-node"><span class="ed-host-dot" data-node="tyrion"></span><span>tyrion</span><span class="ed-host-ip">.13</span></div>
+          </div>
         </div>
 
-        <div class="cc-host cc-host-bronn cc-island" style="left:2.6%;top:64.5%;width:28%;height:13.6%">
-          <div class="cc-host-row"><span class="cc-host-dot ok"></span><span class="cc-host-name cc-muted">bronn</span><span class="cc-host-ip">.20</span><span class="cc-host-tag cc-tag-muted">MEDIA</span></div>
-          <div class="cc-host-sub">standalone docker compose</div>
-          <div class="cc-host-sub cc-faint">not in cluster · no monitoring</div>
+        <div class="ed-tier">
+          <div class="ed-host-row"><span class="ed-host-dot ok"></span><span class="ed-host-name">truenas <span class="ed-host-ip">.80</span></span><span class="ed-tier-tag">PERSISTS</span></div>
+          <div class="ed-host-sub">NFS-backed PVCs · MinIO backup target</div>
+        </div>
+
+        <div class="ed-tier ed-tier-island">
+          <div class="ed-host-row"><span class="ed-host-dot ok"></span><span class="ed-host-name ed-muted">bronn <span class="ed-host-ip">.20</span></span><span class="ed-tier-tag">MEDIA</span></div>
+          <div class="ed-host-sub ed-faint">standalone docker compose · not in cluster</div>
         </div>
       </div>
     </div>
   </header>
 
   <!-- ── Tagline divider ── -->
-  <section class="cc-tagline fade-up" aria-hidden="true">
-    <span class="cc-tagline-rule"></span>
-    <span class="cc-tagline-word">No demos.</span>
-    <span class="cc-tagline-dot"></span>
-    <span class="cc-tagline-word">No staging.</span>
-    <span class="cc-tagline-dot"></span>
-    <span class="cc-tagline-word cc-tagline-grad">Built in public.</span>
-    <span class="cc-tagline-rule"></span>
+  <section class="cc-tagline fade-up">
+    <span class="cc-tagline-line">No demos. No staging. <span class="cc-tagline-grad">Built in public.</span></span>
   </section>
 
   <!-- ── Interactive shell ── -->
@@ -181,10 +140,10 @@ const RACK_WATTS = Math.round((ELECTRICITY_KWH * 1000) / (30 * 24));
       <div class="cc-cost-card">
         <div class="cc-cost-figrow">
           <div><div class="cc-cost-big mono">{MONTHLY_LABEL}</div><div class="cc-cost-sub mono">all-in, current</div></div>
-          <div><div class="cc-cost-big mono" style="color:var(--signal)">R{ELECTRICITY_COST}</div><div class="cc-cost-sub mono">electricity / mo</div></div>
+          <div><div class="cc-cost-big mono" style="color:var(--ed-ok)">R{ELECTRICITY_COST}</div><div class="cc-cost-sub mono">electricity / mo</div></div>
           <div><div class="cc-cost-big mono">~{RACK_WATTS}W</div><div class="cc-cost-sub mono">rack draw</div></div>
         </div>
-        <p class="cc-cost-note">Mostly electricity — three mini-PCs, the NAS, a Pi, switch and UPS. Idle-tuned in Q1 for a ~28% cut. No cloud bill, no surprises. <a href="/cost" class="cc-signal" style="text-decoration:none">Full breakdown →</a></p>
+        <p class="cc-cost-note">Mostly electricity — three mini-PCs, the NAS, a Pi, switch and UPS. No cloud bill: the lab replaces the subscriptions I used to pay for. <a href="/cost" class="cc-signal" style="text-decoration:none">Full breakdown →</a></p>
       </div>
     </div>
   </section>
@@ -224,8 +183,8 @@ const RACK_WATTS = Math.round((ELECTRICITY_KWH * 1000) / (30 * 24));
       <div class="about-grid">
 
         <div class="about-text">
-          <p class="mono" style="color:var(--color-gold);margin-bottom:0.75rem">~/whoami</p>
-          <h2 style="font-size:clamp(1.5rem,3vw,2rem);margin:0 0 1.25rem">Hey, I'm Kagiso.</h2>
+          <p class="mono" style="color:var(--ed-mut);margin-bottom:0.75rem;font-size:11px;letter-spacing:0.16em;text-transform:uppercase">$ whoami</p>
+          <h2 style="font-family:var(--ed-serif);font-weight:500;font-size:clamp(1.5rem,3vw,28px);margin:0 0 1.25rem;color:var(--ed-tx)">Kagiso — exec by day, operator by night.</h2>
           <p style="color:var(--color-subtle);line-height:1.8;margin-bottom:1rem">
             Corporate exec by day, self-taught engineer by night. I built this cluster to close the gap
             between knowing how systems work and actually operating them — storage, media, backups,
@@ -301,149 +260,157 @@ const RACK_WATTS = Math.round((ELECTRICITY_KWH * 1000) / (30 * 24));
 </Layout>
 
 <style is:global>
-  /* ════ Command-center hero + live cluster map (mockup) ════ */
-  .cc-hero {
+  /* ════ Editorial design tokens (Command Center mockup) ════
+     Scoped to Home. Muted editorial palette from the .dc.html mockups —
+     more restrained than the global --color-* set. Green accent #2fa06b,
+     strict hairlines, Newsreader serif headings, near-flat cards. */
+  .ed-hero, .cc-tagline, .cc-shell-section, .cc-uptime-section,
+  .cc-hosts-section, .cc-twoup, .cc-stack-section, .about-section {
+    --ed-tx:   #eaeaed;
+    --ed-mut:  #9a9aa3;
+    --ed-fnt:  #63636b;
+    --ed-hair: rgba(255,255,255,.09);
+    --ed-box:  rgba(255,255,255,.16);
+    --ed-ok:   #2fa06b;
+    --ed-warn: #c98a1e;
+    --ed-crit: #cf5349;
+    --ed-serif: var(--font-display);
+    --ed-mono:  var(--font-mono);
+  }
+
+  /* ── Editorial hero ── */
+  .ed-hero {
     display: grid;
     grid-template-columns: 0.92fr 1.08fr;
-    gap: 40px;
-    align-items: center;
-    max-width: 1220px;
+    gap: 44px;
+    align-items: start;
+    max-width: 1080px;
     margin: 0 auto;
-    padding: 64px 1.5rem 40px;
+    padding: 56px 1.5rem 8px;
   }
-  .cc-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 12px;
+  .ed-kicker {
+    font-size: 11.5px;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--signal);
-    margin-bottom: 26px;
+    color: var(--ed-mut);
+    margin-bottom: 22px;
   }
-  .cc-kicker-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--signal); box-shadow: 0 0 10px var(--signal); }
-  .cc-h1 {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: clamp(2.2rem, 5vw, 60px);
-    line-height: 0.98;
+  .ed-h1 {
+    font-family: var(--ed-serif);
+    font-weight: 500;
+    font-size: clamp(2.1rem, 5vw, 56px);
+    line-height: 1.04;
     letter-spacing: -0.02em;
-    margin: 0 0 22px;
-    color: var(--color-heading);
+    margin: 0 0 20px;
+    color: var(--ed-tx);
   }
-  .cc-accent { color: var(--accent); }
-  .cc-signal { color: var(--signal); }
-  .cc-muted { color: var(--color-text); }
-  .cc-faint { color: var(--color-faint); }
-  .cc-lede { max-width: 40ch; font-size: 17px; line-height: 1.62; color: var(--color-text); margin: 0 0 30px; }
-  .cc-actions { display: flex; gap: 12px; flex-wrap: wrap; }
-  .cc-btn-primary {
+  .ed-accent { font-style: italic; color: var(--ed-ok); }
+  .ed-muted { color: var(--ed-tx); }
+  .ed-faint { color: var(--ed-fnt); }
+  .ed-lede { max-width: 42ch; font-size: 16px; line-height: 1.62; color: var(--ed-mut); margin: 0 0 28px; }
+  .ed-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .ed-btn-primary {
     display: inline-flex; align-items: center; gap: 8px;
-    padding: 13px 20px; border-radius: 9px;
-    background: var(--accent); color: #1a1206;
-    text-decoration: none; font-weight: 600; font-size: 14.5px;
-    box-shadow: 0 10px 34px color-mix(in srgb, var(--accent) 14%, transparent);
+    padding: 12px 18px; border-radius: 8px;
+    background: var(--ed-tx); color: #0e0e11;
+    text-decoration: none; font-weight: 600; font-size: 14px;
+    font-family: var(--ed-mono);
     transition: filter 0.16s ease;
   }
-  .cc-btn-primary:hover { filter: brightness(1.07); }
-  .cc-btn-ghost {
+  .ed-btn-primary:hover { filter: brightness(0.92); color: #0e0e11; }
+  .ed-btn-ghost {
     display: inline-flex; align-items: center; gap: 8px;
-    padding: 13px 20px; border-radius: 9px;
-    background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1);
-    color: #dfe4ec; text-decoration: none; font-weight: 500; font-size: 14.5px;
-    transition: border-color 0.16s ease, background 0.16s ease;
+    padding: 12px 18px; border-radius: 8px;
+    background: transparent; border: 1px solid var(--ed-hair);
+    color: var(--ed-tx); text-decoration: none; font-weight: 500; font-size: 14px;
+    font-family: var(--ed-mono);
+    transition: border-color 0.16s ease;
   }
-  .cc-btn-ghost:hover { border-color: rgba(255,255,255,.22); background: rgba(255,255,255,.06); }
+  .ed-btn-ghost:hover { border-color: var(--ed-box); color: var(--ed-tx); }
 
-  /* ── map shell ── */
-  .cc-map {
-    position: relative;
-    background:
-      radial-gradient(120% 120% at 50% 30%, rgba(76,201,232,.06), transparent 60%),
-      linear-gradient(#0d111a, #0b0e15);
-    border: 1px solid var(--color-muted);
-    border-radius: 18px;
-    padding: 14px 16px 8px;
-    box-shadow: 0 36px 90px -36px rgba(0,0,0,.8), inset 0 1px 0 rgba(255,255,255,.04);
+  /* ── Flat tiered topology ── */
+  .ed-map {
+    border: 1px solid var(--ed-hair);
+    border-radius: 12px;
+    padding: 16px 18px;
   }
-  .cc-map-head {
+  .ed-map-head {
     display: flex; align-items: center; justify-content: space-between;
-    font-size: 11.5px; color: var(--color-subtle); padding: 2px 4px 8px;
+    font-size: 11px; color: var(--ed-fnt); margin-bottom: 14px;
   }
-  .cc-map-clock { display: inline-flex; align-items: center; gap: 6px; color: var(--color-ok); font-variant-numeric: tabular-nums; }
-  .cc-map-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--color-ok); box-shadow: 0 0 6px var(--color-ok); }
-  .cc-map-stage { position: relative; width: 100%; aspect-ratio: 500 / 470; font-family: var(--font-mono); margin-top: 2px; }
-  .cc-map-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-  .cc-perim { animation: ccDash 9s linear infinite; }
-  @keyframes ccDash { to { stroke-dashoffset: -18; } }
+  .ed-map-clock { display: inline-flex; align-items: center; gap: 6px; color: var(--ed-ok); font-variant-numeric: tabular-nums; }
+  .ed-map-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ed-ok); animation: edBlink 3.2s ease-in-out infinite; }
+  @keyframes edBlink { 0%,100% { opacity: 1; } 50% { opacity: .45; } }
+  .ed-map-stack { display: flex; flex-direction: column; gap: 12px; }
 
-  .cc-host, .cc-cluster {
-    position: absolute; box-sizing: border-box; border-radius: 10px;
-    transition: transform 0.2s cubic-bezier(.2,.7,.2,1), border-color 0.2s ease;
+  .ed-tier {
+    display: flex; flex-direction: column; gap: 5px;
+    padding: 11px 13px;
+    border: 1px solid var(--ed-hair);
+    border-radius: 8px;
+    font-family: var(--ed-mono);
   }
-  .cc-host { display: flex; flex-direction: column; justify-content: center; gap: 3px; padding: 8px 10px;
-    background: rgba(255,255,255,.025); border: 1px solid var(--color-muted); }
-  .cc-host:hover { transform: translateY(-2px); border-color: rgba(255,255,255,.22); }
-  .cc-host-router { flex-direction: row; align-items: center; gap: 8px; border-radius: 9px; padding: 0 11px;
-    background: rgba(76,201,232,.06); border-color: rgba(76,201,232,.3); }
-  .cc-host-varys { background: linear-gradient(rgba(243,179,77,.07), transparent); border-color: rgba(243,179,77,.32); }
-  .cc-host-truenas { gap: 2px; background: rgba(76,201,232,.05); border-color: rgba(76,201,232,.26); }
-  .cc-island { border-style: dashed; border-color: rgba(255,255,255,.16); background: rgba(255,255,255,.02); }
-  .cc-host-row { display: flex; align-items: center; gap: 6px; }
-  .cc-host-name { font-size: 11.5px; color: var(--color-heading); font-weight: 600; }
-  .cc-host-router .cc-host-name { font-size: 11px; font-weight: 500; }
-  .cc-host-ip { color: var(--color-faint); font-size: 9px; }
-  .cc-host-sub { font-size: 8px; color: var(--color-subtle); line-height: 1.4; }
-  .cc-host-tag { margin-left: auto; font-size: 7px; letter-spacing: .1em; }
-  .cc-tag-signal { color: var(--signal); }
-  .cc-tag-accent { color: var(--accent); }
-  .cc-tag-muted { color: var(--color-subtle); }
-  .cc-host-l { line-height: 1.25; }
-  .cc-host-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--color-unknown); box-shadow: 0 0 6px var(--color-unknown); flex: none; }
-  .cc-host-dot.ok { background: var(--color-ok); box-shadow: 0 0 6px var(--color-ok); }
-  .cc-host-dot.warn { background: var(--color-warn); box-shadow: 0 0 6px var(--color-warn); }
-  .cc-host-dot.crit { background: var(--color-crit); box-shadow: 0 0 6px var(--color-crit); }
+  .ed-tier-router {
+    flex-direction: row; align-items: center; gap: 8px;
+    padding: 10px 12px;
+  }
+  .ed-tier-2up { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .ed-tier-island { border-style: dashed; }
+  .ed-host-row { display: flex; align-items: center; gap: 7px; }
+  .ed-host-name { font-size: 12px; color: var(--ed-tx); font-weight: 500; }
+  .ed-tier-router .ed-host-name { font-size: 11.5px; }
+  .ed-host-ip { color: var(--ed-fnt); font-weight: 400; font-size: 11px; }
+  .ed-host-role { color: var(--ed-fnt); font-size: 11px; }
+  .ed-host-sub { font-size: 11px; color: var(--ed-mut); line-height: 1.4; }
+  .ed-tier-island .ed-host-sub { color: var(--ed-fnt); }
+  .ed-tier-tag { margin-left: auto; font-size: 9.5px; letter-spacing: .08em; color: var(--ed-fnt); }
+  .ed-host-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ed-fnt); flex: none; }
+  .ed-host-dot.ok { background: var(--ed-ok); }
+  .ed-host-dot.warn { background: var(--ed-warn); }
+  .ed-host-dot.crit { background: var(--ed-crit); }
 
-  .cc-cluster {
-    display: flex; flex-direction: column; gap: 4px; padding: 7px 9px; border-radius: 12px;
-    background: linear-gradient(rgba(243,179,77,.06), rgba(243,179,77,.02));
-    border: 1px solid rgba(243,179,77,.34);
-    animation: ccBoxGlow 3.8s ease-in-out infinite;
+  .ed-cluster {
+    padding: 13px 15px;
+    border: 1px solid var(--ed-box);
+    border-radius: 10px;
   }
-  @keyframes ccBoxGlow {
-    0%, 100% { box-shadow: 0 0 16px -8px rgba(243,179,77,.3); }
-    50%      { box-shadow: 0 0 30px -3px rgba(243,179,77,.5); }
+  .ed-cluster-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    font-family: var(--ed-mono); margin-bottom: 10px; flex-wrap: wrap; gap: 6px;
   }
-  .cc-cluster-head { display: flex; align-items: center; justify-content: space-between; font-size: 9px; letter-spacing: .07em; text-transform: uppercase; }
-  .cc-cluster-vip { font-size: 7.5px; background: rgba(76,201,232,.08); border-radius: 5px; padding: 2px 6px; }
-  .cc-cluster-nodes { display: flex; flex-direction: column; gap: 3px; flex: 1; justify-content: center; }
-  .cc-cluster-node { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,.03); border: 1px solid var(--color-muted); border-radius: 6px; padding: 3px 7px; font-size: 10px; color: var(--color-heading); }
-  .cc-cluster-quorum { display: flex; align-items: center; gap: 5px; font-size: 8px; color: var(--color-ok); }
+  .ed-cluster-quorum { color: var(--ed-ok); font-size: 10.5px; }
+  .ed-cluster-nodes { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+  .ed-cluster-node {
+    display: flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,.03); border-radius: 6px; padding: 6px 9px;
+    font-family: var(--ed-mono); font-size: 11px; color: var(--ed-tx);
+  }
+  .ed-cluster-node .ed-host-ip { margin-left: auto; font-size: 9.5px; }
 
-  @media (prefers-reduced-motion: reduce) { .cc-perim, .cc-cluster { animation: none; } }
+  @media (prefers-reduced-motion: reduce) { .ed-map-dot { animation: none; } }
   @media (max-width: 860px) {
-    .cc-hero { grid-template-columns: 1fr; }
-    .cc-h1 { font-size: 34px; line-height: 1.06; }
+    .ed-hero { grid-template-columns: 1fr; padding-top: 40px; }
+    .ed-h1 { font-size: 32px; line-height: 1.08; }
   }
 
   /* ── Shell section ── */
-  .cc-shell-section { max-width: 1220px; margin: 0 auto; padding: 30px 1.5rem 8px; }
+  .cc-shell-section { max-width: 1080px; margin: 0 auto; padding: 30px 1.5rem 8px; }
   .cc-shell-head { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 18px; flex-wrap: wrap; gap: 10px; }
-  .cc-shell-kicker { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--signal); margin-bottom: 8px; }
-  .cc-shell-title { font-family: var(--font-display); font-size: clamp(1.5rem, 3.5vw, 34px); font-weight: 600; margin: 0; color: var(--color-heading); letter-spacing: -.01em; }
-  .cc-shell-note { font-size: 12px; color: var(--color-subtle); max-width: 36ch; text-align: right; line-height: 1.5; }
+  .cc-shell-kicker { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--ed-mut); margin-bottom: 8px; }
+  .cc-shell-title { font-family: var(--ed-serif); font-size: clamp(1.5rem, 3.5vw, 29px); font-weight: 500; margin: 0; color: var(--ed-tx); letter-spacing: -.01em; }
+  .cc-shell-note { font-size: 11.5px; color: var(--ed-fnt); max-width: 36ch; text-align: right; line-height: 1.5; }
+  .cc-shell-note .cc-accent { color: var(--ed-ok); }
 
   /* ── Cluster-age band ── */
   .cc-uptime-section {
-    max-width: 1220px; margin: 24px auto 0; padding: 34px 1.5rem;
-    background: linear-gradient(180deg, rgba(255,255,255,.018), transparent);
-    border-top: 1px solid var(--color-muted); border-bottom: 1px solid var(--color-muted);
+    max-width: 1080px; margin: 24px auto 0; padding: 34px 1.5rem;
+    border-top: 1px solid var(--ed-hair); border-bottom: 1px solid var(--ed-hair);
   }
   .cc-uptime-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
   .cc-uptime-title-row { display: flex; align-items: baseline; gap: 14px; }
-  .cc-uptime-title { font-family: var(--font-display); font-size: 22px; font-weight: 600; color: var(--color-heading); }
-  .cc-uptime-stat { font-size: 14px; font-weight: 500; color: var(--color-ok); font-variant-numeric: tabular-nums; }
-  .cc-uptime-meta { font-size: 11.5px; color: var(--color-subtle); }
+  .cc-uptime-title { font-family: var(--ed-serif); font-size: 22px; font-weight: 500; color: var(--ed-tx); }
+  .cc-uptime-stat { font-size: 13px; font-weight: 500; color: var(--ed-ok); font-variant-numeric: tabular-nums; }
+  .cc-uptime-meta { font-size: 11.5px; color: var(--ed-fnt); }
   .cc-uptime-track { position: relative; padding-top: 38px; }
   .cc-uptime-tip {
     position: absolute; top: 0; transform: translateX(-50%); white-space: nowrap;
@@ -460,11 +427,12 @@ const RACK_WATTS = Math.round((ELECTRICITY_KWH * 1000) / (30 * 24));
   .cc-uptime-axis { display: flex; justify-content: space-between; font-size: 11px; color: var(--color-faint); margin-top: 8px; }
 
   /* ── Hosts table ── */
-  .cc-hosts-section { max-width: 1220px; margin: 0 auto; padding: 54px 1.5rem 8px; }
+  .cc-hosts-section { max-width: 1080px; margin: 0 auto; padding: 54px 1.5rem 8px; }
   .cc-hosts-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 18px; flex-wrap: wrap; gap: 8px; }
-  .cc-hosts-title { font-family: var(--font-display); font-size: 25px; font-weight: 600; margin: 0; color: var(--color-heading); }
-  .cc-hosts-meta { font-size: 12px; color: var(--color-subtle); }
-  .cc-hosts-table { border: 1px solid var(--color-muted); border-radius: 14px; overflow: hidden; background: rgba(255,255,255,.012); }
+  .cc-hosts-title { font-family: var(--ed-serif); font-size: 25px; font-weight: 500; margin: 0; color: var(--ed-tx); }
+  .cc-hosts-meta { font-size: 12px; color: var(--ed-fnt); }
+  .cc-hosts-meta .cc-signal { color: var(--ed-ok); }
+  .cc-hosts-table { border: 1px solid var(--ed-hair); border-radius: 12px; overflow: hidden; }
   .cc-hosts-row {
     display: grid; grid-template-columns: 1fr 1.7fr 1.5fr 1.5fr 1.1fr .8fr; gap: 12px;
     padding: 13px 20px; align-items: center; font-family: var(--font-mono); font-size: 13px;
@@ -485,70 +453,62 @@ const RACK_WATTS = Math.round((ELECTRICITY_KWH * 1000) / (30 * 24));
     .cc-hosts-row { grid-template-columns: 1fr 1fr; row-gap: 6px; }
   }
 
-  /* ── Tagline divider ── */
+  /* ── Tagline divider (editorial: centered italic serif) ── */
   .cc-tagline {
-    max-width: 1220px; margin: 6px auto 0; padding: 50px 1.5rem;
-    display: flex; align-items: center; justify-content: center; gap: 18px; flex-wrap: wrap;
-    font-family: var(--font-display); font-weight: 700; font-size: clamp(1.2rem, 3vw, 27px);
-    letter-spacing: -0.01em; position: relative;
+    max-width: 1080px; margin: 40px auto 0; padding: 44px 1.5rem;
+    text-align: center; border-top: 1px solid var(--ed-hair);
   }
-  .cc-tagline-word { color: var(--color-subtle); }
-  .cc-tagline-grad {
-    background: linear-gradient(90deg, var(--accent), var(--color-ok));
-    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  .cc-tagline-line {
+    font-family: var(--ed-serif); font-style: italic; font-weight: 400;
+    font-size: clamp(1.15rem, 3vw, 22px); color: var(--ed-mut); letter-spacing: 0;
   }
-  .cc-tagline-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--color-faint); }
-  .cc-tagline-rule { flex: 1; min-width: 30px; max-width: 170px; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,.16)); }
-  .cc-tagline-rule:last-child { background: linear-gradient(90deg, rgba(255,255,255,.16), transparent); }
+  .cc-tagline-grad { color: var(--ed-tx); font-style: italic; }
 
   /* ── Incident log + cost two-up ── */
   .cc-twoup {
-    max-width: 1220px; margin: 0 auto; padding: 62px 1.5rem 8px;
-    display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+    max-width: 1080px; margin: 0 auto; padding: 52px 1.5rem 8px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 44px;
   }
-  .cc-col-title { font-family: var(--font-display); font-size: 25px; font-weight: 600; margin: 0 0 22px; color: var(--color-heading); }
+  .cc-col-title { font-family: var(--ed-serif); font-size: 25px; font-weight: 500; margin: 0 0 22px; color: var(--ed-tx); }
   .cc-timeline { display: flex; flex-direction: column; gap: 12px; }
   .cc-inc {
-    position: relative; display: flex; gap: 16px;
-    padding: 14px 16px 14px 18px;
-    border: 1px solid var(--color-muted); border-left: 3px solid var(--color-ok);
-    border-radius: 12px; background: rgba(255,255,255,.012);
-    transition: transform .2s cubic-bezier(.2,.7,.2,1), background .2s ease;
+    position: relative; display: block;
+    padding: 14px 0;
+    border-top: 1px solid var(--ed-hair);
   }
-  .cc-inc:hover { transform: translateX(4px); background: rgba(255,255,255,.028); }
-  .cc-inc-dot { flex: none; width: 12px; height: 12px; margin-top: 3px; border-radius: 50%; background: var(--color-base); border: 2px solid var(--color-ok); }
-  .cc-inc-body { min-width: 0; flex: 1; }
-  .cc-inc-meta { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; margin-bottom: 5px; }
-  .cc-inc-date { font-family: var(--font-mono); font-size: 11.5px; color: var(--color-subtle); }
-  .cc-inc-sev { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: .06em; text-transform: uppercase; padding: 1px 7px; border-radius: 20px; border: 1px solid; }
-  .cc-inc-chip { font-family: var(--font-mono); font-size: 10px; color: var(--color-muted); background: rgba(255,255,255,.05); border: 1px solid var(--color-muted); padding: 1px 8px; border-radius: 20px; }
-  .cc-inc-title { font-size: 15px; font-weight: 600; color: var(--color-heading); margin-bottom: 3px; }
-  .cc-inc-note { font-size: 13px; color: var(--color-text); line-height: 1.5; }
-  @media (prefers-reduced-motion: reduce) { .cc-inc { transition: none; } .cc-inc:hover { transform: none; } }
+  .cc-inc-dot { display: none; }
+  .cc-inc-body { min-width: 0; }
+  .cc-inc-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 5px; }
+  .cc-inc-date { font-family: var(--ed-mono); font-size: 11.5px; color: var(--ed-fnt); }
+  .cc-inc-sev { font-family: var(--ed-mono); font-size: 9.5px; letter-spacing: .06em; text-transform: uppercase; padding: 1px 7px; border-radius: 4px; border: 1px solid; }
+  .cc-inc-chip { font-family: var(--ed-mono); font-size: 10px; color: var(--ed-fnt); border: 1px solid var(--ed-hair); padding: 1px 8px; border-radius: 4px; }
+  .cc-inc-title { font-size: 14.5px; font-weight: 500; color: var(--ed-tx); margin-bottom: 3px; }
+  .cc-inc-note { font-size: 13px; color: var(--ed-mut); line-height: 1.5; }
 
   .cc-cost-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 22px; }
-  .cc-cost-fig { font-size: 12px; color: var(--color-ok); }
-  .cc-cost-card { border: 1px solid var(--color-muted); border-radius: 14px; padding: 22px; background: rgba(255,255,255,.012); }
+  .cc-cost-fig { font-size: 12px; color: var(--ed-ok); }
+  .cc-cost-card { border: 1px solid var(--ed-hair); border-radius: 12px; padding: 22px; }
   .cc-cost-figrow { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 14px; }
-  .cc-cost-big { font-size: 26px; font-weight: 600; color: var(--color-heading); line-height: 1; font-variant-numeric: tabular-nums; }
-  .cc-cost-sub { font-size: 11px; color: var(--color-subtle); margin-top: 4px; }
-  .cc-cost-note { font-size: 13px; color: var(--color-subtle); line-height: 1.6; margin: 0; }
+  .cc-cost-big { font-size: 26px; font-weight: 500; color: var(--ed-tx); line-height: 1; font-variant-numeric: tabular-nums; }
+  .cc-cost-sub { font-size: 11px; color: var(--ed-mut); margin-top: 4px; }
+  .cc-cost-note { font-size: 13px; color: var(--ed-mut); line-height: 1.6; margin: 0; }
+  .cc-cost-note .cc-signal { color: var(--ed-ok); }
 
   /* ── The stack ── */
-  .cc-stack-section { max-width: 1220px; margin: 0 auto; padding: 62px 1.5rem 8px; }
+  .cc-stack-section { max-width: 1080px; margin: 0 auto; padding: 52px 1.5rem 8px; }
   .cc-stack-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 8px; }
-  .cc-stack-meta { font-size: 12px; color: var(--color-subtle); }
+  .cc-stack-meta { font-size: 12px; color: var(--ed-fnt); }
   .cc-stack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(155px, 1fr)); gap: 10px; }
   .cc-stack-chip {
     display: flex; align-items: center; gap: 11px;
-    background: rgba(255,255,255,.02); border: 1px solid var(--color-muted); border-radius: 11px; padding: 13px 15px;
+    background: transparent; border: 1px solid var(--ed-hair); border-radius: 9px; padding: 12px 14px;
     transition: border-color .18s ease;
   }
-  .cc-stack-chip:hover { border-color: var(--signal); }
-  .cc-stack-sym { font-size: 13px; color: var(--signal); width: 18px; text-align: center; flex: none; }
+  .cc-stack-chip:hover { border-color: var(--ed-box); }
+  .cc-stack-sym { font-size: 12.5px; color: var(--ed-mut); width: 18px; text-align: center; flex: none; }
   .cc-stack-txt { min-width: 0; }
-  .cc-stack-name { font-size: 13.5px; font-weight: 500; color: var(--color-text); }
-  .cc-stack-desc { font-size: 11px; color: var(--color-subtle); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cc-stack-name { font-size: 13px; font-weight: 500; color: var(--ed-tx); }
+  .cc-stack-desc { font-size: 10.5px; color: var(--ed-fnt); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   @media (max-width: 860px) { .cc-twoup { grid-template-columns: 1fr; gap: 2.5rem; } }
 
@@ -1100,9 +1060,13 @@ const RACK_WATTS = Math.round((ELECTRICITY_KWH * 1000) / (30 * 24));
 
   /* ── About section ── */
   .about-section {
-    border-top: 1px solid var(--color-muted);
-    background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--color-mantle) 60%, transparent));
+    border-top: 1px solid var(--ed-hair);
+    background: none;
+    padding: 52px 1.5rem;
+    max-width: 1080px;
+    margin: 0 auto;
   }
+  .about-section .section-inner { max-width: none; }
 
   .about-grid {
     display: grid;
@@ -1274,11 +1238,11 @@ const RACK_WATTS = Math.round((ELECTRICITY_KWH * 1000) / (30 * 24));
 
   .contrib-cell:hover { transform: scale(1.4); }
 
-  .contrib-cell[data-level="0"] { background: var(--color-overlay); }
-  .contrib-cell[data-level="1"] { background: color-mix(in srgb, var(--color-gold) 25%, var(--color-overlay)); }
-  .contrib-cell[data-level="2"] { background: color-mix(in srgb, var(--color-gold) 50%, var(--color-overlay)); }
-  .contrib-cell[data-level="3"] { background: color-mix(in srgb, var(--color-gold) 75%, var(--color-overlay)); }
-  .contrib-cell[data-level="4"] { background: var(--color-gold); }
+  .contrib-cell[data-level="0"] { background: rgba(255,255,255,.06); }
+  .contrib-cell[data-level="1"] { background: rgba(111,143,176,.35); }
+  .contrib-cell[data-level="2"] { background: rgba(47,160,107,.5); }
+  .contrib-cell[data-level="3"] { background: color-mix(in srgb, #2fa06b 78%, transparent); }
+  .contrib-cell[data-level="4"] { background: #2fa06b; }
 
   .contrib-loading {
     font-family: var(--font-mono);
@@ -1642,10 +1606,10 @@ const RACK_WATTS = Math.round((ELECTRICITY_KWH * 1000) / (30 * 24));
       const ccNodes: any[] = Array.isArray(data.nodes) ? data.nodes : [];
       const byName: Record<string, any> = {};
       for (const n of ccNodes) byName[String(n.name).toLowerCase()] = n;
-      document.querySelectorAll<HTMLElement>('.cc-host-dot[data-node]').forEach((dot) => {
+      document.querySelectorAll<HTMLElement>('.ed-host-dot[data-node]').forEach((dot) => {
         const node = byName[dot.dataset.node ?? ''];
         const s = node?.status;
-        dot.className = 'cc-host-dot ' + (s === 'ok' ? 'ok' : s === 'warn' ? 'warn' : s ? 'crit' : '');
+        dot.className = 'ed-host-dot ' + (s === 'ok' ? 'ok' : s === 'warn' ? 'warn' : s ? 'crit' : '');
       });
       const k3s = ['tywin', 'jaime', 'tyrion'].map((n) => byName[n]).filter(Boolean);
       const readyCount = k3s.filter((n) => n.status === 'ok').length;
@@ -2051,10 +2015,10 @@ const RACK_WATTS = Math.round((ELECTRICITY_KWH * 1000) / (30 * 24));
   }
 
   const INC_SEV: Record<string, { color: string }> = {
-    INCIDENT: { color: 'var(--color-crit)' },
-    FIX:      { color: 'var(--color-ok)' },
-    SECURITY: { color: 'var(--accent)' },
-    NETWORK:  { color: 'var(--signal)' },
+    INCIDENT: { color: '#cf5349' },
+    FIX:      { color: '#2fa06b' },
+    SECURITY: { color: '#c98a1e' },
+    NETWORK:  { color: '#8a8f98' },
   };
   async function loadIncidents() {
     const el = document.getElementById('cc-incidents');

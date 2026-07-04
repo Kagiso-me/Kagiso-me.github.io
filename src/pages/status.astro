@@ -47,7 +47,7 @@ import Layout from '../layouts/Layout.astro';
         <span class="mono ed-note" id="ed-svc-note">measured by Gatus · per app</span>
       </div>
       <div class="ed-svhead ed-svgrid mono">
-        <span>Service</span><span>Group</span><span style="text-align:right">Uptime</span><span style="text-align:right">Latency</span>
+        <span>Service</span><span>Group</span><span style="text-align:right">Uptime</span><span style="text-align:right">Latency</span><span style="text-align:right">Measured</span>
       </div>
       <div id="ed-services"></div>
     </section>
@@ -176,7 +176,7 @@ import Layout from '../layouts/Layout.astro';
   .ed-bar-val { font-size: 11.5px; color: var(--ed-mut); width: 34px; text-align: right; font-variant-numeric: tabular-nums; }
 
   /* SERVICES */
-  .ed-svgrid { display: grid; grid-template-columns: 1.6fr 1fr .9fr .9fr; gap: 16px; align-items: center; }
+  .ed-svgrid { display: grid; grid-template-columns: 1.5fr .9fr .85fr .85fr .7fr; gap: 16px; align-items: center; }
   .ed-svhead { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--ed-fnt); padding-bottom: 2px; }
   .ed-svrow { padding: 13px 0; border-top: 1px solid var(--ed-hair); font-family: var(--font-mono); font-size: 13px; transition: background .15s; }
   .ed-svrow:hover { background: rgba(255,255,255,.02); }
@@ -184,6 +184,7 @@ import Layout from '../layouts/Layout.astro';
   .ed-svgroup { font-size: 11.5px; color: var(--ed-fnt); }
   .ed-svpct { text-align: right; font-size: 12.5px; font-variant-numeric: tabular-nums; }
   .ed-svlat { text-align: right; font-size: 11.5px; color: var(--ed-mut); font-variant-numeric: tabular-nums; }
+  .ed-svcov { text-align: right; font-size: 11.5px; color: var(--ed-fnt); font-variant-numeric: tabular-nums; }
 
   /* INCIDENT BAND */
   .ed-band { display: flex; gap: 2px; align-items: flex-end; height: 48px; }
@@ -254,7 +255,8 @@ import Layout from '../layouts/Layout.astro';
     .ed-ngrid { grid-template-columns: 1.2fr 1fr 1fr; }
     .ed-nhead span:nth-child(2), .ed-nrow .ed-nrole, .ed-nhead span:nth-child(3), .ed-nrow .ed-nip { display: none; }
     .ed-svgrid { grid-template-columns: 1.4fr .9fr .9fr; }
-    .ed-svhead span:nth-child(2), .ed-svrow .ed-svgroup { display: none; }
+    .ed-svhead span:nth-child(2), .ed-svrow .ed-svgroup,
+    .ed-svhead span:nth-child(5), .ed-svrow .ed-svcov { display: none; }
   }
 </style>
 
@@ -334,6 +336,7 @@ import Layout from '../layouts/Layout.astro';
     if (svcEl) {
       if (!apps.length) { svcEl.innerHTML = `<div class="ed-svrow"><span class="ed-svgroup">no service data yet</span></div>`; }
       else {
+        const fmtCov = (h: number) => !h ? '—' : h < 48 ? `${h}h` : `${Math.round(h / 24)}d`;
         const sorted = [...apps].sort((a, b) => (b.uptime_pct ?? -1) - (a.uptime_pct ?? -1));
         svcEl.innerHTML = sorted.map(a => {
           const name = a.app.charAt(0).toUpperCase() + a.app.slice(1);
@@ -346,11 +349,17 @@ import Layout from '../layouts/Layout.astro';
             <span class="ed-svgroup">${a.group ?? ''}</span>
             <span class="ed-svpct" style="color:${upC}">${upT}</span>
             <span class="ed-svlat">${lat}</span>
+            <span class="ed-svcov">${fmtCov(a.coverage_hours ?? 0)}</span>
           </div>`;
         }).join('');
       }
-      const m = apps.filter(a => a.has_data).length;
-      set('ed-svc-note', m ? `measured by Gatus · ${m} apps` : 'Gatus · warming up');
+      // Honest window note: report the ACTUAL coverage span, not an assumed 30d.
+      const withData = apps.filter(a => a.has_data);
+      const maxCov = withData.reduce((m, a) => Math.max(m, a.coverage_hours ?? 0), 0);
+      const covLabel = maxCov === 0 ? '' : maxCov < 48 ? `${maxCov}h` : `${Math.round(maxCov / 24)}d`;
+      set('ed-svc-note', withData.length
+        ? `measured by Gatus · ${covLabel} of history`
+        : 'Gatus · warming up');
     }
 
     // ── Cluster incident band (rolling 60d, real outages) ──

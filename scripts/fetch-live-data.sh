@@ -365,7 +365,8 @@ build_app_uptime() {
             SUM(u.total_executions),
             SUM(u.successful_executions),
             ROUND(SUM(u.total_response_time)::numeric
-                  / NULLIF(SUM(u.total_executions),0), 0)
+                  / NULLIF(SUM(u.total_executions),0), 0),
+            ROUND((EXTRACT(EPOCH FROM now()) - MIN(u.hour_unix_timestamp)) / 3600.0)
      FROM endpoint_uptimes u JOIN endpoints e USING (endpoint_id)
      WHERE u.hour_unix_timestamp >= EXTRACT(EPOCH FROM now() - interval '${win} days')
      GROUP BY e.endpoint_key
@@ -385,15 +386,21 @@ for line in sys.stdin:
     if not line.strip():
         continue
     parts = line.split("\t")
-    if len(parts) < 4:
+    if len(parts) < 5:
         continue
-    key, total, ok, avg_ms = parts[0], int(parts[1]), int(parts[2]), parts[3]
+    key, total, ok, avg_ms, cov_h = parts[0], int(parts[1]), int(parts[2]), parts[3], parts[4]
     # Gatus keys are "<group>_<name>". Split once; the app name is the remainder.
     group, _, app = key.partition("_")
     if not app:
         app, group = group, ""
     has_data = total > 0
     pct = round(100.0 * ok / total, 3) if has_data else None
+    # Real measurement span (hours since the oldest rollup for this app), capped at
+    # the requested window. Lets the UI show the ACTUAL coverage, not an assumed 30d.
+    try:
+        coverage_hours = min(int(float(cov_h)), win_days * 24) if cov_h not in ("", None) else 0
+    except ValueError:
+        coverage_hours = 0
     out.append({
         "app": app,
         "group": group,
@@ -401,6 +408,7 @@ for line in sys.stdin:
         "avg_ms": int(float(avg_ms)) if avg_ms not in ("", None) else None,
         "checks": total,
         "window_days": win_days,
+        "coverage_hours": coverage_hours,
         "has_data": has_data,
     })
 print(json.dumps(out))

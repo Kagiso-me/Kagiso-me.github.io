@@ -1,5 +1,41 @@
 [
   {
+    "slug": "2026-06-add-database-url-dsn-for-self-hosted-chart-661",
+    "date": "2026-06",
+    "type": "DEPLOY",
+    "title": "add database-url DSN for self-hosted chart (#661)",
+    "summary": "add database-url DSN for self-hosted chart (#661)",
+    "commit": "868c24e",
+    "hasDetail": false,
+    "tags": [
+      "DEPLOY"
+    ]
+  },
+  {
+    "slug": "2026-06-make-renovate-vulnerability-aware-648",
+    "date": "2026-06",
+    "type": "DEPLOY",
+    "title": "make Renovate vulnerability-aware (#648)",
+    "summary": "make Renovate vulnerability-aware (#648)",
+    "commit": "a685689",
+    "hasDetail": false,
+    "tags": [
+      "DEPLOY"
+    ]
+  },
+  {
+    "slug": "2026-06-deploy-finforge-internal-only-633",
+    "date": "2026-06",
+    "type": "DEPLOY",
+    "title": "deploy FinForge internal-only (#633)",
+    "summary": "deploy FinForge internal-only (#633)",
+    "commit": "7c21300",
+    "hasDetail": false,
+    "tags": [
+      "DEPLOY"
+    ]
+  },
+  {
     "slug": "2026-04-apply-secure-headers-compress-and-crowdsec-bouncer-middlewar",
     "date": "2026-04",
     "type": "DEPLOY",

@@ -844,7 +844,7 @@ build_network() {
   local mt_pass="${MIKROTIK_PASS:-}"
 
   # ── MikroTik ────────────────────────────────────────────────────────────────
-  local fw_json="[]" ping_json="[]" log_json="[]"
+  local fw_json="[]" ping_json="[]" log_json="[]" block_json="[]"
   if [[ -n "$mt_host" && -n "$mt_user" && -n "$mt_pass" ]]; then
     local base="https://$mt_host/rest"
     # Use a shared session cookie jar so TLS is negotiated once across all calls
@@ -860,6 +860,13 @@ build_network() {
     log_json=$(curl -sf --max-time 45 -k -c "$mt_jar" -b "$mt_jar" \
       -u "$mt_user:$mt_pass" \
       "$base/log/print?.proplist=message,topics&.count=5000" \
+      2>/dev/null || echo "[]")
+    # Active edge bans — IPs the router auto-jailed for crossing a scan / SSH /
+    # brute-force threshold (harden-firewall.rsc → address-list=fw_blocklist).
+    # These are DELIBERATE attacks, not the FW_INPUT_DROP background-scan noise.
+    block_json=$(curl -sf --max-time 45 -k -c "$mt_jar" -b "$mt_jar" \
+      -u "$mt_user:$mt_pass" \
+      "$base/ip/firewall/address-list?list=fw_blocklist&.proplist=address,timeout,creation-time" \
       2>/dev/null || echo "[]")
     rm -f "$mt_jar"
   fi
@@ -877,14 +884,15 @@ build_network() {
       2>/dev/null || echo "null")
   fi
 
-  local tmp_fw tmp_ping tmp_log tmp_cs
-  tmp_fw=$(mktemp); tmp_ping=$(mktemp); tmp_log=$(mktemp); tmp_cs=$(mktemp)
-  echo "$fw_json"   > "$tmp_fw"
-  echo "$ping_json" > "$tmp_ping"
-  echo "$log_json"  > "$tmp_log"
-  echo "$cs_bans"   > "$tmp_cs"
+  local tmp_fw tmp_ping tmp_log tmp_cs tmp_block
+  tmp_fw=$(mktemp); tmp_ping=$(mktemp); tmp_log=$(mktemp); tmp_cs=$(mktemp); tmp_block=$(mktemp)
+  echo "$fw_json"    > "$tmp_fw"
+  echo "$ping_json"  > "$tmp_ping"
+  echo "$log_json"   > "$tmp_log"
+  echo "$cs_bans"    > "$tmp_cs"
+  echo "$block_json" > "$tmp_block"
 
-  python3 - "$tmp_fw" "$tmp_ping" "$tmp_log" "$tmp_cs" "$PREV_LIVE" "$NOW" <<'PYEOF'
+  python3 - "$tmp_fw" "$tmp_ping" "$tmp_log" "$tmp_cs" "$PREV_LIVE" "$NOW" "$tmp_block" <<'PYEOF'
 import json, collections, re, sys
 from datetime import datetime
 
@@ -970,15 +978,48 @@ try:
 except:
   pass
 
+# Active edge bans — fw_blocklist address-list entries (deliberate attacks the
+# router jailed). RouterOS REST 'timeout' is the REMAINING time, e.g. "5h30m20s".
+blocked = []
+try:
+  raw_block = load(sys.argv[7]) or []
+  tunit = {'w': 604800, 'd': 86400, 'h': 3600, 'm': 60, 's': 1}
+  def to_secs(t):
+    if not t: return None
+    total, num = 0, ''
+    for ch in str(t):
+      if ch.isdigit(): num += ch
+      elif ch in tunit and num: total += int(num) * tunit[ch]; num = ''
+    return total or None
+  def human(s):
+    if s is None: return None
+    if s >= 86400: return f"{round(s/86400)}d"
+    if s >= 3600:  return f"{round(s/3600)}h"
+    if s >= 60:    return f"{round(s/60)}m"
+    return f"{s}s"
+  rows = []
+  for e in raw_block:
+    ip = e.get('address', '')
+    if not re.match(r'^\d+\.\d+\.\d+\.\d+', ip): continue
+    secs = to_secs(e.get('timeout'))
+    rows.append({'ip': ip, 'remaining': human(secs), '_s': secs if secs is not None else 1<<30})
+  # Soonest-to-expire first (most recently added tend to have the full window)
+  rows.sort(key=lambda r: r['_s'])
+  blocked = [{'ip': r['ip'], 'remaining': r['remaining']} for r in rows[:25]]
+except:
+  blocked = []
+
 print(json.dumps({
   'fw_hits':          fw_hits,
   'fw_rate_per_hour': fw_rate_per_hour,
   'latency_ms':       latency_ms,
   'offenders':        offenders,
+  'blocked':          blocked,
+  'blocked_count':    len(blocked),
   'crowdsec_bans':    cs_bans,
 }))
 PYEOF
-  rm -f "$tmp_fw" "$tmp_ping" "$tmp_log" "$tmp_cs"
+  rm -f "$tmp_fw" "$tmp_ping" "$tmp_log" "$tmp_cs" "$tmp_block"
 }
 
 # ── bran health (runs locally — bran IS the runner) ───────────────────────────

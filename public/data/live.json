@@ -1,6 +1,6 @@
 {
-  "updated": "2026-07-04T05:58:17Z",
-  "fetched_at": "2026-07-04T05:58:17Z",
+  "updated": "2026-07-04T08:40:13Z",
+  "fetched_at": "2026-07-04T08:40:13Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "outages": [
     {
@@ -28,27 +28,27 @@
     {
       "app": "immich",
       "group": "apps",
-      "uptime_pct": 99.894,
+      "uptime_pct": 99.903,
       "avg_ms": 3,
-      "checks": 1895,
+      "checks": 2056,
       "window_days": 30,
       "has_data": true
     },
     {
       "app": "moodle",
       "group": "apps",
-      "uptime_pct": 99.896,
+      "uptime_pct": 99.904,
       "avg_ms": 53,
-      "checks": 962,
+      "checks": 1043,
       "window_days": 30,
       "has_data": true
     },
     {
       "app": "nextcloud",
       "group": "apps",
-      "uptime_pct": 96.201,
-      "avg_ms": 903,
-      "checks": 1895,
+      "uptime_pct": 96.498,
+      "avg_ms": 852,
+      "checks": 2056,
       "window_days": 30,
       "has_data": true
     },
@@ -56,17 +56,17 @@
       "app": "seerr",
       "group": "apps",
       "uptime_pct": 100.0,
-      "avg_ms": 72,
-      "checks": 962,
+      "avg_ms": 73,
+      "checks": 1043,
       "window_days": 30,
       "has_data": true
     },
     {
       "app": "vaultwarden",
       "group": "apps",
-      "uptime_pct": 99.789,
+      "uptime_pct": 99.806,
       "avg_ms": 3,
-      "checks": 1897,
+      "checks": 2058,
       "window_days": 30,
       "has_data": true
     },
@@ -74,8 +74,8 @@
       "app": "finforge",
       "group": "forge",
       "uptime_pct": 100.0,
-      "avg_ms": 79,
-      "checks": 962,
+      "avg_ms": 81,
+      "checks": 1043,
       "window_days": 30,
       "has_data": true
     },
@@ -83,17 +83,17 @@
       "app": "training",
       "group": "forge",
       "uptime_pct": 100.0,
-      "avg_ms": 104,
-      "checks": 961,
+      "avg_ms": 106,
+      "checks": 1042,
       "window_days": 30,
       "has_data": true
     },
     {
       "app": "authentik",
       "group": "platform",
-      "uptime_pct": 99.947,
+      "uptime_pct": 99.951,
       "avg_ms": 62,
-      "checks": 1895,
+      "checks": 2056,
       "window_days": 30,
       "has_data": true
     }
@@ -101,8 +101,8 @@
   "cards": [
     {
       "label": "Workloads",
-      "value": "61/62",
-      "sub": "pods running",
+      "value": "61/61",
+      "sub": "3 failed jobs",
       "status": "warn"
     },
     {
@@ -113,27 +113,27 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "3h 55m ago",
+      "value": "\u2014",
       "sub": "last backup",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "etcd Snapshot",
-      "value": "5h 58m ago",
+      "value": "\u2014",
       "sub": "last snapshot",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "Velero",
-      "value": "2h 57m ago",
+      "value": "1h 41m ago",
       "sub": "last cluster backup",
-      "status": "warn"
+      "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "4h 58m ago",
+      "value": "\u2014",
       "sub": "age keys \u00b7 varys",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "label": "Backblaze B2",
@@ -148,16 +148,16 @@
       "role": "control-plane",
       "status": "ok",
       "pods": "18/110",
-      "cpu": "14%",
-      "memory": "39%",
+      "cpu": "20%",
+      "memory": "40%",
       "pressure": []
     },
     {
       "name": "tyrion",
       "role": "control-plane",
       "status": "ok",
-      "pods": "19/110",
-      "cpu": "22%",
+      "pods": "18/110",
+      "cpu": "13%",
       "memory": "33%",
       "pressure": []
     },
@@ -165,36 +165,30 @@
       "name": "tywin",
       "role": "control-plane",
       "status": "ok",
-      "pods": "26/110",
-      "cpu": "33%",
-      "memory": "38%",
+      "pods": "25/110",
+      "cpu": "29%",
+      "memory": "37%",
       "pressure": []
     }
   ],
   "host_metrics": {
     "tywin": {
-      "cpu": "33%",
-      "mem": "38%"
+      "cpu": "29%",
+      "mem": "37%"
     },
     "jaime": {
-      "cpu": "14%",
-      "mem": "39%"
+      "cpu": "20%",
+      "mem": "40%"
     },
     "tyrion": {
-      "cpu": "22%",
+      "cpu": "13%",
       "mem": "33%"
     },
-    "varys": {
-      "cpu": "8%",
-      "mem": "24%"
-    },
-    "bronn": {
-      "cpu": "3%",
-      "mem": "17%"
-    },
+    "varys": {},
+    "bronn": {},
     "bran": {
-      "cpu": "20%",
-      "mem": "51%"
+      "cpu": "14%",
+      "mem": "49%"
     }
   },
   "flux": {
@@ -302,7 +296,7 @@
       {
         "namespace": "flux-system",
         "name": "platform-trivy-operator",
-        "age": "5d21h",
+        "age": "5d23h",
         "ready": true
       },
       {
@@ -337,13 +331,13 @@
     },
     {
       "name": "Sonarr",
-      "tag": "Sonarr: 64 series",
+      "tag": "Sonarr: \u2014 series",
       "status": "ok"
     },
     {
       "name": "Radarr",
-      "tag": "Radarr: 20 movies",
-      "status": "ok"
+      "tag": "Radarr: \u2014 movies",
+      "status": "unknown"
     },
     {
       "name": "Lidarr",
@@ -366,23 +360,23 @@
     }
   ],
   "network": {
-    "fw_hits": 1366607,
+    "fw_hits": 1369732,
     "fw_rate_per_hour": null,
-    "latency_ms": 4.7,
+    "latency_ms": 3.7,
     "offenders": [],
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 44.0,
+    "temp_c": 47.2,
     "temp_status": "ok",
-    "load": 0.56,
-    "mem_pct": 50.2
+    "load": 0.32,
+    "mem_pct": 49.3
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 588,
-    "runtime_str": "9m",
-    "load_pct": 31,
+    "runtime_s": 648,
+    "runtime_str": "10m",
+    "load_pct": 29,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
@@ -405,7 +399,7 @@
     },
     {
       "name": "archive",
-      "used": "771.3 GB",
+      "used": "771.4 GB",
       "total": "4.0 TB",
       "pct": 19.4,
       "status": "ok",
@@ -414,9 +408,9 @@
     },
     {
       "name": "core",
-      "used": "123.0 GB",
+      "used": "123.5 GB",
       "total": "476.7 GB",
-      "pct": 25.8,
+      "pct": 25.9,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true

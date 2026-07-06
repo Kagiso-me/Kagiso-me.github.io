@@ -1,13 +1,13 @@
 {
-  "updated": "2026-07-06T08:57:04Z",
-  "fetched_at": "2026-07-06T08:57:04Z",
+  "updated": "2026-07-06T12:45:28Z",
+  "fetched_at": "2026-07-06T12:45:28Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "outages": [],
   "app_uptime": [],
   "cards": [
     {
       "label": "Workloads",
-      "value": "75/78",
+      "value": "77/81",
       "sub": "pods running",
       "status": "warn"
     },
@@ -19,25 +19,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "6h 54m ago",
+      "value": "10h 42m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "2h 57m ago",
+      "value": "45m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "1h 57m ago",
+      "value": "5h 45m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "7h 57m ago",
+      "value": "11h 45m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -53,9 +53,9 @@
       "name": "jaime",
       "role": "control-plane",
       "status": "ok",
-      "pods": "25/110",
-      "cpu": "16%",
-      "memory": "39%",
+      "pods": "26/110",
+      "cpu": "31%",
+      "memory": "40%",
       "pressure": []
     },
     {
@@ -71,20 +71,20 @@
       "name": "tywin",
       "role": "control-plane",
       "status": "ok",
-      "pods": "32/110",
-      "cpu": "24%",
-      "memory": "36%",
+      "pods": "34/110",
+      "cpu": "33%",
+      "memory": "37%",
       "pressure": []
     }
   ],
   "host_metrics": {
     "tywin": {
-      "cpu": "24%",
-      "mem": "36%"
+      "cpu": "33%",
+      "mem": "37%"
     },
     "jaime": {
-      "cpu": "16%",
-      "mem": "39%"
+      "cpu": "31%",
+      "mem": "40%"
     },
     "tyrion": {},
     "varys": {
@@ -93,7 +93,7 @@
     },
     "bronn": {
       "cpu": "100%",
-      "mem": "13%"
+      "mem": "12%"
     },
     "bran": {
       "cpu": "18%",
@@ -115,7 +115,7 @@
       {
         "namespace": "flux-system",
         "name": "flux-system",
-        "age": "88d",
+        "age": "89d",
         "ready": true
       },
       {
@@ -235,8 +235,8 @@
     },
     {
       "name": "SABnzbd",
-      "tag": "SABnzbd: idle",
-      "status": "unknown"
+      "tag": "SABnzbd: downloading \u00b7 239.2 GB left",
+      "status": "ok"
     },
     {
       "name": "Sonarr",
@@ -269,84 +269,100 @@
     }
   ],
   "network": {
-    "fw_hits": 1424091,
+    "fw_hits": 1429321,
     "fw_rate_per_hour": null,
-    "latency_ms": 30.9,
+    "latency_ms": 13.9,
     "offenders": [],
     "blocked": [
       {
-        "ip": "180.167.128.203",
-        "remaining": "15m"
-      },
-      {
-        "ip": "2.57.122.209",
-        "remaining": "22m"
-      },
-      {
-        "ip": "172.236.106.113",
-        "remaining": "51m"
-      },
-      {
-        "ip": "91.92.40.35",
-        "remaining": "1h"
-      },
-      {
-        "ip": "205.210.31.203",
-        "remaining": "1h"
-      },
-      {
-        "ip": "195.178.110.137",
-        "remaining": "2h"
-      },
-      {
-        "ip": "2.57.122.238",
-        "remaining": "2h"
-      },
-      {
-        "ip": "20.163.15.176",
-        "remaining": "2h"
-      },
-      {
-        "ip": "45.43.37.254",
-        "remaining": "3h"
-      },
-      {
-        "ip": "165.245.176.51",
-        "remaining": "3h"
-      },
-      {
-        "ip": "157.230.186.54",
-        "remaining": "3h"
-      },
-      {
-        "ip": "91.224.92.147",
-        "remaining": "4h"
-      },
-      {
-        "ip": "45.148.10.230",
-        "remaining": "4h"
-      },
-      {
         "ip": "64.62.197.25",
-        "remaining": "5h"
+        "remaining": "54m"
       },
       {
         "ip": "139.19.117.197",
-        "remaining": "5h"
+        "remaining": "1h"
       },
       {
         "ip": "34.22.130.245",
+        "remaining": "2h"
+      },
+      {
+        "ip": "139.99.74.35",
+        "remaining": "2h"
+      },
+      {
+        "ip": "193.32.162.84",
+        "remaining": "2h"
+      },
+      {
+        "ip": "94.154.43.254",
+        "remaining": "2h"
+      },
+      {
+        "ip": "34.140.66.252",
+        "remaining": "2h"
+      },
+      {
+        "ip": "34.62.254.51",
+        "remaining": "2h"
+      },
+      {
+        "ip": "62.60.130.148",
+        "remaining": "3h"
+      },
+      {
+        "ip": "205.210.31.77",
+        "remaining": "3h"
+      },
+      {
+        "ip": "66.132.186.243",
+        "remaining": "3h"
+      },
+      {
+        "ip": "18.119.209.50",
+        "remaining": "4h"
+      },
+      {
+        "ip": "34.118.254.89",
+        "remaining": "4h"
+      },
+      {
+        "ip": "45.153.34.235",
+        "remaining": "4h"
+      },
+      {
+        "ip": "85.11.167.228",
+        "remaining": "4h"
+      },
+      {
+        "ip": "216.218.206.88",
+        "remaining": "4h"
+      },
+      {
+        "ip": "178.20.210.151",
+        "remaining": "5h"
+      },
+      {
+        "ip": "80.94.92.179",
+        "remaining": "5h"
+      },
+      {
+        "ip": "115.29.34.90",
+        "remaining": "6h"
+      },
+      {
+        "ip": "103.203.57.2",
         "remaining": "6h"
       }
     ],
-    "blocked_count": 16,
+    "blocked_count": 20,
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 46.2,
+    "temp_c": 47.2,
     "temp_status": "ok",
-    "load": 0.69,
-    "mem_pct": 48.6
+    "load": 0.41,
+    "mem_pct": 49.3
   },
   "ups": {
     "charge": 100,
@@ -366,16 +382,16 @@
   "storage": [
     {
       "name": "tera",
-      "used": "6.5 TB",
+      "used": "6.6 TB",
       "total": "7.9 TB",
-      "pct": 83.1,
+      "pct": 83.5,
       "status": "warn",
       "pool_status": "ONLINE",
       "healthy": true
     },
     {
       "name": "archive",
-      "used": "789.8 GB",
+      "used": "790.2 GB",
       "total": "4.0 TB",
       "pct": 19.8,
       "status": "ok",
@@ -384,7 +400,7 @@
     },
     {
       "name": "core",
-      "used": "126.6 GB",
+      "used": "126.7 GB",
       "total": "476.7 GB",
       "pct": 26.6,
       "status": "ok",
@@ -399,7 +415,7 @@
       "2026-07-04": 19,
       "2026-07-03": 7,
       "2026-07-02": 26,
-      "2026-07-01": 50,
+      "2026-07-01": 48,
       "2026-06-30": 12,
       "2026-06-28": 7,
       "2026-06-27": 10,
@@ -409,7 +425,7 @@
       "2026-06-21": 4,
       "2026-06-19": 6
     },
-    "total": 168,
+    "total": 166,
     "active_days": 14
   }
 }

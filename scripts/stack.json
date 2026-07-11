@@ -1,6 +1,6 @@
 {
   "_comment": "App versions for CVE tracking via OSV.dev. The 'version' of any component with an 'image' field is auto-synced from the live cluster by sync-stack-versions.py (runs before fetch-cves.py). Components without 'image' (Docker-host apps not in k3s) are still hand-maintained \u2014 update their version when upgraded.",
-  "_updated": "2026-07-09",
+  "_updated": "2026-07-11",
   "components": [
     {
       "name": "k3s",
@@ -29,7 +29,7 @@
     {
       "name": "flux-source-controller",
       "display": "Flux source-controller",
-      "version": "1.9.1",
+      "version": "1.9.2",
       "ecosystem": "Go",
       "package": "github.com/fluxcd/source-controller",
       "image": "fluxcd/source-controller"
@@ -37,7 +37,7 @@
     {
       "name": "flux-helm-controller",
       "display": "Flux helm-controller",
-      "version": "1.6.1",
+      "version": "1.6.2",
       "ecosystem": "Go",
       "package": "github.com/fluxcd/helm-controller",
       "image": "fluxcd/helm-controller"
@@ -45,7 +45,7 @@
     {
       "name": "flux-kustomize-controller",
       "display": "Flux kustomize-controller",
-      "version": "1.9.1",
+      "version": "1.9.2",
       "ecosystem": "Go",
       "package": "github.com/fluxcd/kustomize-controller",
       "image": "fluxcd/kustomize-controller"
@@ -53,7 +53,7 @@
     {
       "name": "flux-notification-controller",
       "display": "Flux notification-controller",
-      "version": "1.9.1",
+      "version": "1.9.2",
       "ecosystem": "Go",
       "package": "github.com/fluxcd/notification-controller",
       "image": "fluxcd/notification-controller"

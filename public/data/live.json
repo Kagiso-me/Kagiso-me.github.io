@@ -1,6 +1,6 @@
 {
-  "updated": "2026-07-12T18:58:57Z",
-  "fetched_at": "2026-07-12T18:58:57Z",
+  "updated": "2026-07-12T20:07:05Z",
+  "fetched_at": "2026-07-12T20:07:05Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "outages": [
     {
@@ -145,29 +145,29 @@
       "group": "apps",
       "uptime_pct": 99.971,
       "avg_ms": 4,
-      "checks": 13814,
+      "checks": 13882,
       "window_days": 30,
-      "coverage_hours": 259,
+      "coverage_hours": 260,
       "has_data": true
     },
     {
       "app": "moodle",
       "group": "apps",
-      "uptime_pct": 98.451,
+      "uptime_pct": 98.458,
       "avg_ms": 148,
-      "checks": 6971,
+      "checks": 7005,
       "window_days": 30,
-      "coverage_hours": 259,
+      "coverage_hours": 260,
       "has_data": true
     },
     {
       "app": "nextcloud",
       "group": "apps",
-      "uptime_pct": 93.861,
-      "avg_ms": 569,
-      "checks": 13814,
+      "uptime_pct": 93.891,
+      "avg_ms": 568,
+      "checks": 13882,
       "window_days": 30,
-      "coverage_hours": 259,
+      "coverage_hours": 260,
       "has_data": true
     },
     {
@@ -175,19 +175,19 @@
       "group": "apps",
       "uptime_pct": 100.0,
       "avg_ms": 128,
-      "checks": 6971,
+      "checks": 7005,
       "window_days": 30,
-      "coverage_hours": 259,
+      "coverage_hours": 260,
       "has_data": true
     },
     {
       "app": "vaultwarden",
       "group": "apps",
-      "uptime_pct": 89.326,
-      "avg_ms": 113,
-      "checks": 13818,
+      "uptime_pct": 89.378,
+      "avg_ms": 112,
+      "checks": 13886,
       "window_days": 30,
-      "coverage_hours": 259,
+      "coverage_hours": 260,
       "has_data": true
     },
     {
@@ -195,9 +195,9 @@
       "group": "forge",
       "uptime_pct": 100.0,
       "avg_ms": 74,
-      "checks": 6970,
+      "checks": 7004,
       "window_days": 30,
-      "coverage_hours": 259,
+      "coverage_hours": 260,
       "has_data": true
     },
     {
@@ -205,9 +205,9 @@
       "group": "forge",
       "uptime_pct": 100.0,
       "avg_ms": 97,
-      "checks": 6970,
+      "checks": 7004,
       "window_days": 30,
-      "coverage_hours": 259,
+      "coverage_hours": 260,
       "has_data": true
     },
     {
@@ -215,16 +215,16 @@
       "group": "platform",
       "uptime_pct": 99.899,
       "avg_ms": 178,
-      "checks": 13814,
+      "checks": 13882,
       "window_days": 30,
-      "coverage_hours": 259,
+      "coverage_hours": 260,
       "has_data": true
     }
   ],
   "cards": [
     {
       "label": "Workloads",
-      "value": "66/68",
+      "value": "63/64",
       "sub": "pods running",
       "status": "warn"
     },
@@ -242,19 +242,19 @@
     },
     {
       "label": "etcd Snapshot",
-      "value": "59m ago",
+      "value": "2h 7m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "5h 59m ago",
+      "value": "1h 7m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "17h 58m ago",
+      "value": "19h 6m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -271,8 +271,8 @@
       "role": "control-plane",
       "status": "ok",
       "pods": "26/110",
-      "cpu": "26%",
-      "memory": "47%",
+      "cpu": "30%",
+      "memory": "48%",
       "pressure": []
     },
     {
@@ -288,30 +288,30 @@
       "name": "tywin",
       "role": "control-plane",
       "status": "ok",
-      "pods": "33/110",
-      "cpu": "35%",
-      "memory": "36%",
+      "pods": "32/110",
+      "cpu": "30%",
+      "memory": "39%",
       "pressure": []
     }
   ],
   "host_metrics": {
     "tywin": {
-      "cpu": "35%",
-      "mem": "36%"
+      "cpu": "30%",
+      "mem": "39%"
     },
     "jaime": {
-      "cpu": "26%",
-      "mem": "47%"
+      "cpu": "30%",
+      "mem": "48%"
     },
     "tyrion": {},
     "varys": {
-      "cpu": "12%",
-      "mem": "33%"
+      "cpu": "2%",
+      "mem": "34%"
     },
     "bronn": {},
     "bran": {
-      "cpu": "38%",
-      "mem": "42%"
+      "cpu": "18%",
+      "mem": "44%"
     }
   },
   "flux": {
@@ -483,122 +483,106 @@
     }
   ],
   "network": {
-    "fw_hits": 1557537,
+    "fw_hits": 1558390,
     "fw_rate_per_hour": null,
-    "latency_ms": 3.2,
+    "latency_ms": 3.4,
     "offenders": [],
     "blocked": [
       {
-        "ip": "180.167.128.202",
-        "remaining": "12m"
-      },
-      {
-        "ip": "117.177.102.79",
-        "remaining": "36m"
-      },
-      {
-        "ip": "194.88.98.121",
-        "remaining": "46m"
-      },
-      {
-        "ip": "220.76.68.23",
-        "remaining": "53m"
-      },
-      {
-        "ip": "91.92.40.204",
-        "remaining": "1h"
-      },
-      {
         "ip": "180.167.128.203",
-        "remaining": "1h"
+        "remaining": "4m"
       },
       {
         "ip": "68.5.83.165",
-        "remaining": "1h"
+        "remaining": "11m"
       },
       {
         "ip": "219.78.63.235",
-        "remaining": "2h"
+        "remaining": "31m"
       },
       {
         "ip": "220.121.206.61",
-        "remaining": "2h"
+        "remaining": "1h"
       },
       {
         "ip": "94.154.43.30",
-        "remaining": "3h"
+        "remaining": "2h"
       },
       {
         "ip": "198.235.24.249",
-        "remaining": "3h"
+        "remaining": "2h"
       },
       {
         "ip": "80.94.92.55",
-        "remaining": "3h"
+        "remaining": "2h"
       },
       {
         "ip": "213.209.159.26",
-        "remaining": "3h"
+        "remaining": "2h"
       },
       {
         "ip": "5.79.212.112",
-        "remaining": "3h"
+        "remaining": "2h"
       },
       {
         "ip": "165.22.102.237",
-        "remaining": "4h"
+        "remaining": "3h"
       },
       {
         "ip": "91.224.92.147",
-        "remaining": "4h"
+        "remaining": "3h"
       },
       {
         "ip": "31.132.90.3",
-        "remaining": "5h"
+        "remaining": "3h"
       },
       {
         "ip": "14.52.46.79",
-        "remaining": "5h"
+        "remaining": "3h"
       },
       {
         "ip": "195.178.110.227",
-        "remaining": "5h"
+        "remaining": "4h"
       },
       {
         "ip": "193.46.255.86",
-        "remaining": "5h"
+        "remaining": "4h"
       },
       {
         "ip": "51.158.205.203",
-        "remaining": "5h"
+        "remaining": "4h"
       },
       {
         "ip": "62.60.130.148",
-        "remaining": "6h"
+        "remaining": "5h"
       },
       {
         "ip": "40.119.40.156",
-        "remaining": "6h"
+        "remaining": "5h"
       },
       {
         "ip": "77.90.185.20",
-        "remaining": "6h"
+        "remaining": "5h"
+      },
+      {
+        "ip": "178.20.210.151",
+        "remaining": "5h"
       }
     ],
-    "blocked_count": 24,
+    "blocked_count": 20,
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 47.2,
+    "temp_c": 46.2,
     "temp_status": "ok",
-    "load": 0.68,
-    "mem_pct": 42.7
+    "load": 0.5,
+    "mem_pct": 43.6
   },
   "ups": {
     "charge": 100,
-    "runtime_s": 744,
+    "runtime_s": 772,
     "runtime_str": "12m",
-    "load_pct": 26,
+    "load_pct": 25,
     "status": "OL",
     "nominal_w": 390,
     "on_battery": false,
@@ -621,18 +605,18 @@
     },
     {
       "name": "archive",
-      "used": "763.1 GB",
+      "used": "763.3 GB",
       "total": "4.0 TB",
-      "pct": 19.1,
+      "pct": 19.2,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true
     },
     {
       "name": "core",
-      "used": "131.4 GB",
+      "used": "131.3 GB",
       "total": "476.7 GB",
-      "pct": 27.6,
+      "pct": 27.5,
       "status": "ok",
       "pool_status": "ONLINE",
       "healthy": true

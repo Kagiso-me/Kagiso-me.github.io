@@ -1,14 +1,14 @@
 {
-  "fetched_at": "2026-07-17T08:08:46Z",
+  "fetched_at": "2026-07-22T20:04:20Z",
   "status": "warn",
   "counts": {
     "CRITICAL": 0,
     "HIGH": 0,
     "MEDIUM": 1,
     "LOW": 0,
-    "UNKNOWN": 2
+    "UNKNOWN": 3
   },
-  "total": 3,
+  "total": 4,
   "tracked": 17,
   "vulnerabilities": [
     {
@@ -16,13 +16,13 @@
       "cve_id": "CVE-2026-54761",
       "summary": "Traefik: Kubernetes Gateway crossProviderNamespaces bypass allows HTTPRoute outside the allowlist to expose internal Traefik services",
       "severity": "MEDIUM",
-      "cvss": null,
+      "cvss": 7.1,
       "published": "2026-06-17T14:01:48Z",
-      "modified": "2026-07-02T14:44:23.150776378Z",
+      "modified": "2026-07-20T21:30:38.747485554Z",
       "refs": [
         "https://github.com/traefik/traefik/security/advisories/GHSA-3g6v-2r68-prfc",
-        "https://github.com/traefik/traefik",
-        "https://github.com/traefik/traefik/releases/tag/v3.6.21"
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-54761",
+        "https://github.com/traefik/traefik"
       ],
       "component": "Traefik",
       "component_version": "3.6.19"
@@ -39,6 +39,21 @@
         "https://github.com/advisories/GHSA-864f-7xjm-2jp2",
         "https://nvd.nist.gov/vuln/detail/CVE-2025-46599",
         "https://github.com/k3s-io/k3s/commit/097b63e588e3c844cdf9b967bcd0a69f4fc0aa0a"
+      ],
+      "component": "k3s",
+      "component_version": "1.34.6"
+    },
+    {
+      "id": "GO-2026-5973",
+      "cve_id": "CVE-2026-54250",
+      "summary": "K3s: ZIP Archive Path Traversal Vulnerability in etcd Snapshot Decompression in github.com/k3s-io/k3s",
+      "severity": "UNKNOWN",
+      "cvss": null,
+      "published": "2026-07-17T19:42:05Z",
+      "modified": "2026-07-21T19:15:30.632374047Z",
+      "refs": [
+        "https://github.com/k3s-io/k3s/security/advisories/GHSA-jxr7-mqhw-9p98",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-54250"
       ],
       "component": "k3s",
       "component_version": "1.34.6"

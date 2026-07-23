@@ -1,6 +1,6 @@
 {
   "_comment": "App versions for CVE tracking via OSV.dev. The 'version' of any component with an 'image' field is auto-synced from the live cluster by sync-stack-versions.py (runs before fetch-cves.py). Components without 'image' (Docker-host apps not in k3s) are still hand-maintained \u2014 update their version when upgraded.",
-  "_updated": "2026-07-11",
+  "_updated": "2026-07-23",
   "components": [
     {
       "name": "k3s",
@@ -29,7 +29,7 @@
     {
       "name": "flux-source-controller",
       "display": "Flux source-controller",
-      "version": "1.9.2",
+      "version": "1.9.3",
       "ecosystem": "Go",
       "package": "github.com/fluxcd/source-controller",
       "image": "fluxcd/source-controller"
@@ -45,7 +45,7 @@
     {
       "name": "flux-kustomize-controller",
       "display": "Flux kustomize-controller",
-      "version": "1.9.2",
+      "version": "1.9.3",
       "ecosystem": "Go",
       "package": "github.com/fluxcd/kustomize-controller",
       "image": "fluxcd/kustomize-controller"

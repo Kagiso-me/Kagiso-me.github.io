@@ -1,6 +1,6 @@
 {
   "_comment": "App versions for CVE tracking via OSV.dev. The 'version' of any component with an 'image' field is auto-synced from the live cluster by sync-stack-versions.py (runs before fetch-cves.py). Components without 'image' (Docker-host apps not in k3s) are still hand-maintained \u2014 update their version when upgraded.",
-  "_updated": "2026-07-24",
+  "_updated": "2026-07-29",
   "components": [
     {
       "name": "k3s",
@@ -93,7 +93,7 @@
     {
       "name": "nextcloud",
       "display": "Nextcloud",
-      "version": "34.0.1",
+      "version": "34.0.2",
       "ecosystem": "Packagist",
       "package": "nextcloud/server",
       "image": "library/nextcloud"

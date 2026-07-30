@@ -191,16 +191,6 @@
       "has_data": true
     },
     {
-      "app": "finforge",
-      "group": "forge",
-      "uptime_pct": 100.0,
-      "avg_ms": 66,
-      "checks": 10330,
-      "window_days": 30,
-      "coverage_hours": 371,
-      "has_data": true
-    },
-    {
       "app": "training",
       "group": "forge",
       "uptime_pct": 100.0,

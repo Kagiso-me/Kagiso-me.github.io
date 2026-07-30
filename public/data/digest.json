@@ -112,14 +112,6 @@
     "excerpt": ""
   },
   {
-    "slug": "2026-06-26-finforge-internal-only-deploy",
-    "date": "2026-06-26",
-    "title": "DEPLOY: FinForge (internal-only, finance.local.kagiso.me)",
-    "tag": "DEPLOY",
-    "components": "FinForge \u00b7 Traefik \u00b7 IngressRoute \u00b7 Authentik \u00b7 embedded outpost \u00b7 central PostgreSQL",
-    "excerpt": ""
-  },
-  {
     "slug": "2026-06-22-traefik-cve-2026-48020-upgrade",
     "date": "2026-06-22",
     "title": "SECURITY: Traefik 3.6.15 \u2192 3.6.19 (CVE-2026-48020)",

@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-09T12:37:39Z",
-  "fetched_at": "2026-08-09T12:37:39Z",
+  "updated": "2026-08-09T13:44:00Z",
+  "fetched_at": "2026-08-09T13:44:00Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "outages": [
     {
@@ -288,31 +288,31 @@
     {
       "app": "immich",
       "group": "apps",
-      "uptime_pct": 97.07,
+      "uptime_pct": 97.075,
       "avg_ms": 5,
-      "checks": 35695,
+      "checks": 35761,
       "window_days": 30,
-      "coverage_hours": 709,
+      "coverage_hours": 710,
       "has_data": true
     },
     {
       "app": "moodle",
       "group": "apps",
-      "uptime_pct": 99.966,
+      "uptime_pct": 99.967,
       "avg_ms": 46,
-      "checks": 17904,
+      "checks": 17937,
       "window_days": 30,
-      "coverage_hours": 709,
+      "coverage_hours": 710,
       "has_data": true
     },
     {
       "app": "nextcloud",
       "group": "apps",
-      "uptime_pct": 91.881,
+      "uptime_pct": 91.896,
       "avg_ms": 221,
-      "checks": 35694,
+      "checks": 35760,
       "window_days": 30,
-      "coverage_hours": 709,
+      "coverage_hours": 710,
       "has_data": true
     },
     {
@@ -320,19 +320,19 @@
       "group": "apps",
       "uptime_pct": 99.978,
       "avg_ms": 258,
-      "checks": 17904,
+      "checks": 17937,
       "window_days": 30,
-      "coverage_hours": 709,
+      "coverage_hours": 710,
       "has_data": true
     },
     {
       "app": "vaultwarden",
       "group": "apps",
-      "uptime_pct": 96.269,
+      "uptime_pct": 96.276,
       "avg_ms": 5,
-      "checks": 35703,
+      "checks": 35769,
       "window_days": 30,
-      "coverage_hours": 709,
+      "coverage_hours": 710,
       "has_data": true
     },
     {
@@ -340,9 +340,9 @@
       "group": "forge",
       "uptime_pct": 100.0,
       "avg_ms": 91,
-      "checks": 17902,
+      "checks": 17935,
       "window_days": 30,
-      "coverage_hours": 709,
+      "coverage_hours": 710,
       "has_data": true
     },
     {
@@ -350,46 +350,46 @@
       "group": "platform",
       "uptime_pct": 99.997,
       "avg_ms": 76,
-      "checks": 35694,
+      "checks": 35760,
       "window_days": 30,
-      "coverage_hours": 709,
+      "coverage_hours": 710,
       "has_data": true
     }
   ],
   "cards": [
     {
       "label": "Workloads",
-      "value": "64/64",
+      "value": "63/63",
       "sub": "pods running",
       "status": "ok"
     },
     {
       "label": "Flux",
       "value": "19/19 synced",
-      "sub": "122d",
+      "sub": "123d",
       "status": "ok"
     },
     {
       "label": "Docker Appdata",
-      "value": "4h 1m ago",
+      "value": "5h 7m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "37m ago",
+      "value": "1h 44m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "17h 37m ago",
-      "sub": "last success \u00b7 3 failed runs since",
-      "status": "crit"
+      "value": "43m ago",
+      "sub": "last cluster backup",
+      "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "35h 37m ago",
+      "value": "36h 43m ago",
       "sub": "age keys \u00b7 varys",
       "status": "warn"
     },
@@ -407,16 +407,16 @@
       "status": "ok",
       "pods": "19/110",
       "cpu": "17%",
-      "memory": "45%",
+      "memory": "44%",
       "pressure": []
     },
     {
       "name": "tyrion",
       "role": "control-plane",
       "status": "ok",
-      "pods": "16/110",
-      "cpu": "30%",
-      "memory": "39%",
+      "pods": "15/110",
+      "cpu": "28%",
+      "memory": "37%",
       "pressure": []
     },
     {
@@ -425,46 +425,46 @@
       "status": "ok",
       "pods": "29/110",
       "cpu": "18%",
-      "memory": "39%",
+      "memory": "37%",
       "pressure": []
     }
   ],
   "host_metrics": {
     "tywin": {
       "cpu": "18%",
-      "mem": "39%"
+      "mem": "37%"
     },
     "jaime": {
       "cpu": "17%",
-      "mem": "45%"
+      "mem": "44%"
     },
     "tyrion": {
-      "cpu": "30%",
-      "mem": "39%"
+      "cpu": "28%",
+      "mem": "37%"
     },
     "varys": {
       "cpu": "0%",
       "mem": "17%"
     },
     "bronn": {
-      "cpu": "3%",
+      "cpu": "13%",
       "mem": "13%"
     },
     "bran": {
-      "cpu": "39%",
-      "mem": "42%"
+      "cpu": "26%",
+      "mem": "46%"
     }
   },
   "flux": {
     "ready": 19,
     "total": 19,
-    "last_sync": "122d",
+    "last_sync": "123d",
     "status": "ok",
     "kustomizations": [
       {
         "namespace": "flux-system",
         "name": "apps",
-        "age": "122d",
+        "age": "123d",
         "ready": true
       },
       {
@@ -476,85 +476,85 @@
       {
         "namespace": "flux-system",
         "name": "platform-authentik",
-        "age": "122d",
+        "age": "123d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup",
-        "age": "122d",
+        "age": "123d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-backup-config",
-        "age": "122d",
+        "age": "123d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-crowdsec",
-        "age": "122d",
+        "age": "123d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-databases",
-        "age": "122d",
+        "age": "123d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-namespaces",
-        "age": "122d",
+        "age": "123d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking",
-        "age": "122d",
+        "age": "123d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-config",
-        "age": "122d",
+        "age": "123d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-networking-tls",
-        "age": "122d",
+        "age": "123d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability",
-        "age": "122d",
+        "age": "123d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-observability-config",
-        "age": "122d",
+        "age": "123d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security",
-        "age": "122d",
+        "age": "123d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-security-issuers",
-        "age": "122d",
+        "age": "123d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-storage",
-        "age": "122d",
+        "age": "123d",
         "ready": true
       },
       {
@@ -566,13 +566,13 @@
       {
         "namespace": "flux-system",
         "name": "platform-upgrade",
-        "age": "122d",
+        "age": "123d",
         "ready": true
       },
       {
         "namespace": "flux-system",
         "name": "platform-upgrade-plans",
-        "age": "122d",
+        "age": "123d",
         "ready": true
       }
     ]
@@ -585,8 +585,8 @@
     },
     {
       "name": "Nextcloud",
-      "tag": "Nextcloud: 61.0 MB used",
-      "status": "ok"
+      "tag": "Nextcloud: offline",
+      "status": "crit"
     },
     {
       "name": "SABnzbd",
@@ -624,19 +624,19 @@
     }
   ],
   "network": {
-    "fw_hits": 445813,
+    "fw_hits": 446291,
     "fw_rate_per_hour": null,
-    "latency_ms": 4.5,
+    "latency_ms": 4.7,
     "offenders": [],
     "blocked": [],
     "blocked_count": 0,
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 56.9,
+    "temp_c": 55.8,
     "temp_status": "ok",
-    "load": 1.16,
-    "mem_pct": 43.0
+    "load": 0.97,
+    "mem_pct": 45.3
   },
   "ups": {
     "charge": null,
@@ -665,7 +665,7 @@
     },
     {
       "name": "archive",
-      "used": "732.0 GB",
+      "used": "732.2 GB",
       "total": "4.0 TB",
       "pct": 18.4,
       "status": "ok",
@@ -674,7 +674,7 @@
     },
     {
       "name": "core",
-      "used": "161.4 GB",
+      "used": "161.2 GB",
       "total": "476.7 GB",
       "pct": 33.8,
       "status": "ok",

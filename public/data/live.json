@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-09T19:57:45Z",
-  "fetched_at": "2026-08-09T19:57:45Z",
+  "updated": "2026-08-09T20:32:39Z",
+  "fetched_at": "2026-08-09T20:32:39Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "outages": [
     {
@@ -288,11 +288,11 @@
     {
       "app": "immich",
       "group": "apps",
-      "uptime_pct": 97.105,
+      "uptime_pct": 97.108,
       "avg_ms": 5,
-      "checks": 36134,
+      "checks": 36169,
       "window_days": 30,
-      "coverage_hours": 716,
+      "coverage_hours": 717,
       "has_data": true
     },
     {
@@ -300,19 +300,19 @@
       "group": "apps",
       "uptime_pct": 99.967,
       "avg_ms": 46,
-      "checks": 18124,
+      "checks": 18141,
       "window_days": 30,
-      "coverage_hours": 716,
+      "coverage_hours": 717,
       "has_data": true
     },
     {
       "app": "nextcloud",
       "group": "apps",
-      "uptime_pct": 91.98,
+      "uptime_pct": 91.987,
       "avg_ms": 219,
-      "checks": 36133,
+      "checks": 36168,
       "window_days": 30,
-      "coverage_hours": 716,
+      "coverage_hours": 717,
       "has_data": true
     },
     {
@@ -320,19 +320,19 @@
       "group": "apps",
       "uptime_pct": 99.978,
       "avg_ms": 256,
-      "checks": 18124,
+      "checks": 18141,
       "window_days": 30,
-      "coverage_hours": 716,
+      "coverage_hours": 717,
       "has_data": true
     },
     {
       "app": "vaultwarden",
       "group": "apps",
-      "uptime_pct": 96.315,
+      "uptime_pct": 96.318,
       "avg_ms": 5,
-      "checks": 36142,
+      "checks": 36177,
       "window_days": 30,
-      "coverage_hours": 716,
+      "coverage_hours": 717,
       "has_data": true
     },
     {
@@ -340,9 +340,9 @@
       "group": "forge",
       "uptime_pct": 100.0,
       "avg_ms": 91,
-      "checks": 18122,
+      "checks": 18139,
       "window_days": 30,
-      "coverage_hours": 716,
+      "coverage_hours": 717,
       "has_data": true
     },
     {
@@ -350,9 +350,9 @@
       "group": "platform",
       "uptime_pct": 99.997,
       "avg_ms": 76,
-      "checks": 36133,
+      "checks": 36168,
       "window_days": 30,
-      "coverage_hours": 716,
+      "coverage_hours": 717,
       "has_data": true
     }
   ],
@@ -371,25 +371,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "11h 21m ago",
+      "value": "11h 56m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "1h 58m ago",
+      "value": "2h 32m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "57m ago",
+      "value": "1h 32m ago",
       "sub": "last cluster backup",
       "status": "ok"
     },
     {
       "label": "varys Keys",
-      "value": "42h 57m ago",
+      "value": "43h 32m ago",
       "sub": "age keys \u00b7 varys",
       "status": "warn"
     },
@@ -406,48 +406,48 @@
       "role": "control-plane",
       "status": "ok",
       "pods": "19/110",
-      "cpu": "17%",
-      "memory": "45%",
+      "cpu": "14%",
+      "memory": "46%",
       "pressure": []
     },
     {
       "name": "tyrion",
       "role": "control-plane",
       "status": "ok",
-      "pods": "15/110",
-      "cpu": "26%",
-      "memory": "34%",
+      "pods": "17/110",
+      "cpu": "31%",
+      "memory": "35%",
       "pressure": []
     },
     {
       "name": "tywin",
       "role": "control-plane",
       "status": "ok",
-      "pods": "30/110",
-      "cpu": "23%",
-      "memory": "38%",
+      "pods": "29/110",
+      "cpu": "21%",
+      "memory": "37%",
       "pressure": []
     }
   ],
   "host_metrics": {
     "tywin": {
-      "cpu": "23%",
-      "mem": "38%"
+      "cpu": "21%",
+      "mem": "37%"
     },
     "jaime": {
-      "cpu": "17%",
-      "mem": "45%"
+      "cpu": "14%",
+      "mem": "46%"
     },
     "tyrion": {
-      "cpu": "26%",
-      "mem": "34%"
+      "cpu": "31%",
+      "mem": "35%"
     },
     "varys": {
       "cpu": "1%",
       "mem": "17%"
     },
     "bronn": {
-      "cpu": "1%",
+      "cpu": "4%",
       "mem": "13%"
     },
     "bran": {
@@ -585,8 +585,8 @@
     },
     {
       "name": "Nextcloud",
-      "tag": "Nextcloud: offline",
-      "status": "crit"
+      "tag": "Nextcloud: 61.0 MB used",
+      "status": "ok"
     },
     {
       "name": "SABnzbd",
@@ -624,19 +624,19 @@
     }
   ],
   "network": {
-    "fw_hits": 448329,
+    "fw_hits": 448514,
     "fw_rate_per_hour": null,
-    "latency_ms": 6.2,
+    "latency_ms": 14.5,
     "offenders": [],
     "blocked": [],
     "blocked_count": 0,
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 58.0,
+    "temp_c": 56.9,
     "temp_status": "ok",
-    "load": 0.67,
-    "mem_pct": 50.7
+    "load": 0.65,
+    "mem_pct": 50.3
   },
   "ups": {
     "charge": null,
@@ -674,7 +674,7 @@
     },
     {
       "name": "core",
-      "used": "161.5 GB",
+      "used": "161.6 GB",
       "total": "476.7 GB",
       "pct": 33.9,
       "status": "ok",

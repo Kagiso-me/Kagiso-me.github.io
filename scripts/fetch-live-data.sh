@@ -513,37 +513,69 @@ PYEOF
 }
 
 # ── Velero last backup ─────────────────────────────────────────────────────────
+# Reports the age of the last SUCCESSFUL backup, not the last attempt, and
+# counts the failures since it. During the 2026-08-09 TrueNAS outage the newest
+# attempt was 2h old and FailedValidation — a phase the old mapping did not
+# know, so it fell through to a neutral grey card while backups had in fact
+# been broken for 14h. A failing newest attempt is crit regardless of age.
+VELERO_UNKNOWN='{"age":"—","status":"unknown","sub":"last cluster backup"}'
 build_velero() {
-  local last_line name ts phase status age_str
-  last_line=$(kubectl get backups -n velero \
-    --sort-by=.metadata.creationTimestamp \
-    -o custom-columns="NAME:.metadata.name,PHASE:.status.phase,TS:.metadata.creationTimestamp" \
-    --no-headers 2>/dev/null | tail -1 || echo "")
-  name=$(echo "$last_line"  | awk '{print $1}')
-  phase=$(echo "$last_line" | awk '{print $2}')
-  ts=$(echo "$last_line"    | awk '{print $3}')
-  status="unknown"
-  [[ "$phase" == "Completed" ]]       && status="ok"
-  [[ "$phase" == "Failed" ]]          && status="crit"
-  [[ "$phase" == "PartiallyFailed" ]] && status="warn"
+  local raw out
+  raw=$(kubectl get backups -n velero -o json 2>/dev/null) || raw=""
+  [[ -z "$raw" ]] && { echo "$VELERO_UNKNOWN"; return; }
+  out=$(printf '%s\n' "$raw" | python3 -c '
+import sys, json, time
+from datetime import datetime
 
-  # Convert ISO timestamp to age string
-  age_str="—"
-  if [[ -n "$ts" && "$ts" != "<none>" ]]; then
-    age_str=$(python3 -c "
-import time
-from datetime import datetime, timezone
 try:
-  t = datetime.fromisoformat('${ts}'.replace('Z','+00:00')).timestamp()
-  age = time.time() - t
-  h = int(age//3600); m = int((age%3600)//60)
-  print(f'{h}h {m}m ago' if h else f'{m}m ago')
-except:
-  print('—')
-" 2>/dev/null || echo "—")
-  fi
+    items = json.load(sys.stdin)["items"]
+except Exception:
+    items = []
 
-  echo "{\"age\":\"${age_str}\",\"status\":\"${status}\"}"
+def created(b): return b["metadata"].get("creationTimestamp", "")
+def phase(b):   return b.get("status", {}).get("phase", "")
+
+# ISO8601 Z sorts correctly as a string
+items.sort(key=created)
+FAILED = ("Failed", "FailedValidation")
+BAD    = FAILED + ("PartiallyFailed",)
+
+last_ok = None
+for b in items:
+    if phase(b) == "Completed":
+        last_ok = b
+
+latest_phase = phase(items[-1]) if items else ""
+since = [b for b in items if created(b) > created(last_ok)] if last_ok else items
+bad   = [b for b in since if phase(b) in BAD]
+
+age_h, age_str = None, "—"
+if last_ok is not None:
+    secs = time.time() - datetime.fromisoformat(
+        created(last_ok).replace("Z", "+00:00")).timestamp()
+    age_h = secs / 3600
+    h, m = int(secs // 3600), int((secs % 3600) // 60)
+    age_str = f"{h}h {m}m ago" if h else f"{m}m ago"
+
+if last_ok is None:
+    status = "crit" if items else "unknown"
+elif latest_phase in FAILED or age_h > 48:
+    status = "crit"
+elif latest_phase == "PartiallyFailed" or age_h > 25:
+    status = "warn"
+else:
+    status = "ok"
+
+if bad:
+    n = len(bad)
+    plural = "" if n == 1 else "s"
+    sub = f"last success · {n} failed run{plural} since"
+else:
+    sub = "last cluster backup"
+
+print(json.dumps({"age": age_str, "status": status, "sub": sub}))
+' 2>/dev/null) || out=""
+  json_or "$out" "$VELERO_UNKNOWN"
 }
 
 # =============================================================================
@@ -1305,6 +1337,7 @@ B2_STATUS=$(echo "$B2" | python3 -c "import sys,json; d=json.load(sys.stdin); pr
 
 VELERO_AGE=$(echo    "$VELERO" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['age'])")
 VELERO_STATUS=$(echo "$VELERO" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['status'])")
+VELERO_SUB=$(echo    "$VELERO" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('sub','last cluster backup'))")
 
 # Count running k8s workloads
 # Workload health = Running / (pods that should be up). Terminal pods
@@ -1433,7 +1466,7 @@ data = {
     {'label': 'Flux',           'value': '${FLUX_LABEL}',        'sub': '${FLUX_SYNC}',       'status': '${FLUX_STATUS}'},
     {'label': 'Docker Appdata', 'value': '${BRONN_BACKUP_AGE}',  'sub': 'last backup',        'status': '${BRONN_BACKUP_STATUS}'},
     {'label': 'etcd Snapshot',  'value': '${ETCD_BACKUP_AGE}',   'sub': 'last snapshot',      'status': '${ETCD_BACKUP_STATUS}'},
-    {'label': 'Velero',         'value': '${VELERO_AGE}',        'sub': 'last cluster backup','status': '${VELERO_STATUS}'},
+    {'label': 'Velero',         'value': '${VELERO_AGE}',        'sub': '${VELERO_SUB}',      'status': '${VELERO_STATUS}'},
     {'label': 'varys Keys',     'value': '${VARYS_BACKUP_AGE}',  'sub': 'age keys · varys',   'status': '${VARYS_BACKUP_STATUS}'},
     {'label': 'Backblaze B2',   'value': '${B2_AGE}',            'sub': 'offsite · TrueNAS',  'status': '${B2_STATUS}'},
   ],

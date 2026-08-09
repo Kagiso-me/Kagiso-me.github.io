@@ -19,6 +19,23 @@ NOW=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 # cumulative firewall packet counter into a meaningful per-hour drop rate.
 PREV_LIVE="${PREV_LIVE:-public/data/live.json}"
 
+# ── JSON guard ────────────────────────────────────────────────────────────────
+# `cmd | python3 … || echo FALLBACK` is unsafe here: with `pipefail`, a failing
+# cmd fails the whole pipeline even when python already printed its own
+# empty-input result — so BOTH that result and FALLBACK reach stdout and the
+# consumer sees two JSON documents ("Extra data: line 2 column 1"). That is what
+# took every run down for 23 days when the UPS driver dropped off bran. Route
+# such output through this: keep it only if it parses as exactly one JSON value.
+json_or() {
+  local out="$1" fallback="$2"
+  if [[ -n "$out" ]] && printf '%s' "$out" \
+       | python3 -c 'import sys,json; json.load(sys.stdin)' 2>/dev/null; then
+    printf '%s\n' "$out"
+  else
+    printf '%s\n' "$fallback"
+  fi
+}
+
 # ── Nodes ─────────────────────────────────────────────────────────────────────
 # All metrics derived from a single kubectl get nodes -o json call.
 # No node-exporter, no port-forwarding needed.
@@ -259,7 +276,10 @@ host_util_json() {
 # k3s node CPU/mem via `kubectl top nodes` — real kubelet-reported utilisation,
 # needs no SSH key (the runner already has kubectl). Emits {"name":{"cpu","mem"}}.
 k3s_top_json() {
-  kubectl top nodes --no-headers 2>/dev/null | python3 -c '
+  local raw out
+  raw=$(kubectl top nodes --no-headers 2>/dev/null) || raw=""
+  [[ -z "$raw" ]] && { echo "{}"; return; }
+  out=$(printf '%s\n' "$raw" | python3 -c '
 import sys, json
 out = {}
 for line in sys.stdin:
@@ -268,7 +288,8 @@ for line in sys.stdin:
     if len(f) >= 5 and f[2].endswith("%") and f[4].endswith("%"):
         out[f[0]] = {"cpu": f[2], "mem": f[4]}
 print(json.dumps(out))
-' 2>/dev/null || echo "{}"
+' 2>/dev/null) || out=""
+  json_or "$out" "{}"
 }
 
 build_host_metrics() {
@@ -1062,8 +1083,15 @@ print(json.dumps({
 }
 
 # ── UPS (NUT — runs locally on bran) ──────────────────────────────────────────
+UPS_UNKNOWN='{"charge":null,"runtime_s":null,"runtime_str":null,"load_pct":null,"status":"unknown","nominal_w":null,"on_battery":false,"dot":"unknown"}'
 build_ups() {
-  upsc apc@localhost 2>/dev/null | python3 -c "
+  # upsc exits nonzero when the NUT driver is not connected. Take the raw read
+  # first so a dead driver degrades to UPS_UNKNOWN instead of feeding the python
+  # stage empty stdin and producing an all-null card that claims dot=ok.
+  local raw out
+  raw=$(upsc apc@localhost 2>/dev/null) || raw=""
+  [[ -z "$raw" ]] && { echo "$UPS_UNKNOWN"; return; }
+  out=$(printf '%s\n' "$raw" | python3 -c "
 import sys, json
 data = {}
 for line in sys.stdin:
@@ -1085,7 +1113,10 @@ nominal_w = int(nominal_w) if nominal_w is not None else None
 on_battery = 'OB' in status
 low_batt   = charge is not None and charge <= 20
 
-dot = 'crit' if (on_battery or low_batt) else 'warn' if (charge is not None and charge <= 50) else 'ok'
+if charge is None and load is None:
+    dot = 'unknown'
+else:
+    dot = 'crit' if (on_battery or low_batt) else 'warn' if (charge is not None and charge <= 50) else 'ok'
 
 # Human-readable runtime
 if runtime is not None:
@@ -1104,7 +1135,8 @@ print(json.dumps({
   'on_battery':  on_battery,
   'dot':         dot,
 }))
-" 2>/dev/null || echo '{"charge":null,"runtime_s":null,"runtime_str":null,"load_pct":null,"status":"unknown","nominal_w":null,"on_battery":false,"dot":"unknown"}'
+" 2>/dev/null) || out=""
+  json_or "$out" "$UPS_UNKNOWN"
 }
 
 # ── Last deployment (git log on infra repo) ────────────────────────────────────
@@ -1220,7 +1252,10 @@ PYEOF
 
 # ── Cluster start timestamp (earliest node creationTimestamp) ─────────────────
 build_cluster_start() {
-  kubectl get nodes -o json 2>/dev/null | python3 -c "
+  local raw
+  raw=$(kubectl get nodes -o json 2>/dev/null) || { echo ""; return; }
+  [[ -z "$raw" ]] && { echo ""; return; }
+  printf '%s\n' "$raw" | python3 -c "
 import json, sys, datetime
 try:
   nodes = json.load(sys.stdin).get('items', [])
@@ -1276,7 +1311,10 @@ VELERO_STATUS=$(echo "$VELERO" | python3 -c "import sys,json; d=json.load(sys.st
 # (Succeeded = completed cronjobs, Failed = finished job pods) are excluded
 # from the denominator so the ratio isn't perpetually dragged down by jobs.
 # Failed pods are surfaced separately so a nonzero count still warns.
-POD_COUNTS=$(kubectl get pods -A -o json 2>/dev/null | python3 -c "
+PODS_RAW=$(kubectl get pods -A -o json 2>/dev/null) || PODS_RAW=""
+POD_COUNTS=""
+if [[ -n "$PODS_RAW" ]]; then
+  POD_COUNTS=$(printf '%s\n' "$PODS_RAW" | python3 -c "
 import sys, json
 try:
   pods = json.load(sys.stdin)['items']
@@ -1286,7 +1324,10 @@ nonterm = [p for p in pods if p['status'].get('phase') not in ('Succeeded','Fail
 running = sum(1 for p in nonterm if p['status'].get('phase') == 'Running')
 failed  = sum(1 for p in pods if p['status'].get('phase') == 'Failed')
 print(running, len(nonterm), failed)
-" 2>/dev/null || echo "0 0 0")
+" 2>/dev/null) || POD_COUNTS=""
+fi
+# Exactly three integers, or the run is degraded — never a smeared multi-line value.
+[[ "$POD_COUNTS" =~ ^[0-9]+\ [0-9]+\ [0-9]+$ ]] || POD_COUNTS="0 0 0"
 RUNNING_PODS=$(echo "$POD_COUNTS" | awk '{print $1}')
 TOTAL_PODS=$(echo "$POD_COUNTS"   | awk '{print $2}')
 FAILED_PODS=$(echo "$POD_COUNTS"  | awk '{print $3}')

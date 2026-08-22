@@ -1,14 +1,14 @@
 {
-  "fetched_at": "2026-08-09T06:55:03Z",
+  "fetched_at": "2026-08-22T14:03:15Z",
   "status": "crit",
   "counts": {
     "CRITICAL": 1,
     "HIGH": 3,
     "MEDIUM": 4,
     "LOW": 1,
-    "UNKNOWN": 3
+    "UNKNOWN": 4
   },
-  "total": 12,
+  "total": 13,
   "tracked": 17,
   "vulnerabilities": [
     {
@@ -18,7 +18,7 @@
       "severity": "CRITICAL",
       "cvss": 9.1,
       "published": "2026-08-06T16:51:10Z",
-      "modified": "2026-08-06T17:00:56.640332193Z",
+      "modified": "2026-08-18T15:10:35.177278461Z",
       "refs": [
         "https://github.com/traefik/traefik/security/advisories/GHSA-cxjq-mrr5-89rv",
         "https://nvd.nist.gov/vuln/detail/CVE-2026-65600",
@@ -34,7 +34,7 @@
       "severity": "HIGH",
       "cvss": 7.1,
       "published": "2026-08-06T16:38:18Z",
-      "modified": "2026-08-06T16:45:15.753854599Z",
+      "modified": "2026-08-18T15:10:46.433650953Z",
       "refs": [
         "https://github.com/traefik/traefik/security/advisories/GHSA-fgjj-px3w-67xx",
         "https://github.com/traefik/traefik/pull/13580",
@@ -50,7 +50,7 @@
       "severity": "HIGH",
       "cvss": null,
       "published": "2026-08-06T15:56:40Z",
-      "modified": "2026-08-06T16:00:15.384299895Z",
+      "modified": "2026-08-18T15:10:47.771430180Z",
       "refs": [
         "https://github.com/traefik/traefik/security/advisories/GHSA-3ccp-42pg-hgv6",
         "https://github.com/traefik/traefik/pull/13542",
@@ -66,7 +66,7 @@
       "severity": "HIGH",
       "cvss": null,
       "published": "2026-08-06T16:53:53Z",
-      "modified": "2026-08-06T17:00:56.805830211Z",
+      "modified": "2026-08-18T15:11:00.208827242Z",
       "refs": [
         "https://github.com/traefik/traefik/security/advisories/GHSA-x677-9fxg-v5c5",
         "https://nvd.nist.gov/vuln/detail/CVE-2026-54763",
@@ -98,7 +98,7 @@
       "severity": "MEDIUM",
       "cvss": 5.4,
       "published": "2026-08-06T16:38:29Z",
-      "modified": "2026-08-06T16:45:15.777687602Z",
+      "modified": "2026-08-18T15:10:51.913961220Z",
       "refs": [
         "https://github.com/traefik/traefik/security/advisories/GHSA-3q9r-p662-5j8m",
         "https://nvd.nist.gov/vuln/detail/CVE-2026-54764",
@@ -114,7 +114,7 @@
       "severity": "MEDIUM",
       "cvss": null,
       "published": "2026-08-05T21:53:35Z",
-      "modified": "2026-08-05T22:01:01.362377349Z",
+      "modified": "2026-08-18T15:11:02.023074981Z",
       "refs": [
         "https://github.com/traefik/traefik/security/advisories/GHSA-42cj-m3vj-89wv",
         "https://nvd.nist.gov/vuln/detail/CVE-2026-65602",
@@ -130,7 +130,7 @@
       "severity": "MEDIUM",
       "cvss": null,
       "published": "2026-08-06T16:38:37Z",
-      "modified": "2026-08-06T16:45:15.774049920Z",
+      "modified": "2026-08-18T15:11:01.191262367Z",
       "refs": [
         "https://github.com/traefik/traefik/security/advisories/GHSA-62fc-8686-hfmq",
         "https://github.com/traefik/traefik/commit/65ebf4b47fbdc33e3856803a5844a404e094d52d",
@@ -146,7 +146,7 @@
       "severity": "LOW",
       "cvss": null,
       "published": "2026-08-06T16:34:38Z",
-      "modified": "2026-08-06T16:45:15.779324158Z",
+      "modified": "2026-08-18T15:10:47.240700768Z",
       "refs": [
         "https://github.com/traefik/traefik/security/advisories/GHSA-6765-c87h-8mrf",
         "https://github.com/traefik/traefik/pull/13572",
@@ -185,6 +185,21 @@
       ],
       "component": "k3s",
       "component_version": "1.34.6"
+    },
+    {
+      "id": "GO-2026-5287",
+      "cve_id": "CVE-2026-53622",
+      "summary": "Traefik: HTTP/3 mTLS bypass via exact SNI TLSOptions lookup for wildcard and mixed-case hosts in github.com/traefik/traefik",
+      "severity": "UNKNOWN",
+      "cvss": null,
+      "published": "2026-08-11T20:19:48Z",
+      "modified": "2026-08-13T03:41:53.812568434Z",
+      "refs": [
+        "https://github.com/traefik/traefik/security/advisories/GHSA-9cr8-q42q-g8m7",
+        "https://github.com/traefik/traefik/releases/tag/v3.7.3"
+      ],
+      "component": "Traefik",
+      "component_version": "3.6.19"
     },
     {
       "id": "GO-2024-3029",

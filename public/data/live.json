@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-22T15:43:56Z",
-  "fetched_at": "2026-08-22T15:43:56Z",
+  "updated": "2026-08-22T16:16:37Z",
+  "fetched_at": "2026-08-22T16:16:37Z",
   "cluster_start": "2026-04-08T10:44:38Z",
   "outages": [
     {
@@ -368,9 +368,9 @@
     {
       "app": "immich",
       "group": "apps",
-      "uptime_pct": 96.769,
+      "uptime_pct": 96.772,
       "avg_ms": 9,
-      "checks": 32682,
+      "checks": 32715,
       "window_days": 30,
       "coverage_hours": 712,
       "has_data": true
@@ -380,7 +380,7 @@
       "group": "apps",
       "uptime_pct": 99.969,
       "avg_ms": 50,
-      "checks": 16371,
+      "checks": 16388,
       "window_days": 30,
       "coverage_hours": 712,
       "has_data": true
@@ -388,9 +388,9 @@
     {
       "app": "nextcloud",
       "group": "apps",
-      "uptime_pct": 91.224,
+      "uptime_pct": 91.23,
       "avg_ms": 139,
-      "checks": 32680,
+      "checks": 32713,
       "window_days": 30,
       "coverage_hours": 712,
       "has_data": true
@@ -400,7 +400,7 @@
       "group": "apps",
       "uptime_pct": 99.969,
       "avg_ms": 285,
-      "checks": 16371,
+      "checks": 16388,
       "window_days": 30,
       "coverage_hours": 712,
       "has_data": true
@@ -408,9 +408,9 @@
     {
       "app": "vaultwarden",
       "group": "apps",
-      "uptime_pct": 95.922,
+      "uptime_pct": 95.923,
       "avg_ms": 6,
-      "checks": 32691,
+      "checks": 32723,
       "window_days": 30,
       "coverage_hours": 712,
       "has_data": true
@@ -420,7 +420,7 @@
       "group": "forge",
       "uptime_pct": 100.0,
       "avg_ms": 80,
-      "checks": 16368,
+      "checks": 16385,
       "window_days": 30,
       "coverage_hours": 712,
       "has_data": true
@@ -430,7 +430,7 @@
       "group": "platform",
       "uptime_pct": 99.997,
       "avg_ms": 75,
-      "checks": 32679,
+      "checks": 32712,
       "window_days": 30,
       "coverage_hours": 712,
       "has_data": true
@@ -439,8 +439,8 @@
   "cards": [
     {
       "label": "Workloads",
-      "value": "64/65",
-      "sub": "pods running",
+      "value": "65/65",
+      "sub": "7 failed jobs",
       "status": "warn"
     },
     {
@@ -451,25 +451,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "37h 41m ago",
+      "value": "38h 13m ago",
       "sub": "last backup",
       "status": "warn"
     },
     {
       "label": "etcd Snapshot",
-      "value": "21h 44m ago",
+      "value": "22h 16m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "20h 43m ago",
+      "value": "21h 16m ago",
       "sub": "last success \u00b7 2 failed runs since",
       "status": "crit"
     },
     {
       "label": "varys Keys",
-      "value": "38h 43m ago",
+      "value": "39h 16m ago",
       "sub": "age keys \u00b7 varys",
       "status": "warn"
     },
@@ -486,8 +486,8 @@
       "role": "control-plane",
       "status": "ok",
       "pods": "19/110",
-      "cpu": "28%",
-      "memory": "50%",
+      "cpu": "19%",
+      "memory": "45%",
       "pressure": []
     },
     {
@@ -495,7 +495,7 @@
       "role": "control-plane",
       "status": "ok",
       "pods": "17/110",
-      "cpu": "29%",
+      "cpu": "27%",
       "memory": "32%",
       "pressure": []
     },
@@ -504,35 +504,35 @@
       "role": "control-plane",
       "status": "ok",
       "pods": "29/110",
-      "cpu": "22%",
-      "memory": "33%",
+      "cpu": "29%",
+      "memory": "32%",
       "pressure": []
     }
   ],
   "host_metrics": {
     "tywin": {
-      "cpu": "22%",
-      "mem": "33%"
-    },
-    "jaime": {
-      "cpu": "28%",
-      "mem": "50%"
-    },
-    "tyrion": {
       "cpu": "29%",
       "mem": "32%"
     },
+    "jaime": {
+      "cpu": "19%",
+      "mem": "45%"
+    },
+    "tyrion": {
+      "cpu": "27%",
+      "mem": "32%"
+    },
     "varys": {
-      "cpu": "0%",
-      "mem": "26%"
+      "cpu": "1%",
+      "mem": "24%"
     },
     "bronn": {
-      "cpu": "18%",
+      "cpu": "7%",
       "mem": "12%"
     },
     "bran": {
-      "cpu": "23%",
-      "mem": "52%"
+      "cpu": "25%",
+      "mem": "45%"
     }
   },
   "flux": {
@@ -704,9 +704,9 @@
     }
   ],
   "network": {
-    "fw_hits": 3434,
+    "fw_hits": 4389,
     "fw_rate_per_hour": null,
-    "latency_ms": 71.7,
+    "latency_ms": 27.3,
     "offenders": [],
     "blocked": [
       {
@@ -715,19 +715,19 @@
       },
       {
         "ip": "24.251.161.219",
-        "remaining": "5h"
+        "remaining": "4h"
       },
       {
         "ip": "37.55.37.45",
-        "remaining": "5h"
+        "remaining": "4h"
       },
       {
         "ip": "92.118.39.71",
-        "remaining": "5h"
+        "remaining": "4h"
       },
       {
         "ip": "188.19.249.129",
-        "remaining": "5h"
+        "remaining": "4h"
       },
       {
         "ip": "38.76.139.44",
@@ -739,29 +739,41 @@
       },
       {
         "ip": "206.189.5.249",
-        "remaining": "6h"
+        "remaining": "5h"
       },
       {
         "ip": "118.145.104.105",
-        "remaining": "6h"
+        "remaining": "5h"
       },
       {
         "ip": "97.80.195.190",
-        "remaining": "6h"
+        "remaining": "5h"
       },
       {
         "ip": "194.44.50.235",
+        "remaining": "5h"
+      },
+      {
+        "ip": "36.163.199.22",
+        "remaining": "6h"
+      },
+      {
+        "ip": "217.196.165.191",
+        "remaining": "6h"
+      },
+      {
+        "ip": "178.20.210.151",
         "remaining": "6h"
       }
     ],
-    "blocked_count": 11,
+    "blocked_count": 14,
     "crowdsec_bans": 0
   },
   "bran": {
-    "temp_c": 56.9,
+    "temp_c": 58.0,
     "temp_status": "ok",
-    "load": 0.81,
-    "mem_pct": 51.0
+    "load": 0.93,
+    "mem_pct": 46.2
   },
   "ups": {
     "charge": null,
@@ -790,7 +802,7 @@
     },
     {
       "name": "archive",
-      "used": "672.5 GB",
+      "used": "672.6 GB",
       "total": "4.0 TB",
       "pct": 16.9,
       "status": "ok",
@@ -808,8 +820,28 @@
     }
   ],
   "contribs": {
-    "days": {},
-    "total": 0,
-    "active_days": 0
+    "days": {
+      "2026-08-22": 0,
+      "2026-08-09": 8,
+      "2026-08-08": 0,
+      "2026-08-07": 0,
+      "2026-08-06": 0,
+      "2026-08-05": 0,
+      "2026-08-04": 0,
+      "2026-08-03": 0,
+      "2026-08-02": 0,
+      "2026-08-01": 0,
+      "2026-07-31": 0,
+      "2026-07-30": 4,
+      "2026-07-29": 0,
+      "2026-07-28": 0,
+      "2026-07-27": 0,
+      "2026-07-26": 0,
+      "2026-07-25": 0,
+      "2026-07-24": 0,
+      "2026-07-23": 12
+    },
+    "total": 24,
+    "active_days": 19
   }
 }

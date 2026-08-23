@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-23T18:55:36Z",
-  "fetched_at": "2026-08-23T18:55:36Z",
+  "updated": "2026-08-23T19:18:35Z",
+  "fetched_at": "2026-08-23T19:18:35Z",
   "cluster_start": null,
   "outages": [],
   "app_uptime": [],
@@ -37,7 +37,7 @@
     },
     {
       "label": "varys Keys",
-      "value": "17h 59m ago",
+      "value": "18h 18m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -59,7 +59,7 @@
     },
     "bronn": {},
     "bran": {
-      "cpu": "0%",
+      "cpu": "16%",
       "mem": "51%"
     }
   },
@@ -117,26 +117,22 @@
     }
   ],
   "network": {
-    "fw_hits": 41766,
+    "fw_hits": 42277,
     "fw_rate_per_hour": null,
-    "latency_ms": 4.1,
+    "latency_ms": 14.2,
     "offenders": [],
     "blocked": [
       {
-        "ip": "5.253.102.207",
-        "remaining": "3m"
-      },
-      {
         "ip": "94.51.64.210",
-        "remaining": "26m"
+        "remaining": "7m"
       },
       {
         "ip": "45.148.10.230",
-        "remaining": "27m"
+        "remaining": "8m"
       },
       {
         "ip": "194.39.227.83",
-        "remaining": "1h"
+        "remaining": "56m"
       },
       {
         "ip": "105.155.20.190",
@@ -144,11 +140,11 @@
       },
       {
         "ip": "39.105.212.205",
-        "remaining": "2h"
+        "remaining": "1h"
       },
       {
         "ip": "213.209.159.26",
-        "remaining": "2h"
+        "remaining": "1h"
       },
       {
         "ip": "179.238.47.31",
@@ -164,11 +160,11 @@
       },
       {
         "ip": "37.192.211.74",
-        "remaining": "3h"
+        "remaining": "2h"
       },
       {
         "ip": "45.142.193.164",
-        "remaining": "3h"
+        "remaining": "2h"
       },
       {
         "ip": "154.0.30.137",
@@ -204,11 +200,11 @@
       },
       {
         "ip": "45.172.223.144",
-        "remaining": "4h"
+        "remaining": "3h"
       },
       {
         "ip": "181.24.17.215",
-        "remaining": "4h"
+        "remaining": "3h"
       },
       {
         "ip": "205.210.31.6",
@@ -221,16 +217,20 @@
       {
         "ip": "51.158.205.203",
         "remaining": "4h"
+      },
+      {
+        "ip": "194.180.49.37",
+        "remaining": "4h"
       }
     ],
     "blocked_count": 25,
     "crowdsec_bans": null
   },
   "bran": {
-    "temp_c": 56.4,
+    "temp_c": 55.3,
     "temp_status": "ok",
-    "load": 0.14,
-    "mem_pct": 51.9
+    "load": 0.54,
+    "mem_pct": 51.7
   },
   "ups": {
     "charge": null,

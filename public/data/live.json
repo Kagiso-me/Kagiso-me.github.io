@@ -1,17 +1,388 @@
 {
-  "updated": "2026-08-23T16:17:43Z",
-  "fetched_at": "2026-08-23T16:17:43Z",
+  "updated": "2026-08-23T16:49:40Z",
+  "fetched_at": "2026-08-23T16:49:40Z",
   "cluster_start": "2026-04-08T10:44:38Z",
-  "outages": [],
+  "outages": [
+    {
+      "date": "2026-08-23",
+      "severity": "warning",
+      "minutes": 0
+    },
+    {
+      "date": "2026-08-23",
+      "severity": "warning",
+      "minutes": 549
+    },
+    {
+      "date": "2026-08-22",
+      "severity": "warning",
+      "minutes": 300
+    },
+    {
+      "date": "2026-08-22",
+      "severity": "warning",
+      "minutes": 790
+    },
+    {
+      "date": "2026-08-22",
+      "severity": "warning",
+      "minutes": 1400
+    },
+    {
+      "date": "2026-08-19",
+      "severity": "warning",
+      "minutes": 3021
+    },
+    {
+      "date": "2026-08-14",
+      "severity": "warning",
+      "minutes": 10072
+    },
+    {
+      "date": "2026-08-14",
+      "severity": "warning",
+      "minutes": 10381
+    },
+    {
+      "date": "2026-08-14",
+      "severity": "warning",
+      "minutes": 10411
+    },
+    {
+      "date": "2026-08-14",
+      "severity": "warning",
+      "minutes": 585
+    },
+    {
+      "date": "2026-08-14",
+      "severity": "warning",
+      "minutes": 10473
+    },
+    {
+      "date": "2026-08-14",
+      "severity": "warning",
+      "minutes": 710
+    },
+    {
+      "date": "2026-08-14",
+      "severity": "warning",
+      "minutes": 1111
+    },
+    {
+      "date": "2026-08-14",
+      "severity": "warning",
+      "minutes": 772
+    },
+    {
+      "date": "2026-08-14",
+      "severity": "warning",
+      "minutes": 1111
+    },
+    {
+      "date": "2026-08-13",
+      "severity": "warning",
+      "minutes": 834
+    },
+    {
+      "date": "2026-08-13",
+      "severity": "warning",
+      "minutes": 31
+    },
+    {
+      "date": "2026-08-12",
+      "severity": "warning",
+      "minutes": 1443
+    },
+    {
+      "date": "2026-08-08",
+      "severity": "warning",
+      "minutes": 31
+    },
+    {
+      "date": "2026-08-08",
+      "severity": "warning",
+      "minutes": 31
+    },
+    {
+      "date": "2026-08-08",
+      "severity": "warning",
+      "minutes": 31
+    },
+    {
+      "date": "2026-08-08",
+      "severity": "warning",
+      "minutes": 31
+    },
+    {
+      "date": "2026-08-08",
+      "severity": "warning",
+      "minutes": 31
+    },
+    {
+      "date": "2026-08-07",
+      "severity": "warning",
+      "minutes": 62
+    },
+    {
+      "date": "2026-08-06",
+      "severity": "warning",
+      "minutes": 8130
+    },
+    {
+      "date": "2026-08-05",
+      "severity": "warning",
+      "minutes": 211
+    },
+    {
+      "date": "2026-08-05",
+      "severity": "warning",
+      "minutes": 4327
+    },
+    {
+      "date": "2026-08-05",
+      "severity": "warning",
+      "minutes": 855
+    },
+    {
+      "date": "2026-08-04",
+      "severity": "warning",
+      "minutes": 60
+    },
+    {
+      "date": "2026-08-04",
+      "severity": "warning",
+      "minutes": 60
+    },
+    {
+      "date": "2026-08-04",
+      "severity": "warning",
+      "minutes": 60
+    },
+    {
+      "date": "2026-08-04",
+      "severity": "warning",
+      "minutes": 60
+    },
+    {
+      "date": "2026-08-04",
+      "severity": "warning",
+      "minutes": 60
+    },
+    {
+      "date": "2026-08-04",
+      "severity": "warning",
+      "minutes": 60
+    },
+    {
+      "date": "2026-08-04",
+      "severity": "warning",
+      "minutes": 246
+    },
+    {
+      "date": "2026-08-04",
+      "severity": "warning",
+      "minutes": 1109
+    },
+    {
+      "date": "2026-08-03",
+      "severity": "warning",
+      "minutes": 59
+    },
+    {
+      "date": "2026-08-03",
+      "severity": "warning",
+      "minutes": 0
+    },
+    {
+      "date": "2026-08-01",
+      "severity": "warning",
+      "minutes": 1424
+    },
+    {
+      "date": "2026-07-31",
+      "severity": "warning",
+      "minutes": 29
+    },
+    {
+      "date": "2026-07-30",
+      "severity": "warning",
+      "minutes": 31
+    },
+    {
+      "date": "2026-07-30",
+      "severity": "warning",
+      "minutes": 30
+    },
+    {
+      "date": "2026-07-27",
+      "severity": "warning",
+      "minutes": 32
+    },
+    {
+      "date": "2026-07-23",
+      "severity": "warning",
+      "minutes": 11469
+    },
+    {
+      "date": "2026-07-22",
+      "severity": "warning",
+      "minutes": 78
+    },
+    {
+      "date": "2026-07-22",
+      "severity": "warning",
+      "minutes": 0
+    },
+    {
+      "date": "2026-07-22",
+      "severity": "critical",
+      "minutes": 12712
+    },
+    {
+      "date": "2026-07-09",
+      "severity": "warning",
+      "minutes": 30
+    },
+    {
+      "date": "2026-07-09",
+      "severity": "warning",
+      "minutes": 30
+    },
+    {
+      "date": "2026-07-08",
+      "severity": "warning",
+      "minutes": 31
+    },
+    {
+      "date": "2026-07-08",
+      "severity": "warning",
+      "minutes": 32
+    },
+    {
+      "date": "2026-07-08",
+      "severity": "critical",
+      "minutes": 23
+    },
+    {
+      "date": "2026-07-08",
+      "severity": "warning",
+      "minutes": 31
+    },
+    {
+      "date": "2026-07-08",
+      "severity": "warning",
+      "minutes": 31
+    },
+    {
+      "date": "2026-07-08",
+      "severity": "warning",
+      "minutes": 31
+    },
+    {
+      "date": "2026-07-07",
+      "severity": "warning",
+      "minutes": 56
+    },
+    {
+      "date": "2026-07-07",
+      "severity": "critical",
+      "minutes": 30
+    },
+    {
+      "date": "2026-07-07",
+      "severity": "critical",
+      "minutes": 28
+    },
+    {
+      "date": "2026-07-07",
+      "severity": "warning",
+      "minutes": 0
+    },
+    {
+      "date": "2026-07-07",
+      "severity": "warning",
+      "minutes": 0
+    },
+    {
+      "date": "2026-07-07",
+      "severity": "critical",
+      "minutes": 0
+    },
+    {
+      "date": "2026-07-06",
+      "severity": "warning",
+      "minutes": 0
+    },
+    {
+      "date": "2026-07-06",
+      "severity": "warning",
+      "minutes": 0
+    },
+    {
+      "date": "2026-07-06",
+      "severity": "warning",
+      "minutes": 0
+    },
+    {
+      "date": "2026-07-06",
+      "severity": "warning",
+      "minutes": 0
+    },
+    {
+      "date": "2026-07-06",
+      "severity": "warning",
+      "minutes": 0
+    },
+    {
+      "date": "2026-07-06",
+      "severity": "warning",
+      "minutes": 0
+    },
+    {
+      "date": "2026-07-06",
+      "severity": "warning",
+      "minutes": 0
+    },
+    {
+      "date": "2026-07-06",
+      "severity": "warning",
+      "minutes": 0
+    },
+    {
+      "date": "2026-07-06",
+      "severity": "critical",
+      "minutes": 0
+    },
+    {
+      "date": "2026-07-03",
+      "severity": "warning",
+      "minutes": 0
+    },
+    {
+      "date": "2026-07-02",
+      "severity": "warning",
+      "minutes": 0
+    },
+    {
+      "date": "2026-07-02",
+      "severity": "warning",
+      "minutes": 0
+    },
+    {
+      "date": "2026-06-29",
+      "severity": "warning",
+      "minutes": 0
+    }
+  ],
   "app_uptime": [
     {
       "app": "immich",
       "group": "apps",
-      "uptime_pct": 96.736,
+      "uptime_pct": 96.739,
       "avg_ms": 10,
-      "checks": 32511,
+      "checks": 32534,
       "window_days": 30,
-      "coverage_hours": 712,
+      "coverage_hours": 713,
       "has_data": true
     },
     {
@@ -19,29 +390,29 @@
       "group": "apps",
       "uptime_pct": 99.957,
       "avg_ms": 50,
-      "checks": 16284,
+      "checks": 16296,
       "window_days": 30,
-      "coverage_hours": 712,
+      "coverage_hours": 713,
       "has_data": true
     },
     {
       "app": "nextcloud",
       "group": "apps",
-      "uptime_pct": 91.175,
+      "uptime_pct": 91.181,
       "avg_ms": 133,
-      "checks": 32510,
+      "checks": 32532,
       "window_days": 30,
-      "coverage_hours": 712,
+      "coverage_hours": 713,
       "has_data": true
     },
     {
       "app": "nextcloud-(via-ingress)",
       "group": "apps",
       "uptime_pct": 100.0,
-      "avg_ms": 52,
-      "checks": 78,
+      "avg_ms": 57,
+      "checks": 101,
       "window_days": 30,
-      "coverage_hours": 1,
+      "coverage_hours": 2,
       "has_data": true
     },
     {
@@ -49,19 +420,19 @@
       "group": "apps",
       "uptime_pct": 99.963,
       "avg_ms": 287,
-      "checks": 16285,
+      "checks": 16296,
       "window_days": 30,
-      "coverage_hours": 712,
+      "coverage_hours": 713,
       "has_data": true
     },
     {
       "app": "vaultwarden",
       "group": "apps",
-      "uptime_pct": 95.898,
+      "uptime_pct": 95.901,
       "avg_ms": 6,
-      "checks": 32522,
+      "checks": 32544,
       "window_days": 30,
-      "coverage_hours": 712,
+      "coverage_hours": 713,
       "has_data": true
     },
     {
@@ -69,9 +440,9 @@
       "group": "forge",
       "uptime_pct": 100.0,
       "avg_ms": 79,
-      "checks": 16282,
+      "checks": 16293,
       "window_days": 30,
-      "coverage_hours": 712,
+      "coverage_hours": 713,
       "has_data": true
     },
     {
@@ -79,17 +450,17 @@
       "group": "platform",
       "uptime_pct": 99.997,
       "avg_ms": 75,
-      "checks": 32508,
+      "checks": 32530,
       "window_days": 30,
-      "coverage_hours": 712,
+      "coverage_hours": 713,
       "has_data": true
     }
   ],
   "cards": [
     {
       "label": "Workloads",
-      "value": "64/64",
-      "sub": "7 failed jobs",
+      "value": "63/64",
+      "sub": "pods running",
       "status": "warn"
     },
     {
@@ -100,25 +471,25 @@
     },
     {
       "label": "Docker Appdata",
-      "value": "14h 24m ago",
+      "value": "14h 46m ago",
       "sub": "last backup",
       "status": "ok"
     },
     {
       "label": "etcd Snapshot",
-      "value": "10h 27m ago",
+      "value": "10h 49m ago",
       "sub": "last snapshot",
       "status": "ok"
     },
     {
       "label": "Velero",
-      "value": "9h 27m ago",
+      "value": "9h 49m ago",
       "sub": "last success \u00b7 1 failed run since",
       "status": "crit"
     },
     {
       "label": "varys Keys",
-      "value": "15h 27m ago",
+      "value": "15h 49m ago",
       "sub": "age keys \u00b7 varys",
       "status": "ok"
     },
@@ -129,16 +500,59 @@
       "status": "unknown"
     }
   ],
-  "nodes": [],
+  "nodes": [
+    {
+      "name": "jaime",
+      "role": "control-plane",
+      "status": "ok",
+      "pods": "19/110",
+      "cpu": "26%",
+      "memory": "42%",
+      "pressure": []
+    },
+    {
+      "name": "tyrion",
+      "role": "control-plane",
+      "status": "ok",
+      "pods": "17/110",
+      "cpu": "29%",
+      "memory": "32%",
+      "pressure": []
+    },
+    {
+      "name": "tywin",
+      "role": "control-plane",
+      "status": "ok",
+      "pods": "28/110",
+      "cpu": "14%",
+      "memory": "27%",
+      "pressure": []
+    }
+  ],
   "host_metrics": {
-    "tywin": {},
-    "jaime": {},
-    "tyrion": {},
-    "varys": {},
-    "bronn": {},
+    "tywin": {
+      "cpu": "14%",
+      "mem": "27%"
+    },
+    "jaime": {
+      "cpu": "26%",
+      "mem": "42%"
+    },
+    "tyrion": {
+      "cpu": "29%",
+      "mem": "32%"
+    },
+    "varys": {
+      "cpu": "0%",
+      "mem": "25%"
+    },
+    "bronn": {
+      "cpu": "3%",
+      "mem": "12%"
+    },
     "bran": {
-      "cpu": "1%",
-      "mem": "49%"
+      "cpu": "25%",
+      "mem": "50%"
     }
   },
   "flux": {
@@ -310,46 +724,42 @@
     }
   ],
   "network": {
-    "fw_hits": 37672,
+    "fw_hits": 38279,
     "fw_rate_per_hour": null,
-    "latency_ms": 3.9,
+    "latency_ms": 73.9,
     "offenders": [],
     "blocked": [
       {
-        "ip": "216.25.89.134",
-        "remaining": "11m"
-      },
-      {
         "ip": "84.54.71.20",
-        "remaining": "28m"
+        "remaining": "6m"
       },
       {
         "ip": "179.36.132.50",
-        "remaining": "35m"
+        "remaining": "13m"
       },
       {
         "ip": "85.99.50.122",
-        "remaining": "37m"
+        "remaining": "15m"
       },
       {
         "ip": "178.159.210.136",
-        "remaining": "38m"
+        "remaining": "16m"
       },
       {
         "ip": "100.28.153.226",
-        "remaining": "41m"
+        "remaining": "19m"
       },
       {
         "ip": "101.206.107.245",
-        "remaining": "54m"
+        "remaining": "32m"
       },
       {
         "ip": "45.191.45.13",
-        "remaining": "55m"
+        "remaining": "33m"
       },
       {
         "ip": "62.60.130.148",
-        "remaining": "55m"
+        "remaining": "33m"
       },
       {
         "ip": "80.94.92.234",
@@ -357,11 +767,11 @@
       },
       {
         "ip": "163.47.148.114",
-        "remaining": "2h"
+        "remaining": "1h"
       },
       {
         "ip": "220.123.222.114",
-        "remaining": "2h"
+        "remaining": "1h"
       },
       {
         "ip": "195.178.110.137",
@@ -373,7 +783,7 @@
       },
       {
         "ip": "5.253.102.207",
-        "remaining": "3h"
+        "remaining": "2h"
       },
       {
         "ip": "94.51.64.210",
@@ -385,7 +795,7 @@
       },
       {
         "ip": "194.39.227.83",
-        "remaining": "4h"
+        "remaining": "3h"
       },
       {
         "ip": "105.155.20.190",
@@ -401,11 +811,11 @@
       },
       {
         "ip": "179.238.47.31",
-        "remaining": "5h"
+        "remaining": "4h"
       },
       {
         "ip": "186.62.69.99",
-        "remaining": "5h"
+        "remaining": "4h"
       },
       {
         "ip": "34.230.221.101",
@@ -413,6 +823,10 @@
       },
       {
         "ip": "37.192.211.74",
+        "remaining": "5h"
+      },
+      {
+        "ip": "45.142.193.164",
         "remaining": "5h"
       }
     ],
@@ -422,8 +836,8 @@
   "bran": {
     "temp_c": 58.5,
     "temp_status": "ok",
-    "load": 0.34,
-    "mem_pct": 49.5
+    "load": 0.79,
+    "mem_pct": 50.8
   },
   "ups": {
     "charge": null,
@@ -461,7 +875,7 @@
     },
     {
       "name": "core",
-      "used": "172.9 GB",
+      "used": "173.0 GB",
       "total": "476.7 GB",
       "pct": 36.3,
       "status": "ok",
@@ -488,10 +902,9 @@
       "2026-07-28": 0,
       "2026-07-27": 0,
       "2026-07-26": 0,
-      "2026-07-25": 0,
-      "2026-07-24": 0
+      "2026-07-25": 0
     },
     "total": 12,
-    "active_days": 19
+    "active_days": 18
   }
 }

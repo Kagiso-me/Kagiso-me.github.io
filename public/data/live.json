@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-23T18:20:22Z",
-  "fetched_at": "2026-08-23T18:20:22Z",
+  "updated": "2026-08-23T18:55:36Z",
+  "fetched_at": "2026-08-23T18:55:36Z",
   "cluster_start": null,
   "outages": [],
   "app_uptime": [],
@@ -37,9 +37,9 @@
     },
     {
       "label": "varys Keys",
-      "value": "\u2014",
+      "value": "17h 59m ago",
       "sub": "age keys \u00b7 varys",
-      "status": "unknown"
+      "status": "ok"
     },
     {
       "label": "Backblaze B2",
@@ -50,17 +50,17 @@
   ],
   "nodes": [],
   "host_metrics": {
-    "tywin": {
-      "cpu": "22%",
-      "mem": "18%"
-    },
+    "tywin": {},
     "jaime": {},
     "tyrion": {},
-    "varys": {},
+    "varys": {
+      "cpu": "0%",
+      "mem": "25%"
+    },
     "bronn": {},
     "bran": {
-      "cpu": "2%",
-      "mem": "50%"
+      "cpu": "0%",
+      "mem": "51%"
     }
   },
   "flux": {
@@ -73,18 +73,18 @@
   "services": [
     {
       "name": "Immich",
-      "tag": "Immich: 1.0k photos \u00b7 22 videos",
-      "status": "ok"
+      "tag": "Immich: offline",
+      "status": "crit"
     },
     {
       "name": "Nextcloud",
-      "tag": "Nextcloud: 61.0 MB used",
-      "status": "ok"
+      "tag": "Nextcloud: offline",
+      "status": "crit"
     },
     {
       "name": "SABnzbd",
       "tag": "SABnzbd: idle",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "name": "Sonarr",
@@ -94,7 +94,7 @@
     {
       "name": "Radarr",
       "tag": "Radarr: \u2014 movies",
-      "status": "ok"
+      "status": "unknown"
     },
     {
       "name": "Lidarr",
@@ -106,7 +106,7 @@
     {
       "name": "Plex",
       "label": "idle",
-      "status": "ok",
+      "status": "unknown",
       "playing": false
     },
     {
@@ -117,38 +117,30 @@
     }
   ],
   "network": {
-    "fw_hits": 40896,
+    "fw_hits": 41766,
     "fw_rate_per_hour": null,
-    "latency_ms": 18.2,
+    "latency_ms": 4.1,
     "offenders": [],
     "blocked": [
       {
-        "ip": "195.178.110.137",
-        "remaining": "4m"
-      },
-      {
-        "ip": "35.169.206.177",
-        "remaining": "26m"
-      },
-      {
         "ip": "5.253.102.207",
-        "remaining": "34m"
+        "remaining": "3m"
       },
       {
         "ip": "94.51.64.210",
-        "remaining": "56m"
+        "remaining": "26m"
       },
       {
         "ip": "45.148.10.230",
-        "remaining": "57m"
+        "remaining": "27m"
       },
       {
         "ip": "194.39.227.83",
-        "remaining": "2h"
+        "remaining": "1h"
       },
       {
         "ip": "105.155.20.190",
-        "remaining": "2h"
+        "remaining": "1h"
       },
       {
         "ip": "39.105.212.205",
@@ -160,15 +152,15 @@
       },
       {
         "ip": "179.238.47.31",
-        "remaining": "3h"
+        "remaining": "2h"
       },
       {
         "ip": "186.62.69.99",
-        "remaining": "3h"
+        "remaining": "2h"
       },
       {
         "ip": "34.230.221.101",
-        "remaining": "3h"
+        "remaining": "2h"
       },
       {
         "ip": "37.192.211.74",
@@ -184,31 +176,31 @@
       },
       {
         "ip": "78.30.230.36",
-        "remaining": "4h"
+        "remaining": "3h"
       },
       {
         "ip": "188.241.120.4",
-        "remaining": "4h"
+        "remaining": "3h"
       },
       {
         "ip": "111.175.88.6",
-        "remaining": "4h"
+        "remaining": "3h"
       },
       {
         "ip": "62.60.130.219",
-        "remaining": "4h"
+        "remaining": "3h"
       },
       {
         "ip": "195.178.110.227",
-        "remaining": "4h"
+        "remaining": "3h"
       },
       {
         "ip": "185.30.203.117",
-        "remaining": "4h"
+        "remaining": "3h"
       },
       {
         "ip": "85.216.77.253",
-        "remaining": "4h"
+        "remaining": "3h"
       },
       {
         "ip": "45.172.223.144",
@@ -220,17 +212,25 @@
       },
       {
         "ip": "205.210.31.6",
-        "remaining": "5h"
+        "remaining": "4h"
+      },
+      {
+        "ip": "201.254.11.39",
+        "remaining": "4h"
+      },
+      {
+        "ip": "51.158.205.203",
+        "remaining": "4h"
       }
     ],
     "blocked_count": 25,
     "crowdsec_bans": null
   },
   "bran": {
-    "temp_c": 55.8,
+    "temp_c": 56.4,
     "temp_status": "ok",
-    "load": 0.28,
-    "mem_pct": 51.1
+    "load": 0.14,
+    "mem_pct": 51.9
   },
   "ups": {
     "charge": null,
@@ -247,35 +247,7 @@
     "message": "unavailable",
     "sha": "\u2014"
   },
-  "storage": [
-    {
-      "name": "tera",
-      "used": "6.6 TB",
-      "total": "7.9 TB",
-      "pct": 83.8,
-      "status": "warn",
-      "pool_status": "ONLINE",
-      "healthy": true
-    },
-    {
-      "name": "archive",
-      "used": "674.8 GB",
-      "total": "4.0 TB",
-      "pct": 16.9,
-      "status": "ok",
-      "pool_status": "ONLINE",
-      "healthy": true
-    },
-    {
-      "name": "core",
-      "used": "173.0 GB",
-      "total": "476.7 GB",
-      "pct": 36.3,
-      "status": "ok",
-      "pool_status": "ONLINE",
-      "healthy": true
-    }
-  ],
+  "storage": [],
   "contribs": {
     "days": {
       "2026-08-23": 0,

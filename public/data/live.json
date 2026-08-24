@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-24T02:21:12Z",
-  "fetched_at": "2026-08-24T02:21:12Z",
+  "updated": "2026-08-24T03:30:08Z",
+  "fetched_at": "2026-08-24T03:30:08Z",
   "cluster_start": null,
   "outages": [],
   "app_uptime": [],
@@ -37,9 +37,9 @@
     },
     {
       "label": "varys Keys",
-      "value": "25h 22m ago",
+      "value": "26h 31m ago",
       "sub": "age keys \u00b7 varys",
-      "status": "ok"
+      "status": "warn"
     },
     {
       "label": "Backblaze B2",
@@ -59,7 +59,7 @@
     },
     "bronn": {},
     "bran": {
-      "cpu": "11%",
+      "cpu": "10%",
       "mem": "53%"
     }
   },
@@ -117,110 +117,110 @@
     }
   ],
   "network": {
-    "fw_hits": 52272,
+    "fw_hits": 53730,
     "fw_rate_per_hour": null,
-    "latency_ms": 3.7,
+    "latency_ms": 3.9,
     "offenders": [],
     "blocked": [
       {
-        "ip": "91.242.112.151",
-        "remaining": "1m"
-      },
-      {
-        "ip": "91.92.40.27",
-        "remaining": "16m"
-      },
-      {
-        "ip": "45.187.213.111",
-        "remaining": "18m"
-      },
-      {
-        "ip": "78.175.51.157",
-        "remaining": "23m"
-      },
-      {
-        "ip": "185.217.186.179",
-        "remaining": "26m"
-      },
-      {
-        "ip": "73.37.156.171",
-        "remaining": "28m"
-      },
-      {
-        "ip": "194.165.16.167",
-        "remaining": "29m"
-      },
-      {
-        "ip": "181.23.130.240",
-        "remaining": "41m"
-      },
-      {
-        "ip": "146.158.97.1",
-        "remaining": "41m"
-      },
-      {
-        "ip": "209.99.190.174",
-        "remaining": "55m"
-      },
-      {
-        "ip": "190.62.84.211",
-        "remaining": "1h"
-      },
-      {
         "ip": "198.235.24.90",
-        "remaining": "1h"
+        "remaining": "10m"
       },
       {
         "ip": "41.226.213.111",
-        "remaining": "1h"
+        "remaining": "14m"
       },
       {
         "ip": "200.105.110.142",
-        "remaining": "1h"
+        "remaining": "18m"
       },
       {
         "ip": "45.148.10.230",
-        "remaining": "1h"
+        "remaining": "19m"
       },
       {
         "ip": "193.163.125.223",
-        "remaining": "2h"
+        "remaining": "36m"
       },
       {
         "ip": "187.57.129.232",
-        "remaining": "2h"
+        "remaining": "40m"
       },
       {
         "ip": "61.213.26.182",
-        "remaining": "2h"
+        "remaining": "44m"
       },
       {
         "ip": "181.123.122.126",
-        "remaining": "2h"
+        "remaining": "44m"
       },
       {
         "ip": "32.193.241.45",
-        "remaining": "2h"
+        "remaining": "52m"
       },
       {
         "ip": "91.222.39.238",
-        "remaining": "2h"
+        "remaining": "1h"
       },
       {
         "ip": "147.185.132.183",
-        "remaining": "2h"
+        "remaining": "1h"
       },
       {
         "ip": "27.79.44.127",
-        "remaining": "3h"
+        "remaining": "1h"
       },
       {
         "ip": "85.217.140.32",
-        "remaining": "3h"
+        "remaining": "2h"
       },
       {
         "ip": "200.63.111.99",
+        "remaining": "2h"
+      },
+      {
+        "ip": "190.160.69.250",
+        "remaining": "2h"
+      },
+      {
+        "ip": "195.178.110.227",
+        "remaining": "2h"
+      },
+      {
+        "ip": "213.209.159.25",
+        "remaining": "2h"
+      },
+      {
+        "ip": "64.62.197.161",
         "remaining": "3h"
+      },
+      {
+        "ip": "178.20.210.151",
+        "remaining": "3h"
+      },
+      {
+        "ip": "179.125.127.183",
+        "remaining": "3h"
+      },
+      {
+        "ip": "152.53.148.66",
+        "remaining": "3h"
+      },
+      {
+        "ip": "195.74.72.177",
+        "remaining": "3h"
+      },
+      {
+        "ip": "169.224.1.212",
+        "remaining": "3h"
+      },
+      {
+        "ip": "116.168.104.85",
+        "remaining": "3h"
+      },
+      {
+        "ip": "172.110.223.73",
+        "remaining": "4h"
       }
     ],
     "blocked_count": 25,
@@ -229,8 +229,8 @@
   "bran": {
     "temp_c": 53.2,
     "temp_status": "ok",
-    "load": 0.11,
-    "mem_pct": 54.2
+    "load": 0.04,
+    "mem_pct": 55.3
   },
   "ups": {
     "charge": null,

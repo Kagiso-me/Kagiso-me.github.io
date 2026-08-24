@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-24T06:01:32Z",
-  "fetched_at": "2026-08-24T06:01:32Z",
+  "updated": "2026-08-24T07:35:40Z",
+  "fetched_at": "2026-08-24T07:35:40Z",
   "cluster_start": null,
   "outages": [],
   "app_uptime": [],
@@ -37,7 +37,7 @@
     },
     {
       "label": "varys Keys",
-      "value": "29h 2m ago",
+      "value": "30h 36m ago",
       "sub": "age keys \u00b7 varys",
       "status": "warn"
     },
@@ -117,109 +117,109 @@
     }
   ],
   "network": {
-    "fw_hits": 57232,
+    "fw_hits": 59966,
     "fw_rate_per_hour": null,
-    "latency_ms": 3.6,
+    "latency_ms": 3.8,
     "offenders": [],
     "blocked": [
       {
-        "ip": "178.20.210.151",
-        "remaining": "8m"
-      },
-      {
-        "ip": "179.125.127.183",
-        "remaining": "18m"
-      },
-      {
-        "ip": "152.53.148.66",
-        "remaining": "20m"
-      },
-      {
-        "ip": "195.74.72.177",
-        "remaining": "20m"
-      },
-      {
-        "ip": "169.224.1.212",
-        "remaining": "49m"
-      },
-      {
-        "ip": "116.168.104.85",
-        "remaining": "52m"
-      },
-      {
-        "ip": "172.110.223.73",
-        "remaining": "1h"
-      },
-      {
-        "ip": "62.60.130.219",
-        "remaining": "1h"
-      },
-      {
         "ip": "65.49.1.154",
-        "remaining": "2h"
+        "remaining": "9m"
       },
       {
         "ip": "106.75.176.89",
-        "remaining": "2h"
+        "remaining": "13m"
       },
       {
         "ip": "91.92.40.164",
-        "remaining": "2h"
+        "remaining": "14m"
       },
       {
         "ip": "146.158.121.90",
-        "remaining": "2h"
+        "remaining": "25m"
       },
       {
         "ip": "192.227.206.227",
-        "remaining": "2h"
+        "remaining": "31m"
       },
       {
         "ip": "41.90.141.140",
-        "remaining": "3h"
+        "remaining": "1h"
       },
       {
         "ip": "95.65.92.198",
-        "remaining": "3h"
+        "remaining": "2h"
       },
       {
         "ip": "220.170.112.22",
-        "remaining": "3h"
+        "remaining": "2h"
       },
       {
         "ip": "75.69.233.9",
-        "remaining": "3h"
+        "remaining": "2h"
       },
       {
         "ip": "35.240.11.30",
-        "remaining": "4h"
+        "remaining": "2h"
       },
       {
         "ip": "93.171.214.248",
-        "remaining": "4h"
+        "remaining": "2h"
       },
       {
         "ip": "93.171.214.225",
-        "remaining": "4h"
+        "remaining": "2h"
       },
       {
         "ip": "172.237.136.85",
-        "remaining": "4h"
+        "remaining": "2h"
       },
       {
         "ip": "91.214.17.19",
-        "remaining": "4h"
+        "remaining": "2h"
       },
       {
         "ip": "92.118.39.77",
-        "remaining": "4h"
+        "remaining": "2h"
       },
       {
         "ip": "156.225.1.10",
-        "remaining": "4h"
+        "remaining": "3h"
       },
       {
         "ip": "45.232.12.73",
+        "remaining": "3h"
+      },
+      {
+        "ip": "23.244.251.52",
+        "remaining": "3h"
+      },
+      {
+        "ip": "220.85.210.200",
+        "remaining": "3h"
+      },
+      {
+        "ip": "195.178.110.137",
+        "remaining": "3h"
+      },
+      {
+        "ip": "213.139.63.72",
+        "remaining": "3h"
+      },
+      {
+        "ip": "198.235.24.88",
+        "remaining": "3h"
+      },
+      {
+        "ip": "170.239.151.94",
+        "remaining": "3h"
+      },
+      {
+        "ip": "109.248.252.238",
+        "remaining": "3h"
+      },
+      {
+        "ip": "62.60.130.148",
         "remaining": "4h"
       }
     ],
@@ -227,10 +227,10 @@
     "crowdsec_bans": null
   },
   "bran": {
-    "temp_c": 53.2,
+    "temp_c": 53.7,
     "temp_status": "ok",
-    "load": 0.23,
-    "mem_pct": 55.6
+    "load": 0.38,
+    "mem_pct": 56.3
   },
   "ups": {
     "charge": null,

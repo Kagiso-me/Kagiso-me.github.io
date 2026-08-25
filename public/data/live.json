@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-25T16:29:17Z",
-  "fetched_at": "2026-08-25T16:29:17Z",
+  "updated": "2026-08-25T17:06:18Z",
+  "fetched_at": "2026-08-25T17:06:18Z",
   "cluster_start": null,
   "outages": [],
   "app_uptime": [],
@@ -37,7 +37,7 @@
     },
     {
       "label": "varys Keys",
-      "value": "63h 30m ago",
+      "value": "64h 7m ago",
       "sub": "age keys \u00b7 varys",
       "status": "crit"
     },
@@ -59,8 +59,8 @@
     },
     "bronn": {},
     "bran": {
-      "cpu": "12%",
-      "mem": "54%"
+      "cpu": "14%",
+      "mem": "53%"
     }
   },
   "flux": {
@@ -117,90 +117,50 @@
     }
   ],
   "network": {
-    "fw_hits": 99948,
+    "fw_hits": 100817,
     "fw_rate_per_hour": null,
-    "latency_ms": 3.9,
+    "latency_ms": 3.6,
     "offenders": [],
     "blocked": [
       {
-        "ip": "198.235.24.123",
-        "remaining": "3m"
-      },
-      {
-        "ip": "35.241.175.83",
-        "remaining": "3m"
-      },
-      {
-        "ip": "148.222.217.254",
-        "remaining": "4m"
-      },
-      {
-        "ip": "13.89.125.26",
-        "remaining": "8m"
-      },
-      {
-        "ip": "45.224.98.209",
-        "remaining": "16m"
-      },
-      {
-        "ip": "5.189.84.117",
-        "remaining": "18m"
-      },
-      {
-        "ip": "203.57.235.233",
-        "remaining": "24m"
-      },
-      {
-        "ip": "88.243.100.34",
-        "remaining": "29m"
-      },
-      {
-        "ip": "144.124.192.183",
-        "remaining": "32m"
-      },
-      {
-        "ip": "217.25.82.113",
-        "remaining": "37m"
-      },
-      {
         "ip": "37.53.143.71",
-        "remaining": "48m"
+        "remaining": "11m"
       },
       {
         "ip": "2.57.122.238",
-        "remaining": "51m"
+        "remaining": "14m"
       },
       {
         "ip": "175.119.225.92",
-        "remaining": "1h"
+        "remaining": "24m"
       },
       {
         "ip": "85.217.149.46",
-        "remaining": "1h"
+        "remaining": "33m"
       },
       {
         "ip": "80.94.92.234",
-        "remaining": "1h"
+        "remaining": "44m"
       },
       {
         "ip": "178.20.210.151",
-        "remaining": "1h"
+        "remaining": "45m"
       },
       {
         "ip": "220.121.206.61",
-        "remaining": "1h"
+        "remaining": "45m"
       },
       {
         "ip": "190.51.117.102",
-        "remaining": "1h"
+        "remaining": "46m"
       },
       {
         "ip": "77.239.124.240",
-        "remaining": "2h"
+        "remaining": "1h"
       },
       {
         "ip": "176.77.12.116",
-        "remaining": "2h"
+        "remaining": "1h"
       },
       {
         "ip": "62.60.130.219",
@@ -208,19 +168,59 @@
       },
       {
         "ip": "213.230.92.97",
-        "remaining": "3h"
+        "remaining": "2h"
       },
       {
         "ip": "76.35.172.100",
-        "remaining": "3h"
+        "remaining": "2h"
       },
       {
         "ip": "195.178.110.137",
-        "remaining": "3h"
+        "remaining": "2h"
       },
       {
         "ip": "185.168.155.10",
+        "remaining": "2h"
+      },
+      {
+        "ip": "100.50.17.159",
+        "remaining": "2h"
+      },
+      {
+        "ip": "186.129.30.98",
+        "remaining": "2h"
+      },
+      {
+        "ip": "37.76.159.73",
         "remaining": "3h"
+      },
+      {
+        "ip": "193.32.162.84",
+        "remaining": "3h"
+      },
+      {
+        "ip": "77.239.124.50",
+        "remaining": "3h"
+      },
+      {
+        "ip": "91.92.42.35",
+        "remaining": "4h"
+      },
+      {
+        "ip": "45.148.10.230",
+        "remaining": "4h"
+      },
+      {
+        "ip": "39.37.157.40",
+        "remaining": "4h"
+      },
+      {
+        "ip": "109.172.55.136",
+        "remaining": "4h"
+      },
+      {
+        "ip": "20.65.152.190",
+        "remaining": "4h"
       }
     ],
     "blocked_count": 25,
@@ -229,8 +229,8 @@
   "bran": {
     "temp_c": 54.8,
     "temp_status": "ok",
-    "load": 0.12,
-    "mem_pct": 54.7
+    "load": 0.14,
+    "mem_pct": 54.1
   },
   "ups": {
     "charge": null,

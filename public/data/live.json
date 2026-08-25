@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-25T12:36:10Z",
-  "fetched_at": "2026-08-25T12:36:10Z",
+  "updated": "2026-08-25T13:43:12Z",
+  "fetched_at": "2026-08-25T13:43:12Z",
   "cluster_start": null,
   "outages": [],
   "app_uptime": [],
@@ -37,7 +37,7 @@
     },
     {
       "label": "varys Keys",
-      "value": "59h 37m ago",
+      "value": "60h 44m ago",
       "sub": "age keys \u00b7 varys",
       "status": "crit"
     },
@@ -54,7 +54,7 @@
     "jaime": {},
     "tyrion": {},
     "varys": {
-      "cpu": "4%",
+      "cpu": "0%",
       "mem": "7%"
     },
     "bronn": {},
@@ -117,109 +117,109 @@
     }
   ],
   "network": {
-    "fw_hits": 95686,
+    "fw_hits": 96731,
     "fw_rate_per_hour": null,
-    "latency_ms": 3.8,
+    "latency_ms": 3.9,
     "offenders": [],
     "blocked": [
       {
-        "ip": "45.82.76.103",
-        "remaining": "10m"
-      },
-      {
-        "ip": "196.238.177.74",
-        "remaining": "31m"
-      },
-      {
-        "ip": "38.172.181.9",
-        "remaining": "33m"
-      },
-      {
-        "ip": "179.37.144.177",
-        "remaining": "34m"
-      },
-      {
-        "ip": "35.240.14.129",
-        "remaining": "37m"
-      },
-      {
-        "ip": "151.243.11.8",
-        "remaining": "50m"
-      },
-      {
-        "ip": "104.173.101.135",
-        "remaining": "59m"
-      },
-      {
-        "ip": "194.62.122.254",
-        "remaining": "1h"
-      },
-      {
         "ip": "62.60.130.148",
-        "remaining": "1h"
+        "remaining": "12m"
       },
       {
         "ip": "181.45.132.228",
-        "remaining": "1h"
+        "remaining": "22m"
       },
       {
         "ip": "213.209.159.26",
-        "remaining": "2h"
+        "remaining": "29m"
       },
       {
         "ip": "77.90.185.16",
-        "remaining": "2h"
+        "remaining": "29m"
       },
       {
         "ip": "185.56.117.140",
-        "remaining": "2h"
+        "remaining": "36m"
       },
       {
         "ip": "95.32.83.215",
-        "remaining": "2h"
+        "remaining": "48m"
       },
       {
         "ip": "77.244.67.194",
-        "remaining": "2h"
+        "remaining": "49m"
       },
       {
         "ip": "212.32.212.200",
-        "remaining": "2h"
+        "remaining": "52m"
       },
       {
         "ip": "61.240.156.37",
-        "remaining": "2h"
+        "remaining": "53m"
       },
       {
         "ip": "81.26.207.58",
-        "remaining": "2h"
+        "remaining": "1h"
       },
       {
         "ip": "91.92.47.90",
-        "remaining": "2h"
+        "remaining": "1h"
       },
       {
         "ip": "103.194.168.180",
-        "remaining": "3h"
+        "remaining": "1h"
       },
       {
         "ip": "193.34.172.53",
-        "remaining": "3h"
+        "remaining": "2h"
       },
       {
         "ip": "173.183.163.128",
-        "remaining": "3h"
+        "remaining": "2h"
       },
       {
         "ip": "106.124.137.21",
-        "remaining": "3h"
+        "remaining": "2h"
       },
       {
         "ip": "148.113.13.123",
-        "remaining": "3h"
+        "remaining": "2h"
       },
       {
         "ip": "93.158.90.56",
+        "remaining": "2h"
+      },
+      {
+        "ip": "45.225.135.20",
+        "remaining": "2h"
+      },
+      {
+        "ip": "170.244.188.56",
+        "remaining": "2h"
+      },
+      {
+        "ip": "66.240.223.208",
+        "remaining": "3h"
+      },
+      {
+        "ip": "8.134.157.132",
+        "remaining": "3h"
+      },
+      {
+        "ip": "198.235.24.123",
+        "remaining": "3h"
+      },
+      {
+        "ip": "35.241.175.83",
+        "remaining": "3h"
+      },
+      {
+        "ip": "148.222.217.254",
+        "remaining": "3h"
+      },
+      {
+        "ip": "13.89.125.26",
         "remaining": "3h"
       }
     ],
@@ -229,8 +229,8 @@
   "bran": {
     "temp_c": 54.2,
     "temp_status": "ok",
-    "load": 0.13,
-    "mem_pct": 55.6
+    "load": 0.26,
+    "mem_pct": 55.4
   },
   "ups": {
     "charge": null,
@@ -264,10 +264,9 @@
       "2026-08-02": 0,
       "2026-08-01": 0,
       "2026-07-31": 0,
-      "2026-07-30": 4,
-      "2026-07-29": 0
+      "2026-07-30": 4
     },
     "total": 12,
-    "active_days": 16
+    "active_days": 15
   }
 }

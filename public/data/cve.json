@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-09-09T10:49:25Z",
+  "fetched_at": "2026-09-10T10:42:24Z",
   "status": "crit",
   "counts": {
     "CRITICAL": 1,
@@ -82,7 +82,7 @@
       "severity": "MEDIUM",
       "cvss": 7.1,
       "published": "2026-06-17T14:01:48Z",
-      "modified": "2026-07-20T21:30:38.747485554Z",
+      "modified": "2026-09-10T03:50:55.279272148Z",
       "refs": [
         "https://github.com/traefik/traefik/security/advisories/GHSA-3g6v-2r68-prfc",
         "https://nvd.nist.gov/vuln/detail/CVE-2026-54761",

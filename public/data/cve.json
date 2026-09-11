@@ -1,14 +1,14 @@
 {
-  "fetched_at": "2026-09-10T10:42:24Z",
+  "fetched_at": "2026-09-11T10:41:23Z",
   "status": "crit",
   "counts": {
-    "CRITICAL": 1,
-    "HIGH": 3,
-    "MEDIUM": 4,
+    "CRITICAL": 2,
+    "HIGH": 6,
+    "MEDIUM": 6,
     "LOW": 1,
     "UNKNOWN": 4
   },
-  "total": 13,
+  "total": 19,
   "tracked": 17,
   "vulnerabilities": [
     {
@@ -23,6 +23,22 @@
         "https://github.com/traefik/traefik/security/advisories/GHSA-cxjq-mrr5-89rv",
         "https://nvd.nist.gov/vuln/detail/CVE-2026-65600",
         "https://github.com/traefik/traefik/commit/3f10dd442479530560f010167cac2947676d9b29"
+      ],
+      "component": "Traefik",
+      "component_version": "3.6.19"
+    },
+    {
+      "id": "GHSA-qqjf-53cj-pwvv",
+      "cve_id": "CVE-2026-88007",
+      "summary": "Traefik HTTP/3 Backend NTLM Connection Reuse",
+      "severity": "CRITICAL",
+      "cvss": null,
+      "published": "2026-09-10T23:04:06Z",
+      "modified": "2026-09-10T23:15:04.352847272Z",
+      "refs": [
+        "https://github.com/traefik/traefik/security/advisories/GHSA-qqjf-53cj-pwvv",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-88007",
+        "https://github.com/traefik/traefik/pull/13812"
       ],
       "component": "Traefik",
       "component_version": "3.6.19"
@@ -55,6 +71,54 @@
         "https://github.com/traefik/traefik/security/advisories/GHSA-3ccp-42pg-hgv6",
         "https://github.com/traefik/traefik/pull/13542",
         "https://github.com/traefik/traefik/pull/13543"
+      ],
+      "component": "Traefik",
+      "component_version": "3.6.19"
+    },
+    {
+      "id": "GHSA-f52w-8j3h-j724",
+      "cve_id": "CVE-2026-88009",
+      "summary": "Traefik: Rootless HTTP/1 request-target routes as \"/\" but is forwarded verbatim, bypassing path-scoped routing, middleware guards and access logging",
+      "severity": "HIGH",
+      "cvss": null,
+      "published": "2026-09-10T23:03:53Z",
+      "modified": "2026-09-10T23:15:04.335272553Z",
+      "refs": [
+        "https://github.com/traefik/traefik/security/advisories/GHSA-f52w-8j3h-j724",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-88009",
+        "https://github.com/traefik/traefik/pull/13796"
+      ],
+      "component": "Traefik",
+      "component_version": "3.6.19"
+    },
+    {
+      "id": "GHSA-v67p-phpq-fc8x",
+      "cve_id": "CVE-2026-88004",
+      "summary": "Traefik entrypoint header-name sanitization bypassed via request trailers",
+      "severity": "HIGH",
+      "cvss": null,
+      "published": "2026-09-10T23:04:21Z",
+      "modified": "2026-09-10T23:15:04.330787069Z",
+      "refs": [
+        "https://github.com/traefik/traefik/security/advisories/GHSA-v67p-phpq-fc8x",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-88004",
+        "https://github.com/traefik/traefik/pull/13822"
+      ],
+      "component": "Traefik",
+      "component_version": "3.6.19"
+    },
+    {
+      "id": "GHSA-w4v4-9rw7-5326",
+      "cve_id": "CVE-2026-88008",
+      "summary": "Traefik: Inconsistent Interpretation of HTTP Requests ('HTTP Request/Response Smuggling') and Incorrect Authorization",
+      "severity": "HIGH",
+      "cvss": null,
+      "published": "2026-09-10T23:04:37Z",
+      "modified": "2026-09-10T23:15:04.347944883Z",
+      "refs": [
+        "https://github.com/traefik/traefik/security/advisories/GHSA-w4v4-9rw7-5326",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-88008",
+        "https://github.com/traefik/traefik/pull/13797"
       ],
       "component": "Traefik",
       "component_version": "3.6.19"
@@ -108,6 +172,22 @@
       "component_version": "3.6.19"
     },
     {
+      "id": "GHSA-7ghq-v6jf-g56c",
+      "cve_id": "CVE-2026-88012",
+      "summary": "Traefik: respondingTimeouts.readTimeout is not applied to HTTP/3, leaving slow-body uploads unbounded",
+      "severity": "MEDIUM",
+      "cvss": 5.3,
+      "published": "2026-09-10T20:27:16Z",
+      "modified": "2026-09-11T03:55:42.747943039Z",
+      "refs": [
+        "https://github.com/traefik/traefik/security/advisories/GHSA-7ghq-v6jf-g56c",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-88012",
+        "https://github.com/traefik/traefik/pull/13717"
+      ],
+      "component": "Traefik",
+      "component_version": "3.6.19"
+    },
+    {
       "id": "GHSA-42cj-m3vj-89wv",
       "cve_id": "CVE-2026-65602",
       "summary": "Traefik CRD IngressRouteTCP ServersTransport Cross-Provider Namespace Bypass",
@@ -135,6 +215,22 @@
         "https://github.com/traefik/traefik/security/advisories/GHSA-62fc-8686-hfmq",
         "https://github.com/traefik/traefik/commit/65ebf4b47fbdc33e3856803a5844a404e094d52d",
         "https://github.com/traefik/traefik"
+      ],
+      "component": "Traefik",
+      "component_version": "3.6.19"
+    },
+    {
+      "id": "GHSA-rf44-j88r-hh8c",
+      "cve_id": "CVE-2026-88011",
+      "summary": "Traefik: ForwardAuth identity spoofing via dot-form header alias",
+      "severity": "MEDIUM",
+      "cvss": null,
+      "published": "2026-09-10T20:28:15Z",
+      "modified": "2026-09-11T03:55:40.551373807Z",
+      "refs": [
+        "https://github.com/traefik/traefik/security/advisories/GHSA-rf44-j88r-hh8c",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-88011",
+        "https://github.com/traefik/traefik/pull/13720"
       ],
       "component": "Traefik",
       "component_version": "3.6.19"

@@ -4,10 +4,6 @@ fetch-cves.py — Query OSV.dev for CVEs affecting the homelab stack.
 
 Reads:  scripts/stack.json  (component version registry)
 Writes: JSON to stdout      → redirect to public/data/cve.json
-
-Discord alerts: set DISCORD_CVE_WEBHOOK env var to post a message when
-new CRITICAL or HIGH CVEs are found that weren't in the previous run.
-Compare against previous cve.json at PUBLIC_DATA_DIR/cve.json (default: public/data/).
 """
 
 import json
@@ -21,9 +17,6 @@ import datetime
 SCRIPT_DIR     = os.path.dirname(os.path.abspath(__file__))
 STACK_FILE     = os.path.join(SCRIPT_DIR, "stack.json")
 OSV_BATCH_URL  = "https://api.osv.dev/v1/querybatch"
-DISCORD_WEBHOOK = os.environ.get("DISCORD_CVE_WEBHOOK", "")
-PUBLIC_DATA_DIR = os.path.join(SCRIPT_DIR, "..", "public", "data")
-PREV_CVE_FILE   = os.path.join(PUBLIC_DATA_DIR, "cve.json")
 
 SEVERITY_ORDER = {"CRITICAL": 0, "HIGH": 1, "MEDIUM": 2, "LOW": 3, "UNKNOWN": 4}
 
@@ -109,77 +102,6 @@ def parse_vuln(v: dict) -> dict:
         "refs":      refs,
     }
 
-
-
-def load_prev_ids() -> set:
-    """Return the set of vuln IDs from the previous cve.json run."""
-    try:
-        with open(PREV_CVE_FILE) as f:
-            prev = json.load(f)
-        return {v["id"] for v in prev.get("vulnerabilities", [])}
-    except Exception:
-        return set()
-
-
-def send_discord_alert(all_vulns: list, total_counts: dict) -> None:
-    if not DISCORD_WEBHOOK:
-        return
-    if not all_vulns:
-        return
-
-    prev_ids = load_prev_ids()
-    new_vulns = [v for v in all_vulns if v["id"] not in prev_ids]
-
-    crit = [v for v in new_vulns if v["severity"] == "CRITICAL"]
-    high = [v for v in new_vulns if v["severity"] == "HIGH"]
-
-    if not crit and not high:
-        return
-
-    lines = []
-    lines.append(f"🚨 **Homelab CVE digest — {len(crit)} new CRITICAL, {len(high)} new HIGH**\n")
-
-    if crit:
-        lines.append(f"**CRITICAL ({len(crit)})**")
-        for v in crit[:5]:
-            ref = v["refs"][0] if v["refs"] else ""
-            score_str = f" · CVSS {v['cvss']}" if v["cvss"] else ""
-            lines.append(f"• `{v['cve_id'] or v['id']}` **{v['component']}** {v['component_version']}{score_str}")
-            lines.append(f"  {v['summary'][:120]}")
-            if ref:
-                lines.append(f"  <{ref}>")
-
-    if high:
-        lines.append(f"\n**HIGH ({len(high)})**")
-        for v in high[:5]:
-            ref = v["refs"][0] if v["refs"] else ""
-            score_str = f" · CVSS {v['cvss']}" if v["cvss"] else ""
-            lines.append(f"• `{v['cve_id'] or v['id']}` **{v['component']}** {v['component_version']}{score_str}")
-            lines.append(f"  {v['summary'][:120]}")
-            if ref:
-                lines.append(f"  <{ref}>")
-
-    lines.append(f"\n[View all CVEs on kagiso.me/security](https://kagiso.me/security)")
-
-    content = "\n".join(lines)
-    if len(content) > 1900:
-        content = content[:1900] + "\n…"
-
-    payload = json.dumps({"content": content, "username": "homelab-cve-bot"}).encode()
-    req = urllib.request.Request(
-        DISCORD_WEBHOOK,
-        data=payload,
-        headers={
-            "Content-Type": "application/json",
-            "User-Agent": "curl/7.88.1",
-        },
-        method="POST",
-    )
-    try:
-        urllib.request.urlopen(req, timeout=10)
-        print(f"Discord digest sent: {len(crit)} new CRITICAL, {len(high)} new HIGH.", file=sys.stderr)
-    except Exception as e:
-        print(f"Discord alert failed: {e}", file=sys.stderr)
 
 
 def main():
@@ -289,9 +211,6 @@ def main():
     }
 
     print(json.dumps(output, indent=2))
-
-    # Daily digest: alert whenever CRITICAL/HIGH CVEs exist
-    send_discord_alert(all_vulns, counts)
 
 
 if __name__ == "__main__":

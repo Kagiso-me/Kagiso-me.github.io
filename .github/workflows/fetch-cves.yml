@@ -20,8 +20,6 @@ jobs:
         run: python3 scripts/sync-stack-versions.py
 
       - name: Fetch CVE data
-        env:
-          DISCORD_CVE_WEBHOOK: "https://discord.com/api/webhooks/1495109691393577131/oqu26VRzLkNSIMop7VwoodHyI81WxqzF_GhkL01I0UIRYC8ioXcGn0mCcWO3b7n7J1bO"
         run: python3 scripts/fetch-cves.py > public/data/cve.json
 
       - name: Commit if changed

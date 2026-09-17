@@ -1,179 +1,74 @@
 ---
-import Layout from '../../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import SiteNav from '../../components/SiteNav.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
-  return posts.map(post => ({ params: { slug: post.id } }));
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
 }
 
-const { slug } = Astro.params;
-const posts = await getCollection('blog');
-const post = posts.find(p => p.id === slug);
-if (!post) return Astro.redirect('/blog');
-
+const { post } = Astro.props;
 const { Content } = await render(post);
-const date = new Date(post.data.date).toLocaleDateString('en-ZA', {
-  year: 'numeric', month: 'long', day: 'numeric'
-});
-const words = post.body.trim().split(/\s+/).length;
-const readingTime = Math.ceil(words / 200);
-const ogImage = `https://kagiso-me.github.io/og/${post.id}.svg`;
+const fmt = (s: string) =>
+  new Date(s).toLocaleDateString('en-ZA', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
-
-<Layout title={post.data.title} description={post.data.summary} ogImage={ogImage}>
-
-  <div class="post-wrap">
-
-    <div class="post-nav fade-up">
-      <a href="/blog" class="back-link mono">← blog</a>
-    </div>
-
-    <header class="post-header fade-up" style="animation-delay:0.04s">
-      <div class="post-meta">
-        <span class="post-date mono">{date}</span>
-        {post.data.adr && <span class="post-adr mono">{post.data.adr}</span>}
-        <span class="post-reading-time mono">{readingTime} min read</span>
-      </div>
+<Base
+  title={`${post.data.title} — kagiso.me`}
+  description={post.data.summary}
+  ogImage={`/og/${post.id}.svg`}
+  bg="var(--paper)"
+  color="var(--ink)"
+>
+  <SiteNav variant="light" />
+  <article class="wrap">
+    <header class="head">
+      <div class="meta"><a href="/blog" class="back">← Journal</a><span class="date">{fmt(post.data.date)}</span>{post.data.adr && <span class="adr">{post.data.adr}</span>}</div>
       <h1>{post.data.title}</h1>
-      <p class="post-summary">{post.data.summary}</p>
+      <p class="sum">{post.data.summary}</p>
+      {post.data.tags && <div class="tags">{post.data.tags.map((t) => <span>{t}</span>)}</div>}
     </header>
-
-    <article class="post-body fade-up" style="animation-delay:0.08s">
+    <div class="prose">
       <Content />
-    </article>
+    </div>
+    <div class="signoff"><span class="sig">Kagiso</span><span class="lab">— written in the open</span></div>
+  </article>
+  <SiteFooter variant="light" maxWidth={720} note={'© 2026 · kagiso.me · <a href="/rss.xml">RSS</a> · written in the open'} />
+</Base>
 
-  </div>
+<style>
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 44px; }
+  .head { padding: 80px 0 36px; border-bottom: 1px solid var(--stone); }
+  .meta { display: flex; gap: 16px; align-items: baseline; font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-soft); }
+  .meta .back { color: var(--ink-soft); }
+  .meta .back:hover { color: var(--ember); }
+  .meta .adr { color: var(--ember); }
+  .head h1 { font-family: var(--serif); font-weight: 500; font-size: clamp(2.2rem, 5.4vw, 58px); line-height: 1.02; letter-spacing: -.02em; margin: 20px 0 0; }
+  .head .sum { font-family: var(--serif); font-style: italic; font-size: clamp(1.15rem, 2.4vw, 24px); color: var(--ink-soft); margin: 18px 0 0; }
+  .head .tags { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .head .tags span { font-size: 10.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); border: 1px solid var(--stone); padding: 4px 9px; }
 
-</Layout>
+  .prose { padding: 44px 0 8px; font-size: 18px; line-height: 1.75; }
+  .prose :global(p) { margin: 0 0 22px; }
+  .prose :global(h2) { font-family: var(--serif); font-weight: 500; font-size: 32px; letter-spacing: -.01em; margin: 48px 0 16px; }
+  .prose :global(h3) { font-family: var(--serif); font-weight: 500; font-size: 25px; margin: 36px 0 12px; }
+  .prose :global(a) { color: var(--ink); border-bottom: 1px solid var(--ember); }
+  .prose :global(a:hover) { color: var(--ember); }
+  .prose :global(strong) { font-weight: 600; }
+  .prose :global(em) { font-style: italic; }
+  .prose :global(ul), .prose :global(ol) { margin: 0 0 22px; padding-left: 1.3em; }
+  .prose :global(li) { margin: 0 0 8px; }
+  .prose :global(blockquote) { margin: 30px 0; padding: 6px 0 6px 26px; border-left: 3px solid var(--ember); background: var(--cream); }
+  .prose :global(blockquote p) { font-family: var(--serif); font-style: italic; font-size: 22px; color: var(--ink); margin: 12px 22px; }
+  .prose :global(code) { font-family: var(--mono); font-size: .86em; background: var(--cream); border: 1px solid var(--stone); padding: 1px 5px; border-radius: 3px; }
+  .prose :global(pre) { font-family: var(--mono); font-size: 14px; line-height: 1.6; background: var(--cream); border: 1px solid var(--stone); padding: 20px 22px; overflow-x: auto; margin: 0 0 26px; }
+  .prose :global(pre code) { background: none; border: 0; padding: 0; }
+  .prose :global(hr) { height: 1px; background: var(--stone); border: 0; margin: 40px 0; }
+  .prose :global(img) { border: 1px solid var(--stone); margin: 26px 0; }
 
-<style is:global>
-  .post-wrap {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 3rem 1.5rem 6rem;
-  }
-
-  .post-nav {
-    margin-bottom: 2rem;
-  }
-
-  .back-link {
-    font-size: 0.8rem;
-    color: var(--color-subtle);
-    transition: color 0.2s;
-  }
-
-  .back-link:hover { color: var(--color-peach); }
-
-  .post-header {
-    margin-bottom: 2.5rem;
-    padding-bottom: 2rem;
-    border-bottom: 1px solid var(--color-muted);
-  }
-
-  .post-meta {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
-  }
-
-  .post-date {
-    font-size: 0.75rem;
-    color: var(--color-subtle);
-  }
-
-  .post-adr {
-    font-size: 0.72rem;
-    color: var(--color-mauve);
-    background: color-mix(in srgb, var(--color-mauve) 12%, transparent);
-    border: 1px solid color-mix(in srgb, var(--color-mauve) 25%, transparent);
-    border-radius: 4px;
-    padding: 0.1rem 0.45rem;
-  }
-
-  .post-reading-time {
-    font-size: 0.72rem;
-    color: var(--color-subtle);
-  }
-
-  .post-header h1 {
-    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
-    line-height: 1.2;
-    margin: 0 0 0.75rem;
-  }
-
-  .post-summary {
-    color: var(--color-subtle);
-    font-size: 1rem;
-    line-height: 1.7;
-    margin: 0;
-  }
-
-  /* ── Prose ── */
-  .post-body {
-    color: var(--color-text);
-    line-height: 1.8;
-    font-size: 1rem;
-  }
-
-  .post-body h2 {
-    font-size: 1.25rem;
-    margin: 2.5rem 0 0.75rem;
-    color: var(--color-heading);
-    padding-left: 0.75rem;
-    border-left: 2px solid transparent;
-    border-image: linear-gradient(to bottom, var(--color-peach), transparent) 1;
-  }
-
-  .post-body p { margin: 0 0 1.25rem; }
-
-  .post-body strong { color: var(--color-heading); }
-
-  .post-body a {
-    color: var(--color-peach);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-
-  .post-body hr {
-    border: none;
-    border-top: 1px solid var(--color-muted);
-    margin: 2.5rem 0;
-  }
-
-  .post-body em {
-    color: var(--color-subtle);
-    font-style: italic;
-  }
-
-  /* inline code */
-  .post-body :not(pre) > code {
-    background: var(--color-overlay);
-    border: 1px solid var(--color-muted);
-    border-radius: 4px;
-    padding: 0.1em 0.4em;
-    font-size: 0.875em;
-    color: var(--color-peach);
-  }
-
-  /* Shiki highlighted block */
-  .post-body pre.astro-code {
-    border: 1px solid var(--color-muted);
-    border-radius: 10px;
-    padding: 1.25rem 1.5rem;
-    overflow-x: auto;
-    margin: 0 0 1.5rem;
-    font-size: 0.85rem;
-    line-height: 1.65;
-  }
-
-  .post-body pre.astro-code code {
-    background: none;
-    border: none;
-    padding: 0;
-    font-size: inherit;
-    color: inherit;
-  }
+  .signoff { margin-top: 8px; padding-top: 26px; border-top: 1px solid var(--stone); display: flex; align-items: baseline; gap: 12px; }
+  .signoff .sig { font-family: var(--serif); font-style: italic; font-size: 30px; color: var(--ink); }
+  .signoff .lab { font-size: 12px; letter-spacing: .04em; color: var(--ink-soft); }
+  @media (max-width: 860px) { .wrap { padding-left: 22px; padding-right: 22px; } }
 </style>

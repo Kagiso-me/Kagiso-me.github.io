@@ -1,0 +1,122 @@
+# Sveltia CMS — the /admin studio for kagiso.me.
+# Edits commit straight to the repo; a push to main triggers the Pages build.
+#
+# AUTH (prerequisite — see the handback): the GitHub backend needs an OAuth app
+# plus an auth endpoint. Deploy the `sveltia-cms-auth` Cloudflare Worker and set
+# `base_url` (and `auth_endpoint`) below, or point at any Decap-compatible OAuth
+# provider. Until that is set, /admin loads but cannot sign in.
+backend:
+  name: github
+  repo: Kagiso-me/kagiso-me.github.io
+  branch: main
+  # base_url: https://<your-sveltia-cms-auth-worker>.workers.dev
+
+# Uploaded media commits to the repo and serves as a static asset. This is the
+# working default; the scale path is R2 + Cloudflare Images (see handback).
+media_folder: "public/media"
+public_folder: "/media"
+
+collections:
+  - name: photography
+    label: Photography
+    label_singular: Frame
+    folder: "src/content/photography"
+    create: true
+    extension: md
+    format: yaml-frontmatter
+    identifier_field: title
+    sortable_fields: [order]
+    fields:
+      - { name: order, label: Order, widget: number, value_type: int, default: 10 }
+      - { name: kind, label: Layout, widget: select, options: [fullbleed, single, diptych, offset, wide], default: single }
+      - { name: image, label: Image, widget: image, required: false }
+      - { name: alt, label: Alt text, widget: string, required: false }
+      - { name: title, label: Caption title, widget: string, required: false }
+      - { name: place, label: Place, widget: string, required: false }
+      - { name: year, label: Year, widget: string, required: false }
+      - { name: tag, label: Placeholder label (shown until an image is set), widget: string, required: false }
+      - { name: side, label: Offset side (for the “offset” layout), widget: select, options: [left, right], default: right, required: false }
+      - { name: minvh, label: Full-bleed height (vh, for “fullbleed”), widget: number, value_type: int, default: 54, required: false }
+      - { name: imageB, label: Image — right (for “diptych”), widget: image, required: false }
+      - { name: titleB, label: Caption title — right, widget: string, required: false }
+      - { name: yearB, label: Year — right, widget: string, required: false }
+      - { name: tagB, label: Placeholder label — right, widget: string, required: false }
+
+  - name: films
+    label: Film
+    label_singular: Film
+    folder: "src/content/films"
+    create: true
+    extension: md
+    format: yaml-frontmatter
+    identifier_field: title
+    sortable_fields: [order]
+    fields:
+      - { name: order, label: Order, widget: number, value_type: int, default: 10 }
+      - { name: featured, label: Featured (the big poster at the top), widget: boolean, default: false }
+      - { name: title, label: Title, widget: string }
+      - { name: year, label: Year, widget: string }
+      - { name: role, label: Role, widget: string, required: false }
+      - { name: runtime, label: Runtime, widget: string, required: false }
+      - { name: info, label: Featured info line, widget: string, required: false }
+      - { name: poster, label: Poster frame, widget: image, required: false }
+      - { name: video, label: Video URL (Cloudflare Stream / YouTube / Vimeo), widget: string, required: false }
+      - { name: alt, label: Alt text, widget: string, required: false }
+
+  - name: cycling
+    label: Cycling
+    label_singular: Ride
+    folder: "src/content/cycling"
+    create: true
+    extension: md
+    format: yaml-frontmatter
+    identifier_field: issue
+    sortable_fields: [date, order]
+    fields:
+      - { name: order, label: Order, widget: number, value_type: int, default: 10 }
+      - { name: date, label: Date, widget: datetime, date_format: "YYYY-MM-DD", time_format: false, picker_utc: true }
+      - { name: issue, label: Issue line, widget: string, required: false }
+      - { name: dek, label: Dek (italic subtitle), widget: string, required: false }
+      - { name: lead, label: Lead photograph, widget: image, required: false }
+      - { name: leadTag, label: Lead placeholder label, widget: string, required: false }
+      - { name: leadCap, label: Lead caption, widget: string, required: false }
+      - { name: distance, label: Distance (e.g. 42 km), widget: string }
+      - { name: climb, label: Climbed (e.g. 1 240 m), widget: string }
+      - { name: moving, label: Moving time (e.g. 2:18), widget: string }
+      - { name: summitLabel, label: Summit label, widget: string, required: false }
+      - { name: profile, label: Elevation path (SVG d), widget: string }
+      - { name: profileFill, label: Elevation fill path (SVG d), widget: string, required: false }
+      - { name: summitX, label: Summit marker X, widget: number, value_type: int, default: 470 }
+      - { name: summitY, label: Summit marker Y, widget: number, value_type: int, default: 40 }
+      - { name: intro, label: Intro paragraph (drop cap), widget: text }
+      - { name: figure, label: Climb photograph, widget: image, required: false }
+      - { name: figureTag, label: Climb placeholder label, widget: string, required: false }
+      - { name: figureCap, label: Climb caption, widget: string, required: false }
+      - { name: quote, label: Pull quote, widget: text }
+      - { name: body, label: Body (blank line between paragraphs), widget: text }
+      - { name: tall, label: Portrait photograph, widget: image, required: false }
+      - { name: tallTag, label: Portrait placeholder label, widget: string, required: false }
+      - name: strip
+        label: Closing strip
+        widget: list
+        required: false
+        fields:
+          - { name: image, label: Image, widget: image, required: false }
+          - { name: tag, label: Placeholder label, widget: string, required: false }
+
+  - name: blog
+    label: Journal
+    label_singular: Entry
+    folder: "src/content/blog"
+    create: true
+    extension: md
+    format: yaml-frontmatter
+    identifier_field: title
+    sortable_fields: [date]
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: date, label: Date, widget: datetime, date_format: "YYYY-MM-DD", time_format: false, picker_utc: true }
+      - { name: summary, label: Summary, widget: text }
+      - { name: adr, label: ADR reference, widget: string, required: false }
+      - { name: tags, label: Tags, widget: list, required: false }
+      - { name: body, label: Body, widget: markdown }

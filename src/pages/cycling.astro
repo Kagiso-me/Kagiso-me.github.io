@@ -1,0 +1,160 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import SiteNav from '../components/SiteNav.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import MastRail from '../components/MastRail.astro';
+
+const rides = (await getCollection('cycling')).sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
+);
+const ride = rides[0];
+const d = ride.data;
+const splitStat = (s: string) => {
+  const i = s.indexOf(' ');
+  return i === -1 ? { num: s, unit: '' } : { num: s.slice(0, i), unit: s.slice(i) };
+};
+const dist = splitStat(d.distance);
+const clim = splitStat(d.climb);
+---
+<Base
+  title="Cycling — kagiso.me"
+  description="A ride told as a photo essay — long roads, early light, a clear head. Ridden and photographed the same morning."
+  bg="var(--paper)"
+  color="var(--ink)"
+>
+  <SiteNav active="cycling" variant="light" />
+  <MastRail index={3} variant="light" />
+
+  <div class="wrap">
+    <header class="mast">
+      <div class="mghost" aria-hidden="true">03</div>
+      <div class="kick" data-rise style="--d:.05s"><span class="eyebrow"><span class="tk"></span><span class="n">03</span> — Cycling</span><span class="issue">{d.issue}</span></div>
+      <h1 data-rise style="--d:.14s">Riding.</h1>
+      <p class="dek" data-rise style="--d:.26s">{d.dek}</p>
+    </header>
+
+    <div class="lead reveal">
+      <div class="ph">{d.lead ? <img src={d.lead} alt={d.leadTag ?? ''} loading="lazy" decoding="async" /> : <span class="tag">{d.leadTag}</span>}</div>
+      <div class="cap">{d.leadCap}</div>
+    </div>
+
+    <article class="article">
+      <div class="col-lead reveal">
+        <p class="drop">{d.intro}</p>
+      </div>
+      <div class="col-figure reveal">
+        <div class="ph">{d.figure ? <img src={d.figure} alt={d.figureTag ?? ''} loading="lazy" decoding="async" /> : <span class="tag">{d.figureTag}</span>}</div>
+        <div class="cap">{d.figureCap}</div>
+      </div>
+
+      <div class="route reveal">
+        <figure>
+          <div class="rhead">
+            <span class="t">The route</span>
+            <div class="stats">
+              <div class="stat"><div class="v">{dist.num}<span class="u">{dist.unit}</span></div><div class="k">distance</div></div>
+              <div class="stat"><div class="v">{clim.num}<span class="u">{clim.unit}</span></div><div class="k">climbed</div></div>
+              <div class="stat"><div class="v">{d.moving}</div><div class="k">moving</div></div>
+            </div>
+          </div>
+          <svg viewBox="0 0 800 200" role="img" aria-label={`Elevation profile of a ${d.distance} ride climbing to a summit, then descending.`}>
+            <line class="base" x1="0" y1="170" x2="800" y2="170"></line>
+            {d.profileFill && <path class="fillp" d={d.profileFill}></path>}
+            <path class="prof" d={d.profile}></path>
+            <circle class="summit" cx={d.summitX} cy={d.summitY} r="4.5"></circle>
+            <text class="lbl" x="0" y="190">0 km</text>
+            {d.summitLabel && <text class="lbl e" x={d.summitX} y={d.summitY - 12} text-anchor="middle">{d.summitLabel}</text>}
+            <text class="lbl" x="800" y="190" text-anchor="end">{d.distance}</text>
+          </svg>
+          <figcaption>One climb, front-loaded — then a long descent home.</figcaption>
+        </figure>
+      </div>
+
+      <div class="quote reveal">
+        <p>{d.quote}</p>
+        <div class="b">Kagiso</div>
+      </div>
+
+      <div class="col-body reveal">
+        {d.body.split(/\n\n+/).map((p) => p.trim()).filter(Boolean).map((p) => <p>{p}</p>)}
+      </div>
+      <div class="col-tall reveal"><div class="ph">{d.tall ? <img src={d.tall} alt={d.tallTag ?? ''} loading="lazy" decoding="async" /> : <span class="tag">{d.tallTag}</span>}</div></div>
+
+      <div class="strip reveal">
+        {d.strip.map((s) => <div class="ph">{s.image ? <img src={s.image} alt={s.tag ?? ''} loading="lazy" decoding="async" /> : <span class="tag">{s.tag}</span>}</div>)}
+      </div>
+    </article>
+  </div>
+
+  <SiteFooter variant="light" maxWidth={1120} note={'© 2026 · kagiso.me · <a href="#">Strava</a> · ridden &amp; photographed the same morning'} />
+</Base>
+
+<style>
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 44px; }
+  .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); }
+  .mast { position: relative; padding: 80px 0 20px; }
+  .mast .kick { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--ink); padding-bottom: 16px; }
+  .mast .kick .eyebrow { display: inline-flex; align-items: center; gap: 11px; }
+  .mast .kick .tk { width: 9px; height: 9px; background: var(--ember); }
+  .mast .kick .n { color: var(--ember); }
+  .mast .issue { font-size: 11px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--ink-soft); }
+  .mast h1 { position: relative; z-index: 1; font-family: var(--serif); font-weight: 500; font-size: clamp(3.2rem, 10vw, 140px); line-height: .9; letter-spacing: -.02em; margin: 28px 0 0; }
+  .mast .dek { position: relative; z-index: 1; font-family: var(--serif); font-style: italic; font-size: clamp(1.3rem, 2.8vw, 32px); color: var(--ink-soft); margin: 18px 0 0; max-width: 30ch; }
+  .mghost { position: absolute; z-index: 0; top: 8px; right: -1%; font-family: var(--serif); font-weight: 500;
+    font-size: clamp(150px, 26vw, 320px); line-height: .72; color: var(--cream); pointer-events: none; user-select: none; }
+
+  .lead { margin-top: 40px; }
+  .lead .ph { aspect-ratio: 16/8; }
+  :global(.anim) .lead .ph { filter: blur(16px) brightness(.9); transition: filter 1.4s cubic-bezier(.2, .7, .2, 1); }
+  :global(.anim) .lead.in .ph { filter: none; }
+
+  .ph { position: relative; overflow: hidden; background: repeating-linear-gradient(135deg, #EFEAE0 0 22px, #F4F0E8 22px 44px); border: 1px solid var(--stone); display: flex; align-items: flex-end; }
+  .ph :global(img) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .ph .tag { margin: 12px; font-size: 10.5px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); background: var(--paper); border: 1px solid var(--stone); padding: 5px 9px; }
+  .cap { margin-top: 12px; font-size: 12px; color: var(--ink-soft); font-style: italic; }
+
+  .article { display: grid; grid-template-columns: repeat(12, 1fr); gap: 32px; margin-top: 64px; }
+  .col-lead { grid-column: 1/6; }
+  .col-lead p { margin: 0; font-size: 17px; line-height: 1.72; }
+  .col-lead p.drop::first-letter { font-family: var(--serif); font-weight: 500; font-size: 78px; line-height: .72; float: left; margin: 8px 12px 0 0; color: var(--ink); }
+  .col-figure { grid-column: 6/13; }
+  .col-figure .ph { aspect-ratio: 5/4; }
+
+  .route { grid-column: 1/13; margin-top: 20px; border-top: 1px solid var(--stone); border-bottom: 1px solid var(--stone); padding: 34px 0; }
+  .route figure { margin: 0; }
+  .route .rhead { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+  .route .rhead .t { font-family: var(--serif); font-size: 26px; }
+  .route .stats { display: flex; gap: 44px; flex-wrap: wrap; }
+  .route .stat .v { font-family: var(--serif); font-size: 32px; line-height: 1; font-variant-numeric: tabular-nums; }
+  .route .stat .v .u { font-size: 16px; }
+  .route .stat .k { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); margin-top: 6px; }
+  .route svg { width: 100%; height: 200px; display: block; color: var(--ink); }
+  .route .prof { fill: none; stroke: currentColor; stroke-width: 1.5; }
+  .route .fillp { fill: var(--cream); stroke: none; }
+  .route .base { stroke: var(--stone); stroke-width: 1; }
+  .route .summit { fill: var(--ember); }
+  .route .lbl { font-family: var(--sans); font-size: 11px; fill: var(--ink-soft); letter-spacing: .04em; }
+  .route .lbl.e { fill: var(--ember); font-weight: 600; }
+  .route figcaption { margin-top: 14px; font-size: 12.5px; color: var(--ink-soft); font-style: italic; }
+  :global(.anim) .prof { stroke-dasharray: 1600; stroke-dashoffset: 1600; animation: draw 2.4s cubic-bezier(.3, .7, .2, 1) forwards .3s; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+
+  .quote { grid-column: 2/12; margin: 58px 0; text-align: center; }
+  .quote p { font-family: var(--serif); font-size: clamp(1.8rem, 4vw, 46px); line-height: 1.2; font-weight: 500; margin: 0; }
+  .quote .b { margin-top: 20px; font-size: 12px; font-weight: 600; letter-spacing: .24em; text-transform: uppercase; color: var(--ink-soft); }
+
+  .col-body { grid-column: 1/7; }
+  .col-body p { margin: 0 0 18px; }
+  .col-tall { grid-column: 8/13; }
+  .col-tall .ph { aspect-ratio: 4/5; }
+
+  .strip { grid-column: 1/13; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 20px; margin-top: 20px; }
+  .strip .ph { min-height: 280px; }
+
+  @media (max-width: 860px) {
+    .wrap { padding-left: 22px; padding-right: 22px; }
+    .col-lead, .col-figure, .col-body, .col-tall, .route, .quote, .strip { grid-column: 1/13; }
+    .strip { grid-template-columns: 1fr; }
+  }
+</style>

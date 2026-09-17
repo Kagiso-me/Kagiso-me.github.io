@@ -1,0 +1,126 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import SiteNav from '../components/SiteNav.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import MastRail from '../components/MastRail.astro';
+
+const all = (await getCollection('films')).sort((a, b) => a.data.order - b.data.order);
+const featured = all.find((f) => f.data.featured) ?? all[0];
+const selected = all.filter((f) => f !== featured);
+const playIcon = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+---
+<Base
+  title="Film — kagiso.me"
+  description="Short films and portrait films — shot, cut and graded by hand. Photography, with a timeline."
+  bg="#121010"
+  color="#F3EFE7"
+>
+  <SiteNav active="film" variant="dark" />
+  <MastRail index={2} variant="dark" />
+
+  <div class="wrap">
+    <div class="mhead">
+      <div class="mghost" aria-hidden="true">02</div>
+      <header class="mast">
+        <div>
+          <div class="eyebrow" data-rise style="--d:.05s"><span class="tk"></span><span class="n">02</span> — Film</div>
+          <h1 data-rise style="--d:.12s">Motion.</h1>
+        </div>
+        <div class="now" data-rise style="--d:.24s">Photography, with a timeline</div>
+      </header>
+      <div class="mbase"></div>
+    </div>
+
+    {featured && (
+      <section class="feature">
+        <a class="poster dev" href={featured.data.video ?? '#'} aria-label={`Play ${featured.data.title}`}>
+          <div class="bars"></div>
+          {featured.data.poster ? <img src={featured.data.poster} alt={featured.data.alt} loading="lazy" decoding="async" /> : <span class="tag">Featured film — poster frame</span>}
+          <span class="play"><Fragment set:html={playIcon} /></span>
+        </a>
+        <div class="meta">
+          <h2>{featured.data.title}</h2>
+          <div class="info">Short film · <span class="e">{featured.data.year}</span><br>{featured.data.info}</div>
+        </div>
+      </section>
+    )}
+
+    <section class="sel">
+      <div class="h"><span class="t">Selected films</span><span class="c">{String(selected.length).padStart(2, '0')} · reel on request</span></div>
+      <div class="films">
+        {selected.map((film) => (
+          <a class="film reveal" href={film.data.video ?? '#'}>
+            <div class="thumb">
+              {film.data.poster ? <img src={film.data.poster} alt={film.data.alt} loading="lazy" decoding="async" /> : null}
+              <span class="p"><Fragment set:html={playIcon} /></span>
+            </div>
+            <div class="ttl">{film.data.title}<span class="role">{film.data.role}</span></div>
+            <div class="rt">{film.data.runtime} · <span class="e">{film.data.year}</span></div>
+          </a>
+        ))}
+      </div>
+    </section>
+  </div>
+
+  <SiteFooter variant="dark" maxWidth={1180} note={'© 2026 · kagiso.me · <a href="#">Vimeo</a> · films shot, cut &amp; graded by hand'} />
+</Base>
+
+<style>
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 48px; }
+  .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: #A79F92; }
+  .mhead { position: relative; }
+  .mhead .mast { position: relative; z-index: 1; }
+  .mast { padding: 84px 0 40px; display: flex; justify-content: space-between; align-items: flex-end; gap: 30px; flex-wrap: wrap; }
+  .mast .eyebrow { margin-bottom: 20px; display: inline-flex; align-items: center; gap: 11px; }
+  .mast .eyebrow .tk { width: 9px; height: 9px; background: #D5743E; }
+  .mast .eyebrow .n { color: #D5743E; }
+  .mast h1 { font-family: var(--serif); font-weight: 500; font-size: clamp(3rem, 9vw, 120px); line-height: .92; margin: 0; }
+  .mast .now { font-size: 12px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: #6E665B; }
+  .mghost { position: absolute; z-index: 0; top: -18px; right: -1%; font-family: var(--serif); font-weight: 500;
+    font-size: clamp(150px, 26vw, 320px); line-height: .72; color: transparent;
+    -webkit-text-stroke: 1px rgba(243, 239, 231, .13); pointer-events: none; user-select: none; }
+  .mbase { position: relative; z-index: 1; height: 3px; width: 100%; margin-top: 32px; transform-origin: left;
+    background: linear-gradient(90deg, #D5743E 0, #D5743E 30%, #2C2620 30%, #2C2620 100%); }
+  :global(.anim) .mbase { transform: scaleX(0); animation: growx 1.3s cubic-bezier(.3, .7, .2, 1) forwards .6s; }
+  @keyframes growx { to { transform: scaleX(1); } }
+
+  .feature { position: relative; margin-top: 20px; }
+  .poster { position: relative; display: block; aspect-ratio: 21/9; overflow: hidden; border: 1px solid #2C2620;
+    background: radial-gradient(120% 130% at 50% 34%, #2a2017 0%, #161210 55%, #0c0a08 100%); }
+  .poster :global(img) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .poster .bars { position: absolute; inset: 0; pointer-events: none; }
+  .poster .bars::before, .poster .bars::after { content: ""; position: absolute; left: 0; right: 0; height: 8%; background: #000; opacity: .55; }
+  .poster .tag { position: absolute; top: 16px; left: 16px; font-size: 10.5px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #A79F92; background: rgba(12, 10, 9, .7); border: 1px solid #2C2620; padding: 5px 9px; }
+  .play { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 88px; height: 88px; border-radius: 50%;
+    border: 1.5px solid #D5743E; display: flex; align-items: center; justify-content: center; color: #D5743E;
+    background: rgba(18, 16, 16, .35); transition: transform .3s cubic-bezier(.2, .7, .2, 1), background .3s; }
+  .play :global(svg) { width: 26px; height: 26px; margin-left: 4px; }
+  .feature:hover .play { transform: translate(-50%, -50%) scale(1.08); background: rgba(213, 116, 62, .14); }
+
+  .feature .meta { margin-top: 24px; display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+  .feature .meta h2 { font-family: var(--serif); font-weight: 500; font-size: clamp(2rem, 4.5vw, 52px); margin: 0; }
+  .feature .meta .info { font-size: 12px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: #6E665B; text-align: right; line-height: 2; }
+  .feature .meta .info .e { color: #D5743E; }
+
+  .sel { margin-top: 96px; border-top: 1px solid #2C2620; padding-top: 40px; }
+  .sel .h { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 26px; }
+  .sel .h .t { font-family: var(--serif); font-size: 28px; }
+  .sel .h .c { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: #6E665B; }
+  .films { display: flex; flex-direction: column; }
+  .film { display: grid; grid-template-columns: 300px 1fr auto; gap: 30px; align-items: center; padding: 24px 0; border-top: 1px solid #2C2620; }
+  .film:last-child { border-bottom: 1px solid #2C2620; }
+  .film .thumb { position: relative; aspect-ratio: 16/9; overflow: hidden; border: 1px solid #2C2620;
+    background: radial-gradient(120% 130% at 50% 30%, #241c15 0%, #141110 60%, #0c0a08 100%); }
+  .film .thumb :global(img) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .film .thumb .p { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 46px; height: 46px; border-radius: 50%;
+    border: 1.5px solid rgba(243, 239, 231, .7); display: flex; align-items: center; justify-content: center; color: #F3EFE7; transition: transform .3s, border-color .3s, color .3s; }
+  .film .thumb .p :global(svg) { width: 15px; height: 15px; margin-left: 2px; }
+  .film:hover .thumb .p { transform: translate(-50%, -50%) scale(1.1); border-color: #D5743E; color: #D5743E; }
+  .film .ttl { font-family: var(--serif); font-size: 30px; line-height: 1.1; }
+  .film .ttl .role { display: block; font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: #6E665B; margin-top: 8px; }
+  .film .rt { font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #A79F92; text-align: right; white-space: nowrap; }
+  .film .rt .e { color: #D5743E; }
+
+  @media (max-width: 820px) { .wrap { padding-left: 22px; padding-right: 22px; } .film { grid-template-columns: 1fr; gap: 14px; } .film .rt { text-align: left; } }
+</style>

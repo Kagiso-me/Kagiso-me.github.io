@@ -1,21 +1,21 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
-import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://kagiso.me',
-  integrations: [
-    sitemap(),
-  ],
+  integrations: [sitemap()],
   markdown: {
-    shikiConfig: {
-      theme: 'github-dark',
-      wrap: false,
-    },
+    shikiConfig: { theme: 'min-light', wrap: false },
   },
-  vite: {
-    plugins: [tailwindcss()]
-  }
+  redirects: {
+    '/photos': '/photography',
+    '/about': '/',
+    '/status': '/lab',
+    '/cost': '/lab',
+    '/security': '/lab',
+    '/projects': '/lab',
+    '/digest': '/blog',
+  },
 });

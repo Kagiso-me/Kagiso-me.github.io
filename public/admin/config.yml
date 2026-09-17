@@ -1,15 +1,15 @@
 # Sveltia CMS — the /admin studio for kagiso.me.
 # Edits commit straight to the repo; a push to main triggers the Pages build.
 #
-# AUTH (prerequisite — see the handback): the GitHub backend needs an OAuth app
-# plus an auth endpoint. Deploy the `sveltia-cms-auth` Cloudflare Worker and set
-# `base_url` (and `auth_endpoint`) below, or point at any Decap-compatible OAuth
-# provider. Until that is set, /admin loads but cannot sign in.
+# AUTH: base_url points at the deployed sveltia-cms-auth Cloudflare Worker. The
+# only remaining step is the GitHub OAuth App — its client id/secret are set as
+# worker secrets (not here). Callback URL: <base_url>/callback. Until the secret
+# is loaded into the worker, /admin loads but GitHub sign-in returns an error.
 backend:
   name: github
   repo: Kagiso-me/kagiso-me.github.io
   branch: main
-  # base_url: https://<your-sveltia-cms-auth-worker>.workers.dev
+  base_url: https://sveltia-cms-auth.kagiso-030.workers.dev
 
 # Uploaded media commits to the repo and serves as a static asset. This is the
 # working default; the scale path is R2 + Cloudflare Images (see handback).

@@ -1,0 +1,34 @@
+---
+interface Props {
+  active?: string;
+  variant?: 'dark' | 'light';
+}
+const { active = '', variant = 'light' } = Astro.props;
+const links = [
+  { href: '/photography', label: 'Photography', key: 'photography' },
+  { href: '/film', label: 'Film', key: 'film' },
+  { href: '/cycling', label: 'Cycling', key: 'cycling' },
+  { href: '/lab', label: 'The Lab', key: 'lab' },
+  { href: '/#contact', label: 'Contact', key: 'contact' },
+];
+---
+<nav class:list={['site-nav', variant]}>
+  <div class="row">
+    <a href="/" class="mark">kagiso<span class="pt">.</span></a>
+    <div class="navlinks">
+      {links.map((l) => <a href={l.href} class={active === l.key ? 'on' : ''}>{l.label}</a>)}
+    </div>
+  </div>
+</nav>
+<style>
+  .site-nav { position: sticky; top: 0; z-index: 20; backdrop-filter: blur(8px); background: var(--nav-bg); border-bottom: 1px solid var(--nav-line); }
+  .site-nav.dark { --nav-bg: rgba(21, 18, 16, .82); --nav-line: #302A22; --nav-mut: #A79F92; --nav-tx: #F3EFE7; --nav-pt: #D5743E; }
+  .site-nav.light { --nav-bg: rgba(251, 249, 245, .88); --nav-line: #D8D2C6; --nav-mut: #736E64; --nav-tx: #37342D; --nav-pt: #C85B33; }
+  .row { max-width: 1200px; margin: 0 auto; padding: 22px 48px; display: flex; align-items: center; justify-content: space-between; }
+  .mark { font-family: var(--serif); font-weight: 500; font-size: 26px; letter-spacing: -.012em; color: var(--nav-tx); }
+  .mark .pt { color: var(--nav-pt); }
+  .navlinks { display: flex; gap: 30px; font-size: 12px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--nav-mut); }
+  .navlinks a:hover { color: var(--nav-tx); }
+  .navlinks a.on { color: var(--nav-tx); border-bottom: 2px solid var(--nav-pt); padding-bottom: 4px; }
+  @media (max-width: 860px) { .row { padding-left: 22px; padding-right: 22px; } .navlinks { display: none; } }
+</style>

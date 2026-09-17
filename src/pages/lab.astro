@@ -1,0 +1,198 @@
+---
+import Base from '../layouts/Base.astro';
+import SiteNav from '../components/SiteNav.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import MastRail from '../components/MastRail.astro';
+
+const gh = 'https://github.com/Kagiso-me';
+const fleet = [
+  { host: 'tywin / jaime / tyrion', role: 'k3s control-plane + worker', hw: 'ThinkCentre M93p · i5-4570T · 16 GB' },
+  { host: 'varys', role: 'GitOps origin · control', hw: 'NUC · i3 · 16 GB' },
+  { host: 'truenas', role: 'NFS storage · backup target', hw: 'MicroServer Gen8 · ECC · SAS mirror' },
+  { host: 'bran', role: 'watcher · CI · paging', hw: 'Raspberry Pi · aarch64' },
+  { host: 'bronn', role: 'media · standalone docker', hw: 'NUC · i3 · 32 GB' },
+];
+const repos = [
+  { r: 'homelab-infrastructure', href: `${gh}/homelab-infrastructure`, d: 'The whole cluster as code — Flux, Helm, Ansible, SOPS.' },
+  { r: 'beesly', href: `${gh}/beesly`, d: 'A self-healing engine: detect → guard → fix → verify, zero-LLM runbooks.' },
+  { r: 'write-up · building in the open', href: '/blog', d: 'Decisions, incidents, and the ones I got wrong first.' },
+];
+const proof = { value: '312', unit: 'd', label: 'longest unbroken uptime', verifyHref: `${gh}/homelab-infrastructure` };
+---
+<Base
+  title="The Lab — kagiso.me"
+  description="A real three-node Kubernetes cluster on hardware I own — GitOps, storage, backups, observability, run with production discipline. Reproducible from a commit."
+  bg="#F6F7F4"
+  color="#31332E"
+  mono={true}
+>
+  <SiteNav active="lab" variant="light" />
+  <MastRail index={4} variant="light" mono={true} />
+
+  <div class="labwrap">
+    <header class="mast"><div class="grid-bg"></div><div class="mghost" aria-hidden="true">04</div><div class="wrap inner">
+      <div class="kick" data-rise style="--d:.05s"><span class="eyebrow"><span class="tk"></span><span class="n">04</span> — The Lab</span><span class="coord">Self-hosted · Johannesburg</span></div>
+      <h1 data-rise style="--d:.14s">The Lab.</h1>
+      <p class="dek" data-rise style="--d:.26s">Precise, and quiet. The engineer's eye, not a console.</p>
+    </div></header>
+
+    <div class="wrap">
+      <section class="essay reveal">
+        <div class="ln">§01<br>§02<br><br>§03</div>
+        <div class="body">
+          <p>I run a real three-node Kubernetes cluster on hardware I own — GitOps, identity, storage, backups, observability — with production discipline. I built it to understand technology at the level of a builder, not a customer.</p>
+          <p>The whole thing reconciles from one git repository. If it isn't in git, it doesn't exist; the cluster is reproducible from a commit, or it's a pet I'm one bad night from losing. That single rule is what lets the rest stay calm.</p>
+          <p>This is the small door at the end of the hall. It stays small on purpose — one page, one diagram, a few numbers that are true.</p>
+        </div>
+      </section>
+
+      <section class="schema reveal">
+        <div class="h"><span class="t">The architecture</span><span class="c">one repo → one cluster</span></div>
+        <figure>
+          <svg viewBox="0 0 900 380" role="img" aria-label="Architecture: a git repository reconciles through the varys control node into a three-node HA k3s control-plane (highlighted), which persists to TrueNAS; an independent watcher and a standalone media host sit outside the cluster.">
+            <rect class="nodebox" x="380" y="18" width="140" height="40" rx="2"></rect>
+            <text class="nlabel" x="450" y="37" text-anchor="middle">git</text>
+            <text class="nrole" x="450" y="50" text-anchor="middle">source of truth</text>
+            <path class="conn d1" d="M450,58 L450,88"></path>
+            <polygon class="hl-txt" points="450,94 446,86 454,86" fill="currentColor"></polygon>
+            <text class="elabel" x="462" y="78">reconcile</text>
+            <rect class="nodebox" x="360" y="94" width="180" height="46" rx="2"></rect>
+            <text class="nlabel" x="378" y="116">varys</text>
+            <text class="nrole" x="378" y="131">GitOps origin</text>
+            <path class="conn d2" d="M450,140 L450,172"></path>
+            <polygon points="450,178 446,170 454,170" fill="currentColor"></polygon>
+            <text class="elabel" x="462" y="162">applies</text>
+            <rect class="nodebox hl" x="250" y="178" width="400" height="120" rx="2"></rect>
+            <text class="nlabel hl-txt" x="266" y="200">k3s · HA control-plane</text>
+            <text class="nip hl-txt" x="634" y="200" text-anchor="end">etcd quorum 3/3</text>
+            <rect class="nodebox" x="272" y="222" width="112" height="62" rx="2"></rect>
+            <text class="nlabel" x="328" y="258" text-anchor="middle">tywin</text>
+            <rect class="nodebox" x="394" y="222" width="112" height="62" rx="2"></rect>
+            <text class="nlabel" x="450" y="258" text-anchor="middle">jaime</text>
+            <rect class="nodebox" x="516" y="222" width="112" height="62" rx="2"></rect>
+            <text class="nlabel" x="572" y="258" text-anchor="middle">tyrion</text>
+            <path class="conn d3" d="M650,239 L706,239"></path>
+            <polygon points="712,239 704,235 704,243" fill="currentColor"></polygon>
+            <text class="elabel" x="678" y="230" text-anchor="middle">persists</text>
+            <rect class="nodebox" x="712" y="210" width="150" height="58" rx="2"></rect>
+            <text class="nlabel" x="730" y="234">truenas</text>
+            <text class="nrole" x="730" y="251">NFS · backups</text>
+            <rect class="nodebox dash" x="38" y="210" width="150" height="58" rx="2"></rect>
+            <text class="nlabel" x="56" y="234">bran</text>
+            <text class="nrole" x="56" y="251">watcher · off-cluster</text>
+            <path class="conn dash" d="M188,239 L250,239"></path>
+            <text class="elabel" x="219" y="230" text-anchor="middle">watches</text>
+            <rect class="nodebox dash" x="712" y="300" width="150" height="52" rx="2"></rect>
+            <text class="nlabel" x="730" y="322">bronn</text>
+            <text class="nrole" x="730" y="339">media · standalone</text>
+          </svg>
+          <figcaption>State lives in git; the HA control-plane (in ember) is the one part that must keep quorum — everything else is replaceable or watches from outside.</figcaption>
+        </figure>
+      </section>
+
+      <section class="fleet reveal">
+        <div class="h">The fleet</div>
+        <table>
+          <thead><tr><th>Host</th><th>Role</th><th>Hardware</th></tr></thead>
+          <tbody>
+            {fleet.map((row) => <tr><td class="n">{row.host}</td><td>{row.role}</td><td>{row.hw}</td></tr>)}
+          </tbody>
+        </table>
+      </section>
+
+      <section class="work reveal">
+        <div>
+          <h3 class="h">Selected work</h3>
+          {repos.map((repo) => (
+            <a class="repo" href={repo.href}><div class="r">{repo.r}<span class="s"> ↗</span></div><div class="d">{repo.d}</div></a>
+          ))}
+        </div>
+        <div class="proof">
+          <div class="big">{proof.value}<span class="u">{proof.unit}</span></div>
+          <div class="k">{proof.label}</div>
+          <a class="v" href={proof.verifyHref}><span class="arw">→</span>&nbsp; Verify it — the cluster, in the open</a>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <SiteFooter variant="light" maxWidth={1120} note={'© 2026 · kagiso.me · <a href="' + gh + '">GitHub</a> · reproducible from a commit'} />
+</Base>
+
+<style>
+  .labwrap { --ink: #31332E; --ink-soft: #6C6F68; --paper: #F6F7F4; --cream: #ECEEE9; --stone: #D6D9D2; --ember: #C85B33; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 44px; }
+  .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); }
+
+  .mast { position: relative; padding: 78px 0 44px; overflow: hidden; }
+  .mast .grid-bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .6;
+    background-image: repeating-linear-gradient(90deg, transparent 0, transparent calc(8.333% - 1px), var(--stone) calc(8.333% - 1px), var(--stone) 8.333%);
+    -webkit-mask-image: linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent); mask-image: linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent); }
+  .mast .inner { position: relative; z-index: 1; }
+  .mast .kick { display: flex; justify-content: space-between; align-items: baseline; }
+  .mast .kick .eyebrow { display: inline-flex; align-items: center; gap: 11px; }
+  .mast .kick .tk { width: 9px; height: 9px; background: var(--ember); }
+  .mast .kick .n { color: var(--ember); }
+  .mast .coord { font-family: var(--mono); font-size: 12px; color: var(--ink-soft); letter-spacing: .02em; }
+  .mast h1 { font-family: var(--serif); font-weight: 500; font-size: clamp(3rem, 9vw, 120px); line-height: .92; letter-spacing: -.02em; margin: 26px 0 0; }
+  .mast .dek { font-family: var(--serif); font-style: italic; font-size: clamp(1.2rem, 2.6vw, 28px); color: var(--ink-soft); margin: 16px 0 0; }
+  .mast .mghost { position: absolute; z-index: 0; top: 2px; right: 1%; font-family: var(--serif); font-weight: 500;
+    font-size: clamp(140px, 24vw, 300px); line-height: .72; color: transparent;
+    -webkit-text-stroke: 1px var(--stone); pointer-events: none; user-select: none; }
+
+  .essay { display: grid; grid-template-columns: 64px 1fr; gap: 0; margin-top: 56px; border-top: 1px solid var(--ink); }
+  .essay .ln { font-family: var(--mono); font-size: 11px; color: var(--ink-soft); padding: 26px 0 0; border-right: 1px solid var(--stone); }
+  .essay .body { padding: 26px 0 26px 32px; }
+  .essay .body p { margin: 0 0 16px; max-width: 60ch; }
+  .essay .body p:last-child { margin-bottom: 0; }
+
+  .schema { margin-top: 64px; }
+  .schema .h { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 22px; border-bottom: 1px solid var(--stone); padding-bottom: 14px; }
+  .schema .h .t { font-family: var(--serif); font-size: 26px; }
+  .schema .h .c { font-family: var(--mono); font-size: 12px; color: var(--ink-soft); }
+  .schema figure { margin: 0; }
+  .schema svg { width: 100%; height: auto; display: block; color: var(--ink); }
+  .nodebox { fill: var(--paper); stroke: currentColor; stroke-width: 1.5; }
+  .nodebox.dash { stroke-dasharray: 4 3; stroke: var(--ink-soft); }
+  .nodebox.hl { stroke: var(--ember); stroke-width: 1.5; }
+  .conn { stroke: currentColor; stroke-width: 1.5; fill: none; }
+  .conn.dash { stroke-dasharray: 4 3; stroke: var(--ink-soft); }
+  .nlabel { font-family: var(--sans); font-size: 13px; font-weight: 600; fill: var(--ink); }
+  .nrole { font-family: var(--sans); font-size: 11px; fill: var(--ink-soft); }
+  .nip { font-family: var(--mono); font-size: 11px; fill: var(--ink-soft); }
+  .elabel { font-family: var(--sans); font-size: 11px; fill: var(--ink-soft); letter-spacing: .04em; }
+  .hl-txt { fill: var(--ember); }
+  .schema figcaption { margin-top: 16px; font-size: 12.5px; color: var(--ink-soft); font-style: italic; max-width: 70ch; }
+  :global(.anim) .conn { stroke-dasharray: 200; stroke-dashoffset: 200; animation: draw 1.4s ease forwards; }
+  :global(.anim) .conn.d1 { animation-delay: .2s; }
+  :global(.anim) .conn.d2 { animation-delay: .5s; }
+  :global(.anim) .conn.d3 { animation-delay: .8s; }
+  :global(.anim) .conn.dash { stroke-dasharray: 4 3; animation: none; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+
+  .fleet { margin-top: 64px; }
+  .fleet .h { font-family: var(--serif); font-size: 26px; margin-bottom: 18px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--stone); }
+  thead th { background: var(--cream); font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); border-bottom: 1px solid var(--stone); }
+  td.n { font-weight: 600; }
+
+  .work { margin-top: 64px; display: grid; grid-template-columns: 1.3fr 1fr; gap: 48px; border-top: 1px solid var(--ink); padding-top: 36px; }
+  .work .h { font-family: var(--serif); font-size: 26px; margin: 0 0 20px; }
+  .repo { display: block; padding: 16px 0; border-bottom: 1px solid var(--stone); }
+  .repo .r { font-family: var(--mono); font-size: 14px; color: var(--ink); }
+  .repo .r .s { color: var(--ember); }
+  .repo .d { font-size: 13px; color: var(--ink-soft); margin-top: 5px; }
+  .proof { border: 1px solid var(--stone); padding: 26px; height: fit-content; }
+  .proof .big { font-family: var(--mono); font-weight: 500; font-size: 52px; line-height: 1; font-variant-numeric: tabular-nums; }
+  .proof .big .u { color: var(--ember); }
+  .proof .k { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); margin-top: 8px; }
+  .proof .v { display: inline-block; margin-top: 22px; font-size: 13px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+  .proof .v .arw { color: var(--ember); }
+
+  @media (max-width: 860px) {
+    .wrap { padding-left: 22px; padding-right: 22px; }
+    .work { grid-template-columns: 1fr; gap: 32px; }
+    .essay { grid-template-columns: 36px 1fr; }
+  }
+</style>

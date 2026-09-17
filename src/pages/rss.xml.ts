@@ -2,8 +2,8 @@ import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 
 const SITE = 'https://kagiso.me';
-const TITLE = 'kagiso.me — Living Homelab';
-const DESCRIPTION = 'Architecture decisions, homelab learnings, and honest operational retrospectives.';
+const TITLE = 'kagiso.me — Journal';
+const DESCRIPTION = 'Decisions, incidents, and the ones I got wrong first — real operational write-ups from a self-hosted lab.';
 
 function escapeXml(str: string) {
   return str
@@ -15,10 +15,13 @@ function escapeXml(str: string) {
 }
 
 export const GET: APIRoute = async () => {
-  const posts = (await getCollection('blog'))
-    .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+  const posts = (await getCollection('blog')).sort(
+    (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
+  );
 
-  const items = posts.map(post => `
+  const items = posts
+    .map(
+      (post) => `
     <item>
       <title>${escapeXml(post.data.title)}</title>
       <link>${SITE}/blog/${post.id}</link>
@@ -26,7 +29,9 @@ export const GET: APIRoute = async () => {
       <description>${escapeXml(post.data.summary)}</description>
       <pubDate>${new Date(post.data.date).toUTCString()}</pubDate>
       ${post.data.adr ? `<category>${escapeXml(post.data.adr)}</category>` : ''}
-    </item>`).join('');
+    </item>`,
+    )
+    .join('');
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">

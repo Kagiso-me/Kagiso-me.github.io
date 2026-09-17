@@ -1,461 +1,62 @@
 ---
-import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import SiteNav from '../../components/SiteNav.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
 
-function postType(adr: string | undefined, title: string): { label: string; cls: string } {
-  if (adr) return { label: 'DECISION', cls: 'type-decision' };
-  const t = title.toLowerCase();
-  if (t.includes('incident') || t.includes('outage') || t.includes('broke') || t.includes('fail')) return { label: 'INCIDENT', cls: 'type-incident' };
-  if (t.includes('build') || t.includes('setup') || t.includes('install') || t.includes('deploy')) return { label: 'BUILD', cls: 'type-build' };
-  if (t.includes('security') || t.includes('cve') || t.includes('patch')) return { label: 'SECURITY', cls: 'type-security' };
-  return { label: 'OPS', cls: 'type-ops' };
-}
-
-const posts = (await getCollection('blog'))
-  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
-  .map(post => ({
-    ...post,
-    readingTime: Math.ceil((post.body ?? '').trim().split(/\s+/).length / 200),
-    type: postType(post.data.adr, post.data.title),
-    tags: post.data.tags ?? [],
-  }));
-
-// Collect all unique tags
-const allTags = [...new Set(posts.flatMap(p => p.tags))].sort();
+const posts = (await getCollection('blog')).sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
+);
+const fmt = (s: string) =>
+  new Date(s).toLocaleDateString('en-ZA', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
+<Base
+  title="Journal — kagiso.me"
+  description="Decisions, incidents, and the ones I got wrong first — real operational write-ups from a self-hosted lab."
+  bg="var(--paper)"
+  color="var(--ink)"
+>
+  <SiteNav variant="light" />
+  <div class="wrap">
+    <header class="mast">
+      <div class="eyebrow"><span class="tk"></span>The Lab · Writing</div>
+      <h1>Journal.</h1>
+      <p class="dek">Decisions, incidents, and the ones I got wrong first.</p>
+    </header>
 
-<Layout title="Journal" description="Architecture decisions, homelab learnings, and the honest retrospective.">
-
-  <div class="page-wrap">
-
-    <div class="page-header fade-up">
-      <div>
-        <p class="mono" style="color:var(--color-gold);margin-bottom:0.25rem">~/journal</p>
-        <h1 style="margin:0">Journal</h1>
-      </div>
-      <p class="hero-sub">
-        Architecture decisions, homelab learnings, and honest retrospectives.
-        Rooted in real <a href="https://github.com/Kagiso-me/homelab-infrastructure/tree/main/docs/adr" target="_blank" rel="noopener" class="link-inline">ADRs</a> — what we decided, why, and what actually happened.
-      </p>
-    </div>
-
-    <!-- ── Search ── -->
-    <div class="search-wrap fade-up" style="animation-delay:0.03s">
-      <div class="search-box">
-        <span class="search-icon" aria-hidden="true">⌕</span>
-        <input
-          id="blog-search"
-          class="search-input"
-          type="search"
-          placeholder="Search posts…"
-          autocomplete="off"
-          spellcheck="false"
-          aria-label="Search blog posts"
-        />
-        <kbd class="search-kbd" aria-hidden="true">/</kbd>
-      </div>
-      <span class="search-count mono" id="search-count"></span>
-    </div>
-
-    <!-- ── Tag filter bar ── -->
-    <div class="tag-bar fade-up" style="animation-delay:0.04s" id="blog-tag-bar">
-      <button class="tag-btn active" data-tag="all">All</button>
-      {allTags.map(tag => (
-        <button class="tag-btn" data-tag={tag}>{tag}</button>
+    <ol class="list">
+      {posts.map((post) => (
+        <li class="item reveal">
+          <a href={`/blog/${post.id}`}>
+            <div class="meta"><span class="date">{fmt(post.data.date)}</span>{post.data.adr && <span class="adr">{post.data.adr}</span>}</div>
+            <h2>{post.data.title}</h2>
+            <p class="sum">{post.data.summary}</p>
+            {post.data.tags && <div class="tags">{post.data.tags.map((t) => <span>{t}</span>)}</div>}
+          </a>
+        </li>
       ))}
-    </div>
-
-    <div class="post-list fade-up" style="animation-delay:0.05s" id="post-list">
-      {posts.map(post => (
-        <a href={`/blog/${post.id}`} class="post-card" data-tags={post.tags.join(',')}>
-          <div class="post-meta">
-            <span class={`post-type-tag mono ${post.type.cls}`}>{post.type.label}</span>
-            <span class="post-date mono">{new Date(post.data.date).toLocaleDateString('en-ZA', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
-            {post.data.adr && <span class="post-adr mono">{post.data.adr}</span>}
-            <span class="post-reading-time mono">{post.readingTime} min read</span>
-          </div>
-          <h2 class="post-title">{post.data.title}</h2>
-          <p class="post-summary">{post.data.summary}</p>
-          <div class="post-footer">
-            <div class="post-tags">
-              {post.tags.map((t: string) => <span class="post-tag mono">{t}</span>)}
-            </div>
-            <span class="post-read-more mono">read →</span>
-          </div>
-        </a>
-      ))}
-    </div>
-
+    </ol>
   </div>
+  <SiteFooter variant="light" maxWidth={880} note={'© 2026 · kagiso.me · <a href="/rss.xml">RSS</a> · written in the open'} />
+</Base>
 
-</Layout>
+<style>
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 44px; }
+  .mast { padding: 90px 0 40px; border-bottom: 1px solid var(--ink); }
+  .eyebrow { display: inline-flex; align-items: center; gap: 11px; font-size: 12px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); }
+  .eyebrow .tk { width: 9px; height: 9px; background: var(--ember); }
+  .mast h1 { font-family: var(--serif); font-weight: 500; font-size: clamp(3rem, 9vw, 116px); line-height: .92; letter-spacing: -.02em; margin: 24px 0 0; }
+  .mast .dek { font-family: var(--serif); font-style: italic; font-size: clamp(1.2rem, 2.6vw, 28px); color: var(--ink-soft); margin: 16px 0 0; }
 
-<style is:global>
-  .page-wrap {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 3rem 1.5rem 5rem;
-  }
-
-  .page-header {
-    margin-bottom: 2.5rem;
-  }
-
-  h1 { font-size: clamp(1.75rem, 4vw, 2.5rem); margin-bottom: 0.75rem; }
-
-  .hero-sub {
-    color: var(--color-subtle);
-    font-size: 1rem;
-    line-height: 1.7;
-    max-width: 640px;
-    margin: 0;
-  }
-
-  .link-inline {
-    color: var(--color-gold);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-
-
-  .post-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .post-card {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    background: color-mix(in srgb, var(--color-surface) 70%, transparent);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid color-mix(in srgb, var(--color-muted) 55%, transparent);
-    border-top: 1px solid color-mix(in srgb, white 8%, transparent);
-    border-radius: 16px;
-    padding: 1.6rem 1.75rem;
-    color: inherit;
-    transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
-    text-decoration: none;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .post-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-mauve) 40%, transparent), transparent);
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-
-  .post-card:hover {
-    border-color: color-mix(in srgb, var(--color-mauve) 45%, var(--color-muted));
-    transform: translateY(-3px);
-    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.45),
-                0 0 0 1px color-mix(in srgb, var(--color-mauve) 15%, transparent);
-    color: inherit;
-  }
-
-  .post-card:hover::before { opacity: 1; }
-
-  .post-card::after {
-    content: '';
-    pointer-events: none;
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    opacity: 0;
-    transition: opacity 0.3s;
-    background: radial-gradient(
-      600px circle at calc(var(--mx, 50%) * 1%) calc(var(--my, 50%) * 1%),
-      rgba(255,255,255,0.07) 0%,
-      rgba(255,255,255,0.025) 40%,
-      transparent 65%
-    );
-    z-index: 10;
-  }
-  .post-card:hover::after { opacity: 1; }
-
-  .post-meta {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    flex-wrap: wrap;
-  }
-
-  .post-type-tag {
-    font-size: 0.6rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    padding: 0.15rem 0.5rem;
-    border-radius: 4px;
-    flex-shrink: 0;
-  }
-
-  .type-decision { color: var(--color-mauve);    background: color-mix(in srgb, var(--color-mauve)    12%, transparent); border: 1px solid color-mix(in srgb, var(--color-mauve)    30%, transparent); }
-  .type-incident  { color: var(--color-crit);     background: color-mix(in srgb, var(--color-crit)     12%, transparent); border: 1px solid color-mix(in srgb, var(--color-crit)     30%, transparent); }
-  .type-build     { color: var(--color-ok);       background: color-mix(in srgb, var(--color-ok)       12%, transparent); border: 1px solid color-mix(in srgb, var(--color-ok)       30%, transparent); }
-  .type-security  { color: var(--color-warn);     background: color-mix(in srgb, var(--color-warn)     12%, transparent); border: 1px solid color-mix(in srgb, var(--color-warn)     30%, transparent); }
-  .type-ops       { color: var(--color-sapphire); background: color-mix(in srgb, var(--color-sapphire) 12%, transparent); border: 1px solid color-mix(in srgb, var(--color-sapphire) 30%, transparent); }
-
-  .post-date {
-    font-size: 0.72rem;
-    color: var(--color-subtle);
-  }
-
-  .post-adr {
-    font-size: 0.7rem;
-    color: var(--color-mauve);
-    background: color-mix(in srgb, var(--color-mauve) 12%, transparent);
-    border: 1px solid color-mix(in srgb, var(--color-mauve) 25%, transparent);
-    border-radius: 4px;
-    padding: 0.1rem 0.45rem;
-  }
-
-  .post-title {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--color-heading);
-    margin: 0;
-    line-height: 1.3;
-    letter-spacing: -0.02em;
-    transition: color 0.2s;
-  }
-
-  .post-card:hover .post-title { color: #fff; }
-
-  .post-summary {
-    font-size: 0.9rem;
-    color: var(--color-subtle);
-    line-height: 1.7;
-    margin: 0;
-    flex: 1;
-  }
-
-  .post-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 0.25rem;
-    padding-top: 0.75rem;
-    border-top: 1px solid color-mix(in srgb, var(--color-muted) 35%, transparent);
-  }
-
-  .post-read-more {
-    font-size: 0.75rem;
-    color: var(--color-gold);
-    transition: gap 0.2s;
-    letter-spacing: 0.02em;
-  }
-
-  .post-card:hover .post-read-more { color: var(--color-mauve); }
-
-  .post-reading-time {
-    font-size: 0.72rem;
-    color: var(--color-subtle);
-  }
-
-  /* ── Search ── */
-  .search-wrap {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
-  }
-
-  .search-box {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    background: color-mix(in srgb, var(--color-surface) 70%, transparent);
-    border: 1px solid var(--color-muted);
-    border-radius: 10px;
-    padding: 0.6rem 1rem;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-
-  .search-box:focus-within {
-    border-color: var(--color-gold);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-gold) 12%, transparent);
-  }
-
-  .search-icon {
-    color: var(--color-subtle);
-    font-size: 1.1rem;
-    flex-shrink: 0;
-    line-height: 1;
-    user-select: none;
-  }
-
-  .search-input {
-    flex: 1;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: var(--color-heading);
-    font-family: var(--font-sans);
-    font-size: 0.9rem;
-    line-height: 1;
-  }
-
-  .search-input::placeholder { color: var(--color-subtle); }
-
-  /* Hide browser's default clear button */
-  .search-input::-webkit-search-cancel-button { display: none; }
-
-  .search-kbd {
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-    color: var(--color-subtle);
-    background: var(--color-overlay);
-    border: 1px solid var(--color-muted);
-    border-radius: 4px;
-    padding: 0.1rem 0.4rem;
-    flex-shrink: 0;
-    opacity: 0.7;
-  }
-
-  /* Hide the / shortcut hint once focused */
-  .search-box:focus-within .search-kbd { display: none; }
-
-  .search-count {
-    font-size: 0.72rem;
-    color: var(--color-subtle);
-    white-space: nowrap;
-    min-width: 5ch;
-    text-align: right;
-  }
-
-  /* ── Tag filter bar ── */
-  .tag-bar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 1.75rem;
-  }
-
-  .tag-btn {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    padding: 0.3rem 0.8rem;
-    border-radius: 99px;
-    border: 1px solid color-mix(in srgb, var(--color-muted) 60%, transparent);
-    background: transparent;
-    color: var(--color-subtle);
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-
-  .tag-btn:hover {
-    border-color: var(--color-gold);
-    color: var(--color-gold);
-    background: color-mix(in srgb, var(--color-gold) 8%, transparent);
-  }
-
-  .tag-btn.active {
-    border-color: var(--color-gold);
-    color: var(--color-gold);
-    background: color-mix(in srgb, var(--color-gold) 12%, transparent);
-  }
-
-  /* ── Post inline tags ── */
-  .post-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-    align-items: center;
-  }
-
-  .post-tag {
-    font-size: 0.62rem;
-    color: var(--color-subtle);
-    background: color-mix(in srgb, var(--color-muted) 25%, transparent);
-    border: 1px solid color-mix(in srgb, var(--color-muted) 40%, transparent);
-    border-radius: 99px;
-    padding: 0.1rem 0.55rem;
-    letter-spacing: 0.03em;
-    transition: color 0.15s, border-color 0.15s;
-  }
-
-  .post-card:hover .post-tag {
-    color: var(--color-text);
-    border-color: color-mix(in srgb, var(--color-mauve) 30%, transparent);
-  }
-
-  .post-card[aria-hidden="true"] { display: none; }
+  .list { list-style: none; margin: 0; padding: 0; }
+  .item { border-bottom: 1px solid var(--stone); }
+  .item a { display: block; padding: 40px 0; }
+  .item .meta { display: flex; gap: 16px; align-items: baseline; font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-soft); }
+  .item .adr { color: var(--ember); }
+  .item h2 { font-family: var(--serif); font-weight: 500; font-size: clamp(1.7rem, 3.6vw, 40px); line-height: 1.04; margin: 14px 0 0; max-width: 22ch; }
+  .item:hover h2 { color: var(--ember); }
+  .item .sum { color: var(--ink-soft); margin: 14px 0 0; max-width: 62ch; }
+  .item .tags { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .item .tags span { font-size: 10.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); border: 1px solid var(--stone); padding: 4px 9px; }
+  @media (max-width: 860px) { .wrap { padding-left: 22px; padding-right: 22px; } }
 </style>
-
-<script>
-  function initBlog() {
-    const bar       = document.getElementById('blog-tag-bar');
-    const searchEl  = document.getElementById('blog-search') as HTMLInputElement | null;
-    const countEl   = document.getElementById('search-count');
-    if (!bar) return;
-
-    let activeTag   = 'all';
-    let searchQuery = '';
-
-    function applyFilters() {
-      const cards = document.querySelectorAll<HTMLElement>('.post-card');
-      let visible = 0;
-      cards.forEach(card => {
-        const tags  = card.dataset.tags?.split(',') ?? [];
-        const title = card.querySelector('.post-title')?.textContent?.toLowerCase() ?? '';
-        const summ  = card.querySelector('.post-summary')?.textContent?.toLowerCase() ?? '';
-        const q     = searchQuery.toLowerCase();
-
-        const tagMatch    = activeTag === 'all' || tags.includes(activeTag);
-        const searchMatch = !q || title.includes(q) || summ.includes(q) || tags.some(t => t.includes(q));
-        const show        = tagMatch && searchMatch;
-
-        card.setAttribute('aria-hidden', show ? 'false' : 'true');
-        if (show) visible++;
-      });
-
-      if (countEl) {
-        countEl.textContent = searchQuery
-          ? `${visible} result${visible !== 1 ? 's' : ''}`
-          : '';
-      }
-    }
-
-    bar.addEventListener('click', (e) => {
-      const btn = (e.target as Element).closest('.tag-btn') as HTMLElement | null;
-      if (!btn) return;
-      activeTag = btn.dataset.tag ?? 'all';
-      bar.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      applyFilters();
-    });
-
-    searchEl?.addEventListener('input', () => {
-      searchQuery = searchEl.value.trim();
-      // Reset tag filter when searching so results aren't double-filtered unexpectedly
-      if (searchQuery) {
-        activeTag = 'all';
-        bar.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
-        bar.querySelector<HTMLElement>('[data-tag="all"]')?.classList.add('active');
-      }
-      applyFilters();
-    });
-
-    // / key shortcut to focus search
-    document.addEventListener('keydown', (e) => {
-      if (e.key === '/' && document.activeElement !== searchEl) {
-        e.preventDefault();
-        searchEl?.focus();
-        searchEl?.select();
-      }
-    });
-  }
-
-  initBlog();
-  document.addEventListener('astro:page-load', initBlog);
-</script>

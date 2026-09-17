@@ -1,0 +1,68 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  bg?: string;
+  color?: string;
+  mono?: boolean;
+  ogImage?: string;
+}
+
+const {
+  title,
+  description = 'Kagiso — photography, film, cycling, and a self-hosted lab. One considered hand, made in Johannesburg.',
+  bg = 'var(--paper)',
+  color = 'var(--ink)',
+  mono = false,
+  ogImage = '/og-default.svg',
+} = Astro.props;
+
+const site = 'https://kagiso.me';
+const canonical = new URL(Astro.url.pathname, site).href;
+const ogUrl = ogImage.startsWith('http') ? ogImage : site + ogImage;
+const fonts = mono
+  ? 'family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@300;400;500;600'
+  : 'family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@300;400;500;600';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <script is:inline>try{if(matchMedia('(prefers-reduced-motion: no-preference)').matches)document.documentElement.classList.add('anim');}catch(e){}</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href={`https://fonts.googleapis.com/css2?${fonts}&display=swap`} rel="stylesheet" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" type="application/rss+xml" title="kagiso.me — Journal" href="/rss.xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogUrl} />
+  </head>
+  <body style={`background:${bg};color:${color}`}>
+    <slot />
+    <script is:inline>
+      (function () {
+        var anim = document.documentElement.classList.contains('anim');
+        var els = document.querySelectorAll('.reveal,.dev');
+        if (!els.length) return;
+        if (!anim || !('IntersectionObserver' in window)) { els.forEach(function (e) { e.classList.add('in'); }); return; }
+        var io = new IntersectionObserver(function (es) {
+          es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+        }, { threshold: 0.16, rootMargin: '0px 0px -8% 0px' });
+        els.forEach(function (e) { io.observe(e); });
+      })();
+    </script>
+  </body>
+</html>

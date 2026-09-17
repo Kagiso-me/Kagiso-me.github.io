@@ -1,0 +1,28 @@
+---
+interface Props {
+  variant?: 'dark' | 'light';
+  note: string;
+  maxWidth?: number;
+}
+const { variant = 'light', note, maxWidth = 1120 } = Astro.props;
+---
+<footer class:list={['site-footer', variant]}>
+  <div class="wrap" style={`max-width:${maxWidth}px`}>
+    <div class="grid">
+      <span class="sign">kagiso<span class="pt">.</span></span>
+      <span class="co" set:html={note}></span>
+    </div>
+  </div>
+</footer>
+<style>
+  .site-footer { margin-top: 80px; padding: 64px 0 72px; border-top: 1px solid var(--fl-line); }
+  .site-footer.dark { --fl-line: #2C2620; --fl-sign: #F3EFE7; --fl-pt: #D5743E; --fl-co: #6E665B; --fl-a: #A79F92; }
+  .site-footer.light { --fl-line: #D8D2C6; --fl-sign: #37342D; --fl-pt: #C85B33; --fl-co: #736E64; --fl-a: #37342D; }
+  .wrap { margin: 0 auto; padding: 0 44px; }
+  .grid { display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; flex-wrap: wrap; }
+  .sign { font-family: var(--serif); font-size: 24px; color: var(--fl-sign); letter-spacing: -.012em; }
+  .sign .pt { color: var(--fl-pt); }
+  .co { font-size: 12px; color: var(--fl-co); text-align: right; letter-spacing: .04em; }
+  .co :global(a) { color: var(--fl-a); }
+  @media (max-width: 860px) { .wrap { padding-left: 22px; padding-right: 22px; } .co { text-align: left; } }
+</style>

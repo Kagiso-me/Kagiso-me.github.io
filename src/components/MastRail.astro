@@ -1,0 +1,25 @@
+---
+interface Props {
+  index: number;
+  variant?: 'dark' | 'light';
+  mono?: boolean;
+}
+const { index, variant = 'light', mono = false } = Astro.props;
+const nn = String(index).padStart(2, '0');
+---
+<div class:list={['mrail', variant, { mono }]} aria-hidden="true">
+  <span class="v">Scroll</span>
+  <span class="ln"></span>
+  <span class="ix">{nn}<span class="e"> / </span>05</span>
+</div>
+<style>
+  .mrail { position: fixed; left: 20px; top: 50%; transform: translateY(-50%); z-index: 15; display: flex; flex-direction: column; align-items: center; gap: 13px; color: var(--r-mut); }
+  .mrail.dark { --r-mut: #A79F92; --r-line: #302A22; --r-e: #D5743E; }
+  .mrail.light { --r-mut: #736E64; --r-line: #D8D2C6; --r-e: #C85B33; }
+  .v { writing-mode: vertical-rl; font-size: 11px; font-weight: 600; letter-spacing: .3em; text-transform: uppercase; }
+  .ln { width: 1px; height: 54px; background: var(--r-line); }
+  .ix { font-family: var(--serif); font-size: 14px; }
+  .mrail.mono .ix { font-family: var(--mono); font-size: 12px; }
+  .ix .e { color: var(--r-e); }
+  @media (max-width: 1200px) { .mrail { display: none; } }
+</style>

@@ -8,7 +8,9 @@
 backend:
   name: github
   repo: Kagiso-me/kagiso-me.github.io
-  branch: main
+  # Preview phase: edits (and uploaded photos) commit to the rebuild branch, not
+  # the live public site. At production cutover this becomes `main`.
+  branch: feat/editorial-rebuild-v5
   base_url: https://sveltia-cms-auth.kagiso-030.workers.dev
 
 # Uploaded media commits to the repo and serves as a static asset. This is the

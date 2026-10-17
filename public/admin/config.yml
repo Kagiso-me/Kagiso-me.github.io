@@ -19,51 +19,53 @@ media_folder: "public/media"
 public_folder: "/media"
 
 collections:
-  - name: photography
-    label: Photography
-    label_singular: Frame
-    folder: "src/content/photography"
+  - name: work
+    label: Work
+    label_singular: Series
+    folder: "src/content/work"
     create: true
     extension: md
     format: yaml-frontmatter
     identifier_field: title
     sortable_fields: [order]
+    summary: "No. {{number}} — {{title}}"
     fields:
-      - { name: order, label: Order, widget: number, value_type: int, default: 10 }
-      - { name: kind, label: Layout, widget: select, options: [fullbleed, single, diptych, offset, wide], default: single }
-      - { name: image, label: Image, widget: image, required: false }
-      - { name: alt, label: Alt text, widget: string, required: false }
-      - { name: title, label: Caption title, widget: string, required: false }
-      - { name: place, label: Place, widget: string, required: false }
-      - { name: year, label: Year, widget: string, required: false }
-      - { name: tag, label: Placeholder label (shown until an image is set), widget: string, required: false }
-      - { name: side, label: Offset side (for the “offset” layout), widget: select, options: [left, right], default: right, required: false }
-      - { name: minvh, label: Full-bleed height (vh, for “fullbleed”), widget: number, value_type: int, default: 54, required: false }
-      - { name: imageB, label: Image — right (for “diptych”), widget: image, required: false }
-      - { name: titleB, label: Caption title — right, widget: string, required: false }
-      - { name: yearB, label: Year — right, widget: string, required: false }
-      - { name: tagB, label: Placeholder label — right, widget: string, required: false }
-
-  - name: films
-    label: Film
-    label_singular: Film
-    folder: "src/content/films"
-    create: true
-    extension: md
-    format: yaml-frontmatter
-    identifier_field: title
-    sortable_fields: [order]
-    fields:
-      - { name: order, label: Order, widget: number, value_type: int, default: 10 }
-      - { name: featured, label: Featured (the big poster at the top), widget: boolean, default: false }
+      - { name: order, label: Index order (curated, not by date), widget: number, value_type: int, default: 10 }
+      - { name: number, label: "No. (displayed, e.g. 01)", widget: string }
       - { name: title, label: Title, widget: string }
-      - { name: year, label: Year, widget: string }
-      - { name: role, label: Role, widget: string, required: false }
-      - { name: runtime, label: Runtime, widget: string, required: false }
-      - { name: info, label: Featured info line, widget: string, required: false }
-      - { name: poster, label: Poster frame, widget: image, required: false }
-      - { name: video, label: Video URL (Cloudflare Stream / YouTube / Vimeo), widget: string, required: false }
-      - { name: alt, label: Alt text, widget: string, required: false }
+      - { name: years, label: Years (display, e.g. 2024–2026), widget: string }
+      - { name: place, label: Place, widget: string, required: false }
+      - { name: role, label: Role, widget: string, default: Photographer }
+      - { name: cover, label: Cover image, widget: image, required: false }
+      - { name: coverAspect, label: Cover aspect, widget: select, options: ["3/2", "4/5"], default: "3/2" }
+      - { name: coverAlt, label: Cover alt text, widget: string, required: false }
+      - { name: coverTag, label: Cover placeholder label (until an image is set), widget: string, required: false }
+      - { name: statement, label: Series statement (standfirst, 2–4 sentences), widget: text }
+      - { name: teaser, label: Index teaser (one felt line), widget: string, required: false }
+      - { name: mediumLabel, label: Medium label override (else derived), widget: string, required: false }
+      - { name: creditNote, label: Colophon credit note (else sensible default), widget: string, required: false }
+      - { name: gear, label: Gear line (colophon), widget: string, required: false }
+      - { name: showFrameNumbers, label: Show frame numbers in captions, widget: boolean, default: false }
+      - { name: draft, label: Draft (hide from the site), widget: boolean, default: false }
+      - name: frames
+        label: Frames (array order IS the edit — do not sort)
+        label_singular: Frame
+        widget: list
+        fields:
+          - { name: type, label: Type, widget: select, options: [still, film], default: still }
+          - { name: span, label: Span, widget: select, options: [full, wide, single, offset, pair, tall], default: single }
+          - { name: image, label: Image (still) or poster (film), widget: image, required: false }
+          - { name: imageB, label: Image — right (for “pair”), widget: image, required: false }
+          - { name: video, label: Video URL (film — Stream/YouTube/Vimeo), widget: string, required: false }
+          - { name: runtime, label: Runtime (film, e.g. 1:32), widget: string, required: false }
+          - { name: alt, label: Alt text, widget: string, required: false }
+          - { name: altB, label: Alt text — right (pair), widget: string, required: false }
+          - { name: side, label: Side (for “offset”/“tall”), widget: select, options: [left, right], default: right }
+          - { name: caption, label: Caption (optional — keep sparse), widget: string, required: false }
+          - { name: captionB, label: Caption — right (pair), widget: string, required: false }
+          - { name: minvh, label: Full height (vh, for “full”), widget: number, value_type: int, required: false }
+          - { name: tag, label: Placeholder label (until an image is set), widget: string, required: false }
+          - { name: tagB, label: Placeholder label — right (pair), widget: string, required: false }
 
   - name: cycling
     label: Cycling

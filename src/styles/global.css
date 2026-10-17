@@ -32,6 +32,13 @@ img { display: block; max-width: 100%; }
 h1, h2, h3 { font-family: var(--serif); font-weight: 500; margin: 0; letter-spacing: -.01em; line-height: 1.05;
   font-optical-sizing: auto; font-variation-settings: "SOFT" 0, "WONK" 0; }
 
+/* Work room — one warm-charcoal register across the index and every series.
+   All text tones pass WCAG AA on --w-bg; --w-line* are structural (non-text). */
+.work-room {
+  --w-bg: #1E1A16; --w-ink: #F4F0E8; --w-mut: #B8AE9F; --w-faint: #8A8176;
+  --w-line: #35302A; --w-line-2: #4A443B;
+}
+
 .eyebrow {
   font-size: 12px; font-weight: 600; letter-spacing: .22em;
   text-transform: uppercase; color: var(--ink-soft);

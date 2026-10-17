@@ -1,44 +1,51 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
-// Image fields are stored as public path strings (e.g. /media/frame.jpg) written
-// by the CMS on upload, so the room renders a real <img> when present and a
-// branded placeholder when not. The optimization pipeline (astro:assets for
-// in-repo, or R2 + Cloudflare Images for scale) is a media decision layered on
-// top — swapping a string for an R2 URL is a per-entry change, nothing structural.
-const photography = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/photography' }),
+// The Work room — one file per SERIES (a body of work), frames as an ordered
+// array where array order IS the edit (never sorted). Stills and motion live as
+// frame types inside a series, not as separate rooms. Image fields are public
+// path strings written by the CMS; a branded placeholder renders until one is set
+// (the `tag` label shows in its place during the placeholder phase).
+const work = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/work' }),
   schema: z.object({
-    order: z.number().default(0),
-    kind: z.enum(['fullbleed', 'single', 'diptych', 'offset', 'wide']).default('single'),
-    image: z.string().optional(),
-    imageB: z.string().optional(),
-    alt: z.string().default(''),
-    tag: z.string().optional(),
-    tagB: z.string().optional(),
-    title: z.string().optional(),
-    titleB: z.string().optional(),
-    place: z.string().optional(),
-    year: z.string().optional(),
-    yearB: z.string().optional(),
-    side: z.enum(['left', 'right']).default('right'),
-    minvh: z.number().optional(),
-  }),
-});
-
-const films = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/films' }),
-  schema: z.object({
-    order: z.number().default(0),
-    featured: z.boolean().default(false),
+    order: z.number().default(10), // index sequence — CURATED, not by date
+    number: z.string(), // displayed "No." e.g. "01"
     title: z.string(),
-    year: z.string(),
-    role: z.string().optional(),
-    runtime: z.string().optional(),
-    info: z.string().optional(),
-    poster: z.string().optional(),
-    video: z.string().url().optional(),
-    alt: z.string().default(''),
+    years: z.string(),
+    place: z.string().optional(),
+    role: z.string().default('Photographer'),
+    cover: z.string().optional(),
+    coverAspect: z.enum(['3/2', '4/5']).default('3/2'),
+    coverAlt: z.string().default(''),
+    coverTag: z.string().optional(),
+    statement: z.string(),
+    teaser: z.string().optional(),
+    mediumLabel: z.string().optional(),
+    creditNote: z.string().optional(),
+    gear: z.string().optional(),
+    showFrameNumbers: z.boolean().default(false),
+    draft: z.boolean().default(false),
+    frames: z
+      .array(
+        z.object({
+          type: z.enum(['still', 'film']).default('still'),
+          span: z.enum(['full', 'wide', 'single', 'offset', 'pair', 'tall']).default('single'),
+          image: z.string().optional(),
+          imageB: z.string().optional(),
+          video: z.string().optional(),
+          runtime: z.string().optional(),
+          alt: z.string().default(''),
+          altB: z.string().optional(),
+          side: z.enum(['left', 'right']).default('right'),
+          caption: z.string().optional(),
+          captionB: z.string().optional(),
+          minvh: z.number().optional(),
+          tag: z.string().optional(), // placeholder label until an image is set
+          tagB: z.string().optional(),
+        }),
+      )
+      .default([]),
   }),
 });
 
@@ -72,4 +79,4 @@ const cycling = defineCollection({
   }),
 });
 
-export const collections = { photography, films, cycling };
+export const collections = { work, cycling };

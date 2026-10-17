@@ -12,10 +12,11 @@ export default defineConfig({
   redirects: {
     '/photos': '/photography',
     '/about': '/',
-    '/status': '/lab',
-    '/cost': '/lab',
-    '/security': '/lab',
-    '/projects': '/lab',
-    '/digest': '/blog',
+    '/status': '/',
+    '/cost': '/',
+    '/security': '/',
+    '/projects': '/',
+    '/digest': '/',
+    '/blog': '/',
   },
 });

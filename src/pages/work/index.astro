@@ -44,7 +44,7 @@ const mediumLabel = (frames: { type: string }[], override?: string) => {
           <a class="plate reveal" href={`/work/${s.id}`} aria-label={`Open ${d.title}`}>
             <div class="cover">
               <div class="ph dev" style={`aspect-ratio:${d.coverAspect}`}>
-                {d.cover ? <img src={d.cover} alt={d.coverAlt} loading="lazy" decoding="async" /> : <span class="tag">{d.coverTag ?? d.title}</span>}
+                {d.cover ? <img src={d.cover} alt={d.coverAlt} loading="lazy" decoding="async" /> : <span class="tag">{d.coverTag ?? 'Frames'}</span>}
               </div>
             </div>
             <div class="meta">
@@ -61,15 +61,15 @@ const mediumLabel = (frames: { type: string }[], override?: string) => {
     </div>
   </div>
 
-  <SiteFooter variant="dark" maxWidth={1280} note={'© 2026 · kagiso.me · <a href="https://www.instagram.com/">Instagram</a> · every frame shot &amp; owned'} />
+  <SiteFooter variant="light" maxWidth={1280} note={'© 2026 · kagiso.me · <a href="https://www.instagram.com/">Instagram</a> · every frame shot &amp; owned'} />
 </Base>
 
 <style>
-  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 var(--w-pad, 48px); }
-  .mast { position: relative; padding: clamp(72px, 9vw, 112px) 0 40px; max-width: 920px; }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 var(--w-pad, 44px); }
+  .mast { position: relative; padding: clamp(88px, 11vw, 148px) 0 40px; max-width: 920px; }
   .kick { display: inline-flex; align-items: center; gap: 11px; margin-bottom: 22px; color: var(--w-mut); }
   .kick .tk { width: 9px; height: 9px; background: var(--ember); }
-  .mast h1 { font-family: var(--serif); font-weight: 360; font-size: clamp(3rem, 9vw, 128px); line-height: .92; letter-spacing: -.02em; color: var(--w-ink); }
+  .mast h1 { font-family: var(--serif); font-weight: 440; font-size: clamp(3.25rem, 9vw, 132px); line-height: .9; letter-spacing: -.025em; color: var(--w-ink); }
   .mast .dek { font-family: var(--serif); font-style: italic; font-size: clamp(1.25rem, 2.6vw, 30px); line-height: 1.3; color: var(--w-mut); margin: 22px 0 0; max-width: 34ch; }
   .mast .kick, .mast h1, .mast .dek, .mast .mbase { position: relative; z-index: 1; }
   .mghost { position: absolute; z-index: 0; top: -16px; right: -1%; font-family: var(--serif); font-weight: 400;
@@ -80,25 +80,26 @@ const mediumLabel = (frames: { type: string }[], override?: string) => {
   @keyframes growx { to { transform: scaleX(1); } }
 
   .plates { display: flex; flex-direction: column; gap: clamp(80px, 10vw, 140px); padding: clamp(48px, 7vw, 96px) 0 40px; }
-  .plate { display: grid; grid-template-columns: repeat(12, 1fr); gap: clamp(28px, 4vw, 56px); align-items: center; }
+  .plate { display: grid; grid-template-columns: repeat(12, 1fr); gap: clamp(28px, 4vw, 56px); align-items: start;
+    border-top: 1px solid var(--w-line); padding-top: clamp(40px, 5vw, 64px); }
   .cover { grid-column: 1 / 8; }
   .meta { grid-column: 9 / 13; }
   .plate:nth-child(even) .cover { grid-column: 6 / 13; }
   .plate:nth-child(even) .meta { grid-column: 1 / 5; }
 
-  .ph { position: relative; overflow: hidden; border: 1px solid var(--w-line);
-    background: repeating-linear-gradient(135deg, #EFEAE0 0 22px, #F4F0E8 22px 44px); display: flex; align-items: flex-end; }
+  .ph { position: relative; overflow: hidden; border: 1px solid var(--w-line); background: var(--cream); display: flex; }
   .ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  .ph .tag { position: relative; z-index: 1; margin: 14px; font-size: 10.5px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--w-mut); background: var(--paper); border: 1px solid var(--w-line); padding: 5px 9px; }
+  .ph .tag { position: absolute; inset: 0; margin: 0; border: 0; background: none; display: flex; align-items: center; justify-content: center;
+    font-family: var(--serif); font-style: italic; font-weight: 400; font-size: clamp(14px, 1.6vw, 20px); letter-spacing: 0; text-transform: none; color: var(--w-faint); }
   .plate:hover .ph img { transform: scale(1.03); }
   .ph img { transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
 
-  .meta .no { font-family: var(--serif); font-size: clamp(1.4rem, 2vw, 26px); color: var(--ember); line-height: 1; }
-  .meta h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(2rem, 4.5vw, 52px); line-height: 1; letter-spacing: -.015em; color: var(--w-ink); margin: 14px 0 0; }
-  .meta .line { font-size: 12px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--w-mut); margin-top: 18px; }
-  .meta .medium { font-size: 12px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--w-faint); margin-top: 8px; }
-  .meta .teaser { font-family: var(--serif); font-style: italic; font-size: clamp(1.1rem, 1.6vw, 19px); color: var(--w-mut); margin: 18px 0 0; max-width: 26ch; }
-  .meta .enter { display: inline-block; margin-top: 22px; font-size: 12px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--w-ink); }
+  .meta .no { font-family: var(--serif); font-weight: 440; font-size: 26px; color: var(--ember); line-height: 1; }
+  .meta h2 { font-family: var(--serif); font-weight: 440; font-size: clamp(2rem, 4.2vw, 50px); line-height: 1; letter-spacing: -.015em; color: var(--w-ink); margin: 16px 0 0; }
+  .meta .line { font-size: 12px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--w-mut); margin-top: 20px; }
+  .meta .medium { font-size: 12px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--w-mut); margin-top: 6px; }
+  .meta .teaser { font-family: var(--serif); font-style: italic; font-size: clamp(1.1rem, 1.6vw, 19px); color: var(--w-mut); margin: 20px 0 0; max-width: 26ch; }
+  .meta .enter { display: inline-block; margin-top: 28px; font-size: 12px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--w-ink); }
   .meta .enter .arw { color: var(--ember); display: inline-block; transition: transform .4s cubic-bezier(.2, .7, .2, 1); }
   .plate:hover .enter .arw { transform: translateX(6px); }
 
@@ -111,6 +112,6 @@ const mediumLabel = (frames: { type: string }[], override?: string) => {
     .wrap { --w-pad: 22px; }
     .mast h1 { font-size: clamp(3rem, 15vw, 76px); }
     .plate, .plate:nth-child(even) .cover, .plate:nth-child(even) .meta { grid-column: 1 / 13; }
-    .meta { margin-top: 4px; }
+    .meta { margin-top: 20px; }
   }
 </style>

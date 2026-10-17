@@ -35,7 +35,7 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 500; margin: 0; letter-spac
 /* Work room — the same warm-light editorial register as Home and Cycling
    (one consistent publication). Tokens alias the site palette. */
 .work-room {
-  --w-bg: var(--paper); --w-ink: var(--ink); --w-mut: var(--ink-soft); --w-faint: #9A9488;
+  --w-bg: var(--paper); --w-ink: var(--ink); --w-mut: var(--ink-soft); --w-faint: #78736A;
   --w-line: var(--stone); --w-line-2: #C9C2B4;
 }
 

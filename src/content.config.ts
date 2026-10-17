@@ -1,19 +1,6 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
-// The journal — real incident write-ups and decision records. Preserved from the
-// old site; the crown jewel. Route stays /blog so existing URLs and RSS guids hold.
-const blog = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
-  schema: z.object({
-    title: z.string(),
-    date: z.string(),
-    summary: z.string(),
-    adr: z.string().optional(),
-    tags: z.array(z.string()).optional(),
-  }),
-});
-
 // Image fields are stored as public path strings (e.g. /media/frame.jpg) written
 // by the CMS on upload, so the room renders a real <img> when present and a
 // branded placeholder when not. The optimization pipeline (astro:assets for
@@ -85,4 +72,4 @@ const cycling = defineCollection({
   }),
 });
 
-export const collections = { blog, photography, films, cycling };
+export const collections = { photography, films, cycling };

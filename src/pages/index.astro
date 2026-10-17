@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 const ghUrl = 'https://github.com/Kagiso-me';
 ---
-<Base title="Kagiso — Photography, Film, Cycling & The Lab" bg="var(--paper)" color="var(--ink)">
+<Base title="Kagiso — Photography, Film & Cycling" bg="var(--paper)" color="var(--ink)">
   <div class="page">
     <!-- ═══════════ HERO ═══════════ -->
     <header class="hero">
@@ -12,14 +12,14 @@ const ghUrl = 'https://github.com/Kagiso-me';
       <div class="ghost" aria-hidden="true">01</div>
 
       <div class="rail" data-rise style="--d:1s">
-        <span class="v">Scroll</span><span class="ln"></span><span class="ix">01<span class="e"> / </span>05</span>
+        <span class="v">Scroll</span><span class="ln"></span><span class="ix">01<span class="e"> / </span>04</span>
       </div>
 
       <div class="hero-inner">
         <div class="topbar">
           <a href="/" class="mark" data-rise style="--d:.05s">kagiso<span class="pt">.</span></a>
           <nav class="topnav" data-rise style="--d:.15s">
-            <a href="/photography">Photography</a><a href="/film">Film</a><a href="/cycling">Cycling</a><a href="/lab">The Lab</a><a href="#contact">Contact</a>
+            <a href="/photography">Photography</a><a href="/film">Film</a><a href="/cycling">Cycling</a><a href="#contact">Contact</a>
           </nav>
         </div>
 
@@ -29,14 +29,13 @@ const ghUrl = 'https://github.com/Kagiso-me';
             <a href="/photography" data-rise style="--d:.62s"><span class="n">01</span><span class="nm">Photography</span><span class="ds">the way light falls</span></a>
             <a href="/film" data-rise style="--d:.70s"><span class="n">02</span><span class="nm">Film</span><span class="ds">photography, with a timeline</span></a>
             <a href="/cycling" data-rise style="--d:.78s"><span class="n">03</span><span class="nm">Cycling</span><span class="ds">long roads, early light</span></a>
-            <a href="/lab" data-rise style="--d:.86s"><span class="n">04</span><span class="nm">The Lab</span><span class="ds">the systems, run for real</span></a>
-            <a href="#contact" data-rise style="--d:.94s"><span class="n">05</span><span class="nm">Contact</span><span class="ds">say hello</span></a>
+            <a href="#contact" data-rise style="--d:.86s"><span class="n">04</span><span class="nm">Contact</span><span class="ds">say hello</span></a>
           </div>
 
           <div class="headline">
             <span class="h-eye" data-rise style="--d:.3s"><span class="tk"></span>Kagiso — Johannesburg · <span class="is">Issue 01</span></span>
             <h1 data-rise>Outlast<span class="two">the moment.</span></h1>
-            <span class="h-tag" data-rise style="--d:1.05s">pictures · films · cycling · the lab</span>
+            <span class="h-tag" data-rise style="--d:1.05s">pictures · films · cycling</span>
           </div>
         </div>
 
@@ -108,28 +107,9 @@ const ghUrl = 'https://github.com/Kagiso-me';
       <hr class="rule" />
     </div>
 
-    <section class="lab reveal">
-      <div class="wrap">
-        <div class="snum" aria-hidden="true">04</div>
-        <div class="inner">
-          <div class="eyebrow">The Lab</div>
-          <h2>I also run the systems, not just talk about them.</h2>
-          <p>A real three-node Kubernetes cluster on hardware I own — GitOps, identity, storage, backups, observability, run with production discipline. The small door at the end of the hall, and it stays that way on purpose.</p>
-          <div class="proof">
-            <div class="fig"><div class="v">312<span style="color:var(--ember)">d</span></div><div class="k">longest unbroken uptime</div></div>
-            <div class="links">
-              <a href="/lab"><span class="arw">→</span> &nbsp;Selected work — the repo &amp; write-ups</a>
-              <a href="/lab"><span class="arw">→</span> &nbsp;What it is, and why · the essay</a>
-              <a href="/blog"><span class="arw">→</span> &nbsp;The journal — incidents &amp; decisions</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <section class="band">
       <div class="wrap"><div class="q reveal">
-        <p>Different crafts, <span class="e">one hand.</span> The eye that frames a photograph is the same one that keeps a system honest.</p>
+        <p>Different crafts, <span class="e">one hand.</span> The eye that frames a photograph is the same one that reads a road at first light.</p>
         <div class="by">Kagiso</div>
       </div></div>
     </section>
@@ -269,19 +249,6 @@ const ghUrl = 'https://github.com/Kagiso-me';
   .gal .ph { min-height: 0; }
   .gal .ph:first-child { grid-row: span 2; }
 
-  .lab { padding: 96px 0; border-top: 1px solid var(--stone); position: relative; }
-  .lab .snum { top: 64px; right: -8px; color: var(--cream); }
-  .lab .inner { max-width: 760px; position: relative; z-index: 1; }
-  .lab .eyebrow { margin-bottom: 20px; }
-  .lab h2 { font-size: clamp(1.8rem, 4vw, 42px); max-width: 20ch; }
-  .lab p { color: var(--ink-soft); margin: 20px 0 0; max-width: 58ch; }
-  .lab .proof { margin-top: 38px; display: flex; gap: 52px; flex-wrap: wrap; padding-top: 30px; border-top: 1px solid var(--stone); }
-  .lab .fig .v { font-family: var(--serif); font-size: 44px; line-height: 1; }
-  .lab .fig .k { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); margin-top: 8px; }
-  .lab .links { display: flex; flex-direction: column; gap: 10px; }
-  .lab .links a { font-size: 13px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
-  .lab .links a .arw { color: var(--ember); }
-  .lab .links a:hover { color: var(--ember); }
 
   .band { background: var(--hero); color: var(--hero-tx); padding: 104px 0; }
   .band .q { max-width: 960px; margin: 0 auto; text-align: center; }

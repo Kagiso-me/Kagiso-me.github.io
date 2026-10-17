@@ -29,5 +29,9 @@ const links = [
   .navlinks { display: flex; gap: 30px; font-size: 12px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--nav-mut); }
   .navlinks a:hover { color: var(--nav-tx); }
   .navlinks a.on { color: var(--nav-tx); border-bottom: 2px solid var(--nav-pt); padding-bottom: 4px; }
-  @media (max-width: 860px) { .row { padding-left: 22px; padding-right: 22px; } .navlinks { display: none; } }
+  @media (max-width: 860px) {
+    .row { padding: 16px 22px; flex-wrap: wrap; row-gap: 12px; }
+    .navlinks { width: 100%; gap: 18px 20px; flex-wrap: wrap; font-size: 11px; letter-spacing: .12em; }
+    .navlinks a.on { padding-bottom: 2px; }
+  }
 </style>

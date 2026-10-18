@@ -85,6 +85,12 @@ const clim = splitStat(d.climb);
         {d.strip.map((s) => <div class="ph">{s.image ? <img src={s.image} alt={s.tag ?? ''} loading="lazy" decoding="async" /> : <span class="tag">{s.tag}</span>}</div>)}
       </div>
     </article>
+
+    <aside class="latest reveal">
+      <span class="lk">Latest ride</span>
+      <span class="lv">47 km · before work · Oct 2026</span>
+      <a class="lg" href="https://www.strava.com/" target="_blank" rel="noopener">On Strava →</a>
+    </aside>
   </div>
 
   <SiteFooter variant="light" maxWidth={1120} note={'© 2026 · kagiso.me · <a href="https://www.strava.com/">Strava</a> · ridden &amp; photographed the same morning'} />
@@ -152,9 +158,16 @@ const clim = splitStat(d.climb);
   .strip { grid-column: 1/13; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 20px; margin-top: 20px; }
   .strip .ph { min-height: 280px; }
 
+  .latest { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-top: 76px; padding-top: 22px; border-top: 1px solid var(--stone); }
+  .latest .lk { font-size: 11px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--ink-soft); }
+  .latest .lv { font-size: 14px; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .latest .lg { margin-left: auto; font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--ember); }
+  .latest .lg:hover { text-decoration: underline; }
+
   @media (max-width: 860px) {
     .wrap { padding-left: 22px; padding-right: 22px; }
     .col-lead, .col-figure, .col-body, .col-tall, .route, .quote, .strip { grid-column: 1/13; }
     .strip { grid-template-columns: 1fr; }
+    .latest .lg { margin-left: 0; }
   }
 </style>

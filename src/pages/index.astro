@@ -1,53 +1,32 @@
 ---
 import Base from '../layouts/Base.astro';
 ---
-<Base title="Kagiso — Photography, Film & Cycling" bg="var(--paper)" color="var(--ink)">
+<Base title="Kagiso — Photographer, Filmmaker & Cyclist" bg="var(--paper)" color="var(--ink)">
   <div class="page">
-    <!-- ═══════════ HERO ═══════════ -->
+    <!-- ═══════════ BOLD PORTRAIT COVER ═══════════ -->
     <header class="hero">
-      <div class="hero-photo"></div>
-      <div class="scrim"></div>
-      <div class="grain"></div>
-      <div class="ghost" aria-hidden="true">01</div>
-
-      <div class="rail" data-rise style="--d:1s">
-        <span class="v">Scroll</span><span class="ln"></span><span class="ix">01<span class="e"> / </span>03</span>
+      <div class="hero-top">
+        <a href="/" class="mark" data-rise style="--d:.05s">kagiso<span class="pt">.</span></a>
+        <nav class="hero-nav" data-rise style="--d:.14s">
+          <a href="/stills-and-motion">Stills &amp; Motion</a><a href="/cycling">Cycling</a><a href="#contact">Contact</a>
+        </nav>
       </div>
 
-      <div class="hero-inner">
-        <div class="topbar">
-          <a href="/" class="mark" data-rise style="--d:.05s">kagiso<span class="pt">.</span></a>
-          <nav class="topnav" data-rise style="--d:.15s">
-            <a href="/stills-and-motion">Stills &amp; Motion</a><a href="/cycling">Cycling</a><a href="#contact">Contact</a>
-          </nav>
-        </div>
-
-        <div class="hero-mid">
-          <div class="index">
-            <div class="lbl" data-rise style="--d:.55s">Contents</div>
-            <a href="/stills-and-motion" data-rise style="--d:.62s"><span class="n">01</span><span class="nm">Stills &amp; Motion</span><span class="ds">photographs &amp; films, as series</span></a>
-            <a href="/cycling" data-rise style="--d:.70s"><span class="n">02</span><span class="nm">Cycling</span><span class="ds">long roads, early light</span></a>
-            <a href="#contact" data-rise style="--d:.78s"><span class="n">03</span><span class="nm">Contact</span><span class="ds">say hello</span></a>
-          </div>
-
-          <div class="headline">
-            <span class="h-eye" data-rise style="--d:.3s"><span class="tk"></span>Kagiso — Johannesburg · <span class="is">Issue 01</span></span>
-            <h1 data-rise>Outlast<span class="two">the moment.</span></h1>
-            <span class="h-tag" data-rise style="--d:1.05s">pictures · films · cycling</span>
-          </div>
-        </div>
-
-        <div class="hero-bottom">
-          <div class="socials" data-rise style="--d:1.1s">
-            <a href="https://www.instagram.com/" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
-            <a href="https://vimeo.com/" aria-label="Vimeo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8l3-1 2 9c3-2 5-5 5-8 0-1-1-2-3-1M13 6c3-2 6-2 6 2 0 4-4 9-7 9"/></svg></a>
-            <a href="https://www.strava.com/" aria-label="Strava"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 5l5 10 2-4h3l-5 8-5-10-2 4H3z"/></svg></a>
-          </div>
-          <div class="scrollcue" data-rise style="--d:1.1s">Scroll to explore
-            <span class="dn"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M6 13l6 6 6-6"/></svg></span>
-          </div>
+      <div class="hero-type">
+        <span class="idx" data-rise style="--d:.5s">01</span>
+        <span class="ghost" aria-hidden="true">Kagiso</span>
+        <h1 class="name" data-rise style="--d:.12s">Kagiso</h1>
+        <div class="type-foot" data-rise style="--d:.3s">
+          <span class="sub">Photographer · Filmmaker · Cyclist</span>
+          <span class="scrollcue">Scroll <span class="dn" aria-hidden="true">↓</span></span>
         </div>
       </div>
+
+      <div class="hero-portrait">
+        <div class="ph dev"><span class="tag">Portrait</span></div>
+      </div>
+
+      <span class="side" aria-hidden="true">Johannesburg · Est. 2024</span>
       <div class="baseline"></div>
     </header>
 
@@ -114,7 +93,7 @@ import Base from '../layouts/Base.astro';
         </div>
         <div class="colo">
           <span class="sign">kagiso<span class="pt">.</span></span>
-          <span>© 2026 · Set in Cormorant Garamond &amp; Manrope · self-hosted on kagiso.me</span>
+          <span>© 2026 · Set in Fraunces &amp; Manrope · kagiso.me</span>
         </div>
       </div>
     </footer>
@@ -128,83 +107,46 @@ import Base from '../layouts/Base.astro';
   }
   .wrap { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
 
-  /* ═══════════ MAGAZINE-COVER HERO ═══════════ */
-  .hero { position: relative; height: 100vh; min-height: 720px; background: var(--hero); overflow: hidden; color: var(--hero-tx); }
-  .hero-photo { position: absolute; inset: 0; z-index: 0; transform: scale(1.05);
-    background:
-      radial-gradient(45% 58% at 62% 46%, rgba(190, 192, 202, .10) 0%, rgba(120, 122, 132, .04) 40%, transparent 66%),
-      radial-gradient(60% 66% at 50% 6%, rgba(0, 0, 0, .45), transparent 60%),
-      radial-gradient(130% 100% at 16% 94%, rgba(0, 0, 0, .72), transparent 58%),
-      linear-gradient(180deg, #17171B 0%, #0C0C0E 100%); }
-  .hero-photo::before { content: ""; position: absolute; inset: 0;
-    background: radial-gradient(25% 46% at 61% 60%, rgba(0, 0, 0, .36) 0%, transparent 72%); }
-  .scrim { position: absolute; inset: 0; z-index: 1; pointer-events: none;
-    background: linear-gradient(90deg, rgba(9, 9, 11, .55) 0%, transparent 42%),
-      linear-gradient(0deg, rgba(9, 9, 11, .62) 0%, transparent 32%),
-      linear-gradient(270deg, rgba(9, 9, 11, .42) 0%, transparent 30%); }
-  .grain { position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: .05;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>"); }
-  :global(.anim) .hero-photo { animation: develop 2s cubic-bezier(.22, .61, .25, 1) both; }
-  @keyframes develop { from { filter: blur(22px) brightness(.32) saturate(.7); transform: scale(1.15); } to { filter: blur(0) brightness(1) saturate(1); transform: scale(1.05); } }
+  /* ═══════════ BOLD PORTRAIT COVER ═══════════ */
+  .hero { position: relative; min-height: 100vh; background: var(--paper); color: var(--ink);
+    display: grid; grid-template-columns: 1fr clamp(320px, 44vw, 660px); overflow: hidden; }
 
-  .ghost { position: absolute; z-index: 3; top: 2%; right: -2.5%; font-family: var(--serif); font-weight: 500;
-    font-size: clamp(200px, 40vw, 540px); line-height: .72; color: transparent;
-    -webkit-text-stroke: 1px rgba(244, 240, 232, .15); pointer-events: none; user-select: none; }
+  .hero-top { position: absolute; top: 0; left: 0; right: 0; z-index: 8; display: flex; align-items: center;
+    justify-content: space-between; padding: 28px clamp(24px, 4vw, 56px); }
+  .mark { font-family: var(--serif); font-weight: 600; font-size: 28px; letter-spacing: -.012em; color: var(--ink); }
+  .mark .pt { color: var(--ember); }
+  .hero-nav { display: flex; gap: 30px; font-size: 12px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-soft); }
+  .hero-nav a:hover { color: var(--ink); }
 
-  .hero-inner { position: relative; z-index: 5; height: 100%; max-width: 1320px; margin: 0 auto;
-    padding: 26px 56px 22px; display: flex; flex-direction: column; }
-  .topbar { display: flex; align-items: center; justify-content: space-between; }
-  .mark { font-family: var(--serif); font-weight: 500; font-size: 28px; letter-spacing: -.012em; }
-  .mark .pt { color: var(--ember-lit); }
-  .topnav { display: flex; gap: 30px; font-size: 12px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--hero-mut); }
-  .topnav a:hover { color: var(--hero-tx); }
+  .hero-type { position: relative; z-index: 5; align-self: end;
+    padding: clamp(120px, 16vh, 180px) 24px clamp(56px, 8vw, 104px) clamp(24px, 4vw, 56px); }
+  .idx { display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px;
+    background: var(--ember); color: var(--paper); font-family: var(--serif); font-weight: 700; font-size: 21px; margin-bottom: 26px; }
+  .ghost { position: absolute; z-index: -1; left: -1.5%; bottom: clamp(40px, 7vw, 92px); font-family: var(--serif); font-weight: 700;
+    font-size: clamp(8rem, 30vw, 460px); line-height: .72; color: var(--cream); pointer-events: none; user-select: none; white-space: nowrap; }
+  .name { font-family: var(--serif); font-weight: 700; font-size: clamp(4rem, 13vw, 200px); line-height: .82;
+    letter-spacing: -.03em; color: var(--ink); font-optical-sizing: auto; font-variation-settings: "SOFT" 0, "WONK" 0; }
+  .type-foot { display: flex; align-items: center; gap: 28px; margin-top: 26px; flex-wrap: wrap; }
+  .sub { font-size: 13px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); }
+  .scrollcue { display: inline-flex; align-items: center; gap: 9px; font-size: 11px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--ink-soft); }
+  .scrollcue .dn { color: var(--ember); font-size: 14px; }
 
-  .hero-mid { position: relative; flex: 1; }
+  .hero-portrait { position: relative; z-index: 1; }
+  .hero-portrait .ph { position: absolute; inset: 0; border: 0; border-left: 1px solid var(--stone);
+    background: var(--cream); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .hero-portrait .ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    filter: grayscale(1) contrast(1.04); }
+  .hero-portrait .ph .tag { margin: 0; border: 0; background: none; font-family: var(--serif); font-style: italic;
+    font-weight: 400; font-size: clamp(16px, 1.8vw, 22px); letter-spacing: 0; text-transform: none; color: var(--ink-soft); }
 
-  .index { position: absolute; right: 0; top: 12%; width: 300px; z-index: 6; }
-  .index .lbl { font-size: 11px; font-weight: 600; letter-spacing: .24em; text-transform: uppercase; color: var(--hero-fnt);
-    display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
-  .index .lbl::after { content: ""; flex: 1; height: 1px; background: var(--hero-line); }
-  .index a { display: grid; grid-template-columns: auto 1fr; gap: 0 14px; align-items: baseline;
-    padding: 13px 0; border-top: 1px solid var(--hero-line); transition: padding-left .25s ease; }
-  .index a:first-of-type { border-top: 0; }
-  .index .n { font-family: var(--serif); font-size: 22px; color: var(--ember-lit); grid-row: span 2; }
-  .index .nm { font-family: var(--serif); font-size: 24px; color: var(--hero-tx); line-height: 1; }
-  .index .ds { font-size: 11.5px; color: var(--hero-mut); letter-spacing: .02em; margin-top: 3px; }
-  .index a:hover { padding-left: 8px; }
-  .index a:hover .nm { color: var(--ember-lit); }
+  .side { position: absolute; left: clamp(16px, 2vw, 22px); top: 50%; transform: translateY(-50%) rotate(180deg);
+    writing-mode: vertical-rl; z-index: 6; font-size: 11px; font-weight: 600; letter-spacing: .3em; text-transform: uppercase; color: var(--ink-soft); }
+  .baseline { position: absolute; left: 0; bottom: 0; z-index: 7; height: 3px; width: 100%; transform-origin: left;
+    background: linear-gradient(90deg, var(--ember) 0%, var(--ember) 30%, var(--stone) 30%, var(--stone) 100%); }
 
-  .headline { position: absolute; left: 0; bottom: 4%; z-index: 6; max-width: 66%; }
-  .h-eye { display: inline-flex; align-items: center; gap: 12px; font-size: 12px; font-weight: 600; letter-spacing: .22em;
-    text-transform: uppercase; color: var(--hero-mut); margin-bottom: 18px; }
-  .h-eye .is { color: var(--ember-lit); }
-  .h-eye .tk { width: 26px; height: 1px; background: var(--ember-lit); }
-  .headline h1 { font-family: var(--serif); font-weight: 500; font-size: clamp(3.4rem, 11.5vw, 168px);
-    line-height: .84; letter-spacing: -.03em; color: var(--hero-tx); }
-  .headline h1 .two { display: block; font-style: italic; font-weight: 400; margin-left: .14em; color: #EFE7DA; }
-  .h-tag { margin-top: 24px; display: inline-block; font-family: var(--serif); font-style: italic;
-    font-size: clamp(1rem, 2vw, 22px); color: var(--hero-tx); border: 1px solid var(--ember-lit);
-    border-left-width: 3px; padding: 8px 18px; }
-
-  .rail { position: absolute; left: 22px; top: 50%; transform: translateY(-50%); z-index: 6;
-    display: flex; flex-direction: column; align-items: center; gap: 14px; color: var(--hero-mut); }
-  .rail .v { writing-mode: vertical-rl; font-size: 11px; font-weight: 600; letter-spacing: .3em; text-transform: uppercase; }
-  .rail .ln { width: 1px; height: 60px; background: var(--hero-line); }
-  .rail .ix { font-family: var(--serif); font-size: 14px; }
-  .rail .ix .e { color: var(--ember-lit); }
-
-  .hero-bottom { position: relative; z-index: 6; display: flex; align-items: center; justify-content: space-between; }
-  .socials { display: flex; gap: 18px; color: var(--hero-mut); }
-  .socials a:hover { color: var(--hero-tx); }
-  .socials svg { width: 17px; height: 17px; display: block; }
-  .scrollcue { display: inline-flex; align-items: center; gap: 12px; font-size: 11px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--hero-mut); }
-  .scrollcue .dn { width: 34px; height: 34px; border: 1px solid var(--hero-line); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--ember-lit); }
-  .baseline { position: absolute; left: 0; bottom: 0; z-index: 5; height: 3px; width: 100%; transform-origin: left;
-    background: linear-gradient(90deg, var(--ember-lit) 0%, var(--ember-lit) 30%, var(--hero-line) 30%, var(--hero-line) 100%); }
-  :global(.anim) .headline h1[data-rise] { transform: translateY(30px); filter: blur(14px); animation: heroRise 1.5s cubic-bezier(.2, .7, .2, 1) both; animation-delay: .5s; }
-  @keyframes heroRise { to { opacity: 1; transform: none; filter: blur(0); } }
-  :global(.anim) .ghost { opacity: 0; animation: ghostin 1.6s ease both .3s; }
-  @keyframes ghostin { to { opacity: 1; } }
+  :global(.anim) .hero-portrait .ph { filter: blur(20px); transform: scale(1.06); opacity: 0;
+    transition: filter 1.6s cubic-bezier(.22, .61, .25, 1), transform 1.6s cubic-bezier(.22, .61, .25, 1), opacity 1.2s; }
+  :global(.anim) .hero-portrait .ph.in { filter: none; transform: none; opacity: 1; }
   :global(.anim) .baseline { transform: scaleX(0); animation: growx 1.3s cubic-bezier(.3, .7, .2, 1) forwards .7s; }
   @keyframes growx { to { transform: scaleX(1); } }
 
@@ -233,7 +175,6 @@ import Base from '../layouts/Base.astro';
   .gal .ph { min-height: 0; }
   .gal .ph:first-child { grid-row: span 2; }
 
-
   .band { background: var(--hero); color: var(--hero-tx); padding: 104px 0; }
   .band .q { max-width: 960px; margin: 0 auto; text-align: center; }
   .band .q p { font-family: var(--serif); font-size: clamp(2rem, 4.4vw, 50px); line-height: 1.16; font-weight: 500; letter-spacing: -.01em; }
@@ -253,32 +194,38 @@ import Base from '../layouts/Base.astro';
   footer .colo .sign .pt { color: var(--ember); }
 
   @media (max-width: 960px) {
-    .wrap, .hero-inner { padding-left: 24px; padding-right: 24px; }
-    .topnav, .rail, .ghost { display: none; }
-    .hero { height: auto; min-height: 100vh; }
-    .hero-mid { display: flex; flex-direction: column; justify-content: flex-end; padding-top: 40px; }
-    .index { position: static; width: auto; margin-bottom: 40px; order: 2; }
-    .headline { position: static; max-width: none; order: 1; margin-bottom: 36px; }
-    .headline h1 { font-size: clamp(3rem, 15vw, 84px); }
+    .wrap { padding-left: 24px; padding-right: 24px; }
     .spread.a, .spread.b { grid-template-columns: 1fr; gap: 36px; padding: 60px 0; }
     .spread.b .txt { order: 0; }
     footer .grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 860px) {
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-top { flex-wrap: wrap; row-gap: 12px; padding: 16px 24px; }
+    .hero-nav { width: 100%; gap: 16px 18px; flex-wrap: wrap; font-size: 11px; }
+    .hero-type { order: 1; align-self: start; padding: 112px 24px 40px; }
+    .hero-portrait { order: 2; min-height: 64vh; border-top: 1px solid var(--stone); }
+    .hero-portrait .ph { border-left: 0; }
+    .name { font-size: clamp(3.4rem, 19vw, 104px); }
+    .ghost, .side { display: none; }
   }
 </style>
 
 <script is:inline>
   (function () {
     if (!document.documentElement.classList.contains('anim')) return;
-    var inner = document.querySelector('.hero-inner'), photo = document.querySelector('.hero-photo'), ghost = document.querySelector('.ghost'), t = false;
+    var type = document.querySelector('.hero-type'),
+        ghost = document.querySelector('.ghost'),
+        portrait = document.querySelector('.hero-portrait .ph'),
+        t = false;
     window.addEventListener('scroll', function () {
       if (t) return; t = true;
       requestAnimationFrame(function () {
-        var y = window.scrollY || 0;
-        if (y < window.innerHeight) {
-          inner.style.transform = 'translateY(' + (y * 0.14) + 'px)';
-          inner.style.opacity = String(Math.max(0, 1 - y / (window.innerHeight * 0.82)));
-          if (ghost) ghost.style.transform = 'translateY(' + (y * -0.06) + 'px)';
-          photo.style.filter = 'brightness(' + Math.max(.5, 1 - y / (window.innerHeight * 1.4)) + ')';
+        var y = window.scrollY || 0, vh = window.innerHeight;
+        if (y < vh) {
+          if (type) { type.style.transform = 'translateY(' + (y * 0.12) + 'px)'; type.style.opacity = String(Math.max(0, 1 - y / (vh * 0.85))); }
+          if (ghost) ghost.style.transform = 'translateY(' + (y * -0.05) + 'px)';
+          if (portrait) portrait.style.transform = 'scale(' + (1 + (y / vh) * 0.05) + ')';
         }
         t = false;
       });

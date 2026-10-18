@@ -10,9 +10,10 @@ export default defineConfig({
     shikiConfig: { theme: 'min-light', wrap: false },
   },
   redirects: {
-    '/photos': '/work',
-    '/photography': '/work',
-    '/film': '/work',
+    '/photos': '/stills-and-motion',
+    '/photography': '/stills-and-motion',
+    '/film': '/stills-and-motion',
+    '/work': '/stills-and-motion',
     '/about': '/',
     '/status': '/',
     '/cost': '/',

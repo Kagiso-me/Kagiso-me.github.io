@@ -33,7 +33,7 @@ let still = 0;
 
   <div class="work-room">
     <div class="wrap">
-      <a class="back" href="/work"><span class="arw">←</span> Work</a>
+      <a class="back" href="/stills-and-motion"><span class="arw">←</span> Stills &amp; Motion</a>
       <header class="open">
         <div class="mghost" aria-hidden="true">{d.number}</div>
         <div class="eyebrow kick" data-rise style="--d:.05s"><span class="tk"></span>No. {d.number} — {medium}</div>
@@ -93,13 +93,13 @@ let still = 0;
       <nav class="pn">
         <div class="pn-in">
           {prev ? (
-            <a class="pn-l" href={`/work/${prev.id}`}>
+            <a class="pn-l" href={`/stills-and-motion/${prev.id}`}>
               <span class="dir"><span class="arw">←</span> Previous</span>
               <span class="t"><span class="no">No. {prev.data.number}</span> {prev.data.title}</span>
             </a>
           ) : <span></span>}
           {next ? (
-            <a class="pn-r" href={`/work/${next.id}`}>
+            <a class="pn-r" href={`/stills-and-motion/${next.id}`}>
               <span class="dir">Next <span class="arw">→</span></span>
               <span class="t"><span class="no">No. {next.data.number}</span> {next.data.title}</span>
             </a>
@@ -114,7 +114,7 @@ let still = 0;
     <div class="lb-frame" id="lbFrame"></div>
   </div>
 
-  <SiteFooter variant="light" maxWidth={1280} note={'© 2026 · kagiso.me · <a href="/work">Work</a> · every frame shot &amp; owned'} />
+  <SiteFooter variant="light" maxWidth={1280} note={'© 2026 · kagiso.me · <a href="/stills-and-motion">Stills &amp; Motion</a> · every frame shot &amp; owned'} />
 </Base>
 
 <script is:inline>

@@ -18,14 +18,14 @@ import Base from '../layouts/Base.astro';
         <div class="topbar">
           <a href="/" class="mark" data-rise style="--d:.05s">kagiso<span class="pt">.</span></a>
           <nav class="topnav" data-rise style="--d:.15s">
-            <a href="/work">Work</a><a href="/cycling">Cycling</a><a href="#contact">Contact</a>
+            <a href="/stills-and-motion">Stills &amp; Motion</a><a href="/cycling">Cycling</a><a href="#contact">Contact</a>
           </nav>
         </div>
 
         <div class="hero-mid">
           <div class="index">
             <div class="lbl" data-rise style="--d:.55s">Contents</div>
-            <a href="/work" data-rise style="--d:.62s"><span class="n">01</span><span class="nm">Work</span><span class="ds">photographs &amp; films, as series</span></a>
+            <a href="/stills-and-motion" data-rise style="--d:.62s"><span class="n">01</span><span class="nm">Stills &amp; Motion</span><span class="ds">photographs &amp; films, as series</span></a>
             <a href="/cycling" data-rise style="--d:.70s"><span class="n">02</span><span class="nm">Cycling</span><span class="ds">long roads, early light</span></a>
             <a href="#contact" data-rise style="--d:.78s"><span class="n">03</span><span class="nm">Contact</span><span class="ds">say hello</span></a>
           </div>
@@ -64,10 +64,10 @@ import Base from '../layouts/Base.astro';
       <section class="spread a reveal">
         <div class="snum" aria-hidden="true">01</div>
         <div class="txt">
-          <div class="eyebrow"><span class="tk"></span>Work</div>
+          <div class="eyebrow"><span class="tk"></span>Stills &amp; Motion</div>
           <h2>One eye — stills and motion, edited as series.</h2>
           <p class="felt">Photographs and films kept as bodies of work, not a feed. The archive I keep because a moment deserves better than a thumbnail.</p>
-          <a href="/work" class="go">See the work →</a>
+          <a href="/stills-and-motion" class="go">See the series →</a>
         </div>
         <div class="gal">
           <div class="ph"><span class="tag">Still</span></div>
@@ -123,7 +123,7 @@ import Base from '../layouts/Base.astro';
 
 <style>
   .page {
-    --hero: #100D0A; --hero-2: #0B0908; --hero-tx: #F4F0E8; --hero-mut: #AAA093; --hero-fnt: #6E655A;
+    --hero: #16161A; --hero-2: #0D0D10; --hero-tx: #F4F0E8; --hero-mut: #A7A7AD; --hero-fnt: #6B6B72;
     --hero-line: rgba(244, 240, 232, .16); --ember-lit: #D5743E;
   }
   .wrap { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
@@ -132,17 +132,16 @@ import Base from '../layouts/Base.astro';
   .hero { position: relative; height: 100vh; min-height: 720px; background: var(--hero); overflow: hidden; color: var(--hero-tx); }
   .hero-photo { position: absolute; inset: 0; z-index: 0; transform: scale(1.05);
     background:
-      radial-gradient(42% 56% at 63% 48%, rgba(201, 155, 108, .32) 0%, rgba(120, 92, 64, .10) 38%, transparent 66%),
-      radial-gradient(28% 78% at 99% 40%, rgba(213, 140, 90, .24) 0%, transparent 55%),
-      radial-gradient(60% 66% at 50% 6%, rgba(0, 0, 0, .5), transparent 60%),
-      radial-gradient(130% 100% at 16% 94%, rgba(6, 5, 4, .8), transparent 58%),
-      linear-gradient(180deg, #17120e 0%, #0b0807 100%); }
+      radial-gradient(45% 58% at 62% 46%, rgba(190, 192, 202, .10) 0%, rgba(120, 122, 132, .04) 40%, transparent 66%),
+      radial-gradient(60% 66% at 50% 6%, rgba(0, 0, 0, .45), transparent 60%),
+      radial-gradient(130% 100% at 16% 94%, rgba(0, 0, 0, .72), transparent 58%),
+      linear-gradient(180deg, #17171B 0%, #0C0C0E 100%); }
   .hero-photo::before { content: ""; position: absolute; inset: 0;
     background: radial-gradient(25% 46% at 61% 60%, rgba(0, 0, 0, .36) 0%, transparent 72%); }
   .scrim { position: absolute; inset: 0; z-index: 1; pointer-events: none;
-    background: linear-gradient(90deg, rgba(8, 6, 5, .55) 0%, transparent 42%),
-      linear-gradient(0deg, rgba(8, 6, 5, .62) 0%, transparent 32%),
-      linear-gradient(270deg, rgba(8, 6, 5, .42) 0%, transparent 30%); }
+    background: linear-gradient(90deg, rgba(9, 9, 11, .55) 0%, transparent 42%),
+      linear-gradient(0deg, rgba(9, 9, 11, .62) 0%, transparent 32%),
+      linear-gradient(270deg, rgba(9, 9, 11, .42) 0%, transparent 30%); }
   .grain { position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: .05;
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>"); }
   :global(.anim) .hero-photo { animation: develop 2s cubic-bezier(.22, .61, .25, 1) both; }

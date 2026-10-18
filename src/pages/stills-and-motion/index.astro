@@ -29,7 +29,7 @@ const mediumLabel = (frames: { type: string }[], override?: string) => {
     <div class="wrap">
       <header class="mast">
         <div class="mghost" aria-hidden="true">W</div>
-        <div class="eyebrow kick" data-rise style="--d:.05s"><span class="tk"></span>Work — Stills &amp; Motion</div>
+        <div class="eyebrow kick" data-rise style="--d:.05s"><span class="tk"></span>Stills &amp; Motion</div>
         <h1 data-rise style="--d:.12s">One eye,<br>many frames.</h1>
         <p class="dek" data-rise style="--d:.24s">Photographs and films, edited as series — each a body of work, in an order I chose.</p>
         <div class="mbase"></div>
@@ -41,7 +41,7 @@ const mediumLabel = (frames: { type: string }[], override?: string) => {
         const d = s.data;
         const label = mediumLabel(d.frames, d.mediumLabel);
         return (
-          <a class="plate reveal" href={`/work/${s.id}`} aria-label={`Open ${d.title}`}>
+          <a class="plate reveal" href={`/stills-and-motion/${s.id}`} aria-label={`Open ${d.title}`}>
             <div class="cover">
               <div class="ph dev" style={`aspect-ratio:${d.coverAspect}`}>
                 {d.cover ? <img src={d.cover} alt={d.coverAlt} loading="lazy" decoding="async" /> : <span class="tag">{d.coverTag ?? 'Frames'}</span>}

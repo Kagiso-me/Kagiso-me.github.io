@@ -1,5 +1,13 @@
 ---
+import { existsSync } from 'node:fs';
 import Base from '../layouts/Base.astro';
+
+// Drop the hero portrait at public/media/portrait.(jpg|jpeg|png|webp|avif) and it
+// renders automatically; until then a deliberate placeholder shows.
+let portrait: string | null = null;
+for (const f of ['portrait.jpg', 'portrait.jpeg', 'portrait.png', 'portrait.webp', 'portrait.avif']) {
+  if (existsSync(new URL(`../../public/media/${f}`, import.meta.url))) { portrait = `/media/${f}`; break; }
+}
 ---
 <Base title="Kagiso — Photographer, Filmmaker & Cyclist" bg="var(--paper)" color="var(--ink)">
   <div class="page">
@@ -23,7 +31,7 @@ import Base from '../layouts/Base.astro';
       </div>
 
       <div class="hero-portrait">
-        <div class="ph dev"><span class="tag">Portrait</span></div>
+        <div class="ph dev">{portrait ? <img src={portrait} alt="Kagiso" fetchpriority="high" decoding="async" /> : <span class="tag">Portrait</span>}</div>
       </div>
 
       <span class="side" aria-hidden="true">Johannesburg · Est. 2024</span>

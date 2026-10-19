@@ -1,0 +1,109 @@
+# Sveltia CMS — the /admin studio for kagiso.me.
+# Edits commit straight to the repo; a push to main triggers the Pages build.
+#
+# AUTH: base_url points at the deployed sveltia-cms-auth Cloudflare Worker. The
+# only remaining step is the GitHub OAuth App — its client id/secret are set as
+# worker secrets (not here). Callback URL: <base_url>/callback. Until the secret
+# is loaded into the worker, /admin loads but GitHub sign-in returns an error.
+backend:
+  name: github
+  repo: Kagiso-me/kagiso-me.github.io
+  # Preview phase: edits (and uploaded photos) commit to the rebuild branch, not
+  # the live public site. At production cutover this becomes `main`.
+  branch: feat/editorial-rebuild-v5
+  base_url: https://sveltia-cms-auth.kagiso-030.workers.dev
+
+# Uploaded media commits to the repo and serves as a static asset. This is the
+# working default; the scale path is R2 + Cloudflare Images (see handback).
+media_folder: "public/media"
+public_folder: "/media"
+
+collections:
+  - name: work
+    label: Work
+    label_singular: Series
+    folder: "src/content/work"
+    create: true
+    extension: md
+    format: yaml-frontmatter
+    identifier_field: title
+    sortable_fields: [order]
+    summary: "No. {{number}} — {{title}}"
+    fields:
+      - { name: order, label: Index order (curated, not by date), widget: number, value_type: int, default: 10 }
+      - { name: number, label: "No. (displayed, e.g. 01)", widget: string }
+      - { name: title, label: Title, widget: string }
+      - { name: years, label: Years (display, e.g. 2024–2026), widget: string }
+      - { name: place, label: Place, widget: string, required: false }
+      - { name: role, label: Role, widget: string, default: Photographer }
+      - { name: cover, label: Cover image, widget: image, required: false }
+      - { name: coverAspect, label: Cover aspect, widget: select, options: ["3/2", "4/5"], default: "3/2" }
+      - { name: coverAlt, label: Cover alt text, widget: string, required: false }
+      - { name: coverTag, label: Cover placeholder label (until an image is set), widget: string, required: false }
+      - { name: statement, label: Series statement (standfirst, 2–4 sentences), widget: text }
+      - { name: teaser, label: Index teaser (one felt line), widget: string, required: false }
+      - { name: mediumLabel, label: Medium label override (else derived), widget: string, required: false }
+      - { name: creditNote, label: Colophon credit note (else sensible default), widget: string, required: false }
+      - { name: gear, label: Gear line (colophon), widget: string, required: false }
+      - { name: showFrameNumbers, label: Show frame numbers in captions, widget: boolean, default: false }
+      - { name: draft, label: Draft (hide from the site), widget: boolean, default: false }
+      - name: frames
+        label: Frames (array order IS the edit — do not sort)
+        label_singular: Frame
+        widget: list
+        fields:
+          - { name: type, label: Type, widget: select, options: [still, film], default: still }
+          - { name: span, label: Span, widget: select, options: [full, wide, single, offset, pair, tall], default: single }
+          - { name: image, label: Image (still) or poster (film), widget: image, required: false }
+          - { name: imageB, label: Image — right (for “pair”), widget: image, required: false }
+          - { name: video, label: Video URL (film — Stream/YouTube/Vimeo), widget: string, required: false }
+          - { name: runtime, label: Runtime (film, e.g. 1:32), widget: string, required: false }
+          - { name: alt, label: Alt text, widget: string, required: false }
+          - { name: altB, label: Alt text — right (pair), widget: string, required: false }
+          - { name: side, label: Side (for “offset”/“tall”), widget: select, options: [left, right], default: right }
+          - { name: caption, label: Caption (optional — keep sparse), widget: string, required: false }
+          - { name: captionB, label: Caption — right (pair), widget: string, required: false }
+          - { name: minvh, label: Full height (vh, for “full”), widget: number, value_type: int, required: false }
+          - { name: tag, label: Placeholder label (until an image is set), widget: string, required: false }
+          - { name: tagB, label: Placeholder label — right (pair), widget: string, required: false }
+
+  - name: cycling
+    label: Cycling
+    label_singular: Ride
+    folder: "src/content/cycling"
+    create: true
+    extension: md
+    format: yaml-frontmatter
+    identifier_field: issue
+    sortable_fields: [date, order]
+    fields:
+      - { name: order, label: Order, widget: number, value_type: int, default: 10 }
+      - { name: date, label: Date, widget: datetime, date_format: "YYYY-MM-DD", time_format: false, picker_utc: true }
+      - { name: issue, label: Issue line, widget: string, required: false }
+      - { name: dek, label: Dek (italic subtitle), widget: string, required: false }
+      - { name: lead, label: Lead photograph, widget: image, required: false }
+      - { name: leadTag, label: Lead placeholder label, widget: string, required: false }
+      - { name: leadCap, label: Lead caption, widget: string, required: false }
+      - { name: distance, label: Distance (e.g. 42 km), widget: string }
+      - { name: climb, label: Climbed (e.g. 1 240 m), widget: string }
+      - { name: moving, label: Moving time (e.g. 2:18), widget: string }
+      - { name: summitLabel, label: Summit label, widget: string, required: false }
+      - { name: profile, label: Elevation path (SVG d), widget: string }
+      - { name: profileFill, label: Elevation fill path (SVG d), widget: string, required: false }
+      - { name: summitX, label: Summit marker X, widget: number, value_type: int, default: 470 }
+      - { name: summitY, label: Summit marker Y, widget: number, value_type: int, default: 40 }
+      - { name: intro, label: Intro paragraph (drop cap), widget: text }
+      - { name: figure, label: Climb photograph, widget: image, required: false }
+      - { name: figureTag, label: Climb placeholder label, widget: string, required: false }
+      - { name: figureCap, label: Climb caption, widget: string, required: false }
+      - { name: quote, label: Pull quote, widget: text }
+      - { name: body, label: Body (blank line between paragraphs), widget: text }
+      - { name: tall, label: Portrait photograph, widget: image, required: false }
+      - { name: tallTag, label: Portrait placeholder label, widget: string, required: false }
+      - name: strip
+        label: Closing strip
+        widget: list
+        required: false
+        fields:
+          - { name: image, label: Image, widget: image, required: false }
+          - { name: tag, label: Placeholder label, widget: string, required: false }
